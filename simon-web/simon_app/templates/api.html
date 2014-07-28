@@ -1,0 +1,108 @@
+{% include 'header.html' %}
+
+<h1>API</h1>
+<p>La siguiente APi puede ser accedidida para consultar los datos
+	recabados. El Proyecto simón tiene por cometido brindar los datos de
+	forma abierta y en los formatos más utilizados, por lo que la interfaz
+	será ampliada con el tiempo. Agradecemos cualquier sugerencia que pueda
+	realizar.</p>
+
+
+<h3>Resultados de latencia</h3>
+<hr />
+<h3>/api/latency/&#60;Country Code&#62;/&#60;Versión de IP&#62;/&#60;Año&#62;/&#60;Mes&#62;</h3>
+
+<h4>Parámetros opcionales</h4>
+<ul>
+	<li>Country Code es el código ISO del país (2 dígitos), según la <a
+		href="http://en.wikipedia.org/wiki/ISO_3166-1">ISO 3166-1</a>. Se retornarán todos los tests con origen o destino ese país. Por defecto: todos los países.</li>
+	<li>Versión de IP. Puede tomar el valor 4 o 6. Por defecto: versión 4.</li>
+	<li>Año (YYYY). Por defecto: 01.</li>
+	<li>Mes (MM o M). Por defecto: Enero.</li>
+</ul>
+
+<h4>Resultado</h4>
+<p>
+El resultado es un array conteniendo tests, devuelto en formato JSON con los siguientes atributos:
+<ul>
+	<li><strong>country_destination (CC)</strong> - Código ISO (2 dígitos) del país de destino de ese test.</li>
+	<li><strong>country_origin (CC)</strong> - Código ISO (2 dígitos) del país de origen de ese test.</li>
+	<li><strong>max_rtt (ms)</strong> - Máximo RTT del conjunto de muestras tomadas en ese test.</li>
+	<li><strong>date_test (datetime with time zone)</strong> - Fecha con <a href="http://es.wikipedia.org/wiki/Huso_horario">Zona Horaria</a> en que se realizó el test.</li>
+	<li><strong>median_rtt (ms)</strong> - Mediana (valor que tiene una mitad de las muestras por encima y la otra mitad por debajo) del conjunto de muestras tomadas en ese test.</li>
+	<li><strong>min_rtt (ms)</strong> - Mínimo RTT del conjunto de muestras tomadas en ese test.</li>
+	<li><strong>ave_rtt (ms)</strong> - RTT promedio del conjunto de muestras tomadas en ese test.</li>
+	<li><strong>dev_rtt (ms)</strong> - Desvaición estándar del conjunto de muestras tomadas en ese test.</li>
+</ul>
+</p>
+
+<h4>Ejemplo</h4>
+<p class="code">
+[{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"country_destination": "CL",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"country_origin": "UY",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"max_rtt": 445,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"date_test": "2012-11-05 19:40:19+00:00",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"median_rtt": 411,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"min_rtt": 403,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"ave_rtt": 415,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"dev_rtt": 10<br>
+},<br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"country_destination": "CL",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"country_origin": "BO",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"max_rtt": 436,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"date_test": "2012-11-05 19:34:45+00:00",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"median_rtt": 425,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"min_rtt": 395,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"ave_rtt": 429,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"dev_rtt": 12<br>
+}]
+</p>
+
+<!-- <h2>Resultados de ancho de banda</h2> -->
+<!-- <hr /> -->
+<!-- <h3>/api/throughput/&#60;Country Code&#62;/&#60;Versión de IP&#62;/&#60;Año&#62;/&#60;Mes&#62;</h3> -->
+
+<!-- <h4>Parámetros opcionales</h4> -->
+<!-- <ul> -->
+<!-- 	<li>Country Code es el código ISO del país (2 dígitos), según la <a -->
+<!-- 		href="http://en.wikipedia.org/wiki/ISO_3166-1">ISO 3166-1</a>. Se retornarán todos los tests con origen o destino ese país. Por defecto: todos los países.</li> -->
+<!-- 	<li>Versión de IP. Puede tomar el valor 4 o 6. Por defecto: versión 4.</li> -->
+<!-- 	<li>Año (YYYY). Por defecto: 01.</li> -->
+<!-- 	<li>Mes (MM o M). Por defecto: Enero.</li> -->
+<!-- </ul> -->
+
+<!-- <h4>Resultado</h4> -->
+<!-- <p> -->
+<!-- El resultado es un array conteniendo tests, devuelto en formato JSON con los siguientes atributos: -->
+<!-- <ul> -->
+	
+<!-- 	<li><strong>date_test (datetime with time zone)</strong> - Fecha con <a href="http://es.wikipedia.org/wiki/Huso_horario">Zona Horaria</a> en que se realizó el test.</li> -->
+<!-- 	<li><strong>size (Bytes)</strong> - Tamaño de esa muestra.</li> -->
+<!-- 	<li><strong>country_destination (CC)</strong> - Código ISO (2 dígitos) del país de destino de ese test.</li> -->
+<!-- 	<li><strong>country_origin (CC)</strong> - Código ISO (2 dígitos) del país de origen de ese test.</li> -->
+<!-- 	<li><strong>time (ms)</strong> - Tiempo tomado en obtener la muestra.</li> -->
+<!-- </ul> -->
+<!-- </p> -->
+
+<!-- <h4>Ejemplo</h4> -->
+<!-- <p class="code"> -->
+<!-- [{<br> -->
+<!-- &nbsp;&nbsp;&nbsp;&nbsp;"date_test": "2012-07-29 03:00:00+00:00",<br>  -->
+<!-- &nbsp;&nbsp;&nbsp;&nbsp;"size": 256338,<br> -->
+<!-- &nbsp;&nbsp;&nbsp;&nbsp;"country_destination": "CL",<br>  -->
+<!-- &nbsp;&nbsp;&nbsp;&nbsp;"country_origin": "UY",<br>  -->
+<!-- &nbsp;&nbsp;&nbsp;&nbsp;"time": 1000<br> -->
+<!-- },<br>  -->
+<!-- {<br> -->
+<!-- &nbsp;&nbsp;&nbsp;&nbsp;"date_test": "2012-10-26 16:43:50+00:00",<br>  -->
+<!-- &nbsp;&nbsp;&nbsp;&nbsp;"size": 1118012,<br>  -->
+<!-- &nbsp;&nbsp;&nbsp;&nbsp;"country_destination": "BR",<br>  -->
+<!-- &nbsp;&nbsp;&nbsp;&nbsp;"country_origin": "UY",<br>  -->
+<!-- &nbsp;&nbsp;&nbsp;&nbsp;"time": 3030<br> -->
+<!-- } -->
+<!-- }] -->
+<!-- </p> -->
+
+{% include 'footer.html' %}

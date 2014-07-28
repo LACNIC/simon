@@ -1,0 +1,117 @@
+#search-result {
+	border: 1px;
+	border-color: black;
+	border-style: solid;
+	text-align: center;
+	width: 100%
+}
+
+#search-result thead th {
+	border: 1px;
+	border-color: black;
+	border-style: solid;
+	font-size: small;
+	font-weight: bold;
+}
+
+#search-result tbody tr td {
+	border: 1px;
+	border-color: black;
+	border-style: solid;
+	font-size: small;
+}
+
+#lg-link-header {
+	background-image:url(http://www.labs.lacnic.net/drupal/themes/newlabs/xtras/logo-simon.png);
+	background-repeat:no-repeat;
+	position: relative;
+	top: 0px;
+	left: 700px;
+	width: 229px;
+	height: 85px;
+	display: block;
+ 	background-color: transparent;
+ 	border: 0px solid yellow;
+}
+#table_div_json {
+	margin: 0px auto;
+}
+
+.queryinfo {
+	margin: auto;
+	margin: 5px;
+}
+
+.queryinfo ul {
+	margin-left: 0;
+	padding-left: 0;
+	display: inline;
+}
+
+.queryinfo ul li {
+	margin-left: 0;
+	padding: 3px 15px;
+	border-left: 1px solid #000;
+	list-style: none;
+	display: inline;
+	font-family: Arial, Verdana, Geneva, sans-serif;
+	}
+
+.queryinfo ul li:hover {
+	background-color: #aa99aa;
+}
+
+.Stats  {
+	border: 1px;
+	border-style: dashed;
+	float: right;
+	margin:0 0 10px 0;
+	width: 100%;
+}
+
+/**/
+.SearchForm{
+	padding:3px;
+	margin:0 0 10px 0;
+	border:1px dashed #333;
+	float: left;
+	width: 100%;
+}
+
+.homeBox {
+	height: 160px;
+	width: 450px;
+	margin: 10px 10px 10px 10px;
+	float: left;
+	color: black;
+}
+
+.homeBox:hover {
+	box-shadow: 2px 2px 4px #888888;
+	background-color:rgba(0, 0, 0, 0.2);
+}
+
+.border{
+	border-width: 1px;
+	border-style: dashed;
+	}
+.verysmallchart {
+	width: 30%;
+	float: right;
+	margin: 10px;
+}
+.smallchart {
+	width: 45%;
+	float: right;
+	margin: 10px;
+}
+.barchart {
+	min-height: 300px;
+}
+.chartdiv{
+	margin-top: 60px;
+}
+.code{
+	font-family: "courier";
+	line-height: 150%;
+}

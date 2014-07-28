@@ -1,0 +1,147 @@
+/* LACNIC - Labs :: Origin Validation Looking Glass / Mart�n 09/12/2011 martin@lacnic.net */
+body{
+	background-color:#fff;
+	background-image:url(http://www.labs.lacnic.net/drupal/themes/newlabs/xtras/body_bg.png);
+	background-repeat:repeat-x;
+	margin:0;
+	padding:0;
+	/*text-shadow:0 0 5px rgba(0, 0, 0, 0.75);
+	-moz-text-shadow:0 0 5px rgba(0, 0, 0, 0.75);
+	-ms-text-shadow:0 0 5px rgba(0, 0, 0, 0.75);
+	-webkit-text-shadow:0 0 5px rgba(0, 0, 0, 0.75);*/
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+.Container{
+	width:980px;
+	margin:0 auto 0 auto;
+}
+
+.contenido{
+	border-left:1px solid #fff;
+	border-right:1px solid #fff;
+	background-color:rgba(255,255,255,0.50);
+	padding:15px;
+	min-height: 16em;
+}
+
+.Header{
+	width:980px;
+	height:120px;
+	margin:0 0 6px 0;
+	background-image:url(http://www.labs.lacnic.net/drupal/themes/newlabs/xtras/solo_back.png);
+	background-repeat:no-repeat;
+}
+
+.Header img{
+	border:0;
+	float:left;
+	margin:6px 0 0 30px;
+}
+.Footer{
+	width:100%;
+	height:120px;
+	background-image:url(http://www.labs.lacnic.net/drupal/themes/newlabs/xtrasfoot_bg.png);
+	background-repeat:repeat-x;
+	background-position:left bottom;
+	background-color:#fff;
+	margin:0;
+	margin-top: 20px;
+	float:left;
+}
+.foot_content{
+	width:980px;
+	height:120px;
+	margin:0 auto 0 auto;
+	padding:0;
+}
+.foot_labs{
+	width:170px;
+	height:64px;
+	margin:15px 0 0 5px;
+	float:left;
+}
+.foot_app_detail{
+	font-size: 0.75em;
+	color: grey;
+	float: right;
+	margin:45px 0 0 5px;
+}
+/****/
+p{
+	font-size:12px;
+	font-weight:normal;
+	padding:5px;
+	margin:5px;
+}
+ul{
+	font-size:12px;
+	font-weight:normal;
+}
+ol{
+	font-size:12px;
+	font-weight:normal;
+}
+h1{
+	margin:10px 5px 15px;
+	padding:5px;
+	font-weight:bold;
+	font-size:26px;
+	color:#4F4E4E;
+	text-shadow:0 1px 0 rgba(255, 255, 255, 0.8);
+	-moz-text-shadow:0 1px 0 rgba(255, 255, 255, 0.8);
+	-ms-text-shadow:0 1px 0 rgba(255, 255, 255, 0.8);
+	-webkit-text-shadow:0 1px 0 rgba(255, 255, 255, 0.8);
+}
+h3{
+	margin:10px 5px 10px;
+	padding:5px;
+	font-weight:bold;
+	font-size:20px;
+	color:#4F4E4E;
+	text-shadow:0 1px 0 rgba(255, 255, 255, 0.8);
+	-moz-text-shadow:0 1px 0 rgba(255, 255, 255, 0.8);
+	-ms-text-shadow:0 1px 0 rgba(255, 255, 255, 0.8);
+	-webkit-text-shadow:0 1px 0 rgba(255, 255, 255, 0.8);
+}
+h4{
+	margin:10px 5px 10px;
+	padding:5px;
+	font-weight:bold;
+	font-size:14px;
+	color:#4F4E4E;
+	text-shadow:0 1px 0 rgba(255, 255, 255, 0.8);
+	-moz-text-shadow:0 1px 0 rgba(255, 255, 255, 0.8);
+	-ms-text-shadow:0 1px 0 rgba(255, 255, 255, 0.8);
+	-webkit-text-shadow:0 1px 0 rgba(255, 255, 255, 0.8);
+}
+input, select{
+	border:1px solid #333;
+	background-color:rgba(255,255,255,0.50);
+	margin:5px;
+	padding:3px 3px 3px 5px;
+	color:#333;
+	font-size:12px;
+}
+input [type=submit], input#submit{
+	color:#fff;
+	background-color:#666;
+	border:1px solid #fff;
+	cursor:pointer;
+	margin:5px 10px 5px 10px;
+	padding:3px 15px 3px 15px;
+	box-shadow:0 0 5px rgba(0,0,0,0.35);
+	-moz-box-shadow:0 0 5px rgba(0,0,0,0.35);
+	-ms-box-shadow:0 0 5px rgba(0,0,0,0.35);
+	-webkit-box-shadow:0 0 5px rgba(0,0,0,0.35);
+}
+input [type=submit]:hover, input#submit:hover{
+	background-color:#F3B31D;
+}
+a{
+	color:#005fab;
+	text-decoration:none;
+}
+a:hover{
+	color:#5d9bcc;
+	text-decoration:underline;
+}

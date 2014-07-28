@@ -1,0 +1,20 @@
+{% include 'header.html' %}
+
+<h1>Traceroute</h1>
+
+<p>Una forma muy útil de monitorear el trayecto de los paquetes en
+	la red es el programa traceroute. Esta página recopila archivos con
+	logs de traceroute.</p>
+	
+<p>Para generar un archivo de traceroute, ejecutelo con la opción -n, de forma de desplegar únicamente direcciones IP y no nombres de host, de la siguente forma:.</p>
+
+<p><b>traceroute -n [destino] > [archivo]<b/></p>
+
+<form method="post" enctype="multipart/form-data">
+	{% csrf_token %}
+	{{ form.as_p }}
+	<input type="submit" value="Enviar" id="submit" />
+</form>
+
+				
+{% include 'footer.html' %}

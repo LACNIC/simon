@@ -1,0 +1,135 @@
+{% include 'header.html' %}
+
+
+<style>
+#console {
+	background-color: black;
+	overflow: auto;
+	color: ghostwhite;
+	font-size: 12;
+	font-family: monospace;
+}
+</style>
+
+<script type="text/javascript" src="/static/js/jquery1.8.0.js"></script>
+<script type="text/javascript"
+	src="http://jquery-jsonp.googlecode.com/files/jquery.jsonp-1.0.4.min.js"></script>
+<script type="text/javascript" src="/static/js/simon_probe_lab.js"></script>
+<script type="text/javascript" src="/static/js/dateFormatter.js"></script>
+<script src="http://code.highcharts.com/highcharts.js"></script>
+
+<script type="text/javascript">
+	var CATEGORIES = 30;
+	var MIN = 0;
+	var MAX = 900;
+// 	var cronometros = [];
+// 	var SERIES = 0;
+
+// 	function start(site) {
+// // 		stop(site);
+		
+// 		printr("Measuring latency to " + site);
+
+// 		for (var i = 0; i < 1500; i++) {
+// 			var c = setTimeout(function() {
+// 				LAB.latencyTest(site);
+// 			}, latencyTimeout * i);
+
+// // 			cronometros.push(c);
+// 		}
+// 	}
+
+// 	function stop(site) {
+// 		if(cronometros.length > 0){
+// 			for (c in cronometros) {
+// 				clearTimeout(c);
+// 			}
+// 		}
+		
+// 		var data = [];
+// 		$('#container').highcharts().addSeries({
+// 			name: site,
+// 			data: data
+// 		});
+		
+// 		++SERIES;
+// 	}
+
+	$(function() {
+
+		/*
+		Generate data and categories arrays first
+		 */
+		var data = [];
+		var categories = [];
+		var radio = (MAX - MIN) / (2 * CATEGORIES);
+		for (var i = MIN; i < MAX; i = i + 2 * radio) {
+			categories.push('~' + (i + radio));// + '±' + (radio));
+			data.push(0);
+		}
+
+		$('#container').highcharts(
+				{
+					chart : {
+						type : 'column',
+						backgroundColor : 'rgba(255, 255, 255, 0.1)',
+						animation : false
+					},
+					plotOptions : {
+						column : {
+							shadow : false,
+							borderWidth : .5,
+							borderColor : '#666',
+							pointPadding : 0,
+							groupPadding : 0,
+							color : 'rgba(204,204,204,.85)'
+						}
+					},
+					title : {
+						text : 'Distribución'
+					},
+					xAxis : {
+						categories : categories
+					},
+					yAxis : {
+						title : {
+							text : 'Densidad'
+						}
+					},
+					series : [{
+						name : 'Latencia ' + '(categorías de '
+								+ ((MAX - MIN) / CATEGORIES) + ' ms)',
+						data : data
+					}]
+				});
+	});
+</script>
+
+<body>
+
+	<h1>Latency Lab</h1>
+	<p>
+		Este espacio permite la exploración del medidor JavaScript. Para
+		iniciar una prueba, digite una dirección IP y oprima el botón de <i>Iniciar</i>.
+	</p>
+	<p>Debajo se muestra una gráfica que va mostrando la distribución
+		de los resultados obtenidos, y una consola que imprime los valores de
+		RTT percibidos en cada test. Bien comiencen las pruebas, la
+		distribución comenzará a variar, pero una vez transcurrido un
+		intervalo de tiempo la misma deberá estabilizarse y comenzar a
+		aproximarse a su forma para N --> inf.</p>
+	<input type="text" id="site" autofocus="autofocus"
+		placeholder="Dirección IP (v4 o v6)" style="width: 30em" />
+	<button onclick="LAB.start(document.getElementById('site').value)">
+		Iniciar</button>
+
+	<div id="container" style="width: 100%; height: 300px; margin-top: 3em"></div>
+	<div id="console"
+		style="padding-bottom: 10px; padding-left: 10px; width: 910px; height: 150px; margin-top: 3em"></div>
+
+</body>
+
+
+
+
+{% include 'footer.html' %}

@@ -1,0 +1,681 @@
+ {% include 'header.html' %}
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Reports - Charts</title>
+<style>
+#map-canvas {
+	height: 700px;
+	width: 500px;
+	margin: 0 auto padding:            0px
+}
+
+.axis path,.axis line {
+	fill: none;
+	stroke: #000;
+	shape-rendering: crispEdges;
+}
+
+.area {
+	fill: steelblue;
+}
+
+path.line {
+	fill: none;
+	stroke: #000;
+	stroke-width: 2;
+}
+
+.grid .tick {
+    stroke: lightgrey;
+    opacity: 0.7;
+}
+.grid path {
+      stroke-width: 0;
+}
+</style>
+
+<!-- J Query -->
+<script type="text/javascript"
+	src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+
+<!-- Spinner -->
+<script type="text/javascript" src="/static/js/spin.js"></script>
+
+<!-- Heat Map -->
+<script type="text/javascript"
+	src="/static/js/mbostock-protovis-1a61bac/protovis.js"></script>
+
+<script src="http://d3js.org/d3.v3.js"></script>
+
+<!-- Google Charts -->
+<script type='text/javascript' src='https://www.google.com/jsapi'></script>
+
+<!-- Google Maps -->
+<script
+	src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+
+<script type='text/javascript'>
+/*
+ * Google Charts data
+ */
+	google.load('visualization', '1', {
+		'packages' : [ 'geochart', 'corechart' ]
+	});
+
+// 	var simonURL = "http://200.7.87.86/";
+	var countryDistributionChartURL = simonURL + "country_latency_chart";
+	var regionDistributionChartURL = simonURL + "region_latency_chart";
+	var innerLatencyChartURL = simonURL + "inner_latency_chart";
+	
+	google.setOnLoadCallback(drawAllCharts);
+	function drawAllCharts(){
+		initInnerLatencyChart();
+		//initRegionDistributionChart();
+		initDistributionChart();
+	}
+	
+	function initInnerLatencyChart(){
+		var target = document.getElementById('column_chart_div');// spinner container
+		
+		function draw(){
+			var spinner = new Spinner(opts).spin(target);
+		    google.visualization.events.addListener(chart, 'ready',
+		          function() {
+		    	  	spinner.stop();
+		          });
+
+			$.ajax({
+				  url: innerLatencyChartURL,
+				  dataType : "json",
+				  success : function(distribution, textStatus, jqXHR){
+					  var options = {
+							  title: 'Latencia interna para cada país',
+					          hAxis: {title: 'Latencia (ms)', maxTextLines : 1, showTextEvery : 1},
+					          vAxis: {title: 'País', maxTextLines : 1, showTextEvery : 1},
+					          chartArea: {height: 300},
+					          height: 400,
+					          bar: {groupWidth: "40%"},
+					          legend: { position: "none" },
+					          colors: ['steelblue']
+					        };
+					  var data = new google.visualization.DataTable(distribution.table, 0.6);
+					  chart.draw(data, options)
+				  }
+			  });
+		}
+		var chart = new google.visualization.BarChart(document.getElementById('column_chart_div'));
+		draw();
+	}
+	
+	function initRegionDistributionChart(){
+		var target = document.getElementById('distribution_div');// spinner container
+		
+		function draw(){
+			var spinner = new Spinner(opts).spin(target);
+		    google.visualization.events.addListener(chart, 'ready',
+		          function() {
+		    	  	spinner.stop();
+		          });
+
+			$.ajax({
+				  url: regionDistributionChartURL,
+				  dataType : "json",
+				  success : function(distribution, textStatus, jqXHR){
+					  var options = {
+							  title: 'Distribución del delay en la región',
+					          hAxis: {title: 'Latencia (ms)', maxTextLines : 1, showTextEvery : 1},
+					          vAxis: {title: 'Cantidad (%)', maxTextLines : 1, showTextEvery : 1},
+					          curveType : 'function',
+					        };
+					  var data = new google.visualization.DataTable(distribution.table, 0.6);
+					  chart.draw(data, options);
+				  }
+			  });
+		}
+		var chart = new google.visualization.LineChart(document.getElementById('distribution_div'));
+		draw();
+	}
+	
+	function initDistributionChart(){
+		var target = document.getElementById('distribution_history_div');// spinner container
+		
+		function draw(countryCode){
+			var spinner = new Spinner(opts).spin(target);
+		    google.visualization.events.addListener(chart, 'ready',
+		          function() {
+		    	  	spinner.stop();
+		          });
+
+			$.ajax({
+				  url: countryDistributionChartURL + '/' + countryCode,
+				  dataType : "json",
+				  success : function(distribution_history, textStatus, jqXHR){
+					  var options = {
+					          title: 'Distribución del delay por pais',
+					          hAxis: {title: 'Latencia (ms)', maxTextLines : 1, showTextEvery : 1},
+					          vAxis: {title: 'Cantidad (%)', maxTextLines : 1, showTextEvery : 1},
+					          curveType : 'function',
+					          lineWidth : 2,
+					          chartArea: {width: 600, left: 150},
+					          animation:{
+					              duration: 1000,
+					              easing: 'out'
+					            }
+					        };
+			        var data = new google.visualization.DataTable(distribution_history.table, 0.6);
+			        chart.draw(data, options)
+				  }
+			  });
+		}
+		$('#id_country').change( function() {
+			draw($('#id_country').val());
+		});
+		var chart = new google.visualization.AreaChart(document.getElementById('distribution_history_div'));
+		draw($('#id_country').val());
+	}
+</script>
+
+<script>
+
+function initialize() {
+
+	var styles = [
+	              {
+	                  "featureType": "water",
+	                  "elementType": "all",
+	                  "stylers": [
+	                      {
+	                          "hue": "#e9ebed"
+	                      },
+	                      {
+	                          "saturation": -78
+	                      },
+	                      {
+	                          "lightness": 67
+	                      },
+	                      {
+	                          "visibility": "simplified"
+	                      }
+	                  ]
+	              },
+	              {
+	                  "featureType": "landscape",
+	                  "elementType": "all",
+	                  "stylers": [
+	                      {
+	                          "hue": "#ffffff"
+	                      },
+	                      {
+	                          "saturation": -100
+	                      },
+	                      {
+	                          "lightness": 100
+	                      },
+	                      {
+	                          "visibility": "simplified"
+	                      }
+	                  ]
+	              },
+	              {
+	                  "featureType": "road",
+	                  "elementType": "geometry",
+	                  "stylers": [
+	                      {
+	                          "hue": "#bbc0c4"
+	                      },
+	                      {
+	                          "saturation": -93
+	                      },
+	                      {
+	                          "lightness": 31
+	                      },
+	                      {
+	                          "visibility": "simplified"
+	                      }
+	                  ]
+	              },
+	              {
+	                  "featureType": "poi",
+	                  "elementType": "all",
+	                  "stylers": [
+	                      {
+	                          "hue": "#ffffff"
+	                      },
+	                      {
+	                          "saturation": -100
+	                      },
+	                      {
+	                          "lightness": 100
+	                      },
+	                      {
+	                          "visibility": "off"
+	                      }
+	                  ]
+	              },
+	              {
+	                  "featureType": "road.local",
+	                  "elementType": "geometry",
+	                  "stylers": [
+	                      {
+	                          "hue": "#e9ebed"
+	                      },
+	                      {
+	                          "saturation": -90
+	                      },
+	                      {
+	                          "lightness": -8
+	                      },
+	                      {
+	                          "visibility": "simplified"
+	                      }
+	                  ]
+	              },
+	              {
+	                  "featureType": "transit",
+	                  "elementType": "all",
+	                  "stylers": [
+	                      {
+	                          "hue": "#e9ebed"
+	                      },
+	                      {
+	                          "saturation": 10
+	                      },
+	                      {
+	                          "lightness": 69
+	                      },
+	                      {
+	                          "visibility": "on"
+	                      }
+	                  ]
+	              },
+	              {
+	                  "featureType": "administrative.locality",
+	                  "elementType": "all",
+	                  "stylers": [
+	                      {
+	                          "hue": "#2c2e33"
+	                      },
+	                      {
+	                          "saturation": 7
+	                      },
+	                      {
+	                          "lightness": 19
+	                      },
+	                      {
+	                          "visibility": "on"
+	                      }
+	                  ]
+	              },
+	              {
+	                  "featureType": "road",
+	                  "elementType": "labels",
+	                  "stylers": [
+	                      {
+	                          "hue": "#bbc0c4"
+	                      },
+	                      {
+	                          "saturation": -93
+	                      },
+	                      {
+	                          "lightness": 31
+	                      },
+	                      {
+	                          "visibility": "on"
+	                      }
+	                  ]
+	              },
+	              {
+	                  "featureType": "road.arterial",
+	                  "elementType": "labels",
+	                  "stylers": [
+	                      {
+	                          "hue": "#bbc0c4"
+	                      },
+	                      {
+	                          "saturation": -93
+	                      },
+	                      {
+	                          "lightness": -2
+	                      },
+	                      {
+	                          "visibility": "simplified"
+	                      }
+	                  ]
+	              }
+	          ];
+    
+  var mapOptions = {
+		  zoom: 3,
+		  center: new google.maps.LatLng(-25.8836111, -65.1819444),
+		  mapTypeId: google.maps.MapTypeId.ROADMAP,
+    	  styles: styles,
+    	  disableDefaultUI: true,
+    	  draggable: false,
+    	  scrollwheel: false,
+    	  disableDoubleClickZoom: true
+  };
+
+  var map = new google.maps.Map(document.getElementById('map-canvas'),
+      mapOptions);
+
+  var image = "/static/imgs/simon-icon-red.png";
+	{% for testpoint in testpoints %}
+  	var marker = new google.maps.Marker({
+	    position: new google.maps.LatLng({{ testpoint.latitude }}, {{ testpoint.longitude }}),
+	    map: map,
+	    title: "{{ testpoint.city }}",
+// 	    icon: image
+	});
+  	marker.setMap(map);
+	{% endfor %}
+}
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+    </script>
+
+<h1>Gráficas de los resultados de las mediciones</h1>
+<p>Las siguientes gráficas hacen más accesible procesar toda la
+	información obtenida de las mediciones. Es el resultado de la
+	colaboración de la comunidad que impulsa al Proyecto Simón, tanto con
+	el aporte de puntos de testing como de la realización de los tests.</p>
+
+<div class="chartdiv">
+	<h3>Ubicación de los servidores que forman parte del proyecto
+		Simón</h3>
+	<p>Los siguientes mapas muestran la cantidad de servidores,
+		agrupados por país. A mayor cantidad de servidores, mayor cantidad de
+		muestras que un país tendrá, y más representativas serán las
+		estadísticas del mismo.</p>
+	<div id="map-canvas" class="border" style="margin: auto auto"></div>
+</div>
+
+<div class="chartdiv">
+	<h3>Distribución de latencia</h3>
+	<p>Las gráfica a continuación representan la distribución de
+		latencia en la región. Cuanto más estrecha sea la curva, menor
+		varianza, y por ende mayor equidad en la calidad de Internet. Cuanto
+		más a la izquierda se encuentre el máximo de la curva, menor será la
+		latencia, y mejor será la calidad de Internet.</p>
+
+	<h4>Latencia en la región</h4>
+	<p>El eje horizontal representa la latencia, y el eje vertical la
+		cantidad de ocurrencias.</p>
+	<div id="fig2" class="border" align="center" style="margin: 50"></div>
+
+
+
+	<h4>Latencia por lugar desglosada en años</h4>
+	<form id="country_form" action="" method="post">{% csrf_token %}
+		{{ countries_dropdown.as_p }}</form>
+
+	<p>Idem al gráfico anterior, pero se puede ver la evolución de los
+		retardos en la red. Las curvas que tienen un máximo sobre la izquierda
+		muestran una buena interconexión (rápida), las que lo tienen a la
+		derecha una mala interconexión (lenta), y las que lo tienen en la zona
+		media una interconexión media (posiblemente la diferencia entre los
+		caminos de ida y vuelta de los paquetes causa que un enlace sea rápido
+		y otro lento).</p>
+	<div align="center" id="distribution_history_div"
+		class="barchart border"></div>
+</div>
+<div class="chartdiv">
+	<h3>Latencia desde un país hacia él mismo</h3>
+	<p>La gráfica a continuación representa la latencia interna de un
+		país. Cuanto mayor la latencia, peor la calidad de la red. Si la
+		latencia resulta ser excesivamente alta, entonces se puede suponer que
+		el tráfico interno en un país está siendo enrutado hacia afuera, y
+		luego hacia adentro. Una causa de esto es la falta de IXP regionales y
+		locales. Para países pequeños, este valor debería ser menor que para
+		países grandes.</p>
+	<div align="center" id="column_chart_div" class="barchart border"></div>
+</div>
+
+<div id="center" class="chartdiv">
+	<h3>Matriz con latencias</h3>
+	<p>
+		La gráfica a continuación representa la latencia promedio en la
+		región. Las filas representan los paises de origen de los tests, y las
+		columnas los de destino. Es decir, si se quieren ver todos los tests
+		con origen Guatemala, basta ver la fila Guatemala; si se quieren ver
+		los que tienen destino Guatemala, entonces habrá que recorrer la
+		columna Guatemala. <br /> Las latencias más altas se corresponden con
+		las tonalidaades más oscuras. Se puede ver que la diagonal principal
+		tiene, lógicamente, menor latencia que el promedio, ya que se
+		corresponde con la latencia interna de los países.
+	</p>
+	<div class="border" >
+		<div id="heatmap" style="width: 600px; height: 600px; margin: 3em 0 0 100px"></div>
+	</div>
+</div>
+
+<!-- HEATMAP -->
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/modules/heatmap.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<script>
+$(function () {
+	
+	Highcharts.setOptions({
+		lang : {
+			downloadJPEG : 'Descargar JPEG',
+			downloadPDF : 'Descargar PDF',
+			downloadPNG : 'Descargar PNG',
+			downloadSVG : 'Descargar SVG',
+			printChart : 'Imprimir...'
+		}
+	})
+
+    $('#heatmap').highcharts({
+        
+        chart: {
+            type: 'heatmap',
+            inverted : true,
+            backgroundColor : 'rgba(255, 255, 255, 0.1)',
+//             marginTop: 40,
+//             marginBottom: 40
+        },
+        
+        title: {
+            text: ''
+        },
+
+        xAxis: {
+            categories: {{ heatmap_countries|safe }},
+            title: {text : 'Origen'},
+        },
+
+        yAxis: {
+            categories: {{ heatmap_countries|safe }},
+            title: {text : 'Destino'},
+            labels: {
+                rotation: -45,
+            }
+        },
+
+        colorAxis: {
+            min: 0,
+            minColor: '#FFFFFF',
+            maxColor: Highcharts.getOptions().colors[0]
+        },
+
+        legend: {
+            align: 'center',
+            layout: 'horizontal',
+            enabled : true,
+//             margin: 0,
+            verticalAlign: 'top',
+//             y: 25,
+//             symbolHeight: 320
+        },
+
+        tooltip: {
+            formatter: function () {
+                return this.series.xAxis.categories[this.point.x] + ' --> ' + this.series.yAxis.categories[this.point.y] + ' ' + this.point.value + ' ms';
+            }
+        },
+
+        series: [{
+            name: 'Latencia',
+            borderWidth: 0,
+            data: {{ heatmap_values|safe }},
+            dataLabels: {
+                enabled: false,
+                color: 'black',
+                style: {
+                    textShadow: 'none',
+                    HcTextStroke: null
+                }
+            }
+        }],
+        dataLabels: {
+            enabled: false,
+        }
+    });
+});
+</script>
+<script>
+$(document).ready(function() {
+
+function make_x_axis() {        
+    return d3.svg.axis()
+        .scale(x)
+         .orient("bottom")
+         .ticks(10)
+}
+
+function make_y_axis() {        
+    return d3.svg.axis()
+        .scale(y)
+        .orient("left")
+        .ticks(5)
+}
+	
+function ipColor(name) {
+	if(name === 'IP v4') {
+  		return 'steelblue';
+  	} else if(name === 'IP v6') {
+  		return 'firebrick';
+  	}
+}
+
+var margin = {top: 20, right: 80, bottom: 50, left: 100},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+var x = d3.scale.linear()//log()
+    .range([0, width]);
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+var color = d3.scale.category10();
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
+
+var line = d3.svg.line()
+    .interpolate("basis")
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.temperature); });
+
+var svg = d3.select("#fig2").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+d3.tsv("/static/data/region.tsv", function(error, data) {
+  color.domain(d3.keys(data[0]).filter(function(key) { return key !== "date"; }));
+
+  data.forEach(function(d) {
+    d.date = +d.date;
+  });
+
+  var cities = color.domain().map(function(name) {
+    return {
+      name: name,
+      values: data.map(function(d) {
+        return {date: d.date, temperature: +d[name]};
+      })
+    };
+  });
+
+  x.domain(d3.extent(data, function(d) { return d.date; }));
+
+  y.domain([
+    d3.min(cities, function(c) { return d3.min(c.values, function(v) { return v.temperature; }); }),
+    d3.max(cities, function(c) { return d3.max(c.values, function(v) { return v.temperature; }); })
+  ]);
+
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis)
+      .append("text")
+      .attr("y", 40)
+      .attr("x", 400)
+      .attr("dy", ".40em")
+      .text("Latencia (ms)")
+      .style("text-anchor", "middle")
+      .style("font-style", "italic")
+      .style("font-size", 12);
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", -80)
+      .attr("x", -200)
+      .attr("dy", ".71em")
+      .text("Distribución (%)")
+      .style("text-anchor", "middle")
+      .style("font-style", "italic")
+      .style("font-size", 12);
+
+  var city = svg.selectAll(".city")
+      .data(cities)
+    .enter().append("g")
+      .attr("class", "city");
+
+  city.append("path")
+      .attr("class", "line")
+      .attr("d", function(d) { return line(d.values); })
+      .style("stroke", function(d) { return ipColor(d.name) });
+
+  city.append("text")
+      .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
+      .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.temperature) + ")"; })
+      .attr("x", 3)
+      .attr("dy", "-1.35em")
+      .attr("fill", function(d) { return ipColor(d.name) })
+      .text(function(d) { return d.name; });
+
+  svg.append("g")         
+  .attr("class", "grid")
+  .attr("transform", "translate(0," + height + ")")
+  .call(make_x_axis()
+      .tickSize(-height, 0, 0)
+      .tickFormat("")
+  )
+
+svg.append("g")         
+  .attr("class", "grid")
+  .call(make_y_axis()
+      .tickSize(-width, 0, 0)
+      .tickFormat("")
+  )
+});
+
+});
+
+</script>
+
+
+{% include 'footer.html' %}

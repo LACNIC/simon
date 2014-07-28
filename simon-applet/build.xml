@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project simon-applet">
+	<!--this file was created by Eclipse Runnable JAR Export Wizard -->
+	<!--ANT 1.7 is required -->
+	<property name="proj" location="." />
+	<target name="create_run_jar">
+		<jar destfile="${proj}/jar/simon-applet.jar" filesetmanifest="mergewithoutmain">
+			<manifest>
+				<attribute name="Built-By" value="${user.name}" />
+				<attribute name="Main-Class" value="simon.client.latency.LatencyTester" />
+				<attribute name="Class-Path" value="." />
+			</manifest>
+			<fileset dir="${proj}/bin" />
+			<zipfileset excludes="META-INF/*.SF" src="${proj}/lib/log4j.jar" />
+			<zipfileset excludes="META-INF/*"
+				src="${proj}/lib/commons-logging-1.1.1.jar" />
+			<zipfileset excludes="META-INF/*"
+				src="${proj}/lib/httpClient-4/httpcore-4.0.jar" />
+			<zipfileset excludes="META-INF/*"
+				src="${proj}/lib/httpClient-4/httpmime-4.0-beta2.jar" />
+			<zipfileset excludes="META-INF/*"
+				src="${proj}/lib/httpClient-4/httpclient-4.0-beta2.jar" />
+			<zipfileset excludes="META-INF/*" src="${proj}/lib/json-simple-1.1.1.jar" />
+
+			<!-- <zipfileset excludes="META-INF/*" src="${proj}/lib/commons-httpclient-3.1.jar"/> -->
+			<!-- <zipfileset excludes="META-INF/*" src="${proj}/lib/commons-codec-1.3.jar"/> -->
+		</jar>
+	</target>
+</project>
