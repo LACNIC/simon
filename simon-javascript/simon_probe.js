@@ -59,7 +59,6 @@ var COUNTRY = {
 
 				countryCode = cc;
 				getMyIPAddress(ipv6ResolveURL);
-				// getTestsConfigs();
 			},
 			error : function(xhr, status, error) {
 
@@ -395,7 +394,10 @@ function latencyTest(testPoint) {
 						 * if the probe is located at the Simon site, keep doing
 						 * tests indefinitely
 						 */
-						getPoints(pointsURL + 1);
+						if (ipv6Address != "")
+							getPoints(6);
+						else
+							getPoints(4);
 					} else {
 						printr("Thank you!");
 					}
