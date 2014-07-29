@@ -2,6 +2,7 @@
 import os
 import socket
 import passwords
+from datetime import datetime
 
 # Passwords stored in env. variables or passwords.py file
 # Env. variable syntax: SIMON_<>
@@ -18,8 +19,8 @@ ADMINS = (
 MANAGERS = ADMINS
 
 # application version
-APP_VERSION = "1.3"
-DATE_UPDATED = "20140425"
+APP_VERSION = "1.4"
+DATE_UPDATED = "Tue Jul 29 12:35:34 UYT 2014"
 
 PROJECT_ROOT = os.path.abspath(os.path.pardir)
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -230,7 +231,7 @@ else:
     URL_PFX = ''
     UNSUBSCRIBE_TESTPOINT_URL = '/removetestpoint'
 #     MEDIA_ROOT = '/Users/agustin/Desktop'
-    SIMON_URL = 'http://127.0.0.1'
-    v4_URL = 'http://simon.v4.labs.lacnic.net/cemd/getip'
-    v6_URL = 'http://simon.v6.labs.lacnic.net/cemd/getip'
+    SIMON_URL = 'http://200.7.87.141'
+    v4_URL = 'http://simon.v4.labs.lacnic.net/cemd/getip/jsonp'
+    v6_URL = 'http://simon.v6.labs.lacnic.net/cemd/getip/jsonp'
 TEMPLATE_DEBUG = DEBUG

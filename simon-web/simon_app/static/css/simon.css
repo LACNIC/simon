@@ -91,6 +91,11 @@
 	background-color:rgba(0, 0, 0, 0.2);
 }
 
+.hover:hover {
+	box-shadow: 2px 2px 4px #888888;
+	background-color:rgba(0, 0, 0, 0.2);
+}
+
 .border{
 	border-width: 1px;
 	border-style: dashed;

@@ -1,11 +1,12 @@
- {% include 'header.html' %}
+{% extends 'base.html'  %}
 
+{% block content %}
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Reports - Charts</title>
 <style>
 #map-canvas {
-	height: 700px;
-	width: 500px;
+	height: 350px;
+	width: 250px;
 	margin: 0 auto padding:            0px
 }
 
@@ -26,11 +27,12 @@ path.line {
 }
 
 .grid .tick {
-    stroke: lightgrey;
-    opacity: 0.7;
+	stroke: lightgrey;
+	opacity: 0.7;
 }
+
 .grid path {
-      stroke-width: 0;
+	stroke-width: 0;
 }
 </style>
 
@@ -40,12 +42,6 @@ path.line {
 
 <!-- Spinner -->
 <script type="text/javascript" src="/static/js/spin.js"></script>
-
-<!-- Heat Map -->
-<script type="text/javascript"
-	src="/static/js/mbostock-protovis-1a61bac/protovis.js"></script>
-
-<script src="http://d3js.org/d3.v3.js"></script>
 
 <!-- Google Charts -->
 <script type='text/javascript' src='https://www.google.com/jsapi'></script>
@@ -345,7 +341,7 @@ function initialize() {
 	          ];
     
   var mapOptions = {
-		  zoom: 3,
+		  zoom: 2,
 		  center: new google.maps.LatLng(-25.8836111, -65.1819444),
 		  mapTypeId: google.maps.MapTypeId.ROADMAP,
     	  styles: styles,
@@ -358,13 +354,13 @@ function initialize() {
   var map = new google.maps.Map(document.getElementById('map-canvas'),
       mapOptions);
 
-  var image = "/static/imgs/simon-icon-red.png";
+  var image = "/static/imgs/ntp.png";
 	{% for testpoint in testpoints %}
   	var marker = new google.maps.Marker({
 	    position: new google.maps.LatLng({{ testpoint.latitude }}, {{ testpoint.longitude }}),
 	    map: map,
 	    title: "{{ testpoint.city }}",
-// 	    icon: image
+	    icon: image
 	});
   	marker.setMap(map);
 	{% endfor %}
@@ -381,43 +377,100 @@ google.maps.event.addDomListener(window, 'load', initialize);
 	el aporte de puntos de testing como de la realización de los tests.</p>
 
 <div class="chartdiv">
-	<h3>Ubicación de los servidores que forman parte del proyecto
-		Simón</h3>
-	<p>Los siguientes mapas muestran la cantidad de servidores,
-		agrupados por país. A mayor cantidad de servidores, mayor cantidad de
-		muestras que un país tendrá, y más representativas serán las
-		estadísticas del mismo.</p>
-	<div id="map-canvas" class="border" style="margin: auto auto"></div>
+	<div id="map-canvas" class="border" style="float: left; margin: 50px;"></div>
+
+	<h3>Ubicación de los puntos de medición que forman parte del
+		proyecto Simón</h3>
+	<p>El mapa de la izquierda muestra la ubicación de los servidores
+		donde se realizan las mediciones de latencia. Existen varios tipos de
+		servidores, incluyendo NTP, setvidores Speedtest, y servdores CAIDA
+		Ark. En un futuro próximo se incluirán puntos de testing de RIPE
+		ATLAS.</p>
+	<p>
+		Gracias a la naturaleza del medidor Javascript, que realiza mediciones
+		de latencia a servidores web, existen potencialmente una inmensa
+		cantidad de servidores disponibles para incorporar a los puntos de
+		muestreo de Simón. Colaborar con un punto de muestreo es muy sencillo!
+		Visita la sección de <a href="/participate">registro de un nuevo
+			punto de muestreo</a> e ingresá tu servidor web o NTP. Desde ya muchas
+		gracias!
+	</p>
+
 </div>
 
 <div class="chartdiv">
 	<h3>Distribución de latencia</h3>
-	<p>Las gráfica a continuación representan la distribución de
-		latencia en la región. Cuanto más estrecha sea la curva, menor
-		varianza, y por ende mayor equidad en la calidad de Internet. Cuanto
-		más a la izquierda se encuentre el máximo de la curva, menor será la
-		latencia, y mejor será la calidad de Internet.</p>
+	<p>Uno de los principales estudios que Simón realiza sobre los
+		datos recabados es el estudio de histogramas de latencia. Estos
+		histogrmas pueden reflejar problemas vinculados a enrutamiento
+		subóptimo, malas políticas de enrutamiento, o falta de peering entre
+		proveedores de serivcio. A través de anomalías en los histogramas se
+		pueden identificar problemas, o proponer mejoras en la infraestructura
+		o topología de redes de LAC, y dar pasos icrementales hacia una
+		Internet regional de mejor calidad. Una de estas anomalías es cuando
+		un histograma presenta varios 'picos', es decir cuando no existe una
+		única gran media que represente a los datos muestreados, sino que los
+		datos se agrupan en subconjuntos, teniendo cada subconjunto su propia
+		media. Lo ideal es ver la conexión entre dos países y analizando los
+		histogramas ver si existe alguna relación entre cada subconjunto y
+		alguna causa en particular.</p>
+	<p>Las gráficas a continuación representan la distribución de
+		latencia en la región, desde 2009. En este caso, cuanto más estrecha
+		sea la curva, menor varianza, y por ende mayor equidad en la calidad
+		de Internet. Cuanto más a la izquierda se encuentre el máximo de la
+		curva, menor será la latencia, y mejor será la calidad de Internet. En
+		caso de haber múltiples picos en el histograma, se puede decir que la
+		latencia a nivel regional se agrupa en múltiples subconjuntos.</p>
+	<p>
+		Para obtener más información acerca de la calidad de Internet en tu
+		país, ver la sección de <a href="/reports">Reportes por país</a>. Allí
+		se pueden apreciar las anomalías en algunos histogramas. Ese tipo de
+		información es útil para que operadores de red puedan tener
+		conocimiento de cómo su red es vista desde otras redes de LAC en
+		términos de latencia.
+	</p>
 
-	<h4>Latencia en la región</h4>
-	<p>El eje horizontal representa la latencia, y el eje vertical la
-		cantidad de ocurrencias.</p>
-	<div id="fig2" class="border" align="center" style="margin: 50"></div>
+	<a href="/static/files/2009.png"
+		title="Histograma de distribución de latencia, año 2009"><img
+		alt="Histograma de distribución de latencia, año 2009"
+		src="/static/files/2009.png" style="width: 250px" class="hover" /></a> <a
+		href="/static/files/2010.png"
+		title="Histograma de distribución de latencia, año 2010"><img
+		alt="Histograma de distribución de latencia, año 2010"
+		src="/static/files/2010.png" style="width: 250px" class="hover" /></a> <a
+		href="/static/files/2011.png"
+		title="Histograma de distribución de latencia, año 2011"><img
+		alt="Histograma de distribución de latencia, año 2011"
+		src="/static/files/2011.png" style="width: 250px" class="hover" /></a> <a
+		href="/static/files/2012.png"
+		title="Histograma de distribución de latencia, año 2012"><img
+		alt="Histograma de distribución de latencia, año 2012"
+		src="/static/files/2012.png" style="width: 250px" class="hover" /></a> <a
+		href="/static/files/2013.png"
+		title="Histograma de distribución de latencia, año 2013"><img
+		alt="Histograma de distribución de latencia, año 2013"
+		src="/static/files/2013.png" style="width: 250px" class="hover" /></a> <a
+		href="/static/files/2014.png"
+		title="Histograma de distribución de latencia, año 2014"><img
+		alt="Histograma de distribución de latencia, año 2014"
+		src="/static/files/2014.png" style="width: 250px" class="hover" /></a>
+</div>
 
 
 
-	<h4>Latencia por lugar desglosada en años</h4>
-	<form id="country_form" action="" method="post">{% csrf_token %}
-		{{ countries_dropdown.as_p }}</form>
+<h4>Latencia por lugar desglosada en años</h4>
+<form id="country_form" action="" method="post">{% csrf_token %}
+	{{ countries_dropdown.as_p }}</form>
 
-	<p>Idem al gráfico anterior, pero se puede ver la evolución de los
-		retardos en la red. Las curvas que tienen un máximo sobre la izquierda
-		muestran una buena interconexión (rápida), las que lo tienen a la
-		derecha una mala interconexión (lenta), y las que lo tienen en la zona
-		media una interconexión media (posiblemente la diferencia entre los
-		caminos de ida y vuelta de los paquetes causa que un enlace sea rápido
-		y otro lento).</p>
-	<div align="center" id="distribution_history_div"
-		class="barchart border"></div>
+<p>Idem al gráfico anterior, pero se puede ver la evolución de los
+	retardos en la red. Las curvas que tienen un máximo sobre la izquierda
+	muestran una buena interconexión (rápida), las que lo tienen a la
+	derecha una mala interconexión (lenta), y las que lo tienen en la zona
+	media una interconexión media (posiblemente la diferencia entre los
+	caminos de ida y vuelta de los paquetes causa que un enlace sea rápido
+	y otro lento).</p>
+<div align="center" id="distribution_history_div"
+	class="barchart border"></div>
 </div>
 <div class="chartdiv">
 	<h3>Latencia desde un país hacia él mismo</h3>
@@ -444,8 +497,9 @@ google.maps.event.addDomListener(window, 'load', initialize);
 		tiene, lógicamente, menor latencia que el promedio, ya que se
 		corresponde con la latencia interna de los países.
 	</p>
-	<div class="border" >
-		<div id="heatmap" style="width: 600px; height: 600px; margin: 3em 0 0 100px"></div>
+	<div class="border">
+		<div id="heatmap"
+			style="width: 600px; height: 600px; margin: 3em 0 0 100px"></div>
 	</div>
 </div>
 
@@ -534,148 +588,4 @@ $(function () {
     });
 });
 </script>
-<script>
-$(document).ready(function() {
-
-function make_x_axis() {        
-    return d3.svg.axis()
-        .scale(x)
-         .orient("bottom")
-         .ticks(10)
-}
-
-function make_y_axis() {        
-    return d3.svg.axis()
-        .scale(y)
-        .orient("left")
-        .ticks(5)
-}
-	
-function ipColor(name) {
-	if(name === 'IP v4') {
-  		return 'steelblue';
-  	} else if(name === 'IP v6') {
-  		return 'firebrick';
-  	}
-}
-
-var margin = {top: 20, right: 80, bottom: 50, left: 100},
-    width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
-
-var x = d3.scale.linear()//log()
-    .range([0, width]);
-
-var y = d3.scale.linear()
-    .range([height, 0]);
-
-var color = d3.scale.category10();
-
-var xAxis = d3.svg.axis()
-    .scale(x)
-    .orient("bottom");
-
-var yAxis = d3.svg.axis()
-    .scale(y)
-    .orient("left");
-
-var line = d3.svg.line()
-    .interpolate("basis")
-    .x(function(d) { return x(d.date); })
-    .y(function(d) { return y(d.temperature); });
-
-var svg = d3.select("#fig2").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-d3.tsv("/static/data/region.tsv", function(error, data) {
-  color.domain(d3.keys(data[0]).filter(function(key) { return key !== "date"; }));
-
-  data.forEach(function(d) {
-    d.date = +d.date;
-  });
-
-  var cities = color.domain().map(function(name) {
-    return {
-      name: name,
-      values: data.map(function(d) {
-        return {date: d.date, temperature: +d[name]};
-      })
-    };
-  });
-
-  x.domain(d3.extent(data, function(d) { return d.date; }));
-
-  y.domain([
-    d3.min(cities, function(c) { return d3.min(c.values, function(v) { return v.temperature; }); }),
-    d3.max(cities, function(c) { return d3.max(c.values, function(v) { return v.temperature; }); })
-  ]);
-
-  svg.append("g")
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + height + ")")
-      .call(xAxis)
-      .append("text")
-      .attr("y", 40)
-      .attr("x", 400)
-      .attr("dy", ".40em")
-      .text("Latencia (ms)")
-      .style("text-anchor", "middle")
-      .style("font-style", "italic")
-      .style("font-size", 12);
-
-  svg.append("g")
-      .attr("class", "y axis")
-      .call(yAxis)
-    .append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", -80)
-      .attr("x", -200)
-      .attr("dy", ".71em")
-      .text("Distribución (%)")
-      .style("text-anchor", "middle")
-      .style("font-style", "italic")
-      .style("font-size", 12);
-
-  var city = svg.selectAll(".city")
-      .data(cities)
-    .enter().append("g")
-      .attr("class", "city");
-
-  city.append("path")
-      .attr("class", "line")
-      .attr("d", function(d) { return line(d.values); })
-      .style("stroke", function(d) { return ipColor(d.name) });
-
-  city.append("text")
-      .datum(function(d) { return {name: d.name, value: d.values[d.values.length - 1]}; })
-      .attr("transform", function(d) { return "translate(" + x(d.value.date) + "," + y(d.value.temperature) + ")"; })
-      .attr("x", 3)
-      .attr("dy", "-1.35em")
-      .attr("fill", function(d) { return ipColor(d.name) })
-      .text(function(d) { return d.name; });
-
-  svg.append("g")         
-  .attr("class", "grid")
-  .attr("transform", "translate(0," + height + ")")
-  .call(make_x_axis()
-      .tickSize(-height, 0, 0)
-      .tickFormat("")
-  )
-
-svg.append("g")         
-  .attr("class", "grid")
-  .call(make_y_axis()
-      .tickSize(-width, 0, 0)
-      .tickFormat("")
-  )
-});
-
-});
-
-</script>
-
-
-{% include 'footer.html' %}
+{% endblock %}

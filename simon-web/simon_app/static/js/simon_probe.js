@@ -59,7 +59,8 @@ var COUNTRY = {
 			success : function(cc) {
 
 				countryCode = cc;
-				getTestsConfigs();
+				getMyIPAddress();
+//				getTestsConfigs();
 			},
 			error : function(xhr, status, error) {
 
@@ -105,19 +106,22 @@ function getTestsConfigs() {
 			} else {
 				runJitter = false;
 			}
-			getPoints();
+			
+			if(ipv6Address != "")
+				getPoints(6);
+			else
+				getPoints(4);
 		}
 	});
 }
 
-function getPoints() {
+function getPoints(ipVersion) {
 
 	$.ajax({
-		url : simonURL + "web_points/" + SIMON.params.amount + "/4",
+		url : simonURL + "web_points/" + SIMON.params.amount + "/" + ipVersion,
 		dataType : 'jsonp',
 		crossDomain : true
-	})
-	.success(function(data) {
+	}).success(function(data) {
 
 		points = new Array();
 
@@ -161,14 +165,13 @@ function getPoints() {
 
 				testPoint.throughputResults.push(image);
 			}
-			
+
 			points.push(testPoint);
 		}
 
 		siteOnLine(points[0]);
 
-	})
-	.complete();
+	}).complete();
 }
 
 /*
@@ -379,26 +382,50 @@ function latencyTest(testPoint) {
 				 * Force to get the v4 or v6 IP address getMyIPAddress triggers
 				 * the POST and next point test
 				 */
+				var array = [];
+				array.push(testPoint);
+				
+				var xml;
+				if(getIPversion(testPoint.ip) == '4')
+					xml = buildXML(array, ipv4Address);
+				else if(getIPversion(testPoint.ip) == '6')
+					xml = buildXML(array, ipv6Address);
+				postResults(postLatencyURL, xml);
+				
+				var nextTestPoint = getNextPoint(testPoint);
+				if (nextTestPoint != -1) {
+					siteOnLine(nextTestPoint);// ... and next tests
+					
+				} else {
 
-				if (getIPversion(testPoint.ip) == '4') {
-					if (ipv4Address == "") {
-						getMyIPAddress(ipv4ResolveURL
-								+ '/jsonp/getMyIPAddressCallback');
+					if (document.URL === simonURL) {
+						/*
+						 * if the probe is located at the Simon site, keep doing tests
+						 * indefinitely
+						 */
+						getPoints(pointsURL + 1);
 					} else {
-						getMyIPAddressCallback({
-							ip : ipv4Address
-						});
-					}
-				} else if (getIPversion(testPoint.ip) == '6') {
-					if (ipv6Address == "") {
-						getMyIPAddress(ipv6ResolveURL
-								+ '/jsonp/getMyIPAddressCallback');
-					} else {
-						getMyIPAddressCallback({
-							ip : ipv6Address
-						});
+						printr("Thank you!");
 					}
 				}
+
+//				if (getIPversion(testPoint.ip) == '4') {
+//					if (ipv4Address == "") {
+//						getMyIPAddress(ipv4ResolveURL);
+//					} else {
+//						getMyIPAddressCallback({
+//							ip : ipv4Address
+//						});
+//					}
+//				} else if (getIPversion(testPoint.ip) == '6') {
+//					if (ipv6Address == "") {
+//						getMyIPAddress(ipv6ResolveURL);
+//					} else {
+//						getMyIPAddressCallback({
+//							ip : ipv6Address
+//						});
+//					}
+//				}
 			}
 
 		}
@@ -413,7 +440,7 @@ function getIPversion(ip) {
 	} else {
 		return '4';
 	}
-	return 1;// error
+	return -1;// error
 }
 
 function testerFinished(testPoint) {
@@ -445,10 +472,50 @@ function postResults(url, data) {
  * 
  * @param url
  */
-function getMyIPAddress(url) {
+function getMyIPAddress() {
 	$.ajax({
-		url : url,
+		url : ipv6ResolveURL,
 		dataType : 'jsonp'
+	})
+	.success(function(data) {
+//		var testPoint = auxTestPoint;
+//		/*
+//		 * empty global variable
+//		 */
+//		auxTestPoint = null;
+//		var array = [];
+//		array.push(testPoint);
+
+		if (getIPversion(data.ip) == '4') {
+			ipv4Address = data.ip;
+			getTestsConfigs();
+			
+		} else if (getIPversion(testPoint.ip) == '6') {
+			ipv6Address = data.ip;
+			getMyIPAddress(ipv4ResolveURL);
+		}
+
+//		var xml = buildXML(array, data.ip);
+//		postResults(postLatencyURL, xml);
+
+//		var nextTestPoint = getNextPoint(testPoint);
+//		if (nextTestPoint != -1) {
+//			siteOnLine(nextTestPoint);// ... and next tests
+//		} else {
+//
+//			if (document.URL === simonURL) {
+//				/*
+//				 * if the probe is located at the Simon site, keep doing tests
+//				 * indefinitely
+//				 */
+//				getPoints(pointsURL + 1);
+//			} else {
+//				/*
+//				 * otherwise, end
+//				 */
+//				printr("Thank you!");
+//			}
+//		}
 	});
 }
 /**
@@ -456,44 +523,44 @@ function getMyIPAddress(url) {
  * 
  * @param data
  */
-function getMyIPAddressCallback(data) {
-	var testPoint = auxTestPoint;
-	/*
-	 * empty global variable
-	 */
-	auxTestPoint = null;
-	var array = [];
-	array.push(testPoint);
-
-	if (getIPversion(data.ip) == '4') {
-		ipv4Address = data.ip;
-	} else if (getIPversion(testPoint.ip) == '6') {
-		ipv6Address = data.ip;
-	}
-
-	var xml = buildXML(array, data.ip);
-	postResults(postLatencyURL, xml);
-
-	var nextTestPoint = getNextPoint(testPoint);
-	if (nextTestPoint != -1) {
-		siteOnLine(nextTestPoint);
-	} else {
-
-		if (document.URL === simonURL) {
-			/*
-			 * if the probe is located at the Simon site, keep doing tests
-			 * indefinitely
-			 */
-			getPoints(pointsURL + 1);
-		} else {
-			/*
-			 * otherwise, end
-			 */
-			printr("Thank you!");
-		}
-	}
-
-}
+//function getMyIPAddressCallback(data) {
+//	var testPoint = auxTestPoint;
+//	/*
+//	 * empty global variable
+//	 */
+//	auxTestPoint = null;
+//	var array = [];
+//	array.push(testPoint);
+//
+//	if (getIPversion(data.ip) == '4') {
+//		ipv4Address = data.ip;
+//	} else if (getIPversion(testPoint.ip) == '6') {
+//		ipv6Address = data.ip;
+//	}
+//
+//	var xml = buildXML(array, data.ip);
+//	postResults(postLatencyURL, xml);
+//
+//	var nextTestPoint = getNextPoint(testPoint);
+//	if (nextTestPoint != -1) {
+//		siteOnLine(nextTestPoint);
+//	} else {
+//
+//		if (document.URL === simonURL) {
+//			/*
+//			 * if the probe is located at the Simon site, keep doing tests
+//			 * indefinitely
+//			 */
+//			getPoints(pointsURL + 1);
+//		} else {
+//			/*
+//			 * otherwise, end
+//			 */
+//			printr("Thank you!");
+//		}
+//	}
+//
+//}
 
 function getTestPointIndex(testPoint) {
 	for (i in points) {
