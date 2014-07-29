@@ -22,13 +22,15 @@
 }
 
 #lg-link-header {
-	background-image:url(http://www.labs.lacnic.net/drupal/themes/newlabs/xtras/logo-simon.png);
+	background-image:url(/static/imgs/simon-icon.png);
 	background-repeat:no-repeat;
+	background-size: 100%;
+	background-position: 20px;
 	position: relative;
 	top: 0px;
-	left: 700px;
-	width: 229px;
-	height: 85px;
+	left: 560px;
+	width: 400px;
+	height: 100%;
 	display: block;
  	background-color: transparent;
  	border: 0px solid yellow;

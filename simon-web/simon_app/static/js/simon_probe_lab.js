@@ -214,7 +214,7 @@ LAB = {
 				
 				error : function(xhr, textStatus, errorThrown) {
 					// If there is an error and the site is up, we can suppose it is due to 404
-					rtt = (+new Date - ts); // / 2
+					rtt = (+new Date - ts);
 					printr(rtt + ' ms');
 					if(textStatus != 'timeout' && rtt <= MAX) {
 						updateChart(rtt);

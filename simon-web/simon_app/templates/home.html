@@ -1,11 +1,9 @@
-{% include 'header.html' %}
+{% extends 'base.html' %} {% block javascript %}
 <script type="text/javascript" src="/static/js/jquery1.8.0.js"></script>
-
+<script type="text/javascript" src="http://jquery-jsonp.googlecode.com/files/jquery.jsonp-1.0.4.min.js"></script>
 <script type="text/javascript" src="/static/js/dateFormatter.js"></script>
-<script type="text/javascript"
-	src="http://jquery-jsonp.googlecode.com/files/jquery.jsonp-1.0.4.min.js"></script>
-<script type="text/javascript" src="/static/js/simon_probe.js"></script>
-
+<script type="text/javascript" src="/static/js/simon_probe_plugin.js"></script>
+{% endblock %} {% block css %}
 <style>
 #console {
 	background-color: black;
@@ -15,6 +13,7 @@
 	font-family: monospace;
 }
 </style>
+{% endblock %} {% block content %}
 <h1>Proyecto Simón</h1>
 <h3 style="font-size: 1em">Mapa de interconexión entre redes de
 	América Latina y Caribe a través de mediciones de latencia.</h3>
@@ -97,6 +96,11 @@
 <div id="console" class="homeBox"
 	style="padding-bottom: 10px; padding-left: 10px; width: 910px; height: 150px;">
 </div>
+<p>
+	Queres hacer ping a un sitio en particular? Te recomendamos la sección
+	<a href="/lab">latency lab</a>...allí puedes ver un histograma en
+	tiempo real acerca de las mediciones realizadas.
+</p>
 
 
-{% include 'footer.html' %}
+{% endblock %}

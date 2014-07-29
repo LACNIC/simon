@@ -97,12 +97,18 @@ def web_points(request, amount, ip_version):
     return response
 
 def web_configs(request):
-    # Returns JSON from all the configs
+    """
+        Returns JSONP from all the configs
+    """
+    
+    callback = request.GET.get('callback')
+    
     res = {}
     for config in Configs.objects.all():
         res[config.config_name] = config.config_value
 
     response = "{ \"configs\": " + json.dumps(res) + " }"
+    response = '%s( %s );' % (callback, response)
     return HttpResponse(response, mimetype="application/json")
 
     #######

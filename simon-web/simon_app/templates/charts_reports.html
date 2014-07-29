@@ -1,41 +1,5 @@
-{% extends 'base.html'  %}
-
-{% block content %}
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Reports - Charts</title>
-<style>
-#map-canvas {
-	height: 350px;
-	width: 250px;
-	margin: 0 auto padding:            0px
-}
-
-.axis path,.axis line {
-	fill: none;
-	stroke: #000;
-	shape-rendering: crispEdges;
-}
-
-.area {
-	fill: steelblue;
-}
-
-path.line {
-	fill: none;
-	stroke: #000;
-	stroke-width: 2;
-}
-
-.grid .tick {
-	stroke: lightgrey;
-	opacity: 0.7;
-}
-
-.grid path {
-	stroke-width: 0;
-}
-</style>
-
+{% extends 'base.html' %}
+{% block javascript %}
 <!-- J Query -->
 <script type="text/javascript"
 	src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
@@ -125,6 +89,7 @@ path.line {
 					        };
 					  var data = new google.visualization.DataTable(distribution.table, 0.6);
 					  chart.draw(data, options);
+					  
 				  }
 			  });
 		}
@@ -159,7 +124,7 @@ path.line {
 					            }
 					        };
 			        var data = new google.visualization.DataTable(distribution_history.table, 0.6);
-			        chart.draw(data, options)
+			        chart.draw(data, options);
 				  }
 			  });
 		}
@@ -368,7 +333,135 @@ function initialize() {
 
 google.maps.event.addDomListener(window, 'load', initialize);
 
-    </script>
+ </script>
+
+<!-- HEATMAP -->
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/modules/heatmap.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<script>
+$(function () {
+	
+	Highcharts.setOptions({
+		lang : {
+			downloadJPEG : 'Descargar JPEG',
+			downloadPDF : 'Descargar PDF',
+			downloadPNG : 'Descargar PNG',
+			downloadSVG : 'Descargar SVG',
+			printChart : 'Imprimir...'
+		}
+	})
+
+    $('#heatmap').highcharts({
+        
+        chart: {
+            type: 'heatmap',
+            inverted : true,
+            backgroundColor : 'rgba(255, 255, 255, 0.1)',
+//             marginTop: 40,
+//             marginBottom: 40
+        },
+        
+        title: {
+            text: ''
+        },
+
+        xAxis: {
+            categories: {{ heatmap_countries|safe }},
+            title: {text : 'Origen'},
+        },
+
+        yAxis: {
+            categories: {{ heatmap_countries|safe }},
+            title: {text : 'Destino'},
+            labels: {
+                rotation: -45,
+            }
+        },
+
+        colorAxis: {
+            min: 0,
+            minColor: '#FFFFFF',
+            maxColor: Highcharts.getOptions().colors[0]
+        },
+
+        legend: {
+            align: 'center',
+            layout: 'horizontal',
+            enabled : true,
+//             margin: 0,
+            verticalAlign: 'top',
+//             y: 25,
+//             symbolHeight: 320
+        },
+
+        tooltip: {
+            formatter: function () {
+                return this.series.xAxis.categories[this.point.x] + ' --> ' + this.series.yAxis.categories[this.point.y] + ' ' + this.point.value + ' ms';
+            }
+        },
+
+        series: [{
+            name: 'Latencia',
+            borderWidth: 0,
+            data: {{ heatmap_values|safe }},
+            dataLabels: {
+                enabled: false,
+                color: 'black',
+                style: {
+                    textShadow: 'none',
+                    HcTextStroke: null
+                }
+            }
+        }],
+        dataLabels: {
+            enabled: false,
+        }
+    });
+});
+</script>
+{% endblock %}
+
+{% block css %}
+<style>
+#map-canvas {
+	height: 350px;
+	width: 250px;
+	margin: 0 auto padding:            0px
+}
+
+.axis path,.axis line {
+	fill: none;
+	stroke: #000;
+	shape-rendering: crispEdges;
+}
+
+.area {
+	fill: steelblue;
+}
+
+path.line {
+	fill: none;
+	stroke: #000;
+	stroke-width: 2;
+}
+
+.grid .tick {
+	stroke: lightgrey;
+	opacity: 0.7;
+}
+
+.grid path {
+	stroke-width: 0;
+}
+</style>
+{% endblock %}
+{% block title %} Gráficas {% endblock %}
+
+{% block content %}
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
 
 <h1>Gráficas de los resultados de las mediciones</h1>
 <p>Las siguientes gráficas hacen más accesible procesar toda la
@@ -502,90 +595,4 @@ google.maps.event.addDomListener(window, 'load', initialize);
 			style="width: 600px; height: 600px; margin: 3em 0 0 100px"></div>
 	</div>
 </div>
-
-<!-- HEATMAP -->
-<script src="http://code.highcharts.com/highcharts.js"></script>
-<script src="http://code.highcharts.com/modules/heatmap.js"></script>
-<script src="http://code.highcharts.com/modules/exporting.js"></script>
-<script>
-$(function () {
-	
-	Highcharts.setOptions({
-		lang : {
-			downloadJPEG : 'Descargar JPEG',
-			downloadPDF : 'Descargar PDF',
-			downloadPNG : 'Descargar PNG',
-			downloadSVG : 'Descargar SVG',
-			printChart : 'Imprimir...'
-		}
-	})
-
-    $('#heatmap').highcharts({
-        
-        chart: {
-            type: 'heatmap',
-            inverted : true,
-            backgroundColor : 'rgba(255, 255, 255, 0.1)',
-//             marginTop: 40,
-//             marginBottom: 40
-        },
-        
-        title: {
-            text: ''
-        },
-
-        xAxis: {
-            categories: {{ heatmap_countries|safe }},
-            title: {text : 'Origen'},
-        },
-
-        yAxis: {
-            categories: {{ heatmap_countries|safe }},
-            title: {text : 'Destino'},
-            labels: {
-                rotation: -45,
-            }
-        },
-
-        colorAxis: {
-            min: 0,
-            minColor: '#FFFFFF',
-            maxColor: Highcharts.getOptions().colors[0]
-        },
-
-        legend: {
-            align: 'center',
-            layout: 'horizontal',
-            enabled : true,
-//             margin: 0,
-            verticalAlign: 'top',
-//             y: 25,
-//             symbolHeight: 320
-        },
-
-        tooltip: {
-            formatter: function () {
-                return this.series.xAxis.categories[this.point.x] + ' --> ' + this.series.yAxis.categories[this.point.y] + ' ' + this.point.value + ' ms';
-            }
-        },
-
-        series: [{
-            name: 'Latencia',
-            borderWidth: 0,
-            data: {{ heatmap_values|safe }},
-            dataLabels: {
-                enabled: false,
-                color: 'black',
-                style: {
-                    textShadow: 'none',
-                    HcTextStroke: null
-                }
-            }
-        }],
-        dataLabels: {
-            enabled: false,
-        }
-    });
-});
-</script>
 {% endblock %}

@@ -40,7 +40,6 @@ var runThroughput = false;
 var runJitter = false;
 var points;
 var numTests = 5;
-var auxTestPoint;
 
 /*
  * COUNTRY request from server
@@ -59,8 +58,7 @@ var COUNTRY = {
 			success : function(cc) {
 
 				countryCode = cc;
-				getMyIPAddress();
-//				getTestsConfigs();
+				getMyIPAddress(ipv6ResolveURL);
 			},
 			error : function(xhr, status, error) {
 
@@ -88,7 +86,8 @@ function getTestsConfigs() {
 
 	$.ajax({
 		url : testsConfigsURL,
-		dataType : "json",
+		dataType : "jsonp",
+		crossDomain : true,
 		success : function(data, textStatus, jqXHR) {
 
 			if (data.configs.latency == 1) {
@@ -106,8 +105,8 @@ function getTestsConfigs() {
 			} else {
 				runJitter = false;
 			}
-			
-			if(ipv6Address != "")
+
+			if (ipv6Address != "")
 				getPoints(6);
 			else
 				getPoints(4);
@@ -180,7 +179,7 @@ function getPoints(ipVersion) {
 
 function siteOnLine(testPoint) {
 
-	printr("Checking site " + testPoint.ip);
+	printr("Checking site " + testPoint.ip + " (" + testPoint.country + ")");
 
 	/*
 	 * get the '/' directory
@@ -329,9 +328,6 @@ function buildOfflineXML(offlinePoints) {
 
 function latencyTest(testPoint) {
 
-	printr("Measuring latency to " + testPoint.ip + " (" + testPoint.country
-			+ ")");
-
 	var ts, rtt;
 
 	var url;
@@ -340,23 +336,26 @@ function latencyTest(testPoint) {
 	} else {
 		url = "http://" + testPoint.ip + "/" + Math.random();
 	}
-
+	
+//	$.ajax({
+//	url : url,
+//	dataType : 'jsonp',
+//	crossDomain : true,
+	
 	$.jsonp({
-		type : 'GET',
-		url : url,
-		dataType : 'jsonp',
-		timeout : latencyTimeout,
+	type : 'GET',
+	url : url,
+	dataType : 'jsonp',
+	timeout : latencyTimeout,
 		xhrFields : {
 			withCredentials : true
 		},
 
 		beforeSend : function(xhr) {
-			if (xhr.overrideMimeType) {
+			if (xhr.overrideMimeType)
 				xhr.setRequestHeader("Connection", "close");
-			}
 		},
-
-		error : function(xhr, textStatus, errorThrown) {
+		error : function(jqXHR, textStatus) {
 
 			if (textStatus == 'timeout') {
 
@@ -368,64 +367,42 @@ function latencyTest(testPoint) {
 				 */
 				rtt = (+new Date - ts);
 				testPoint.results.push(rtt);
+				printr("Measuring latency to " + testPoint.ip + " (" + getMean(testPoint.results) + " ms)");
 			}
 
 			saveTestPoint(testPoint);// store results in global variable
 
-			if (testerFinished(testPoint)) {
-				/*
-				 * post test point results
-				 */
-				auxTestPoint = testPoint;
+			if (testerFinished(testPoint)) {// post results
 
-				/*
-				 * Force to get the v4 or v6 IP address getMyIPAddress triggers
-				 * the POST and next point test
-				 */
 				var array = [];
 				array.push(testPoint);
-				
+
 				var xml;
-				if(getIPversion(testPoint.ip) == '4')
+				if (getIPversion(testPoint.ip) == '4')
 					xml = buildXML(array, ipv4Address);
-				else if(getIPversion(testPoint.ip) == '6')
+				else if (getIPversion(testPoint.ip) == '6')
 					xml = buildXML(array, ipv6Address);
 				postResults(postLatencyURL, xml);
-				
+
 				var nextTestPoint = getNextPoint(testPoint);
 				if (nextTestPoint != -1) {
 					siteOnLine(nextTestPoint);// ... and next tests
-					
+
 				} else {
 
 					if (document.URL === simonURL) {
 						/*
-						 * if the probe is located at the Simon site, keep doing tests
-						 * indefinitely
+						 * if the probe is located at the Simon site, keep doing
+						 * tests indefinitely
 						 */
-						getPoints(pointsURL + 1);
+						if (ipv6Address != "")
+							getPoints(6);
+						else
+							getPoints(4);
 					} else {
 						printr("Thank you!");
 					}
 				}
-
-//				if (getIPversion(testPoint.ip) == '4') {
-//					if (ipv4Address == "") {
-//						getMyIPAddress(ipv4ResolveURL);
-//					} else {
-//						getMyIPAddressCallback({
-//							ip : ipv4Address
-//						});
-//					}
-//				} else if (getIPversion(testPoint.ip) == '6') {
-//					if (ipv6Address == "") {
-//						getMyIPAddress(ipv6ResolveURL);
-//					} else {
-//						getMyIPAddressCallback({
-//							ip : ipv6Address
-//						});
-//					}
-//				}
 			}
 
 		}
@@ -472,95 +449,24 @@ function postResults(url, data) {
  * 
  * @param url
  */
-function getMyIPAddress() {
+function getMyIPAddress(url) {
+
 	$.ajax({
-		url : ipv6ResolveURL,
-		dataType : 'jsonp'
-	})
-	.success(function(data) {
-//		var testPoint = auxTestPoint;
-//		/*
-//		 * empty global variable
-//		 */
-//		auxTestPoint = null;
-//		var array = [];
-//		array.push(testPoint);
+		url : url,
+		dataType : 'jsonp',
+		crossDomain : true
+	}).success(function(data) {
 
 		if (getIPversion(data.ip) == '4') {
 			ipv4Address = data.ip;
 			getTestsConfigs();
-			
-		} else if (getIPversion(testPoint.ip) == '6') {
+
+		} else if (getIPversion(data.ip) == '6') {
 			ipv6Address = data.ip;
 			getMyIPAddress(ipv4ResolveURL);
 		}
-
-//		var xml = buildXML(array, data.ip);
-//		postResults(postLatencyURL, xml);
-
-//		var nextTestPoint = getNextPoint(testPoint);
-//		if (nextTestPoint != -1) {
-//			siteOnLine(nextTestPoint);// ... and next tests
-//		} else {
-//
-//			if (document.URL === simonURL) {
-//				/*
-//				 * if the probe is located at the Simon site, keep doing tests
-//				 * indefinitely
-//				 */
-//				getPoints(pointsURL + 1);
-//			} else {
-//				/*
-//				 * otherwise, end
-//				 */
-//				printr("Thank you!");
-//			}
-//		}
 	});
 }
-/**
- * callback called after a call to getMyIPAddress
- * 
- * @param data
- */
-//function getMyIPAddressCallback(data) {
-//	var testPoint = auxTestPoint;
-//	/*
-//	 * empty global variable
-//	 */
-//	auxTestPoint = null;
-//	var array = [];
-//	array.push(testPoint);
-//
-//	if (getIPversion(data.ip) == '4') {
-//		ipv4Address = data.ip;
-//	} else if (getIPversion(testPoint.ip) == '6') {
-//		ipv6Address = data.ip;
-//	}
-//
-//	var xml = buildXML(array, data.ip);
-//	postResults(postLatencyURL, xml);
-//
-//	var nextTestPoint = getNextPoint(testPoint);
-//	if (nextTestPoint != -1) {
-//		siteOnLine(nextTestPoint);
-//	} else {
-//
-//		if (document.URL === simonURL) {
-//			/*
-//			 * if the probe is located at the Simon site, keep doing tests
-//			 * indefinitely
-//			 */
-//			getPoints(pointsURL + 1);
-//		} else {
-//			/*
-//			 * otherwise, end
-//			 */
-//			printr("Thank you!");
-//		}
-//	}
-//
-//}
 
 function getTestPointIndex(testPoint) {
 	for (i in points) {
@@ -808,10 +714,11 @@ function getLost(dataSet) {
  */
 
 $(document).ready(function() {
-
+	NProgress.start();
 	if (Math.random() < SIMON.params.percentage) {
-
+		NProgress.done();
 		COUNTRY.getCountry();
 		jQuery.support.cors = true;
+		
 	}
 });
