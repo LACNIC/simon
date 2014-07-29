@@ -86,7 +86,8 @@ function getTestsConfigs() {
 
 	$.ajax({
 		url : testsConfigsURL,
-		dataType : "json",
+		dataType : "jsonp",
+		crossDomain : true,
 		success : function(data, textStatus, jqXHR) {
 
 			if (data.configs.latency == 1) {
@@ -678,7 +679,6 @@ function getStdDev(dataSet) {
 
 function getMean(dataSet) {
 	if (dataSet instanceof Array && dataSet.length > 0) {
-
 		return Math.floor(sum(dataSet) / dataSet.length);
 	}
 	return 0;
@@ -713,10 +713,11 @@ function getLost(dataSet) {
  */
 
 $(document).ready(function() {
-
+	NProgress.start();
 	if (Math.random() < SIMON.params.percentage) {
-
+		NProgress.done();
 		COUNTRY.getCountry();
 		jQuery.support.cors = true;
+		
 	}
 });
