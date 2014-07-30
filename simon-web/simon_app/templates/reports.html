@@ -2,20 +2,32 @@
 
 <div class="">
 	<h1>Reportes</h1>
-	<p>Las muestras consideradas en estos reportes fueron obtenidas por la contribución de cientos de usuarios en cada uno de los países.</p>
+	<p>Las muestras consideradas en estos reportes fueron obtenidas por
+		la contribución de cientos de usuarios en cada uno de los países.</p>
 </div>
 
 <!-- Latency form -->
 <div class="">
 	<h3>Resultados de latencia</h3>
 	<hr />
-	<p>Este reporte indica cuál es el RTT percibido desde un país de origen, hacia el resto de la región.</p>
+	<p>Este reporte indica cuál es el RTT percibido desde un país de
+		origen, hacia el resto de la región.</p>
 	<p>&nbsp;</p>
-		
-	<form action="{{URL_PFX}}/results/form" method="post">
-		{% csrf_token %} {{ form.as_p }} <input type="submit"
-			value="Submit" id="submit" />
+
+	<form id="country_form" action="/reports/" method="post">
+		{% csrf_token %} {{ form.as_p }} <input type="submit" value="Submit"
+			id="submit" />
 	</form>
+
+	{% for image in images %} <a
+		href="/static/histograms/countries/{{ image }}"
+		title="Histograma de distribución de latencia, año 2009"><img
+		alt="Histograma de distribución de latencia, año 2009"
+		src="/static/histograms/countries/{{ image }}" style="width: 250px"
+		class="hover" /></a> {% endfor %}
+
+
+
 </div>
-			
+
 {% include 'footer.html' %}

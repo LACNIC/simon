@@ -38,7 +38,7 @@ from simon_app.functions import KMG2bps, inLACNICResources, whoIs, bps2KMG
 from simon_app.javascript_latency import CountryForm
 from simon_app.models import Country, Results, TestPoint, ThroughputResults, \
     OfflineReport, Images_in_TestPoints, Images, ActiveTokens, Params
-from simon_app.reportes import ResultsForm, AddNewWebPointForm, AddNewNtpPointForm, GMTUY, CountryDropdownForm
+from simon_app.reportes import ResultsForm, AddNewWebPointForm, AddNewNtpPointForm, GMTUY, CountryDropdownForm, ReportForm
 import simon_project.settings as settings
 from _socket import timeout
 
@@ -111,7 +111,7 @@ def saveTracerouteResults(request, fileName):
                         devs = []
                         mean = sum(rtts) / float(len(rtts))
                         for r in rtts:
-                            dev = (r - mean)**2
+                            dev = (r - mean) ** 2
                             devs.append(dev)
                         stddev = math.sqrt(sum(devs) / (len(devs) - 1))
                     
@@ -137,7 +137,7 @@ def saveTracerouteResults(request, fileName):
                     r.ip_origin = ip_origin
                     r.ip_destination = ip_destination
                     r.testype = 'traceroute'
-                    r.number_probes = len(rtts) / 2 # counting 'ms' fields
+                    r.number_probes = len(rtts) / 2  # counting 'ms' fields
                     r.rtt_min = min(rtts)
                     r.rtt_max = max(rtts)
                     r.rtt_ave = mean
@@ -202,15 +202,15 @@ def latency(request, country='all', ip_version=4, year=2009, month=01):
 def throughput(request, country='all', ip_version=4, year=2009, month=01):
     return throughput_api(request, country, ip_version, year, month)
 
-def tables(request, country_iso, ip_version, year, month, tester, tester_version):#, test_type):
+def tables(request, country_iso, ip_version, year, month, tester, tester_version):  # , test_type):
     table_json, ip_version, country_name, date, now, tester, tester_version = tables_api(request, country_iso, ip_version, year, month, tester, tester_version)
     return render_to_response('table.html', {'json': table_json, 'ip_version':ip_version, 'country':country_name, 'date':date, 'now':now, 'tester':tester, 'tester_version':tester_version}, getContext(request))
 
-def throughput_json(request, country_iso, ip_version, year, month, tester, tester_version):#, test_type):
+def throughput_json(request, country_iso, ip_version, year, month, tester, tester_version):  # , test_type):
     json = throughput_json_api(request, country_iso, ip_version, year, month, tester, tester_version)
     return HttpResponse(json, mimetype="application/json")
 
-def throughput_tables(request, country_iso, ip_version, year, month, tester, tester_version):#, test_type):
+def throughput_tables(request, country_iso, ip_version, year, month, tester, tester_version):  # , test_type):
     json, ip_version, country_name, date, now, tester, tester_version = throughput_tables_api(request, country_iso, ip_version, year, month, tester, tester_version)
     return render_to_response('table.html', {'json': json, 'ip_version':ip_version, 'country':country_name, 'date':date, 'now':now, 'tester':tester, 'tester_version':tester_version}, getContext(request))
 
@@ -219,11 +219,11 @@ def post_xml_result(request):
     """
     View que recibe los datos de las mediciones
     """
-    if (request.method != 'POST'): #and request.method != 'GET'
+    if (request.method != 'POST'):  # and request.method != 'GET'
         return HttpResponse("invalid method: %s" % request.method)
     
     schema_file = '%s/SimonXMLSchema.xsd' % settings.STATIC_ROOT
-    #IMPORTANTE ARREGLAR EL SCHEMA DEL PAIS!!
+    # IMPORTANTE ARREGLAR EL SCHEMA DEL PAIS!!
     with open(schema_file) as f_schema:
         schema_doc = etree.parse(f_schema)
         schema = etree.XMLSchema(schema_doc)
@@ -260,23 +260,23 @@ def post_xml_result(request):
 
 @csrf_exempt
 def post_xml_throughput_result (request):
-    if (request.method != 'POST'): #and request.method != 'GET'
+    if (request.method != 'POST'):  # and request.method != 'GET'
         return HttpResponse("invalid method: %s" % request.method)
 
-    #source_file = '/home/dario/LACNIC/simon/ExampleXML2.xml'
+    # source_file = '/home/dario/LACNIC/simon/ExampleXML2.xml'
     schema_file = '%s/SimonXMLSchemaThroughput.xsd' % settings.STATIC_ROOT
     
-    #IMPORTANTE ARREGLAR EL SCHEMA DEL PAIS!!
+    # IMPORTANTE ARREGLAR EL SCHEMA DEL PAIS!!
     with open(schema_file) as f_schema:
         schema_doc = etree.parse(f_schema)
         schema = etree.XMLSchema(schema_doc)
         parser = etree.XMLParser(schema=schema)
 
         f_source = request.raw_post_data
-        #with open(source_file) as f_source:
+        # with open(source_file) as f_source:
         try:
-            #simon = etree.parse(f_source, parser)
-            #simon = simon.getroot()
+            # simon = etree.parse(f_source, parser)
+            # simon = simon.getroot()
             simon = etree.fromstring(f_source, parser)
              
             tests_list = simon.xpath("test")
@@ -284,7 +284,7 @@ def post_xml_throughput_result (request):
             for tests in tests_list:
                 result = ThroughputResults()
                 
-                #seteo los valores de simon
+                # seteo los valores de simon
                 result.version = simon.find('version').text
                 result.set_date_time(simon.find('date').text, simon.find('time').text)
                 result.country_origin = simon.find('local_country').text
@@ -293,7 +293,7 @@ def post_xml_throughput_result (request):
                 for field in tests:                    
                     result.set_data_test(field.tag, field.text)
                     
-                #seteo el pais de destino
+                # seteo el pais de destino
                 result.country_destination = TestPoint.objects.filter(ip_address=result.ip_destination).get().country
                 result.tester = simon.find('tester').text
                 result.tester_version = simon.find('tester_version').text
@@ -310,7 +310,7 @@ def post_xml_throughput_result (request):
 @csrf_exempt
 def post_offline_testpoints (request):
         
-    if (request.method != 'POST'): #and request.method != 'GET'
+    if (request.method != 'POST'):  # and request.method != 'GET'
         return HttpResponse("invalid method: %s" % request.method)
 
     schema_file = '%s/SimonXMLSchemaOfflinePoint.xsd' % settings.STATIC_ROOT
@@ -332,13 +332,13 @@ def post_offline_testpoints (request):
                     # match
                     dbPoint.report_count += 1
                     
-                    if True:#dbPoint.report_count >= settings.TESTPOINT_OFFLINE_OCCURRENCES:##############################################
+                    if True:  #dbPoint.report_count >= settings.TESTPOINT_OFFLINE_OCCURRENCES:##############################################
                     # alarm
                         # generate the token
                         dbTestPoint = TestPoint.objects.get(ip_address=dbPoint.ip_address)
                         
-                        dbTestPoint.enabled = False###################################33
-                        dbTestPoint.save()#########################################33
+                        dbTestPoint.enabled = False  ###################################33
+                        dbTestPoint.save()  #########################################33
                         
 #                         token = ActiveTokens(token_value=''.join(random.choice('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz') for i in range(settings.TOKEN_LENGTH)), token_expiration=datetime.datetime.now() + datetime.timedelta(minutes=settings.TOKEN_TIMEOUT), testpoint=dbTestPoint)
 #                         token.save()
@@ -364,7 +364,7 @@ def post_offline_testpoints (request):
                     # new report
                     offlinePoint = OfflineReport()
                     offlinePoint.ip_address = point.find('destination_ip').text
-                    offlinePoint.date_reported = datetime.datetime.now(GMTUY())#point.find('date').text
+                    offlinePoint.date_reported = datetime.datetime.now(GMTUY())  # point.find('date').text
                     offlinePoint.report_count = 1
                     offlinePoint.save()
                 
@@ -387,9 +387,31 @@ def participate(request):
     return render_to_response('participate.html', getContext(request))
 
 def reports(request):
-    form = ResultsForm()
-#     throughput_form = ThroughputResultsForm()
-    return render_to_response('reports.html', {'form': form}, getContext(request))
+    ip = request.META.get('REMOTE_ADDR', None)
+    g = GeoIP()
+    images = []
+    
+    if request.method == 'POST':
+        import os
+        country = Country.objects.get(id=request.POST['country'])
+        year = request.POST['year']
+
+        form =  ReportForm(request.POST)
+        
+        for f in os.listdir("%s/%s" % (settings.STATIC_ROOT, 'histograms/countries')):
+            if country.iso in f and year in f:
+                images.append(f)
+        
+    else:
+        form =  ReportForm()
+        
+        try:
+            form.fields['country'].initial = Country.objects.get(iso=g.country(ip)['country_code'])
+            form.fields['year'].initial = datetime.datetime.now().year
+        except:
+            form =  ReportForm()
+
+    return render_to_response('reports.html', {'images': images, 'form' : form}, getContext(request))
 
 
 
@@ -401,7 +423,6 @@ def charts_reports(request):
     
     ip = request.META.get('REMOTE_ADDR', None)
     g = GeoIP()
-    print "Accediendo desde %s" % ip
     
     try:
         cc = g.country(ip)['country_code']
@@ -409,7 +430,7 @@ def charts_reports(request):
         id_country = Country.objects.get(iso=cc)
         countries_dropdown = CountryDropdownForm(initial={'country': id_country})
     except (Country.DoesNotExist, TypeError):
-        #IP is probably a local address
+        # IP is probably a local address
         countries_dropdown = CountryDropdownForm()
     except:
         countries_dropdown = CountryDropdownForm()
@@ -423,11 +444,11 @@ def charts_reports(request):
 #     heatmap = json.loads("{ \"%s\" : %s}" % (key, Params.objects.get(config_name = 'heatmap')))
     
     key = 'heatmap_countries'
-    heatmap_countries = Params.objects.get(config_name = key)
-    print Params.objects.get(config_name = key)
+    heatmap_countries = Params.objects.get(config_name=key)
+    print Params.objects.get(config_name=key)
     
     key = 'heatmap_values'
-    heatmap_values = json.loads("{ \"%s\" : %s}" % (key, Params.objects.get(config_name = key)))
+    heatmap_values = json.loads("{ \"%s\" : %s}" % (key, Params.objects.get(config_name=key)))
     
     #######################
     # REGION DISTRIBUTION #
@@ -453,49 +474,49 @@ def charts_reports_bandwidth(request):
     return render_to_response('charts_reports_bandwidth.html', getContext(request))
     
 def form(request):
-    #Processes the form and redirects to the table
-    if request.method == 'POST': # If the form has been submitted...
-        form = ResultsForm(request.POST) # A form bound to the POST data
-        #if form.is_valid(): # All validation rules pass
+    # Processes the form and redirects to the table
+    if request.method == 'POST':  # If the form has been submitted...
+        form = ResultsForm(request.POST)  # A form bound to the POST data
+        # if form.is_valid(): # All validation rules pass
         # Process the data in form.cleaned_data
         country = str(form.data['countries'])
         ip_version = str(form.data['ip_version'])
-        #tester includes tester version
+        # tester includes tester version
         tester = str(form.data['tester'])
-        #tester_version = str(form.data['tester_version'])
+        # tester_version = str(form.data['tester_version'])
         year = str(form.data['year'])
         month = str(form.data['month'])
-        #test_type = form.data['test_type']
+        # test_type = form.data['test_type']
 
-        url = settings.URL_PFX + '/results/' + country + '/' + ip_version + '/' + year + '/' + month + '/' + tester# + '/' + test_type
+        url = settings.URL_PFX + '/results/' + country + '/' + ip_version + '/' + year + '/' + month + '/' + tester  # + '/' + test_type
         url = re.sub('\s+', '', url)
         return redirect(url)
     else:
-        form = ResultsForm() # An unbound form
+        form = ResultsForm()  # An unbound form
 
 #    return render(request, 'home.html', {'form': form})
     return render_to_response('home.html', {'form': form}, getContext(request))
 
 def throughput_form(request):
-    #Processes the form and redirects to the table
-    if request.method == 'POST': # If the form has been submitted...
-        form = ResultsForm(request.POST) # A form bound to the POST data
-        #if form.is_valid(): # All validation rules pass
+    # Processes the form and redirects to the table
+    if request.method == 'POST':  # If the form has been submitted...
+        form = ResultsForm(request.POST)  # A form bound to the POST data
+        # if form.is_valid(): # All validation rules pass
         # Process the data in form.cleaned_data
         country = str(form.data['countries'])
         ip_version = str(form.data['ip_version'])
-        #tester includes tester version
+        # tester includes tester version
         tester = str(form.data['tester'])
-        #tester_version = str(form.data['tester_version'])
+        # tester_version = str(form.data['tester_version'])
         year = str(form.data['year'])
         month = str(form.data['month'])
-        #test_type = form.data['test_type']
+        # test_type = form.data['test_type']
         
-        url = settings.URL_PFX + '/throughputresults/' + country + '/' + ip_version + '/' + year + '/' + month + '/' + tester# + '/' + test_type
+        url = settings.URL_PFX + '/throughputresults/' + country + '/' + ip_version + '/' + year + '/' + month + '/' + tester  # + '/' + test_type
         url = re.sub('\s+', '', url)
         return redirect(url)
     else:
-        form = ResultsForm() # An unbound form
+        form = ResultsForm()  # An unbound form
 
 #    return render(request, 'home.html', {'form': form})
     return render_to_response('home.html', {'form': form}, getContext(request))
@@ -505,21 +526,21 @@ def add_new_webpoint_form(request):
     title = 'Agregar Nuevo Punto Web'
     text = "Para registrar su servidor como un punto de testing NTP, complete el siguiente formulario. Una vez completado el formulario, nuestro equipo lo evaluará y lo pondrá a disposición de la comunidad para que se realicen tests sobre el. Su servidor formara parte de los 400 servidores que conforman este proyecto. Queremos recordarle que los tests no son demasiado frecuentes como para afectar la performance se su servidor."
     web_form = AddNewWebPointForm()
-    action = settings.URL_PFX + "/addnewwebpoint"# form action
+    action = settings.URL_PFX + "/addnewwebpoint"  # form action
     
     return render_to_response('addpoint.html', {'form': web_form, 'action': action, 'title' : title, 'text' : text}, getContext(request))
 def add_new_ntppoint_form(request):
     title = 'Agregar Nuevo Punto Ntp'
     text = "Para registrar su servidor como un punto de testing NTP, complete el siguiente formulario. Una vez completado el formulario, nuestro equipo lo evaluará y lo pondrá a disposición de la comunidad para que se realicen tests sobre el. Su servidor formara parte de los 400 servidores que conforman este proyecto."
     ntp_form = AddNewNtpPointForm()
-    action = settings.URL_PFX + "/addnewntppoint"# form action
+    action = settings.URL_PFX + "/addnewntppoint"  # form action
     
     return render_to_response('addpoint.html', {'form': ntp_form, 'action': action, 'title' : title, 'text' : text}, getContext(request))
 
 # Views for point submitting
 def add_new_webpoint(request):
     if request.method == 'POST':
-        MINIMUM_BANDWIDTH = 1000000 #1Mbps
+        MINIMUM_BANDWIDTH = 1000000  # 1Mbps
         MEETS_BANDWITH = False
         IN_LACNIC_RESOURCES = False
         HAS_IP = False
@@ -538,7 +559,7 @@ def add_new_webpoint(request):
         if str(url)[:7] is 'http://':
             url = str(url)[7:]
         
-        #Chack bandwidth requirements
+        # Chack bandwidth requirements
         bandwidth = form.data['bandwidth']
         unit = form.data['unit']
         bps = KMG2bps('%s %s' % (bandwidth, unit))
@@ -550,7 +571,7 @@ def add_new_webpoint(request):
         country_printable = Country.objects.get(id=form.data['country']).printable_name
         
         try:
-            #answers may hold multiple addresses for the same server (IPv4 and IPv6, or multiple addresses of the same kind)
+            # answers may hold multiple addresses for the same server (IPv4 and IPv6, or multiple addresses of the same kind)
             answers = socket.getaddrinfo(url, 80, 0, 0, socket.SOL_TCP)
         
             for answer in answers:
@@ -571,8 +592,8 @@ def add_new_webpoint(request):
                 else:
                     print '%s not in LACNIC resources' % testPoint.ip_address
                         
-                if IN_LACNIC_RESOURCES is not True or MEETS_BANDWITH is not True or HAS_IP is not True:# triple condition not to repeat all the mailing text....
-                    #Error message
+                if IN_LACNIC_RESOURCES is not True or MEETS_BANDWITH is not True or HAS_IP is not True:  # triple condition not to repeat all the mailing text....
+                    # Error message
                     if IN_LACNIC_RESOURCES is not True:
                         problema = 'la dirección del servidor no forma parte del espacio de direcciones de LACNIC'
                     elif MEETS_BANDWITH is not True:
@@ -597,7 +618,7 @@ def add_new_webpoint(request):
                     texto_HTML = 'Este mensaje ha sido enviado a la lista de correo del Proyecto Simón. <p>El punto <strong>%s</strong> en %s quiere formar parte de la lista de servidores WEB, pero %s. Para darle de alta por favor póngase en contacto con <a href="mailto:%s?subject=Contacto - Proyecto Simón">%s</a>.</p><p>Muchas gracias</p>.' % (str(testPoint.ip_address), str(country_printable), problema, str(volunteer_email), str(volunteer_email))
         
                     try:
-                        msg = EmailMultiAlternatives(asunto, texto, settings.DEFAULT_FROM_EMAIL, [settings.SERVER_EMAIL])# settings.SERVER_EMAIL
+                        msg = EmailMultiAlternatives(asunto, texto, settings.DEFAULT_FROM_EMAIL, [settings.SERVER_EMAIL])  # settings.SERVER_EMAIL
                         msg.attach_alternative(texto_HTML, "text/html")
                         msg.content_subtype = "html"  # Main content is now text/html
                         msg.send()
@@ -607,13 +628,13 @@ def add_new_webpoint(request):
                     # redireccion con error
                     title = 'Ups!'
                     text = '<p>Nuestro equipo ha determinado que por el momento su servidor no es apto para integrar la lista de servidores debido a que %s. De todos modos será estudiado, y en caso de ser apto, le notificaremos al respecto.</p><p>Lo invitamos a participar de este proyecto realizando algunos tests <a href="http://simon.labs.lacnic.net/simon/participate/">aquí</a>.</p><p>Muchas gracias.</p>' % problema
-                    button='<p><button onclick="window.location.href=\'/\'">Volver</button></p>'
+                    button = '<p><button onclick="window.location.href=\'/\'">Volver</button></p>'
                     return render_to_response('general.html', {'title':title, 'text':text, 'button':button}, getContext(request))
                 
                 # OK message
                 # testPoint.description = form.data['organization']
                 try:
-                    #cc = whoIs(testPoint.ip_address)['operator']['country']
+                    # cc = whoIs(testPoint.ip_address)['operator']['country']
                     cc = whoIs(testPoint.ip_address)['country']
                     testPoint.country = Country.objects.get(iso=cc).is2o
                 except:
@@ -624,7 +645,7 @@ def add_new_webpoint(request):
                 testPoint.enabled = False
                 tz = GMTUY()
                 testPoint.date_created = datetime.datetime.now(tz)
-                #testPoint.url = url
+                # testPoint.url = url
                 images = Images.objects.filter(online=True)
                 
                 testPoint.save()
@@ -633,7 +654,7 @@ def add_new_webpoint(request):
                     image_in_test_points = Images_in_TestPoints()
                     image_in_test_points.testPoint = testPoint
                     image_in_test_points.image = image
-                    image_in_test_points.local_path = images_path#image.name)
+                    image_in_test_points.local_path = images_path  # image.name)
                     image_in_test_points.save()
                 
                 # email admins
@@ -642,7 +663,7 @@ def add_new_webpoint(request):
                 texto_HTML = 'Este mensaje ha sido enviado a la lista de correo del Proyecto Simón. <p>El punto <strong>%s</strong> ubicado en %s ha sido agregado a la lista de puntos web de testeo. Para darle de alta por favor hágalo mediante el administrados de Django. Muchas gracias.' % (str(testPoint.ip_address), str(testPoint.country))
         
                 try:
-                    msg = EmailMultiAlternatives(asunto, texto, settings.DEFAULT_FROM_EMAIL, [settings.SERVER_EMAIL])# 
+                    msg = EmailMultiAlternatives(asunto, texto, settings.DEFAULT_FROM_EMAIL, [settings.SERVER_EMAIL])  # 
                     msg.attach_alternative(texto_HTML, "text/html")
                     msg.content_subtype = "html"  # Main content is now text/html
                     msg.send()
@@ -654,7 +675,7 @@ def add_new_webpoint(request):
                 texto = 'Hemos recibido una petición para agregar su servidor a nuestra lista de servidores. Brevemente un miembro de nuestro equipo lo evaluará, y de cumplir los requisitos será agregado a la lista.'
                 texto_HTML = '<p>Hemos recibido una petición para agregar su servidor a nuestra lista de servidores. Brevemente un miembro de nuestro equipo lo evaluará, y en caso de cumplir los requisitos será agregado a la lista. Recuerde que los tests consumen muy poco ancho de banda y no afectan la performance de su servidor.</p><p>Datos del servidor:</p><p>Organización: %s</p><p>URL: %s</p><p>País: %s</p><p>Dirección IP: <strong>%s</strong></p><p>Ancho de banda (uplink): %s</p><p>Images uploaded: %s</p><p>Muchas gracias por su colaboración. Lo invitamos a seguir siendo partícipe de este proyecto realizando algunos tests <a href="http://simon.labs.lacnic.net/simon/participate/">aquí</a>.</p>' % (str(testPoint.description), str(testPoint.url), str(testPoint.country), str(testPoint.ip_address), str(bandwidth), str(len(images)))
                 try:
-                    msg = EmailMultiAlternatives(asunto, texto, settings.DEFAULT_FROM_EMAIL, [volunteer_email])# volunteer_email
+                    msg = EmailMultiAlternatives(asunto, texto, settings.DEFAULT_FROM_EMAIL, [volunteer_email])  # volunteer_email
                     msg.attach_alternative(texto_HTML, "text/html")
                     msg.content_subtype = "html"  # Main content is now text/html
                     msg.send()
@@ -669,9 +690,9 @@ def add_new_webpoint(request):
         # redireccion
         title = 'Gracias por su contribución.'
         text = 'Su servidor web debería comenzar a atender tests prontamente. Le recomendamos que siga contribuyando a la comunidad realizando más tests'
-        button='<p><button onclick="window.location.href='"/"'">Volver</button></p>'
+        button = '<p><button onclick="window.location.href='"/"'">Volver</button></p>'
         return render_to_response('general.html', {'title':title, 'text':text, 'button':button}, getContext(request))
-        #return render_to_response('general.html', {'title':title, 'text':text}, getContext(request))
+        # return render_to_response('general.html', {'title':title, 'text':text}, getContext(request))
     
     
 def add_new_ntppoint(request):
@@ -696,7 +717,7 @@ def add_new_ntppoint(request):
             ok = False
             print 'Error while retrieving NTP server %s address.' % form.data['server_url']
         
-        testPoint.country = g.country_code(testPoint.ip_address) #Country.objects.get(id=form.data['country']).iso
+        testPoint.country = g.country_code(testPoint.ip_address)  # Country.objects.get(id=form.data['country']).iso
         country_printable = Country.objects.get(iso=testPoint.country).printable_name
         testPoint.enabled = False
         testPoint.date_created = datetime.datetime.now()
@@ -750,7 +771,7 @@ def add_new_ntppoint(request):
         texto_HTML = 'Este mensaje ha sido enviado a la lista de correo del Proyecto Simón. <p>El punto <strong>%s</strong> ubicado en %s ha sido agregado a la lista de puntos NTP de testeo. Para darle de alta por favor hágalo mediante el administrados de Django. Muchas gracias.' % (str(testPoint.ip_address), str(testPoint.country))
 
         try:
-            msg = EmailMultiAlternatives(asunto, texto, settings.DEFAULT_FROM_EMAIL, [settings.SERVER_EMAIL])# settings.SERVER_EMAIL
+            msg = EmailMultiAlternatives(asunto, texto, settings.DEFAULT_FROM_EMAIL, [settings.SERVER_EMAIL])  # settings.SERVER_EMAIL
             msg.attach_alternative(texto, "text/html")
             msg.content_subtype = "html"  # Main content is now text/html
             msg.send()
@@ -762,7 +783,7 @@ def add_new_ntppoint(request):
         texto = 'Hemos recibido una petición para agregar su servidor a nuestra lista de servidores. Brevemente un miembro de nuestro equipo lo evaluará, y de cumplir los requisitos será agregado a la lista.'
         texto_HTML = '<p>Hemos recibido una petición para agregar su servidor a nuestra lista de servidores. Brevemente un miembro de nuestro equipo lo evaluará, y en caso de cumplir los requisitos será agregado a la lista. Recuerde que los tests consumen muy poco ancho de banda y no afectan la performance de su servidor.</p><p>Datos del servidor:</p><p>Organización: %s</p><p>URL: %s</p><p>País: %s</p><p>Dirección IP: <strong>%s</strong></p><p>Muchas gracias por su colaboración. Lo invitamos a seguir siendo partícipe de este proyecto realizando algunos tests <a href="http://simon.labs.lacnic.net/simon/participate/">aquí</a>.</p>' % (str(testPoint.description), str(testPoint.url), str(testPoint.country), str(testPoint.ip_address))
         try:
-            msg = EmailMultiAlternatives(asunto, texto, settings.DEFAULT_FROM_EMAIL, [volunteer_email])# volunteer_email
+            msg = EmailMultiAlternatives(asunto, texto, settings.DEFAULT_FROM_EMAIL, [volunteer_email])  # volunteer_email
             msg.attach_alternative(texto_HTML, "text/html")
             msg.content_subtype = "html"  # Main content is now text/html
             msg.send()
@@ -804,15 +825,15 @@ def applet_run(request):
 
 
 def javascript_run(request):
-    #Get address to pre-select the dropdown menu
+    # Get address to pre-select the dropdown menu
     ip = request.META.get('REMOTE_ADDR', None)
         
     try:
-        #cc = whoIs(ip)['operator']['country']
+        # cc = whoIs(ip)['operator']['country']
         cc = whoIs(ip)['country']
         countries = CountryForm(initial={'countries': cc})
     except (TypeError, HTTPError):
-        #IP is probably a local address
+        # IP is probably a local address
         countries = CountryForm()
         
     return render_to_response('javascript_run.html', {'countries' : countries}, getContext(request))

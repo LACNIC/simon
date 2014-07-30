@@ -175,8 +175,8 @@ class AddNewNtpPointForm(forms.Form):
 #	images_path = forms.CharField(label='Path to the images directory')
 
 class CountryDropdownForm(forms.Form):
-	country = MyCountryModelChoiceField(queryset=Country.objects.filter(Q(region_id=1) | Q(region_id=2) | Q(region_id=3)).order_by('printable_name'), widget=forms.Select(), label='País que desea inspeccionar la latencia: ', empty_label=None)
-	
+	country = MyCountryModelChoiceField(queryset=Country.objects.filter(Q(region_id=1) | Q(region_id=2) | Q(region_id=3)).order_by('printable_name'), widget=forms.Select(), label='País que desea inspeccionar la latencia', empty_label=None)
+
 class GMTUY(tzinfo):
 	def utcoffset(self, dt):
 		return timedelta(hours=-3)
@@ -187,3 +187,12 @@ class GMTUY(tzinfo):
 	
 class UploadFileForm(forms.Form):
 	file = forms.FileField(label="Archivo con logs de traceroute", required=False)
+
+class YearField(forms.ChoiceField):
+	year = range(2009, datetime.datetime.now().year + 1)
+	
+class ReportForm(forms.Form):
+	country = MyCountryModelChoiceField(queryset=Country.objects.filter(Q(region_id=1) | Q(region_id=2) | Q(region_id=3)).order_by('printable_name'), widget=forms.Select(), label='País que desea inspeccionar la latencia', empty_label=None)
+	years = range(2009, datetime.datetime.now().year + 1)
+	year = forms.ChoiceField(choices = zip(years, years))
+	
