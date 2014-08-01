@@ -387,6 +387,9 @@ def participate(request):
     return render_to_response('participate.html', getContext(request))
 
 def reports(request):
+    
+    import string
+    
     ip = request.META.get('REMOTE_ADDR', None)
     g = GeoIP()
     images = []
@@ -400,7 +403,18 @@ def reports(request):
         
         for f in os.listdir("%s/%s" % (settings.STATIC_ROOT, 'histograms/countries')):
             if country.iso in f and year in f:
-                images.append(f)
+                if f[0] == '-':
+                    cc = f[1:3]
+                else:
+                    cc = f[0:2]
+                    
+                image = { 
+                         'name' : f,
+                         'year' : year,
+                         'origin' : country.printable_name,
+                         'destination' : Country.objects.get(iso=cc).printable_name
+                         }
+                images.append(image)
         
     else:
         form =  ReportForm()

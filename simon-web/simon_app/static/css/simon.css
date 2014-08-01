@@ -1,3 +1,17 @@
+@import url(http://fonts.googleapis.com/css?family=Lato:100,400);
+
+h1, h2, h3, h4 {
+  font-family: 'Lato', sans-serif;
+  font-weight: 400;
+}
+
+p {
+  font-family: 'Lato', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+
 #search-result {
 	border: 1px;
 	border-color: black;
@@ -89,13 +103,13 @@
 }
 
 .homeBox:hover {
-	box-shadow: 2px 2px 4px #888888;
-	background-color:rgba(0, 0, 0, 0.2);
+	box-shadow: 1px 1px 4px #888888;
+	background-color:rgba(0, 0, 0, 0.05);
 }
 
 .hover:hover {
-	box-shadow: 2px 2px 4px #888888;
-	background-color:rgba(0, 0, 0, 0.2);
+	box-shadow: 1px 1px 4px #888888;
+	background-color:rgba(0, 0, 0, 0.05);
 }
 
 .border{
@@ -121,4 +135,9 @@
 .code{
 	font-family: "courier";
 	line-height: 150%;
+}
+
+.caption{
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
 }

@@ -1,9 +1,11 @@
 {% extends 'base.html' %} {% block javascript %}
 <script type="text/javascript" src="/static/js/jquery1.8.0.js"></script>
-<script type="text/javascript" src="http://jquery-jsonp.googlecode.com/files/jquery.jsonp-1.0.4.min.js"></script>
+<script type="text/javascript"
+	src="http://jquery-jsonp.googlecode.com/files/jquery.jsonp-1.0.4.min.js"></script>
 <script type="text/javascript" src="/static/js/dateFormatter.js"></script>
 <script type="text/javascript" src="/static/js/simon_probe_plugin.js"></script>
 {% endblock %} {% block css %}
+
 <style>
 #console {
 	background-color: black;
@@ -12,9 +14,17 @@
 	font-size: 12;
 	font-family: monospace;
 }
+
+#logo {
+	font-weight: 100;
+	font-size: 42px;
+}
 </style>
 {% endblock %} {% block content %}
-<h1>Proyecto Simón</h1>
+<h1 id="logo">
+	<font color="orange">Proyecto</font> Simón
+</h1>
+
 <h3 style="font-size: 1em">Mapa de interconexión entre redes de
 	América Latina y Caribe a través de mediciones de latencia.</h3>
 
@@ -42,7 +52,7 @@
 
 <a href="reports">
 	<div class="border homeBox">
-		<h1>Reportes</h1>
+		<h1>Reportes por país</h1>
 		<p>Analiza los reportes de latencia y ancho de banda que hemos
 			preparado a partir de la informacion recolectada por cientos de
 			usuarios, desde distintos puntos de la region.</p>
@@ -50,8 +60,9 @@
 </a>
 
 <a href="charts">
-	<div class="border homeBox" style="background-image: /static/imgs/charts.png">
-		<h1>Gráficas</h1>
+	<div class="border homeBox"
+		style="background-image: /static/imgs/charts.png">
+		<h1>Gráficas de la región</h1>
 		<p>Si quieres observar los datos con más claridad, puedes
 			consultar algunas gráficas de latencia que muestran informacián
 			acerca de la calidad de Internet en toda la region.</p>
