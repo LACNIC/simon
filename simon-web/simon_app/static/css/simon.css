@@ -100,10 +100,12 @@ p {
 	margin: 10px 10px 10px 10px;
 	float: left;
 	color: black;
+	box-shadow: 1px 1px 1px #888888;
+	background-color: white;
 }
 
 .homeBox:hover {
-	box-shadow: 1px 1px 4px #888888;
+	box-shadow: 1px 1px 1px #888888;
 	background-color:rgba(0, 0, 0, 0.05);
 }
 
@@ -140,4 +142,12 @@ p {
 .caption{
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	font-size: 12px;
+}
+
+.logo {
+	float: left; margin: -20px 15px 0px -20px;
+}
+
+.banner{
+	float: right; margin: -20px 15px 0px -20px;
 }

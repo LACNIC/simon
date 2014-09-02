@@ -679,7 +679,6 @@ function getStdDev(dataSet) {
 
 function getMean(dataSet) {
 	if (dataSet instanceof Array && dataSet.length > 0) {
-
 		return Math.floor(sum(dataSet) / dataSet.length);
 	}
 	return 0;

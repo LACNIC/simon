@@ -15,7 +15,7 @@
 		Internet y en el usuario final</p>
 
 	<p>
-		Las muestras consideradas en estos reportes fueron obtenidas por <a href="/participate">la
+		Las muestras consideradas en estos reportes fueron obtenidas por <a href="{{ URL_PFX }}/participate">la
 			contribución de cientos de usuarios</a> en cada uno de los países.
 	</p>
 
@@ -24,7 +24,7 @@
 <!-- Latency form -->
 <div class="">
 
-	<form id="country_form" action="/reports/" method="post">
+	<form id="country_form" action="{{ URL_PFX }}/reports/" method="post">
 		{% csrf_token %} {{ form.as_p }} <input type="submit" value="Submit"
 			id="submit" />
 	</form>
@@ -32,11 +32,11 @@
 	{% for image in images %}
 	<figure style="float: left;">
 
-		<a href="/static/histograms/countries/{{ image.name }}"
+		<a href="{{ URL_PFX }}/static/histograms/countries/{{ image.name }}"
 			title="Histograma de latencia entre {{ image.origin }} y {{ image.destination }}, {{ image.year }}">
 			<img
 			alt="Histograma de latencia entre {{ image.origin }} y {{ image.destination }}, {{ image.year }}"
-			src="/static/histograms/countries/{{ image.name }}"
+			src="{{ URL_PFX }}/static/histograms/countries/{{ image.name }}"
 			style="width: 250px" class="hover" />
 		</a>
 

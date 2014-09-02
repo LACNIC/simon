@@ -147,7 +147,7 @@ TEMPLATE_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     # "/home/agustinf/Escritorio/simon_project/simon_app/templates"
-    "simon_app/templates"
+#     ("simon_app/templates")
 )
 
 INSTALLED_APPS = (
@@ -223,15 +223,15 @@ if HOSTNAME == 'mvuy3-labs':
 #           ('Carlos Martinez', 'carlos@lacnic.net'),
     )
     SIMON_URL = 'http://simon.labs.lacnic.net%s' % URL_PFX
-    v4_URL = 'http://simon.v4.labs.lacnic.net/cemd/getip'
-    v6_URL = 'http://simon.v6.labs.lacnic.net/cemd/getip'
+    v4_URL = 'http://simon.v4.labs.lacnic.net/cemd/getip/jsonp'
+    v6_URL = 'http://simon.v6.labs.lacnic.net/cemd/getip/jsonp'
 else:
     # Developer mode
     DEBUG = True
     URL_PFX = ''
     UNSUBSCRIBE_TESTPOINT_URL = '/removetestpoint'
 #     MEDIA_ROOT = '/Users/agustin/Desktop'
-    SIMON_URL = 'http://200.7.87.141'
+    SIMON_URL = 'http://192.168.1.106'
     v4_URL = 'http://simon.v4.labs.lacnic.net/cemd/getip/jsonp'
     v6_URL = 'http://simon.v6.labs.lacnic.net/cemd/getip/jsonp'
 TEMPLATE_DEBUG = DEBUG

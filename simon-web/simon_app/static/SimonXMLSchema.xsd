@@ -58,6 +58,7 @@
             <xsd:element name="test" type="Result" minOccurs="0" maxOccurs="unbounded"/>
 	    	<xsd:element name="tester" type="xsd:string"/>
 	    	<xsd:element name="tester_version" type="xsd:positiveInteger"/>
+	    	<xsd:element name="user_agent" type="xsd:string"/>
         </xsd:sequence>
 </xsd:complexType>
 

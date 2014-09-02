@@ -6,10 +6,9 @@
 if (typeof simonURL === "undefined")
 	simonURL = "http://simon.labs.lacnic.net/simon/"
 if (typeof ipv6ResolveURL === "undefined")
-	ipv6ResolveURL = "http://simon.labs.lacnic.net/simon/"
+	ipv6ResolveURL = "http://simon.v6.labs.lacnic.net/cemd/getip/jsonp/"
 if (typeof ipv4ResolveURL === "undefined")
-	ipv4ResolveURL = "http://simon.labs.lacnic.net/simon/"
-var pointsURL = simonURL + "web_points/getPointsCallback/";
+	ipv4ResolveURL = "http://simon.v6.labs.lacnic.net/cemd/getip/jsonp/"
 
 var params = {
 	percentage : 1.0,// 100%
@@ -44,11 +43,11 @@ SIMON = {
 		if (Math.random() < this.params.percentage)
 			return this.getCountry();
 		else
-			printr("N/A");
+			SIMON.printr("N/A");
 	},
 
 	getCountry : function() {
-		this.printr("Getting user country...");
+		SIMON.printr("Getting user country...");
 
 		$.ajax({
 			type : 'GET',
@@ -56,7 +55,7 @@ SIMON = {
 			url : simonURL + "getCountry/",
 			success : function(cc) {
 				countryCode = cc;
-				SIMON.getMyIPAddress(ipv6ResolveURL);
+				this.getMyIPAddress(ipv6ResolveURL);
 			}
 		});
 	},
@@ -66,7 +65,7 @@ SIMON = {
 		/*
 		 * get the test configs from the server
 		 */
-		this.printr("Fetching tests configurations...");
+		SIMON.printr("Fetching tests configurations...");
 
 		$.ajax({
 			url : testsConfigsURL,
@@ -162,7 +161,8 @@ SIMON = {
 
 	siteOnLine : function(testPoint) {
 
-		this.printr("Checking site " + testPoint.ip + " (" + testPoint.country + ")");
+		SIMON.printr("Checking site " + testPoint.ip + " (" + testPoint.country
+				+ ")");
 
 		/*
 		 * get the '/' directory
@@ -197,9 +197,9 @@ SIMON = {
 					 */
 					var array = [];
 					array.push(testPoint);
-					var xml = buildOfflineXML(array);
-					this.printr("Reporting offline test point...");
-					this.postResults(reportOfflineURL, xml);
+					var xml = SIMON.buildOfflineXML(array);
+					SIMON.printr("Reporting offline test point...");
+					SIMON.postResults(reportOfflineURL, xml);
 				}
 
 				/*
@@ -222,20 +222,102 @@ SIMON = {
 	startPointTest : function(testPoint) {
 		if (testPoint.online) {
 			// schedule latency tests
+			var that = this;
 			for (var i = 0; i < numTests; i++) {
-				var that = this;
-				setTimeout(function(){SIMON.latencyTest(testPoint);}, latencyTimeout * i);
+				setTimeout(function() {
+					SIMON.latencyTest(testPoint);
+				}, latencyTimeout * i);
 			}
 		} else {
 			this.abortTestPointTest(testPoint);
 			var nextTestPoint = this.getNextPoint(testPoint);
 			if (nextTestPoint != -1) {
-				/*
-				 * test next testpoint
-				 */
 				this.siteOnLine(nextTestPoint);
 			}
 		}
+	},
+
+	latencyTest : function(testPoint) {
+
+		var ts, rtt;
+
+		var url;
+		if (this.getIPversion(testPoint.ip) == '6') {
+			url = "http://[" + testPoint.ip + "]/" + Math.random();
+		} else {
+			url = "http://" + testPoint.ip + "/" + Math.random();
+		}
+
+		$.jsonp({
+			type : 'GET',
+			url : url,
+			dataType : 'jsonp',
+			timeout : latencyTimeout,
+			xhrFields : {
+				withCredentials : true
+			},
+
+			beforeSend : function(xhr) {
+				if (xhr.overrideMimeType)
+					xhr.setRequestHeader("Connection", "close");
+			},
+			error : function(jqXHR, textStatus) {
+
+				if (textStatus == 'timeout') {
+
+					testPoint.results.push('timeout');
+				} else {
+					/*
+					 * If there is an error and the site is up, we can suppose
+					 * it is due to 404
+					 */
+					rtt = (+new Date - ts);
+					testPoint.results.push(rtt);
+					SIMON.printr("Measuring latency to " + testPoint.ip + " - "
+							+ rtt + " ms " + "("
+							+ SIMON.getMean(testPoint.results) + " ms)");
+				}
+
+				SIMON.saveTestPoint(testPoint);// store results in global
+				// variable
+
+				if (SIMON.testerFinished(testPoint)) {// post results
+
+					var array = [];
+					array.push(testPoint);
+
+					var xml;
+					if (SIMON.getIPversion(testPoint.ip) == '4')
+						xml = SIMON.buildXML(array, ipv4Address);
+					else if (SIMON.getIPversion(testPoint.ip) == '6')
+						xml = SIMON.buildXML(array, ipv6Address);
+					SIMON.postResults(postLatencyURL, xml);
+
+					var nextTestPoint = SIMON.getNextPoint(testPoint);
+					if (nextTestPoint != -1) {
+						SIMON.siteOnLine(nextTestPoint);// ... and next tests
+
+					} else {
+
+						if (document.URL === simonURL) {
+							/*
+							 * if the probe is located at the Simon site, keep
+							 * doing tests indefinitely
+							 */
+							if (ipv6Address != "")
+								SIMON.getPoints(6);
+							else
+								SIMON.getPoints(4);
+						} else {
+							SIMON.printr("Thank you!");
+						}
+					}
+				}
+
+			}
+		});
+
+		ts = +new Date;
 	},
 
 	abortTestPointTest : function(testPoint) {
@@ -284,27 +366,33 @@ SIMON = {
 		return 1;
 	},
 
-	latencyTest : function(testPoint) {
-
-		latencyTest(testPoint);
-	},
-
 	getMyIPAddress : function(url) {
 
 		$.ajax({
+			type : 'GET',
 			url : url,
 			dataType : 'jsonp',
+			timeout : 5000,
 			crossDomain : true,
-			context : this
-		}).success(function(data) {
+			context : this,
+			success : function(data) {
 
-			if (this.getIPversion(data.ip) == '4') {
-				ipv4Address = data.ip;
-				this.getTestsConfigs();
+				if (this.getIPversion(data.ip) == '4') {
+					ipv4Address = data.ip;
+					SIMON.getTestsConfigs();
 
-			} else if (this.getIPversion(data.ip) == '6') {
-				ipv6Address = data.ip;
-				this.getMyIPAddress(ipv4ResolveURL);
+				} else if (this.getIPversion(data.ip) == '6') {
+					ipv6Address = data.ip;
+					SIMON.getMyIPAddress(ipv4ResolveURL);
+				}
+
+			},
+			error : function(jqXHR, textStatus, errorThrown) {
+				if(ipv4Address == "")
+					SIMON.getMyIPAddress(ipv4ResolveURL);
+			},
+			complete : function() {
+
 			}
 		});
 	},
@@ -319,70 +407,12 @@ SIMON = {
 	},
 
 	getNextPoint : function(testPoint) {
-		var index = getTestPointIndex(testPoint);
+		var index = this.getTestPointIndex(testPoint);
 		index++;
 		if (index < points.length) {
 			return points[index];
 		} else {
 			return -1;
-		}
-	},
-
-	buildXML : function(testPoints, origin_ip) {
-
-		this.printr("Building data...");
-
-		if (testPoints instanceof Array && testPoints.length > 0) {
-			var date = new Date();
-
-			var xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-			xml = xml
-					+ "<simon xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">";
-			xml = xml + "<version>2</version>";
-			xml = xml + "<date>" + date.format("yyyy-mm-dd") + "</date>";
-			xml = xml + "<time>" + getPrintTimeWithOffset(date) + "</time>";
-			xml = xml + "<local_country>" + countryCode + "</local_country>";
-
-			for (var i = 0; i < testPoints.length; i++) {
-
-				/*
-				 * var lost = getLost(testPoints[i].results);
-				 */
-				var cleanResults = getNumericalValues(testPoints[i].results);
-				/*
-				 * with clean values
-				 */
-
-				xml = xml + "<test>";
-				xml = xml + "<destination_ip>" + testPoints[i].ip
-						+ "</destination_ip>";
-				xml = xml + "<origin_ip>" + origin_ip + "</origin_ip>";
-				xml = xml + "<testtype>" + testType + "</testtype>";
-
-				xml = xml + "<number_probes>" + testPoints[i].results.length
-						+ "</number_probes>";
-				xml = xml + "<min_rtt>" + Math.floor(getMin(cleanResults))
-						+ "</min_rtt>";
-				xml = xml + "<max_rtt>" + Math.floor(getMax(cleanResults))
-						+ "</max_rtt>";
-				xml = xml + "<ave_rtt>" + Math.floor(getMean(cleanResults))
-						+ "</ave_rtt>";
-				xml = xml + "<dev_rtt>" + Math.floor(getStdDev(cleanResults))
-						+ "</dev_rtt>";
-				xml = xml + "<median_rtt>"
-						+ Math.floor(getMedian(cleanResults)) + "</median_rtt>";
-				xml = xml + "<packet_loss>" + getLost(testPoints[i].results)
-						+ "</packet_loss>";
-				xml = xml + "<ip_version>" + getIPversion(testPoints[i].ip)
-						+ "</ip_version>";
-				xml = xml + "</test>";
-			}
-
-			xml = xml + "<tester>JavaScript</tester>";
-			xml = xml + "<tester_version>1</tester_version>";
-			xml = xml + "</simon>";
-
-			return xml;
 		}
 	},
 
@@ -403,8 +433,70 @@ SIMON = {
 		}
 
 		var time = hh + ':' + mm + ':' + ss;
-		var offset = getPrintOffset(date);
+		var offset = SIMON.getPrintOffset(date);
 		return time + offset;
+	},
+
+	buildXML : function(testPoints, origin_ip) {
+
+		SIMON.printr("Building data...");
+
+		if (testPoints instanceof Array && testPoints.length > 0) {
+			var date = new Date();
+
+			var xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+			xml = xml
+					+ "<simon xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">";
+			xml = xml + "<version>2</version>";
+			xml = xml + "<date>" + date.format("yyyy-mm-dd") + "</date>";
+			xml = xml + "<time>" + SIMON.getPrintTimeWithOffset(date)
+					+ "</time>";
+			xml = xml + "<local_country>" + countryCode + "</local_country>";
+
+			for (var i = 0; i < testPoints.length; i++) {
+
+				var cleanResults = SIMON
+						.getNumericalValues(testPoints[i].results);
+				/*
+				 * with clean values
+				 */
+
+				xml = xml + "<test>";
+				xml = xml + "<destination_ip>" + testPoints[i].ip
+						+ "</destination_ip>";
+				xml = xml + "<origin_ip>" + origin_ip + "</origin_ip>";
+				xml = xml + "<testtype>" + testType + "</testtype>";
+
+				xml = xml + "<number_probes>" + testPoints[i].results.length
+						+ "</number_probes>";
+				xml = xml + "<min_rtt>"
+						+ Math.floor(SIMON.getMin(cleanResults)) + "</min_rtt>";
+				xml = xml + "<max_rtt>"
+						+ Math.floor(SIMON.getMax(cleanResults)) + "</max_rtt>";
+				xml = xml + "<ave_rtt>"
+						+ Math.floor(SIMON.getMean(cleanResults))
+						+ "</ave_rtt>";
+				xml = xml + "<dev_rtt>"
+						+ Math.floor(SIMON.getStdDev(cleanResults))
+						+ "</dev_rtt>";
+				xml = xml + "<median_rtt>"
+						+ Math.floor(SIMON.getMedian(cleanResults))
+						+ "</median_rtt>";
+				xml = xml + "<packet_loss>"
+						+ SIMON.getLost(testPoints[i].results)
+						+ "</packet_loss>";
+				xml = xml + "<ip_version>"
+						+ SIMON.getIPversion(testPoints[i].ip)
+						+ "</ip_version>";
+				xml = xml + "</test>";
+			}
+
+			xml = xml + "<tester>JavaScript</tester>";
+			xml = xml + "<tester_version>1</tester_version>";
+			xml = xml + "</simon>";
+
+			return xml;
+		}
 	},
 
 	getPrintOffset : function(date) {
@@ -503,12 +595,12 @@ SIMON = {
 	getStdDev : function(dataSet) {
 		if (dataSet instanceof Array && dataSet.length > 0) {
 			var deviations = new Array(dataSet.length);
-			var mean = getMean(dataSet);
+			var mean = this.getMean(dataSet);
 			for (i in dataSet) {
 				deviations.push(Math.pow((dataSet[i] - mean), 2));
 			}
 			if ((deviations.length - 1) != 0) {
-				return Math.round(Math.sqrt(sum(deviations)
+				return Math.round(Math.sqrt(this.sum(deviations)
 						/ (deviations.length - 1)));
 			}
 		}
@@ -518,7 +610,7 @@ SIMON = {
 	getMean : function(dataSet) {
 		if (dataSet instanceof Array && dataSet.length > 0) {
 
-			return Math.floor(sum(dataSet) / dataSet.length);
+			return Math.floor(this.sum(dataSet) / dataSet.length);
 		}
 		return 0;
 	},
@@ -565,7 +657,7 @@ SIMON = {
 
 	postResults : function(url, data) {
 
-		this.printr("Posting results...");
+		SIMON.printr("Posting results...");
 
 		$.ajax({
 			type : 'POST',
@@ -581,7 +673,8 @@ SIMON = {
 	},
 
 	printr : function(text) {
-		if (document.URL === simonURL) {
+		
+		if (document.URL === simonURL || document.URL + '/' === simonURL ) {
 
 			cur_html = $('#console').html();
 			$('#console').html(cur_html + text + "<br>");
@@ -592,136 +685,8 @@ SIMON = {
 
 };
 
-LAB = {
-		start : function(site) {
-			SIMON.printr("Measuring latency to " + site);
-			
-			for (var i = 0; i < 1500; i++) {
-				var c = setTimeout(function() {
-					LAB.latencyTest(site);
-				}, latencyTimeout * i);
-			}
-		},
-		
-		latencyTest : function(ip) {
-
-			var ts, rtt, IPVersion = SIMON.getIPversion(ip);
-			var url;
-			if(IPVersion == '4') {
-				url = "http://" + ip + "/" + Math.random();
-			} else if(IPVersion == '6') {
-				url = "http://[" + ip + "]/" + Math.random();
-			} else {
-				// abort
-			}
-
-			$.jsonp({
-				type : 'GET',
-				url : url,
-				cache : false,
-				dataType : 'jsonp',
-				timeout : latencyTimeout,
-				xhrFields : {
-					withCredentials : true
-				},
-
-				beforeSend : function(xhr) {
-					if (xhr.overrideMimeType) {
-						xhr.setRequestHeader("Connection", "close");
-					}
-					ts = +new Date;
-				},
-				
-				error : function(xhr, textStatus, errorThrown) {
-					// If there is an error and the site is up, we can suppose it is due to 404
-					rtt = (+new Date - ts);
-					SIMON.printr(rtt + ' ms');
-				},
-			});
-		}
-};
-
-function latencyTest(testPoint) {
-	
-	var ts, rtt;
-
-	var url;
-	if (SIMON.getIPversion(testPoint.ip) == 6) {
-		url = "http://[" + testPoint.ip + "]/" + Math.random();
-	} else {
-		url = "http://" + testPoint.ip + "/" + Math.random();
-	}
-	
-	$.jsonp({
-		type : 'GET',
-		url : url,
-		dataType : 'jsonp',
-		timeout : latencyTimeout,
-			xhrFields : {
-				withCredentials : true
-			},
-
-			beforeSend : function(xhr) {
-				if (xhr.overrideMimeType)
-					xhr.setRequestHeader("Connection", "close");
-			},
-			error : function(jqXHR, textStatus) {
-			
-			if (textStatus == 'timeout') {
-				testPoint.results.push('timeout');
-			} else {
-				/*
-				 * If there is an error and the site is up, we can suppose
-				 * it is due to 404
-				 */
-				rtt = (+new Date - ts);
-				testPoint.results.push(rtt);
-				SIMON.printr("Measuring latency to " + testPoint.ip + " (" + SIMON.getMean(testPoint.results) + " ms)");
-			}
-
-			SIMON.saveTestPoint(testPoint);// store results in global variable
-
-			if (SIMON.testerFinished(testPoint)) {// post results
-
-				var array = [];
-				array.push(testPoint);
-
-				var xml;
-				if (SIMON.getIPversion(testPoint.ip) == '4')
-					xml = SIMON.buildXML(array, ipv4Address);
-				else if (SIMON.getIPversion(testPoint.ip) == '6')
-					xml = SIMON.buildXML(array, ipv6Address);
-				this.postResults(postLatencyURL, xml);
-
-				var nextTestPoint = SIMON.getNextPoint(testPoint);
-				if (nextTestPoint != -1) {
-					SIMON.siteOnLine(nextTestPoint);// ... and next tests
-
-				} else {
-
-					if (document.URL === simonURL) {
-						/*
-						 * if the probe is located at the Simon site, keep
-						 * doing tests indefinitely
-						 */
-						if (ipv6Address != "")
-							SIMON.getPoints(6);
-						else
-							SIMON.getPoints(4);
-					} else {
-						SIMON.printr("Thank you!");
-					}
-				}
-			}
-		}
-	});
-}
-
-
-
 $(document).ready(function() {
-	
-//	LAB.start('2804:224::3');
+
 	NProgress.start();
 
 	if (Math.random() < SIMON.params.percentage) {

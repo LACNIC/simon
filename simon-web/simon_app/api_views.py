@@ -93,8 +93,10 @@ def web_points(request, amount, ip_version):
     response = json.dumps(json_points)
     response = "{ \"points\": " + response + " }"    
     
-    response = '%s( %s );' % (callback, response)# JSONP wrapper
-    return response
+    if callback is None:
+        return response
+    else:
+        return '%s( %s );' % (callback, response)# JSONP wrapper
 
 def web_configs(request):
     """
@@ -109,7 +111,10 @@ def web_configs(request):
 
     response = "{ \"configs\": " + json.dumps(res) + " }"
     response = '%s( %s );' % (callback, response)
-    return HttpResponse(response, mimetype="application/json")
+    return HttpResponse(response)
+
+
+
 
     #######
     # API #
@@ -147,6 +152,30 @@ def latency(request, country='all', ip_version='all', year=2009, month=01):
     
     return HttpResponse(json_response, mimetype="application/json")
 
+from django.core import serializers
+def ases(request, asn_origin, asn_destination):
+    res = Results.objects.get_results_by_as_origin_and_destination(asn_origin, asn_destination)
+    
+    response = []
+    for result in res:
+        row = {}
+        row['min_rtt'] = result.min_rtt
+        row['max_rtt'] = result.max_rtt
+        row['ave_rtt'] = result.ave_rtt
+        row['dev_rtt'] = result.dev_rtt
+        row['median_rtt'] = result.median_rtt
+        row['as_origin'] = result.as_origin.asn
+        row['as_destination'] = result.as_destination.asn
+        row['date_test'] = str(result.date_test)
+        row['ip_version'] = str(result.ip_version)
+        row['tester'] = str(result.tester)
+        response.append(row)
+    
+    json_response = json.dumps(response)
+    
+    return HttpResponse(json_response, mimetype="application/json")
+#     return serializers.serialize("json", res)
+    
 def throughput(request, country='all', ip_version='all', year=2009, month=01):
     # Returns JSON with latency
     
@@ -810,7 +839,7 @@ def throughput_tables(request, country_iso, ip_version, year, month, tester, tes
 def getCountry(request):
     
     if (request.method != 'GET'):
-        return HttpResponse("invalid method: %s" % request.method)
+        return HttpResponse("Invalid method: %s" % request.method)
     
     response = whoIs(request.META['REMOTE_ADDR']) #whois response
     if response is not None:

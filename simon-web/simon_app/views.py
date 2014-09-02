@@ -171,7 +171,7 @@ def throughput_by_country_chart(request):
 
 def web_points(request, amount, ip_version):
     result = web_points_api(request, amount, ip_version)
-    return HttpResponse(result, mimetype="application/json")
+    return HttpResponse(result)
 
 def ntp_points(request):
     result = ntp_points_api(request)
@@ -179,7 +179,7 @@ def ntp_points(request):
 
 def web_configs(request):
     response = web_configs_api(request)
-    return HttpResponse(response, mimetype="application/json")
+    return HttpResponse(response)
 
 def api(request):
     return render_to_response('api.html', getContext(request))
@@ -248,6 +248,7 @@ def post_xml_result(request):
                 result.country_destination = TestPoint.objects.get(ip_address=result.ip_destination).country
                 result.tester = simon.find('tester').text
                 result.tester_version = simon.find('tester_version').text
+                result.user_agent = simon.find('user_agent').text
                 
                 result.save()
         except etree.XMLSyntaxError as e:
@@ -388,8 +389,6 @@ def participate(request):
 
 def reports(request):
     
-    import string
-    
     ip = request.META.get('REMOTE_ADDR', None)
     g = GeoIP()
     images = []
@@ -402,7 +401,7 @@ def reports(request):
         form =  ReportForm(request.POST)
         
         for f in os.listdir("%s/%s" % (settings.STATIC_ROOT, 'histograms/countries')):
-            if country.iso in f and year in f:
+            if country.iso in f and '%s-%s' % (year, year) in f:
                 if f[0] == '-':
                     cc = f[1:3]
                 else:
@@ -449,25 +448,24 @@ def charts_reports(request):
     except:
         countries_dropdown = CountryDropdownForm()
     
-    ###########
-    # HEATMAP #
-    ###########
+    ############
+    # HEATMAPS #
+    ############
     
     import json
-#     key = 'heatmap'
-#     heatmap = json.loads("{ \"%s\" : %s}" % (key, Params.objects.get(config_name = 'heatmap')))
     
     key = 'heatmap_countries'
     heatmap_countries = Params.objects.get(config_name=key)
-    print Params.objects.get(config_name=key)
     
     key = 'heatmap_values'
     heatmap_values = json.loads("{ \"%s\" : %s}" % (key, Params.objects.get(config_name=key)))
     
-    #######################
-    # REGION DISTRIBUTION #
-    #######################
-           
+    key = 'heatmap_asns'
+    heatmap_asns = Params.objects.get(config_name=key)
+    
+    key = 'heatmap_asns_values'
+    heatmap_asns_values = Params.objects.get(config_name=key)#json.loads("{ \"%s\" : %s}" % (key, Params.objects.get(config_name=key)))
+    
     ####### 
     # MAP #
     #######
@@ -482,7 +480,7 @@ def charts_reports(request):
     # RESPONSE #        
     ############
     
-    return render_to_response('charts_reports.html', {'heatmap_countries' : heatmap_countries, 'heatmap_values' : heatmap_values['heatmap_values'], 'countries_dropdown' : countries_dropdown, 'testpoints' : mapPoints}, getContext(request))
+    return render_to_response('charts_reports.html', {'heatmap_asns' : heatmap_asns, 'heatmap_asns_values' : heatmap_asns_values, 'heatmap_countries' : heatmap_countries, 'heatmap_values' : heatmap_values['heatmap_values'], 'countries_dropdown' : countries_dropdown, 'testpoints' : mapPoints}, getContext(request))
 
 def charts_reports_bandwidth(request):
     return render_to_response('charts_reports_bandwidth.html', getContext(request))

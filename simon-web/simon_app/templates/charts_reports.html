@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+
 {% block javascript %}
 <!-- J Query -->
 <script type="text/javascript"
@@ -339,6 +340,7 @@ google.maps.event.addDomListener(window, 'load', initialize);
 <script src="http://code.highcharts.com/modules/heatmap.js"></script>
 <script src="http://code.highcharts.com/modules/exporting.js"></script>
 <script>
+
 $(function () {
 	
 	Highcharts.setOptions({
@@ -367,12 +369,12 @@ $(function () {
 
         xAxis: {
             categories: {{ heatmap_countries|safe }},
-            title: {text : 'Origen'},
+            title: {text : 'País de Origen'},
         },
 
         yAxis: {
             categories: {{ heatmap_countries|safe }},
-            title: {text : 'Destino'},
+            title: {text : 'País de Destino'},
             labels: {
                 rotation: -45,
             }
@@ -417,11 +419,72 @@ $(function () {
             enabled: false,
         }
     });
+	
+$('#heatmap_asns').highcharts({
+        
+        chart: {
+            type: 'heatmap',
+            inverted : true,
+            backgroundColor : 'rgba(255, 255, 255, 0.1)',
+        },
+        
+        title: {
+            text: ''
+        },
+
+        xAxis: {
+            categories: {{ heatmap_asns|safe}},
+            title: {text : 'AS de Origen'},
+        },
+
+        yAxis: {
+            categories: {{ heatmap_asns|safe}},
+            title: {text : 'AS de Destino', margin : 50},
+            labels: {
+                rotation: -45,
+            }
+        },
+
+        colorAxis: {
+            min: 0,
+            max: 500,
+            minColor: '#FFFFFF',
+            maxColor: '#CF7C00'
+        },
+
+        legend: {
+            align: 'center',
+            layout: 'horizontal',
+            enabled : true,
+            verticalAlign: 'top',
+        },
+
+        tooltip: {
+            formatter: function () {
+                return this.series.xAxis.categories[this.point.x] + ' --> ' + this.series.yAxis.categories[this.point.y] + ' ' + this.point.value + ' ms';
+            }
+        },
+
+        series: [{
+            name: 'Latencia',
+            borderWidth: 0,
+            data: {{ heatmap_asns_values|safe }},
+            dataLabels: {
+                enabled: false,
+                color: 'black',
+                style: {
+                    textShadow: 'none',
+                    HcTextStroke: null
+                }
+            }
+        }],
+        dataLabels: {
+            enabled: false,
+        }
+    });
 });
 </script>
-{% endblock %}
-
-{% block css %}
+{% endblock %} {% block css %}
 <style>
 #map-canvas {
 	height: 350px;
@@ -454,10 +517,7 @@ path.line {
 	stroke-width: 0;
 }
 </style>
-{% endblock %}
-{% block title %} Gráficas {% endblock %}
-
-{% block content %}
+{% endblock %} {% block title %} Gráficas {% endblock %} {% block content %}
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 
@@ -592,6 +652,10 @@ path.line {
 	<div class="border">
 		<div id="heatmap"
 			style="width: 600px; height: 600px; margin: 3em 0 0 100px"></div>
+			
+		<div id="heatmap_asns"
+			style="width: 600px; height: 600px; margin: 3em 0 0 100px"></div>
+			
 	</div>
 </div>
 {% endblock %}

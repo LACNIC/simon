@@ -4,7 +4,7 @@
 from __future__ import division
 import doctest
 
-import django_tables as tables
+# import django_tables as tables
 from django import forms
 from simon_app.models import Country, Results, ThroughputResults, Images
 #date picker
@@ -14,44 +14,44 @@ from datetime import tzinfo, timedelta
 from django.db.models import Q
 
 
-class ResultsTable(tables.MemoryTable):
-	#date_test = tables.Column(verbose_name="Test date")
-	#version = tables.Column(verbose_name="Version")
-	#ip_origin = tables.Column(verbose_name="Origin IP")
-	#ip_destination = tables.Column(verbose_name="Destination IP")
-	#testype = tablesao.Column(verbose_name="Test type")
-	#Number of probes to a specific country
-	number_probes = tables.Column(verbose_name="Number of probes", name="num_probes", data="num_probes")
-	min_rtt = tables.Column(verbose_name="Min. RTT (ms)", name="min_rtt", data="min_rtt")
-	max_rtt = tables.Column(verbose_name="Max. RTT (ms)", name="max_rtt", data="max_rtt")
-	ave_rtt = tables.Column(verbose_name="Avge. RTT (ms)", name="ave_rtt", data="ave_rtt")
-	dev_rtt = tables.Column(verbose_name="RTT Deviation (ms)", name="dev_rtt", data="dev_rtt")
-	median_rtt = tables.Column(verbose_name="Avge. Median RTT (ms)", name="median_rtt", data="median_rtt")
-	packet_loss = tables.Column(verbose_name="Packet loss", name="packet_loss", data="packet_loss")
-
-	country_destination = tables.Column(verbose_name="Destination country (code)", name="country_destination", data="country_destination")
-	#Fields that appear on advanced search results
-	ip_version = tables.Column(verbose_name="IP version", visible=False, name="ip_version", data="ip_version")
-	tester = tables.Column(verbose_name="Tester name", visible=False, name="tester", data="tester")
-	tester_version = tables.Column(verbose_name="Tester version", visible=False, name="tester_version", data="tester_version")
-
-	def __unicode__(self):
-		return self.ip_origin
-	
-class ThroughputResultsTable(tables.MemoryTable):
-	time = tables.Column(verbose_name="Avge. time (ms)", visible=False, name="ave_time", data="ave_time")
-	size = tables.Column(verbose_name="Avge. size (Bytes)", visible=False, name="ave_size", data="ave_size")
-	number_probes = tables.Column(verbose_name="Number of probes", name="number_probes", data="number_probes")
-	ave_thput = tables.Column(verbose_name="Avge. Throughput", name="ave_thput", data="ave_thput")
-	std_dev = tables.Column(verbose_name="Std. Deviation", name="std_dev", data="std_dev")
-	country_destination = tables.Column(verbose_name="Destination country (code)", name="country_destination", data="country_destination")
-	#Fields that appear on advanced search results
-	ip_version = tables.Column(verbose_name="IP version", visible=False, name="ip_version", data="ip_version")
-	tester = tables.Column(verbose_name="Tester name", visible=False, name="tester", data="tester")
-	tester_version = tables.Column(verbose_name="Tester version", visible=False, name="tester_version", data="tester_version")
-	
-	def __unicode__(self):
-		return self.country_destination
+# class ResultsTable(tables.MemoryTable):
+# 	#date_test = tables.Column(verbose_name="Test date")
+# 	#version = tables.Column(verbose_name="Version")
+# 	#ip_origin = tables.Column(verbose_name="Origin IP")
+# 	#ip_destination = tables.Column(verbose_name="Destination IP")
+# 	#testype = tablesao.Column(verbose_name="Test type")
+# 	#Number of probes to a specific country
+# 	number_probes = tables.Column(verbose_name="Number of probes", name="num_probes", data="num_probes")
+# 	min_rtt = tables.Column(verbose_name="Min. RTT (ms)", name="min_rtt", data="min_rtt")
+# 	max_rtt = tables.Column(verbose_name="Max. RTT (ms)", name="max_rtt", data="max_rtt")
+# 	ave_rtt = tables.Column(verbose_name="Avge. RTT (ms)", name="ave_rtt", data="ave_rtt")
+# 	dev_rtt = tables.Column(verbose_name="RTT Deviation (ms)", name="dev_rtt", data="dev_rtt")
+# 	median_rtt = tables.Column(verbose_name="Avge. Median RTT (ms)", name="median_rtt", data="median_rtt")
+# 	packet_loss = tables.Column(verbose_name="Packet loss", name="packet_loss", data="packet_loss")
+# 
+# 	country_destination = tables.Column(verbose_name="Destination country (code)", name="country_destination", data="country_destination")
+# 	#Fields that appear on advanced search results
+# 	ip_version = tables.Column(verbose_name="IP version", visible=False, name="ip_version", data="ip_version")
+# 	tester = tables.Column(verbose_name="Tester name", visible=False, name="tester", data="tester")
+# 	tester_version = tables.Column(verbose_name="Tester version", visible=False, name="tester_version", data="tester_version")
+# 
+# 	def __unicode__(self):
+# 		return self.ip_origin
+# 	
+# class ThroughputResultsTable(tables.MemoryTable):
+# 	time = tables.Column(verbose_name="Avge. time (ms)", visible=False, name="ave_time", data="ave_time")
+# 	size = tables.Column(verbose_name="Avge. size (Bytes)", visible=False, name="ave_size", data="ave_size")
+# 	number_probes = tables.Column(verbose_name="Number of probes", name="number_probes", data="number_probes")
+# 	ave_thput = tables.Column(verbose_name="Avge. Throughput", name="ave_thput", data="ave_thput")
+# 	std_dev = tables.Column(verbose_name="Std. Deviation", name="std_dev", data="std_dev")
+# 	country_destination = tables.Column(verbose_name="Destination country (code)", name="country_destination", data="country_destination")
+# 	#Fields that appear on advanced search results
+# 	ip_version = tables.Column(verbose_name="IP version", visible=False, name="ip_version", data="ip_version")
+# 	tester = tables.Column(verbose_name="Tester name", visible=False, name="tester", data="tester")
+# 	tester_version = tables.Column(verbose_name="Tester version", visible=False, name="tester_version", data="tester_version")
+# 	
+# 	def __unicode__(self):
+# 		return self.country_destination
 	
 import datetime
 import re

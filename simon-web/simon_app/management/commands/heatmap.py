@@ -1,3 +1,4 @@
+from __future__ import division
 """
     Script than saves the Heatmap data into static/data/heatmap
 """
@@ -5,15 +6,82 @@ from django.core.management.base import BaseCommand
 from simon_app.models import Country, Params
 from django.db.models import Q
 from simon_app.functions import meanLatency
-from simon_app.models import Results
+from simon_app.models import Results, AS
 from simon_app.reportes import GMTUY
-from datetime import timedelta
+from datetime import timedelta, datetime
+import json
+import sys
 
+def asn_heatmap():
+    rs = Results.objects.filter((Q(as_origin__gt=1) | Q(as_destination__gt=1)) & Q(ip_version=4))
+    ases = rs.order_by('as_origin').distinct('as_origin')
+#     ases_tmp = rs.order_by('as_destination').distinct('as_destination')
+#     ases = set(ases_tmp) - set(ases)
+    
+#     mean = []
+#     for asn in ases:
+#         if Results.objects.filter(Q(as_origin=asn.as_origin) & Q(as_destination=asn.as_origin)).count() > 0:
+#             rs = Results.objects.filter(Q(as_origin=asn.as_origin) & Q(as_destination=asn.as_origin) & Q(ave_rtt__lte=800)).values_list('ave_rtt', flat=True)
+#             print "AS %s\t%.1f ms (%s samples)" % (asn.as_origin.asn, sum(rs) / len(rs), len(rs))
+#             mean.append(sum(rs) / len(rs))
+#     print "------------------------\nRegion average : %s ms" % (sum(mean) / len(mean))
+    
+    as_objects = []
+    for r_asn in ases:
+        if Results.objects.filter(Q(as_origin=r_asn.as_origin)).count() > 0\
+        and Results.objects.filter(Q(as_destination=r_asn.as_origin)).count() > 0:
+            as_objects.append(r_asn.as_origin)
+    print "Generating heatmap for %s ASNs" % (len(as_objects))
+    
+    asns = []
+    for as_object in as_objects:
+        asns.append(str(as_object.asn))  
+    try:
+        param = Params.objects.get(config_name='heatmap_asns')
+        param.config_value = str(asns)
+    except Params.DoesNotExist:
+        param = Params(config_name='heatmap_asns', config_value=str(asns).encode("utf-8"))
+    param.save()
+        
+    N = len(as_objects) ** 2
+    n = 0
+    
+    values = []
+    i = j = 0
+    for asn_origin in as_objects:
+        for asn_destination in as_objects:
+            n = n + 1
+            sys.stdout.write("\r%.1f%s" % (100 * float(n / N), '%'))
+            sys.stdout.flush()
+            
+            rs = Results.objects.filter(Q(as_origin=asn_origin.id) & Q(as_destination=asn_destination.id) & Q(ave_rtt__lte=800)).values_list('ave_rtt', flat=True)
+            if len(rs) > 0:
+                value = "%.2f" % (sum(rs) / len(rs))
+                values.append([i, j, value])
+            else:
+                values.append([i, j, 0])
+            
+#             dt = datetime.now() - t0
+#             sys.stdout.write("\r%s segundos" % ((N - n) * ( 1.0 * dt.seconds / n )))
+#             sys.stdout.flush()
+            
+            j += 1
+        i += 1
+        j = 0
+    sys.stdout.write("\n")
+    try:
+        param = Params.objects.get(config_name='heatmap_asns_values')
+        param.config_value = json.dumps(values)
+        param.save()
+    except Params.DoesNotExist:
+        param = Params(config_name='heatmap_asns_values', config_value=json.dumps(values))
+        param.save()
+    
+    
 def heatmap(start, end):
     
     print "Generating heatmap for %s - %s" % (start.year, end.year)
     
-    import sys
     spinner = spinning_cursor()
     
     countries_iso = list(Country.objects.filter(Q(region_id=1) | Q(region_id=2) | Q(region_id=3)).order_by('printable_name').values_list('iso', flat=True))
@@ -25,7 +93,6 @@ def heatmap(start, end):
             tmp.append(cc)
     countries_iso = tmp
     
-    import json
     countries = []
     for country_iso in countries_iso:
         countries.append(str(Country.objects.get(iso=country_iso).printable_name))
@@ -40,15 +107,20 @@ def heatmap(start, end):
     values = []
     i = j = 0
     
+    N = len(countries_iso) ** 2
+    n = 0
     latencies = []
     for country_iso_origin in countries_iso:
         latency = meanLatency(country_iso_origin, country_iso_origin, start, end)
         if latency > 0: latencies.append(latency)
         
         for country_iso_destination in countries_iso:
-            sys.stdout.write(spinner.next())
+            n = n + 1
+            sys.stdout.write("\r%.1f%s" % (100 * float(n / N), '%'))
             sys.stdout.flush()
-            sys.stdout.write('\b')
+#             sys.stdout.write(spinner.next())
+#             sys.stdout.flush()
+#             sys.stdout.write('\b')
             
             
             
@@ -57,7 +129,6 @@ def heatmap(start, end):
             j = j + 1
         i = i + 1
         j = 0
-    print latencies
     print "Region mean: %s" % (str(sum(latencies) * 1.0 / len(latencies)))
     try:
         param = Params.objects.get(config_name='heatmap_values')
@@ -70,10 +141,10 @@ def heatmap(start, end):
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
-        year = [2009, 2010, 2011, 2012, 2013]
-        from datetime import datetime
+        asn_heatmap()
+        year = 2009#[2009, 2010, 2011, 2012, 2013]
         start = datetime.strptime("Jan 1 %s" % (year), '%b %d %Y').replace(tzinfo=GMTUY())
-        end = datetime.now(GMTUY())#start + timedelta(365) # # 
+        end = datetime.now(GMTUY())#start + timedelta(365)#
         heatmap(start, end)
         
 def spinning_cursor():

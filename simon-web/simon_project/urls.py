@@ -39,8 +39,9 @@ urlpatterns = patterns('',
     url(r'^postxmlresult/throughput$', 'simon_app.views.post_xml_throughput_result'),
     url(r'^postxmlresult/offline$', 'simon_app.views.post_offline_testpoints'),
     
-    url(r'^web_points/(?P<callback>\w+)/$', 'simon_app.views.web_points', {'amount': 0}),  # JSONP callback
-    url(r'^web_points/(?P<amount>\d+)/(?P<ip_version>\d+)$', 'simon_app.views.web_points'),
+    url(r'^web_points/$', 'simon_app.views.web_points', {'amount': 0}),  # JSONP callback
+    url(r'^web_points/(?P<amount>\d+)/$', 'simon_app.views.web_points', {'ip_version': 4}),
+    url(r'^web_points/(?P<amount>\d+)/(?P<ip_version>\d+)/$', 'simon_app.views.web_points'),
     url(r'^ntp_points$', 'simon_app.views.ntp_points'),
     url(r'^web_configs/$', 'simon_app.views.web_configs'),
     url(r'^lab/$', 'simon_app.views.lab'),
@@ -84,6 +85,8 @@ urlpatterns = patterns('',
     #######
     
     url(r'^api$', 'simon_app.views.api'),
+    
+    url(r'^api/latency/autnum/(?P<asn_origin>[0-9]+)/(?P<asn_destination>[0-9]+)/$', 'simon_app.api_views.ases'),
     
     # optional arguments: ip_version, year, month (2^4 = 16 combinations)
     url(r'^api/latency/(?P<country>[A-Z]{2})/(?P<ip_version>[46])/(?P<year>[0-9]{4})/(?P<month>[0-9]{1,2})$', 'simon_app.views.latency'),

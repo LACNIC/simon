@@ -81,6 +81,36 @@ def inLACNICResources(ip_address):
         print 'Error en el formato de la direccion'
     
     return False
+
+def partOfLACNICResources(network):
+    try:
+        for resource in settings.v4resources:
+                if IPNetwork(network) in IPNetwork(resource):
+                    return True
+        
+        for resource in settings.v6resources:
+                if IPNetwork(network) in IPNetwork(resource):
+                    return True
+                
+    except AddrFormatError:
+        print 'Error en el formato de la direccion'
+    
+    return False
+
+def LACNICResourcesIsPartOf(bigger_network):
+    try:
+        for resource in settings.v4resources:
+                if IPNetwork(resource) in IPNetwork(bigger_network):
+                    return True
+        
+        for resource in settings.v6resources:
+                if IPNetwork(resource) in IPNetwork(bigger_network):
+                    return True
+                
+    except AddrFormatError:
+        print 'Error en el formato de la direccion'
+    
+    return False
     
 def distance_on_unit_sphere(lat1, long1, lat2, long2):
 
@@ -119,3 +149,4 @@ def meanLatency(originIso, destinationIso, date_start, date_end):
         return sum(results) / len(results)
     except TypeError:
         return 0
+    

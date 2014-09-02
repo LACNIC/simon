@@ -1,7 +1,8 @@
+from django.db.models import Q
 from django.db import models, connection
 from django.db.models.fields import CharField
 from django.db.models.fields.related import ForeignKey
-
+from netaddr import IPAddress, IPNetwork
 
 class Region(models.Model):
 	name = models.CharField(max_length=80)
@@ -62,6 +63,43 @@ class ThroughputResults(models.Model):
 		if(tag == 'tester_version'):
 			self.tester_version = text
 
+class ASManager(models.Manager):
+	def get_as_by_ip(self, ip_address):
+		for autsys in AS.objects.order_by('-pfx_length'):
+			if IPAddress(ip_address) in IPNetwork(autsys.network):
+				return autsys
+			
+class AS(models.Model):
+	asn = models.IntegerField()
+	network = models.TextField()
+	pfx_length = models.IntegerField()
+	objects = ASManager()
+
+from itertools import chain
+class ResultsManager(models.Manager):
+	def get_results_by_as_origin(self, as_number):
+		res = []
+		for asn in AS.objects.filter(asn=as_number):# asns list
+			res.append(Results.objects.filter(as_origin_id=asn.id))
+		return res
+	
+	def get_results_by_as_destination(self, as_number):
+		res = []
+		for asn in AS.objects.filter(asn=as_number):# asns list
+			res.append(Results.objects.filter(as_destination_id=asn.id))
+		return res
+	
+	def get_results_by_as_origin_and_destination(self, asn_origin, asn_destination):
+		res = []
+		for as_origin in AS.objects.filter(asn=asn_origin):# asns list
+			for as_destination in AS.objects.filter(asn=asn_origin):# asns list
+				if Results.objects.filter(Q(as_destination_id=as_origin.id) & Q(as_origin_id=as_destination.id)).count() > 0:
+					res.extend(Results.objects.filter(Q(as_destination_id=as_origin.id) & Q(as_origin_id=as_destination.id)))
+		return res
+	
+	def get_results_by_as(self, as_number):
+		return list(chain(self.get_results_by_as_origin(as_number), self.get_results_by_as_destination(as_number)))
+	
 class Results(models.Model):
 	#id is automatically inserted as Django identifier
 	date_test = models.DateTimeField('test date')
@@ -81,12 +119,23 @@ class Results(models.Model):
 	ip_version = models.IntegerField()
 	tester = models.CharField(max_length=20)
 	tester_version = models.CharField(max_length=10)
+	as_origin = models.ForeignKey(AS, related_name='as_origin', default=1)
+	as_destination = models.ForeignKey(AS, related_name='as_destination', default=1)
+	user_agent = models.CharField(max_length=200, default='')
+	objects = ResultsManager()
+	
 	
 	def __unicode__(self):
 		return self.ip_origin
 	
 	def set_date_time(self, date, time):
 		self.date_test = date + " " + time
+		
+	def get_as_origin(self):
+		return AS.object.get_as_by_ip(self.ip_origin)
+		
+	def get_as_destination(self):
+		return AS.object.get_as_by_ip(self.ip_destination)
 	
 	def set_data_test(self, tag, text):
 		#if(tag == 'version'):
@@ -136,7 +185,7 @@ class TestPoint(models.Model):
 	testtype = models.CharField(max_length=20)
 	ip_address = models.GenericIPAddressField()
 	country = models.CharField(max_length=2)
-	enabled = models.BooleanField()
+	enabled = models.BooleanField(default=False)
 	date_created = models.DateTimeField('test date')
 	url = models.TextField(null=True)
 	city = models.CharField(max_length=100)
@@ -153,7 +202,7 @@ class Images(models.Model):
 	height = models.IntegerField(null=True)
 	type = models.TextField()
 	timeout = models.IntegerField(null=True)
-	online = models.BooleanField()
+	online = models.BooleanField(default=True)
 	name = models.CharField(max_length=30)
 	
 	def __unicode__(self):

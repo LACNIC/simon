@@ -6,8 +6,6 @@ from simon_app.models import TestPoint, Results, Country
 from geopy import geocoders
 from __future__ import division #float division
 import math
-from dns.resolver import NoAnswer, NXDOMAIN
-from dns.exception import Timeout
 os.environ['DJANGO_SETTINGS_MODULE'] = "simon_project.settings"
 from xml.dom.minidom import parseString
 from time import gmtime, strftime
@@ -155,10 +153,6 @@ def write_web_testpoints():
 		#DNS and IP format exceptions
 		except NXDOMAIN:
 			print 'The query name does not exist. URL: ' + url
-		except NoAnswer:
-			print 'No answer from ' + url
-		except Timeout:
-			print 'Timeout from ' + url
 		except AddrFormatError:
 			print 'Address Format Error'
 		except socket.gaierror:
@@ -212,7 +206,7 @@ def city2latLong():
 
 def rtts():
 	from datetime import datetime
-	f = open('/Users/agustin/Desktop/tcpDump/nicMX', 'r')
+	f = open('/Users/agustin/Dropbox/LACNIC/simon/stats/mediciones/cableado/tcp', 'r')
 	lines = f.readlines()
 	f.close()
 	
@@ -224,7 +218,7 @@ def rtts():
 		anterior = time
 
 def clean():
-	f = open('/Users/agustin/Desktop/tcpDump/nicMXjs', 'r')
+	f = open('/Users/agustin/Dropbox/LACNIC/simon/stats/mediciones/cableado/tcp2', 'r')
 	lines = f.readlines()
 	f.close()
 	for line in lines:
