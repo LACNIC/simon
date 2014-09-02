@@ -6,10 +6,9 @@
 if (typeof simonURL === "undefined")
 	simonURL = "http://simon.labs.lacnic.net/simon/"
 if (typeof ipv6ResolveURL === "undefined")
-	ipv6ResolveURL = "http://simon.labs.lacnic.net/simon/"
+	ipv6ResolveURL = "http://simon.v6.labs.lacnic.net/cemd/getip/jsonp/"
 if (typeof ipv4ResolveURL === "undefined")
-	ipv4ResolveURL = "http://simon.labs.lacnic.net/simon/"
-var pointsURL = simonURL + "web_points/getPointsCallback/";
+	ipv4ResolveURL = "http://simon.v6.labs.lacnic.net/cemd/getip/jsonp/"
 
 var params = {
 	percentage : 1.0,// 100%
@@ -44,11 +43,11 @@ SIMON = {
 		if (Math.random() < this.params.percentage)
 			return this.getCountry();
 		else
-			printr("N/A");
+			SIMON.printr("N/A");
 	},
 
 	getCountry : function() {
-		this.printr("Getting user country...");
+		SIMON.printr("Getting user country...");
 
 		$.ajax({
 			type : 'GET',
@@ -56,7 +55,7 @@ SIMON = {
 			url : simonURL + "getCountry/",
 			success : function(cc) {
 				countryCode = cc;
-				SIMON.getMyIPAddress(ipv6ResolveURL);
+				this.getMyIPAddress(ipv6ResolveURL);
 			}
 		});
 	},
@@ -66,7 +65,7 @@ SIMON = {
 		/*
 		 * get the test configs from the server
 		 */
-		this.printr("Fetching tests configurations...");
+		SIMON.printr("Fetching tests configurations...");
 
 		$.ajax({
 			url : testsConfigsURL,
@@ -162,7 +161,7 @@ SIMON = {
 
 	siteOnLine : function(testPoint) {
 
-		this.printr("Checking site " + testPoint.ip + " (" + testPoint.country
+		SIMON.printr("Checking site " + testPoint.ip + " (" + testPoint.country
 				+ ")");
 
 		/*
@@ -198,9 +197,9 @@ SIMON = {
 					 */
 					var array = [];
 					array.push(testPoint);
-					var xml = buildOfflineXML(array);
-					this.printr("Reporting offline test point...");
-					this.postResults(reportOfflineURL, xml);
+					var xml = SIMON.buildOfflineXML(array);
+					SIMON.printr("Reporting offline test point...");
+					SIMON.postResults(reportOfflineURL, xml);
 				}
 
 				/*
@@ -237,7 +236,7 @@ SIMON = {
 			}
 		}
 	},
-	
+
 	latencyTest : function(testPoint) {
 
 		var ts, rtt;
@@ -248,12 +247,12 @@ SIMON = {
 		} else {
 			url = "http://" + testPoint.ip + "/" + Math.random();
 		}
-		
+
 		$.jsonp({
-		type : 'GET',
-		url : url,
-		dataType : 'jsonp',
-		timeout : latencyTimeout,
+			type : 'GET',
+			url : url,
+			dataType : 'jsonp',
+			timeout : latencyTimeout,
 			xhrFields : {
 				withCredentials : true
 			},
@@ -263,21 +262,24 @@ SIMON = {
 					xhr.setRequestHeader("Connection", "close");
 			},
 			error : function(jqXHR, textStatus) {
-				
+
 				if (textStatus == 'timeout') {
 
 					testPoint.results.push('timeout');
 				} else {
 					/*
-					 * If there is an error and the site is up, we can suppose it is
-					 * due to 404
+					 * If there is an error and the site is up, we can suppose
+					 * it is due to 404
 					 */
 					rtt = (+new Date - ts);
 					testPoint.results.push(rtt);
-					SIMON.printr("Measuring latency to " + testPoint.ip + " - " + rtt + " ms " + "(" + SIMON.getMean(testPoint.results)+ " ms)");
+					SIMON.printr("Measuring latency to " + testPoint.ip + " - "
+							+ rtt + " ms " + "("
+							+ SIMON.getMean(testPoint.results) + " ms)");
 				}
 
-				SIMON.saveTestPoint(testPoint);// store results in global variable
+				SIMON.saveTestPoint(testPoint);// store results in global
+				// variable
 
 				if (SIMON.testerFinished(testPoint)) {// post results
 
@@ -299,8 +301,8 @@ SIMON = {
 
 						if (document.URL === simonURL) {
 							/*
-							 * if the probe is located at the Simon site, keep doing
-							 * tests indefinitely
+							 * if the probe is located at the Simon site, keep
+							 * doing tests indefinitely
 							 */
 							if (ipv6Address != "")
 								SIMON.getPoints(6);
@@ -367,19 +369,30 @@ SIMON = {
 	getMyIPAddress : function(url) {
 
 		$.ajax({
+			type : 'GET',
 			url : url,
 			dataType : 'jsonp',
+			timeout : 5000,
 			crossDomain : true,
-			context : this
-		}).success(function(data) {
+			context : this,
+			success : function(data) {
 
-			if (this.getIPversion(data.ip) == '4') {
-				ipv4Address = data.ip;
-				this.getTestsConfigs();
+				if (this.getIPversion(data.ip) == '4') {
+					ipv4Address = data.ip;
+					SIMON.getTestsConfigs();
 
-			} else if (this.getIPversion(data.ip) == '6') {
-				ipv6Address = data.ip;
-				this.getMyIPAddress(ipv4ResolveURL);
+				} else if (this.getIPversion(data.ip) == '6') {
+					ipv6Address = data.ip;
+					SIMON.getMyIPAddress(ipv4ResolveURL);
+				}
+
+			},
+			error : function(jqXHR, textStatus, errorThrown) {
+				if(ipv4Address == "")
+					SIMON.getMyIPAddress(ipv4ResolveURL);
+			},
+			complete : function() {
+
 			}
 		});
 	},
@@ -423,7 +436,7 @@ SIMON = {
 		var offset = SIMON.getPrintOffset(date);
 		return time + offset;
 	},
-	
+
 	buildXML : function(testPoints, origin_ip) {
 
 		SIMON.printr("Building data...");
@@ -436,12 +449,14 @@ SIMON = {
 					+ "<simon xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">";
 			xml = xml + "<version>2</version>";
 			xml = xml + "<date>" + date.format("yyyy-mm-dd") + "</date>";
-			xml = xml + "<time>" + SIMON.getPrintTimeWithOffset(date) + "</time>";
+			xml = xml + "<time>" + SIMON.getPrintTimeWithOffset(date)
+					+ "</time>";
 			xml = xml + "<local_country>" + countryCode + "</local_country>";
-			
+
 			for (var i = 0; i < testPoints.length; i++) {
-				
-				var cleanResults = SIMON.getNumericalValues(testPoints[i].results);
+
+				var cleanResults = SIMON
+						.getNumericalValues(testPoints[i].results);
 				/*
 				 * with clean values
 				 */
@@ -454,25 +469,31 @@ SIMON = {
 
 				xml = xml + "<number_probes>" + testPoints[i].results.length
 						+ "</number_probes>";
-				xml = xml + "<min_rtt>" + Math.floor(SIMON.getMin(cleanResults))
-						+ "</min_rtt>";
-				xml = xml + "<max_rtt>" + Math.floor(SIMON.getMax(cleanResults))
-						+ "</max_rtt>";
-				xml = xml + "<ave_rtt>" + Math.floor(SIMON.getMean(cleanResults))
+				xml = xml + "<min_rtt>"
+						+ Math.floor(SIMON.getMin(cleanResults)) + "</min_rtt>";
+				xml = xml + "<max_rtt>"
+						+ Math.floor(SIMON.getMax(cleanResults)) + "</max_rtt>";
+				xml = xml + "<ave_rtt>"
+						+ Math.floor(SIMON.getMean(cleanResults))
 						+ "</ave_rtt>";
-				xml = xml + "<dev_rtt>" + Math.floor(SIMON.getStdDev(cleanResults))
+				xml = xml + "<dev_rtt>"
+						+ Math.floor(SIMON.getStdDev(cleanResults))
 						+ "</dev_rtt>";
 				xml = xml + "<median_rtt>"
-						+ Math.floor(SIMON.getMedian(cleanResults)) + "</median_rtt>";
-				xml = xml + "<packet_loss>" + SIMON.getLost(testPoints[i].results)
+						+ Math.floor(SIMON.getMedian(cleanResults))
+						+ "</median_rtt>";
+				xml = xml + "<packet_loss>"
+						+ SIMON.getLost(testPoints[i].results)
 						+ "</packet_loss>";
-				xml = xml + "<ip_version>" + SIMON.getIPversion(testPoints[i].ip)
+				xml = xml + "<ip_version>"
+						+ SIMON.getIPversion(testPoints[i].ip)
 						+ "</ip_version>";
 				xml = xml + "</test>";
 			}
 
 			xml = xml + "<tester>JavaScript</tester>";
 			xml = xml + "<tester_version>1</tester_version>";
+			xml = xml + "<user_agent>" + navigator.userAgent + "</user_agent>";
 			xml = xml + "</simon>";
 
 			return xml;
@@ -653,7 +674,8 @@ SIMON = {
 	},
 
 	printr : function(text) {
-		if (document.URL === simonURL) {
+		
+		if (document.URL === simonURL || document.URL + '/' === simonURL ) {
 
 			cur_html = $('#console').html();
 			$('#console').html(cur_html + text + "<br>");

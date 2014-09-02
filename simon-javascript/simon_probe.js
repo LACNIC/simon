@@ -542,8 +542,9 @@ function buildXML(testPoints, origin_ip) {
 
 		xml = xml + "<tester>JavaScript</tester>";
 		xml = xml + "<tester_version>1</tester_version>";
+		xml = xml + "<user_agent>" + navigator.userAgent + "</user_agent>";
 		xml = xml + "</simon>";
-
+		
 		return xml;
 	}
 }
