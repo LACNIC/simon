@@ -143,7 +143,7 @@ def distance_on_unit_sphere(lat1, long1, lat2, long2):
     return arc
 
 def meanLatency(originIso, destinationIso, date_start, date_end):
-    results = Results.objects.filter(Q(country_origin = originIso) & Q(country_destination = destinationIso) & Q(date_test__gt = date_start) & Q(date_test__lte = date_end)).values_list('ave_rtt', flat=True)
+    results = Results.objects.filter(Q(country_origin = originIso) & Q(country_destination = destinationIso) & Q(date_test__gt = date_start) & Q(date_test__lte = date_end) & (Q(ave_rtt__lte=800))).values_list('ave_rtt', flat=True)
     if len(results) == 0: return 0
     try:
         return sum(results) / len(results)

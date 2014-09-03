@@ -581,36 +581,24 @@ path.line {
 		conocimiento de cómo su red es vista desde otras redes de LAC en
 		términos de latencia.
 	</p>
-
-	<a href="/static/files/2009.png"
-		title="Histograma de distribución de latencia, año 2009"><img
-		alt="Histograma de distribución de latencia, año 2009"
-		src="/static/files/2009.png" style="width: 250px" class="hover" /></a> <a
-		href="/static/files/2010.png"
-		title="Histograma de distribución de latencia, año 2010"><img
-		alt="Histograma de distribución de latencia, año 2010"
-		src="/static/files/2010.png" style="width: 250px" class="hover" /></a> <a
-		href="/static/files/2011.png"
-		title="Histograma de distribución de latencia, año 2011"><img
-		alt="Histograma de distribución de latencia, año 2011"
-		src="/static/files/2011.png" style="width: 250px" class="hover" /></a> <a
-		href="/static/files/2012.png"
-		title="Histograma de distribución de latencia, año 2012"><img
-		alt="Histograma de distribución de latencia, año 2012"
-		src="/static/files/2012.png" style="width: 250px" class="hover" /></a> <a
-		href="/static/files/2013.png"
-		title="Histograma de distribución de latencia, año 2013"><img
-		alt="Histograma de distribución de latencia, año 2013"
-		src="/static/files/2013.png" style="width: 250px" class="hover" /></a> <a
-		href="/static/files/2014.png"
-		title="Histograma de distribución de latencia, año 2014"><img
-		alt="Histograma de distribución de latencia, año 2014"
-		src="/static/files/2014.png" style="width: 250px" class="hover" /></a>
+	
+{% for year in years %}
+	<a href="/static/histograms/region/Region%20latency%20histogram,%20{{year}}-{{year}}.png"
+		title="Histograma de distribución de latencia, año {{year}}"><img
+		alt="Histograma de distribución de latencia, año {{year}}"
+		src="/static/histograms/region/Region%20latency%20histogram,%20{{year}}-{{year}}.png" style="width: 250px" class="hover" /></a>
+{% endfor %}
 </div>
 
 
 
 <h4>Latencia por lugar desglosada en años</h4>
+
+<a href="/static/histograms/region/Region%20latency%20histogram,%202009-2014.png"
+		title="Histograma de distribución de latencia, año 2009"><img
+		alt="Histograma de distribución de latencia, año 2009"
+		src="/static/histograms/region/Region%20latency%20histogram,%202009-2014.png" style="width: 250px" class="hover" /></a>
+		
 <form id="country_form" action="" method="post">{% csrf_token %}
 	{{ countries_dropdown.as_p }}</form>
 

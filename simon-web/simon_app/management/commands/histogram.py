@@ -125,9 +125,9 @@ class Command(BaseCommand):
                                        | Q(country_origin=country_2.iso) & Q(country_destination=country_1.iso))\
                                       & Q(ave_rtt__gt=DESDE) & Q(ave_rtt__lte=HASTA)\
                                        & (Q(date_test__gt=start) & Q(date_test__lte=end))).values_list('ave_rtt', flat=True)
-        legend = "%s samples" % (len(data))
-        print "%s [%s] : %s.png" % (title, legend, filename)
-        self.histogram(data, title, filename, legend)
+        if len(data) > 0:
+            legend = "%s samples" % (len(data))
+            self.histogram(data, title, filename, legend)
         
     def histogram_ip(self, DESDE, HASTA, start, end, ipversion, title):
         data = Results.objects.filter(Q(ip_version=ipversion)\

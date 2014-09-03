@@ -32,11 +32,11 @@
 	{% for image in images %}
 	<figure style="float: left;">
 
-		<a href="{{ URL_PFX }}/static/histograms/countries/{{ image.name }}"
+		<a href="/static/histograms/countries/{{ image.name }}"
 			title="Histograma de latencia entre {{ image.origin }} y {{ image.destination }}, {{ image.year }}">
 			<img
 			alt="Histograma de latencia entre {{ image.origin }} y {{ image.destination }}, {{ image.year }}"
-			src="{{ URL_PFX }}/static/histograms/countries/{{ image.name }}"
+			src="/static/histograms/countries/{{ image.name }}"
 			style="width: 250px" class="hover" />
 		</a>
 

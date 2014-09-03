@@ -475,12 +475,14 @@ def charts_reports(request):
     for tp in testpoints:
         if tp.latitude is not None and tp.longitude is not None:
             mapPoints.append(tp)
-            
+    
+    year = datetime.datetime.now().year
+    years = range(2009, year + 1)
     ############
     # RESPONSE #        
     ############
     
-    return render_to_response('charts_reports.html', {'heatmap_asns' : heatmap_asns, 'heatmap_asns_values' : heatmap_asns_values, 'heatmap_countries' : heatmap_countries, 'heatmap_values' : heatmap_values['heatmap_values'], 'countries_dropdown' : countries_dropdown, 'testpoints' : mapPoints}, getContext(request))
+    return render_to_response('charts_reports.html', {'heatmap_asns' : heatmap_asns, 'heatmap_asns_values' : heatmap_asns_values, 'heatmap_countries' : heatmap_countries, 'heatmap_values' : heatmap_values['heatmap_values'], 'countries_dropdown' : countries_dropdown, 'testpoints' : mapPoints, 'years' : years}, getContext(request))
 
 def charts_reports_bandwidth(request):
     return render_to_response('charts_reports_bandwidth.html', getContext(request))

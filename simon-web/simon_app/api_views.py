@@ -148,11 +148,10 @@ def latency(request, country='all', ip_version='all', year=2009, month=01):
         row['tester'] = str(result.tester)
         response.append(row)
     
-    json_response = json.dumps(response)
+    json_response = json.dumps(response, sort_keys=True, indent=4, separators=(',', ': '))
     
     return HttpResponse(json_response, mimetype="application/json")
 
-from django.core import serializers
 def ases(request, asn_origin, asn_destination):
     res = Results.objects.get_results_by_as_origin_and_destination(asn_origin, asn_destination)
     
@@ -171,10 +170,9 @@ def ases(request, asn_origin, asn_destination):
         row['tester'] = str(result.tester)
         response.append(row)
     
-    json_response = json.dumps(response)
+    json_response = json.dumps(response, sort_keys=True, indent=4, separators=(',', ': '))
     
     return HttpResponse(json_response, mimetype="application/json")
-#     return serializers.serialize("json", res)
     
 def throughput(request, country='all', ip_version='all', year=2009, month=01):
     # Returns JSON with latency

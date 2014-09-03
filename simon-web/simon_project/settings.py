@@ -231,7 +231,7 @@ else:
     URL_PFX = ''
     UNSUBSCRIBE_TESTPOINT_URL = '/removetestpoint'
 #     MEDIA_ROOT = '/Users/agustin/Desktop'
-    SIMON_URL = 'http://192.168.1.106'
+    SIMON_URL = 'http://200.7.87.75'
     v4_URL = 'http://simon.v4.labs.lacnic.net/cemd/getip/jsonp'
     v6_URL = 'http://simon.v6.labs.lacnic.net/cemd/getip/jsonp'
 TEMPLATE_DEBUG = DEBUG

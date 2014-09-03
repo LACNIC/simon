@@ -30,11 +30,12 @@
 
 <p>El mapa de interconexión entre redes de América Latina y Caribe
 	se nutre de mediciones de latencia realizadas desde diversos medidores.
-	Al momento existen dos medidores: el más antiguo es un Applet que
-	realiza mediciones NTP, y un script que las realiza mediciones HTTP.</p>
+	Al momento existen dos medidores: un Applet de Java que realiza
+	mediciones NTP, y un script en Javascript que las realiza mediciones
+	TCP (a través de HTTP).</p>
 
 <a href="{{ URL_PFX }}/objectives">
-	
+
 	<div class="homeBox">
 		<img class="logo" src="/static/imgs/logos/objectives.png" width="70px">
 		<h1>Objetivos</h1>
@@ -46,7 +47,8 @@
 
 <a href="{{ URL_PFX }}/participate">
 	<div id="graph-01-container" class="homeBox">
-	<img class="logo" src="/static/imgs/logos/participate.png" width="70px">
+		<img class="logo" src="/static/imgs/logos/participate.png"
+			width="70px">
 		<h1>¿Cómo Participar?</h1>
 		<p>Existen varias formas de participar de manera simple en el
 			Proyecto Simón, enterate como aquí.</p>
@@ -55,8 +57,8 @@
 
 <a href="{{ URL_PFX }}/reports">
 	<div class="homeBox">
-	<img class="logo" src="/static/imgs/logos/reports.png" width="70px">
-	<img class="banner" src="/static/imgs/logos/updates.png" width="70px">
+		<img class="logo" src="/static/imgs/logos/reports.png" width="70px">
+		<img class="banner" src="/static/imgs/logos/updates.png" width="70px">
 		<h1>Reportes por país</h1>
 		<p>Analiza los reportes de latencia y ancho de banda que hemos
 			preparado a partir de la informacion recolectada por cientos de
@@ -66,8 +68,8 @@
 
 <a href="{{ URL_PFX }}/charts">
 	<div class="homeBox">
-	<img class="logo" src="/static/imgs/logos/charts.png" width="70px">
-	<img class="banner" src="/static/imgs/logos/updates.png" width="70px">
+		<img class="logo" src="/static/imgs/logos/charts.png" width="70px">
+		<img class="banner" src="/static/imgs/logos/updates.png" width="70px">
 		<h1>Gráficas de la región</h1>
 		<p>Si quieres observar los datos con más claridad, puedes
 			consultar algunas gráficas de latencia que muestran informacián
@@ -77,7 +79,7 @@
 
 <a href="{{ URL_PFX }}/api">
 	<div class="homeBox">
-	<img class="logo" src="/static/imgs/logos/api.png" width="70px">
+		<img class="logo" src="/static/imgs/logos/api.png" width="70px">
 		<h1>API</h1>
 		<p>Si deseas consumir los datos a través de interfaces estandar,
 			consulta nuestra API.</p>
@@ -86,7 +88,7 @@
 
 <a href="{{URL_PFX}}/traceroute">
 	<div class="homeBox">
-	<img class="logo" src="/static/imgs/logos/traceroute.png" width="70px">
+		<img class="logo" src="/static/imgs/logos/traceroute.png" width="70px">
 		<h1>Traceroute</h1>
 		<p>En esta sección recibimos archivos con información de
 			traceroute. Esta información es recopilada junto con las demás
@@ -96,8 +98,8 @@
 
 <a href="{{ URL_PFX }}/articles">
 	<div class="homeBox">
-	<img class="logo" src="/static/imgs/logos/articles.png" width="70px">
-	<img class="banner" src="/static/imgs/logos/new.png" width="70px">
+		<img class="logo" src="/static/imgs/logos/articles.png" width="70px">
+		<img class="banner" src="/static/imgs/logos/new.png" width="70px">
 		<h1>Artículos</h1>
 		<p>Aquí residen algunos artículos, en fase de desarrollo, que
 			exponen nuestro punto de vista en cuanto a los aspectos técnicos
@@ -107,7 +109,7 @@
 
 <a href="{{ URL_PFX }}/lab">
 	<div class="homeBox">
-	<img class="logo" src="/static/imgs/logos/lab.png" width="70px">
+		<img class="logo" src="/static/imgs/logos/lab.png" width="70px">
 		<h1>Latency Lab</h1>
 		<p>Este espacio está dedicado a explorar el medidor JavaScript.
 			Desde aquí se pueden realizar pruebas de latencia TCP hacia una
@@ -120,8 +122,8 @@
 </div>
 <p>
 	Queres hacer ping a un sitio en particular? Te recomendamos la sección
-	<a href="{{ URL_PFX }}/lab">latency lab</a>...allí puedes ver un histograma en
-	tiempo real acerca de las mediciones realizadas.
+	<a href="{{ URL_PFX }}/lab">latency lab</a>...allí puedes ver un
+	histograma en tiempo real acerca de las mediciones realizadas.
 </p>
 
 

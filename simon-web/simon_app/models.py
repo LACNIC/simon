@@ -65,13 +65,17 @@ class ThroughputResults(models.Model):
 
 class ASManager(models.Manager):
 	def get_as_by_ip(self, ip_address):
-		for autsys in AS.objects.order_by('-pfx_length'):
-			if IPAddress(ip_address) in IPNetwork(autsys.network):
-				return autsys
+		try:
+			return AS.objects.raw('SELECT * FROM simon_app_as where network >>= inet \'%s\' ORDER BY pfx_length DESC LIMIT 1' % ip_address)[0]
+		except IndexError:
+			return AS.objects.get(id=1)# 0.0.0.0/0
+# 		for autsys in AS.objects.order_by('-pfx_length'):
+# 			if IPAddress(ip_address) in IPNetwork(autsys.network):
+# 				return autsys
 			
 class AS(models.Model):
 	asn = models.IntegerField()
-	network = models.TextField()
+	network = models.GenericIPAddressField()
 	pfx_length = models.IntegerField()
 	objects = ASManager()
 
