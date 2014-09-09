@@ -1,87 +1,71 @@
-{% include 'header.html' %}
-
+{% extends 'base.html' %} {% block content %}
 <div>
 	<h1>¿Cómo Participar?</h1>
-	<p>Existen varias maneras de participar de Simon, en particular, la
-		forma mas fácil es realizar los test de latencia desde tu país.</p>
-
-	<h4>Medidores de Latencia y Ancho de Banda</h4>
 	<p>
-		Ejecutando uno de los medidores y esperando que finalicen los test,
-		nos estas ayudando a recolectar importante información de la
-		conectividad de tu país, que nos servirá para conocer el estado de la
-		interconexión en la región.<br /> Existen dos tipos de medidores:
+		Existen varias maneras de participar de Simon! La forma más fácil de
+		participar es realizar pruebas de latencia desde tu país. Además, se
+		puede participar inscribiendo tu servidor Web o NTP a la lista de
+		Servidores de Prueba. Para registrar tu servidor, contáctanos a través
+		de <a
+			href="mailto:proyectosimon@lacnic.net?Subject=Nuevo Servidor - Proyecto Simón&body=Nombre de la Organización:%0D%0A Correo de contacto:%0D%0A Nombre de la Organización:%0D%0A Dirección IP o URL: %0D%0ATipo: <NTP %7C Web> %0D%0A País donde se encuentra el servidor: ">proyectosimon@lacnic.net</a>
 	</p>
+
+	<h2>Medidores de Latencia</h2>
+	<p>Existen dos tipos de medidores:</p>
 	<ul>
-		<li><a href="{{URL_PFX}}/applet">Java Applet</a> para medir latencia NTP a múltiples puntos (esperar a que las pruebas finalicen)</li>
-		<li><a href="{{URL_PFX}}/runjavascript">Javascript</a> para medir latencia TCP a múltiples puntos de prueba</li>
-		<li><a href="{{URL_PFX}}/lab">Javascript latency lab</a> para medir latencia TCP a una dirección IP en particular</li>
+		<li><a href="{{URL_PFX}}/applet">Java Applet</a> para medir
+			latencia NTP a múltiples puntos (esperar a que las pruebas finalicen)</li>
+		<li><a href="{{URL_PFX}}/runjavascript">Javascript</a> para medir
+			latencia TCP a múltiples puntos de prueba</li>
+		<li><a href="{{URL_PFX}}/lab">Javascript latency lab</a> para
+			medir latencia TCP a una dirección IP en particular</li>
 	</ul>
 
-	<h4>Servidores de Test</h4>
+	<h2>Servidores de Prueba</h2>
 	<p>
 		Es de suma importancia disponer de la mayor cantidad de servidores
 		posibles. Cuanto más servidores están disponibles para realizar los
 		test, podemos tener mayor cantidad de información y datos más
 		certeros.<br> Si conoces o tienes un servidor NTP, o dispones de
-		un servidor web donde puedas hostear algunos archivos, nos ayudarías
-		muchísimo. La única condición que deben cumplir es que se encuentre en
-		la región de Latino América o el Caribe.
+		un servidor web a lso cuales se les puede hacer un HTTP GET. La única
+		condición que deben cumplir es que se encuentre en la región de Latino
+		América o el Caribe.
 	</p>
 
+	<h3>Servidor Web</h3>
+	<p>Basta agregar las siguientes líneas de código en alguna página
+		de tu sitio para que los visitantes comiencen a disparar mediciones de
+		latencia en la región LAC. este mecanismo permite generar mediciones
+		de forma "mesh", es decir desde muchos orígenes hacia muchos destinos.
+		Para ver más información acerca del medidor Javascript lee estas
+		notas.</p>
+		
+	<script style="width: 80%; font-size: 9"
+		src="https://gist.github.com/aguformoso/5b96955beea091492fde.js"></script>
 
-	<div class="Stats">
-		<h4>Servidor NTP</h4>
-		<ul>
-			<li>Por favor, completa los datos del siguiente <a
-				href="{{URL_PFX}}/addnewntppointform">formulario</a>.
-			</li>
-		</ul>
-	</div>
+	<p>Algunas notas:</p>
+	<ul>
+		<li>El medidor es transparente al usuairo y no interfiere con su
+			navegación normal en el sitio.</li>
+		<li>Es posible ajustar la cantidad de usuarios que generan
+			mediciones. Por ejemplo, se puede configurar para que el 10% del
+			tráfico en tu sitio genere mediciones de Simón. Esta función es
+			conveniente si quieres ir aumentando gradualmente tu colaboración con
+			el proyecto.</li>
+	</ul>
 
-	<div class="Stats">
-		<h4>Servidor de mediciones de latencia</h4>
-		<p>
-			Basta agregar las siguientes líneas de código en alguna página de tu
-			sitio para que los visitantes comiencen a disparar mediciones de
-			latencia en la región LAC. este mecanismo permite generar mediciones
-			de forma "mesh", es decir desde muchos orígenes hacia muchos
-			destinos. Para ver más información acerca del medidor Javascript lee
-			estas notas.
-
-			<script
-				src="https://gist.github.com/aguformoso/5b96955beea091492fde.js"></script>
-		</p>
-
-		<p>Algunas notas:
-		<ul>
-			<li>El medidor es transparente al usuairo y no interfiere con su
-				navegación normal en el sitio</li>
-			<li>Es posible ajustar la cantidad de usuarios que generan
-				mediciones. Por ejemplo, se puede configurar para que el 10% del
-				tráfico en tu sitio genere mediciones de Simón. Esta función es
-				conveniente si quieres ir aumentando gradualmente tu colaboración
-				con el proyecto</li>
-		</ul>
-		</p>
-	</div>
-
-	<!-- 			<div class="Stats"> -->
-	<!-- 				<h4>Colaborar con su servidor WEB:</h4> -->
-	<!-- 				<ol> -->
-	<!-- 					<li>Descarga el siguiente <a href="/static/simon.zip">paquete</a>.</li> -->
-	<!-- 					<li>Instalalo en tu servidor web (por favor, conserve la carpeta "simon")</li> -->
-	<!-- 					<li>Completa los datos del siguiente <a href="{{URL_PFX}}/addnewwebpointform">formulario</a>.</li> -->
-	<!-- 				</ol> -->
-	<!-- 				<p>La instalación es simple y los requisitos son un servidor web moderno con una conexión a Internet troncal con una disponibilidad mínima de 1 Mb/s.</p> -->
-	<!-- 			</div> -->
-
-	<p>&nbsp;</p>
+	<h3>Servidor NTP</h3>
+	<ul>
+		<li>Por favor, completa los datos del siguiente <a
+			href="{{URL_PFX}}/addnewntppointform">formulario</a>.
+		</li>
+	</ul>
 
 	<p>
-		Si crees que nos podes ayudar de alguna otra forma, no dudes en
-		contactarte con nosotros a <b>proyectosimon at lacnic.net</b>.
+		Si crees que nos puedes ayudar de alguna otra forma, no dudes en
+		contactarte con nosotros <a
+			href="mailto:proyectosimon@lacnic.net?Subject=Nuevo Servidor - Proyecto Simón&body=Nombre de la Organización:%0D%0A Correo de contacto:%0D%0A Nombre de la Organización:%0D%0A Dirección IP o URL: %0D%0ATipo: <NTP %7C Web> %0D%0A País donde se encuentra el servidor: ">proyectosimon@lacnic.net</a>.
 	</p>
 </div>
 
-{% include 'footer.html' %}
+{% endblock %}

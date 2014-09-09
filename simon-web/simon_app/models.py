@@ -94,9 +94,11 @@ class ResultsManager(models.Manager):
 		return res
 	
 	def get_results_by_as_origin_and_destination(self, asn_origin, asn_destination):
+# 		return Results.objects.filter(Q(as_destination__asn=asn_origin) & Q(as_origin__asn=asn_destination))
+	
 		res = []
 		for as_origin in AS.objects.filter(asn=asn_origin):# asns list
-			for as_destination in AS.objects.filter(asn=asn_origin):# asns list
+			for as_destination in AS.objects.filter(asn=asn_destination):# asns list
 				if Results.objects.filter(Q(as_destination_id=as_origin.id) & Q(as_origin_id=as_destination.id)).count() > 0:
 					res.extend(Results.objects.filter(Q(as_destination_id=as_origin.id) & Q(as_origin_id=as_destination.id)))
 		return res
@@ -123,8 +125,8 @@ class Results(models.Model):
 	ip_version = models.IntegerField()
 	tester = models.CharField(max_length=20)
 	tester_version = models.CharField(max_length=10)
-	as_origin = models.ForeignKey(AS, related_name='as_origin', default=1)
-	as_destination = models.ForeignKey(AS, related_name='as_destination', default=1)
+	as_origin = models.ForeignKey(AS, related_name='as_origin', default=0)
+	as_destination = models.ForeignKey(AS, related_name='as_destination', default=0)
 	user_agent = models.CharField(max_length=200, default='')
 	objects = ResultsManager()
 	

@@ -3,8 +3,17 @@
  * LACNIC Labs - 2014
  */
 
-if (typeof simonURL === "undefined")
-	simonURL = "http://simon.labs.lacnic.net/simon/"
+simonURLs = [];
+if (typeof simonURL === "undefined") {
+	simonURLs.push("http://simon.labs.lacnic.net/simon/");
+	simonURLs.push("http://simon.lacnic.net/simon/");
+	simonURL = simonURLs[0];
+} else {
+	simonURLs.push(simonURL);
+}
+
+simonURL = "http://simon.labs.lacnic.net/simon/";
+
 if (typeof ipv6ResolveURL === "undefined")
 	ipv6ResolveURL = "http://simon.v6.labs.lacnic.net/cemd/getip/jsonp/"
 if (typeof ipv4ResolveURL === "undefined")
@@ -47,15 +56,21 @@ SIMON = {
 	},
 
 	getCountry : function() {
+		
 		SIMON.printr("Getting user country...");
 
 		$.ajax({
 			type : 'GET',
-			context : this,
 			url : simonURL + "getCountry/",
+//			async: false,
+//			contentType: "application/json",
+			dataType : "jsonp",
+			crossDomain : true,
+//			context : this,
 			success : function(cc) {
+				alert("hola");
 				countryCode = cc;
-				this.getMyIPAddress(ipv6ResolveURL);
+				SIMON.getMyIPAddress(ipv6ResolveURL);
 			}
 		});
 	},
@@ -276,7 +291,7 @@ SIMON = {
 					SIMON.printr("Measuring latency to " + testPoint.ip + " - "
 							+ rtt + " ms " + "("
 							+ SIMON.getMean(testPoint.results) + " ms)");
-				}
+				}1
 
 				SIMON.saveTestPoint(testPoint);// store results in global
 				// variable
@@ -299,7 +314,7 @@ SIMON = {
 
 					} else {
 
-						if (document.URL === simonURL) {
+						if (SIMON.atSimonHome()) {
 							/*
 							 * if the probe is located at the Simon site, keep
 							 * doing tests indefinitely
@@ -493,6 +508,7 @@ SIMON = {
 
 			xml = xml + "<tester>JavaScript</tester>";
 			xml = xml + "<tester_version>1</tester_version>";
+			xml = xml + "<user_agent>" + navigator.userAgent + "</user_agent>";
 			xml = xml + "</simon>";
 
 			return xml;
@@ -674,7 +690,7 @@ SIMON = {
 
 	printr : function(text) {
 		
-		if (document.URL === simonURL || document.URL + '/' === simonURL ) {
+		if (SIMON.atSimonHome()) {
 
 			cur_html = $('#console').html();
 			$('#console').html(cur_html + text + "<br>");
@@ -682,7 +698,13 @@ SIMON = {
 			$('#console').scrollTop(y + 30);
 		}
 	},
-
+	
+	atSimonHome : function() {
+		for(url in simonURLs) {
+			if(url.indexOf(document.URL)) return true;
+		}
+		return false;
+	}
 };
 
 $(document).ready(function() {

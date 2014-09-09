@@ -1,6 +1,6 @@
 @import url(http://fonts.googleapis.com/css?family=Lato:100,400);
 
-h1, h2, h3, h4 {
+h1, h2, h3, h4, li {
   font-family: 'Lato', sans-serif;
   font-weight: 400;
 }
@@ -152,4 +152,8 @@ p {
 
 .banner{
 	float: right; margin: -20px 15px 0px -20px;
+}
+
+.header{
+	float: left; margin: -20px 0px 0px 190px;
 }

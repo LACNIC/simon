@@ -1,4 +1,6 @@
-{% include 'header.html' %}
+{% extends 'base.html' %}
+
+{% block content %}
 
 <h1>API</h1>
 <p>La siguiente APi puede ser accedidida para consultar los datos
@@ -83,4 +85,4 @@ El resultado es un array conteniendo tests, devuelto en formato JSON con los sig
 }]
 </p>
 
-{% include 'footer.html' %}
+{% endblock %}

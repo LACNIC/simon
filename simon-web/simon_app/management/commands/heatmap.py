@@ -13,10 +13,10 @@ import json
 import sys
 
 def asn_heatmap():
-    rs = Results.objects.filter((Q(as_origin__gt=1) | Q(as_destination__gt=1)) & Q(ip_version=4))
+    rs = Results.objects.filter((Q(as_origin__gt=1) | Q(as_destination__gt=1)))# & Q(ip_version=4))
     ases = rs.order_by('as_origin').distinct('as_origin')
-#     ases_tmp = rs.order_by('as_destination').distinct('as_destination')
-#     ases = set(ases_tmp) - set(ases)
+    ases_tmp = rs.order_by('as_destination').distinct('as_destination')
+    ases = set(ases_tmp) - set(ases)
     
 #     mean = []
 #     for asn in ases:
@@ -31,11 +31,16 @@ def asn_heatmap():
         if Results.objects.filter(Q(as_origin=r_asn.as_origin)).count() > 0\
         and Results.objects.filter(Q(as_destination=r_asn.as_origin)).count() > 0:
             as_objects.append(r_asn.as_origin)
-    print "Generating heatmap for %s ASNs" % (len(as_objects))
     
     asns = []
     for as_object in as_objects:
-        asns.append(str(as_object.asn))  
+        if str(as_object.asn) not in asns:
+            asns.append(str(as_object.asn))
+    
+    print asns
+    print "Generating heatmap for %s ASNs" % (len(asns))
+#     sys.exit(0)
+    
     try:
         param = Params.objects.get(config_name='heatmap_asns')
         param.config_value = str(asns)
@@ -48,13 +53,13 @@ def asn_heatmap():
     
     values = []
     i = j = 0
-    for asn_origin in as_objects:
-        for asn_destination in as_objects:
+    for asn_origin in asns:
+        for asn_destination in asns:
             n = n + 1
             sys.stdout.write("\r%.1f%s" % (100 * float(n / N), '%'))
             sys.stdout.flush()
             
-            rs = Results.objects.filter(Q(as_origin=asn_origin.id) & Q(as_destination=asn_destination.id) & Q(ave_rtt__lte=800)).values_list('ave_rtt', flat=True)
+            rs = Results.objects.filter(Q(as_origin__asn=asn_origin) & Q(as_destination__asn=asn_destination) & Q(ave_rtt__lte=800)).values_list('ave_rtt', flat=True)
             if len(rs) > 0:
                 value = "%.2f" % (sum(rs) / len(rs))
                 values.append([i, j, value])

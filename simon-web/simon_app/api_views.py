@@ -153,7 +153,8 @@ def latency(request, country='all', ip_version='all', year=2009, month=01):
     return HttpResponse(json_response, mimetype="application/json")
 
 def ases(request, asn_origin, asn_destination):
-    res = Results.objects.get_results_by_as_origin_and_destination(asn_origin, asn_destination)
+    res = Results.objects.get_results_by_as_origin_and_destination(int(asn_origin), int(asn_destination))
+    print res
     
     response = []
     for result in res:
@@ -839,8 +840,15 @@ def getCountry(request):
     if (request.method != 'GET'):
         return HttpResponse("Invalid method: %s" % request.method)
     
-    response = whoIs(request.META['REMOTE_ADDR']) #whois response
-    if response is not None:
-        return HttpResponse(response['country'])
+    callback = request.GET.get('callback')
+    
+    whoIsresponse = whoIs(request.META['REMOTE_ADDR']) #whois response
+    
+    if whoIsresponse is not None:
+        if callback is not None:
+            httpResponse = '%s({ cc : "%s"});' % (callback, whoIsresponse['country'])
+        else:
+            httpResponse = whoIsresponse['country']
+        return HttpResponse(httpResponse)
     else:
         return HttpResponse('XX')
