@@ -128,6 +128,7 @@ class Results(models.Model):
 	as_origin = models.ForeignKey(AS, related_name='as_origin', default=0)
 	as_destination = models.ForeignKey(AS, related_name='as_destination', default=0)
 	user_agent = models.CharField(max_length=200, default='')
+	url = models.CharField(max_length=2000, default='')
 	objects = ResultsManager()
 	
 	

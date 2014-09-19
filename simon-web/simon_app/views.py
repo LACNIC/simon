@@ -249,6 +249,9 @@ def post_xml_result(request):
                 result.tester = simon.find('tester').text
                 result.tester_version = simon.find('tester_version').text
                 result.user_agent = simon.find('user_agent').text
+                result.url = simon.find('url').text
+                
+                print result.url
                 
                 result.save()
         except etree.XMLSyntaxError as e:

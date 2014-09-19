@@ -59,6 +59,7 @@
 	    	<xsd:element name="tester" type="xsd:string"/>
 	    	<xsd:element name="tester_version" type="xsd:positiveInteger"/>
 	    	<xsd:element name="user_agent" type="xsd:string"/>
+	    	<xsd:element name="url" type="xsd:string"/>
         </xsd:sequence>
 </xsd:complexType>
 
