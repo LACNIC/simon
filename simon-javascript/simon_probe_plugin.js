@@ -3,16 +3,26 @@
  * LACNIC Labs - 2014
  */
 
-if (typeof simonURL === "undefined")
-	simonURL = "http://simon.labs.lacnic.net/simon/"
+simonURLs = [];
+if (typeof simonURL === "undefined") {
+	simonURLs.push("http://simon.labs.lacnic.net/simon/");
+	simonURLs.push("http://simon.lacnic.net/simon/");
+	simonURL = simonURLs[0];
+} else {
+	simonURLs.push(simonURL);
+}
+
+simonURL = "http://simon.labs.lacnic.net/simon/";
+
 if (typeof ipv6ResolveURL === "undefined")
 	ipv6ResolveURL = "http://simon.v6.labs.lacnic.net/cemd/getip/jsonp/"
 if (typeof ipv4ResolveURL === "undefined")
-	ipv4ResolveURL = "http://simon.v6.labs.lacnic.net/cemd/getip/jsonp/"
+	ipv4ResolveURL = "http://simon.v4.labs.lacnic.net/cemd/getip/jsonp/"
 
 var params = {
 	percentage : 1.0,// 100%
-	amount : 4
+	amount : 4,
+	running : true
 };
 
 var testsConfigsURL = simonURL + "web_configs/";
@@ -40,22 +50,33 @@ SIMON = {
 	params : params,
 
 	init : function() {
-		if (Math.random() < this.params.percentage)
+		if (Math.random() < this.params.percentage) {
+			SIMON.params.running = true;
 			return this.getCountry();
-		else
+		} else {
 			SIMON.printr("N/A");
+		}
+	},
+
+	stop : function() {
+		SIMON.printr("Stopping tests...it may take a while");
+		SIMON.params.running = false;
 	},
 
 	getCountry : function() {
+
 		SIMON.printr("Getting user country...");
 
 		$.ajax({
 			type : 'GET',
+			url : simonURL + "getCountry",
+			contentType : "text/javascript",
+			dataType : 'jsonp',
+			crossDomain : true,
 			context : this,
-			url : simonURL + "getCountry/",
 			success : function(cc) {
-				countryCode = cc;
-				this.getMyIPAddress(ipv6ResolveURL);
+				countryCode = cc['cc'];
+				SIMON.getMyIPAddress(ipv6ResolveURL);
 			}
 		});
 	},
@@ -128,7 +149,7 @@ SIMON = {
 					"results" : [],
 					"throughputResults" : [],
 					"online" : false,
-					"onlineFinished" : false,
+					"onlineFinished" : false
 				};
 
 				var jsonImages = $.parseJSON(jsonPoint.images);
@@ -145,7 +166,7 @@ SIMON = {
 						/*
 						 * holds the results of throughput tests
 						 */
-						"time" : DEFAULT_TIME,
+						"time" : DEFAULT_TIME
 					};
 
 					testPoint.throughputResults.push(image);
@@ -277,6 +298,7 @@ SIMON = {
 							+ rtt + " ms " + "("
 							+ SIMON.getMean(testPoint.results) + " ms)");
 				}
+				
 
 				SIMON.saveTestPoint(testPoint);// store results in global
 				// variable
@@ -299,7 +321,7 @@ SIMON = {
 
 					} else {
 
-						if (document.URL === simonURL) {
+						if (SIMON.atSimonHome() && SIMON.params.running) {
 							/*
 							 * if the probe is located at the Simon site, keep
 							 * doing tests indefinitely
@@ -385,10 +407,9 @@ SIMON = {
 					ipv6Address = data.ip;
 					SIMON.getMyIPAddress(ipv4ResolveURL);
 				}
-
 			},
 			error : function(jqXHR, textStatus, errorThrown) {
-				if(ipv4Address == "")
+				if (ipv4Address == "")
 					SIMON.getMyIPAddress(ipv4ResolveURL);
 			},
 			complete : function() {
@@ -494,6 +515,7 @@ SIMON = {
 			xml = xml + "<tester>JavaScript</tester>";
 			xml = xml + "<tester_version>1</tester_version>";
 			xml = xml + "<user_agent>" + navigator.userAgent + "</user_agent>";
+			xml = xml + "<url>" + window.location.hostname + "</url>";
 			xml = xml + "</simon>";
 
 			return xml;
@@ -674,8 +696,8 @@ SIMON = {
 	},
 
 	printr : function(text) {
-		
-		if (document.URL === simonURL || document.URL + '/' === simonURL ) {
+
+		if (SIMON.atSimonHome()) {
 
 			cur_html = $('#console').html();
 			$('#console').html(cur_html + text + "<br>");
@@ -684,16 +706,16 @@ SIMON = {
 		}
 	},
 
+	atSimonHome : function() {
+		for (url in simonURLs) {
+			if (url.indexOf(document.URL))
+				return true;
+		}
+		return false;
+	}
 };
 
 $(document).ready(function() {
-
-	NProgress.start();
-
-	if (Math.random() < SIMON.params.percentage) {
-		NProgress.done();
-		SIMON.init();
-		jQuery.support.cors = true;
-
-	}
+	SIMON.init();
+	jQuery.support.cors = true;
 });
