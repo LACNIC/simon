@@ -3,34 +3,44 @@
 <html>
 <head>
 
-<title>{% block title %}Inicio{% endblock %} - Proyecto Simón</title>
-
+<title>{% block title %}Inicio{% endblock %} - Proyecto Simón</title> 
 <meta http-equiv="content-type" content="text/html;charset=utf-8">
 
 <link rel="stylesheet" type="text/css" href="/static/css/estilo.css">
-<!-- <link rel="stylesheet" type="text/css" href="/static/css/style.css"> -->
 <link rel="stylesheet" type="text/css" href="/static/css/simon.css">
 <link rel='stylesheet' href='/static/js/nprogress-master/nprogress.css' />
 <link type="image/x-icon"
 	href="http://www.labs.lacnic.net/site/themes/newlabs/xtras/favicon.png"
 	rel="shortcut icon">
-{% block css %}{% endblock %}
+
+<style>
+#console {
+	background-color: black;
+	overflow: auto;
+	color: ghostwhite;
+	font-size: 12;
+	font-family: monospace;
+}
+{% block css %}
+{% endblock %}
+</style>
 
 <script src='/static/js/nprogress-master/nprogress.js'></script>
 
+<script type="text/javascript" src="/static/js/jquery1.8.0.js"></script>
+
+<script type="text/javascript" src="/static/js/dateFormatter.js"></script>
+<script type="text/javascript" src="/static/js/jsonp.js"></script>
+<script type="text/javascript" src="/static/js/simon_probe_plugin.js"></script>
+<!-- <script type="text/javascript" src="/static/js/simon_min.js"></script> -->
+
+{% block headers %}{% endblock %}
+
 <script type="text/javascript">
-	var simonURL = "{{ SIMON_URL }}" + "/";
-	var ipv6ResolveURL = "{{ v6_URL }}";
-	var ipv4ResolveURL = "{{ v4_URL }}";
+
+{% block javascript %}
+{% endblock %}
 </script>
-
-<!-- <script type="text/javascript" src="http://simon.lacnic.net/static/js/jquery1.8.0.js"></script> -->
-<script type="text/javascript" src="{{ SIMON_URL }}/static/js/simon.js"></script>
-<!-- <script type="text/javascript" src="http://simon.lacnic.net/static/js/dateFormatter.js"></script> -->
-<!-- <script type="text/javascript" src="http://jquery-jsonp.googlecode.com/files/jquery.jsonp-1.0.4.min.js"></script> -->
-
-{% block javascript %}{% endblock %}
-
 
 
 </head>
@@ -41,26 +51,25 @@
 			<a href="http://www.labs.lacnic.net" title="LACNIC labs"> <img
 				src="http://www.labs.lacnic.net/drupal/themes/newlabs/xtras/logo_labs.png"
 				width="229" height="86" border="0" />
-			</a> <a href="{{URL_PFX}}/"><img style="float: right; margin: 10px 25px;" src="/static/imgs/simon-icon.png" height="75px" ></a>
+			</a> <a href="{{URL_PFX}}/"><img
+				style="float: right; margin: 10px 25px;"
+				src="/static/imgs/simon-icon.png" height="75px"></a>
 		</div>
 
-		<div class="contenido">
+		<div class="contenido">{% block content %}{% endblock %}</div>
 
-			{% block content %}{% endblock %}
-
-			<div class="Footer">
-				<!-- no cambiar -->
-				<div class="foot_app_detail"
-					style="font-size: 9px; text-align: right;">
-					Application Version: {{ APP_VERSION }}<br /> Last Updated {{ DATE_UPDATED }}
-				</div>
-				<div class="foot_content">
-					<div class="foot_labs">
-						<a href="http://www.labs.lacnic.net/"> <img
-							src="http://www.labs.lacnic.net/drupal/themes/newlabs/xtras/logo_labs_foot.png"
-							width="170" height="64" border="0" title="LACNIC labs" />
-						</a>
-					</div>
+		<div class="Footer">
+			<!-- no cambiar -->
+			<div class="foot_app_detail"
+				style="font-size: 9px; text-align: right;">
+				Application Version: {{ APP_VERSION }}<br /> Last Updated {{ DATE_UPDATED }}
+			</div>
+			<div class="foot_content">
+				<div class="foot_labs">
+					<a href="http://www.labs.lacnic.net/"> <img
+						src="http://www.labs.lacnic.net/drupal/themes/newlabs/xtras/logo_labs_foot.png"
+						width="170" height="64" border="0" title="LACNIC labs" />
+					</a>
 				</div>
 			</div>
 		</div>

@@ -1,81 +1,116 @@
 {% extends 'base.html' %}
 
-{% block content %}
+{% block headers %}
 
-
-<style>
-#console {
-	background-color: black;
-	overflow: auto;
-	color: ghostwhite;
-	font-size: 12;
-	font-family: monospace;
-}
-</style>
-
-<script type="text/javascript" src="/static/js/jquery1.8.0.js"></script>
-<script type="text/javascript"
-	src="http://jquery-jsonp.googlecode.com/files/jquery.jsonp-1.0.4.min.js"></script>
-<script type="text/javascript" src="/static/js/simon_probe_lab.js"></script>
-<script type="text/javascript" src="/static/js/dateFormatter.js"></script>
 <script src="http://code.highcharts.com/highcharts.js"></script>
 
-<script type="text/javascript">
-	var CATEGORIES = 30;
-	var MIN = 0;
-	var MAX = 900;
+{% endblock %}
 
-	$(function() {
+{% block css%}
 
-		/*
-		Generate data and categories arrays first
-		 */
-		var data = [];
-		var categories = [];
-		var radio = (MAX - MIN) / (2 * CATEGORIES);
-		for (var i = MIN; i < MAX; i = i + 2 * radio) {
-			categories.push('~' + (i + radio));// + '±' + (radio));
-			data.push(0);
-		}
+{% endblock %}
 
-		$('#container').highcharts(
-				{
-					chart : {
-						type : 'column',
-						backgroundColor : 'rgba(255, 255, 255, 0.1)',
-						animation : false
-					},
-					plotOptions : {
-						column : {
-							shadow : false,
-							borderWidth : .5,
-							borderColor : '#666',
-							pointPadding : 0,
-							groupPadding : 0,
-							color : 'rgba(204,204,204,.85)'
-						}
-					},
+{% block javascript %}
+
+var CATEGORIES = 30;
+var MIN = 0;
+var MAX = 900;
+var data = [];
+var ip = "";
+
+function updateChart(rtt) {
+ 		var i = Math.floor((rtt - MIN) / (MAX / CATEGORIES));
+ 		var viejo = $('#container').highcharts().series[0].data[i]['y'];
+ 		$('#container').highcharts().series[0].data[i].update(++viejo);
+		
+ 		$('#container').highcharts().setTitle({text: SIMON.summary(SIMON.quartiles.filter(SIMON.getNumericalValues(SIMON.points[0].results)))});
+ 	}
+
+$(document).ready(function() {
+	SIMON.params = {
+		percentage : 1.0,
+		amount : 1,
+		numTests : 10,
+		post : true,
+		print : true,
+		console : 'console'
+	};
+	
+	SIMON.before_start = function() {
+		ip = $("#textfield").val();
+	};
+	
+	SIMON.after_each = function(rtt) {
+			updateChart(rtt);
+ 			data.push(rtt);
+	};
+	
+	SIMON.after_points = function() {
+		var testPoint = {
+					"ip" : ip,
+					"url" : "",
+					"country" : "",
+					"countryName" : "",
+					"city" : "",
+					"region" : "",
+					"results" : [],
+					"throughputResults" : [],
+					"online" : false,
+					"onlineFinished" : false
+				};
+		SIMON.points[0] = testPoint;
+	};
+		
+		
+
+	/*
+	Generate data and categories arrays first
+	 */
+	var categories = [];
+	var radio = (MAX - MIN) / (2 * CATEGORIES);
+	for (var i = MIN; i < MAX; i = i + 2 * radio) {
+		categories.push('~' + (i + radio));// + '±' + (radio));
+		data.push(0);
+	}
+
+	$('#container').highcharts(
+			{
+				chart : {
+					type : 'column',
+					backgroundColor : 'rgba(255, 255, 255, 0.1)',
+					animation : false
+				},
+				plotOptions : {
+					column : {
+						shadow : false,
+						borderWidth : .5,
+						borderColor : '#666',
+						pointPadding : 0,
+						groupPadding : 0,
+						color : 'rgba(204,204,204,.85)'
+					}
+				},
+				title : {
+					text : 'Distribución'
+				},
+				xAxis : {
+					categories : categories
+				},
+				yAxis : {
 					title : {
-						text : 'Distribución'
-					},
-					xAxis : {
-						categories : categories
-					},
-					yAxis : {
-						title : {
-							text : 'Densidad'
-						}
-					},
-					series : [{
-						name : 'Latencia ' + '(categorías de '
-								+ ((MAX - MIN) / CATEGORIES) + ' ms)',
-						data : data
-					}]
-				});
-	});
-</script>
+						text : 'Densidad'
+					}
+				},
+				series : [{
+					name : 'Latencia ' + '(categorías de '
+							+ ((MAX - MIN) / CATEGORIES) + ' ms)',
+					data : data
+				}]
+			});
+});
+{% endblock %}
 
-<body>
+{% block content %}
 
 	<h1>Latency Lab</h1>
 	<p>
@@ -88,18 +123,13 @@
 		distribución comenzará a variar, pero una vez transcurrido un
 		intervalo de tiempo la misma deberá estabilizarse y comenzar a
 		aproximarse a su forma para N --> inf.</p>
-	<input type="text" id="site" autofocus="autofocus"
+	<input type="text" id="textfield" autofocus="autofocus"
 		placeholder="Dirección IP (v4 o v6)" style="width: 30em" />
-	<button onclick="LAB.start(document.getElementById('site').value)">
+	<button onclick="SIMON.init()">
 		Iniciar</button>
 
 	<div id="container" style="width: 100%; height: 300px; margin-top: 3em"></div>
 	<div id="console"
 		style="padding-bottom: 10px; padding-left: 10px; width: 910px; height: 150px; margin-top: 3em"></div>
-
-</body>
-
-
-
 
 {% endblock %}

@@ -1,28 +1,24 @@
-{% extends 'base.html' %} {% block javascript %}
-<!-- <script type="text/javascript" src="/static/js/jquery1.8.0.js"></script> -->
-<!-- <script type="text/javascript" -->
-<!-- 	src="http://jquery-jsonp.googlecode.com/files/jquery.jsonp-1.0.4.min.js"></script> -->
-<!-- <script type="text/javascript" src="/static/js/dateFormatter.js"></script> -->
-<!-- <script type="text/javascript" src="/static/js/simon_probe_plugin.js"></script> -->
+{% extends 'base.html' %}
+
+{% block javascript %}
+
 <!-- Twitter Widget -->
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-{% endblock %} {% block css %}
+!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
 
-<style>
-#console {
-	background-color: black;
-	overflow: auto;
-	color: ghostwhite;
-	font-size: 12;
-	font-family: monospace;
-}
+$(document).ready(function() {
 
+	SIMON.init();
+});
+{% endblock %}
+
+{% block css %}
 #logo {
 	font-weight: 100;
 	font-size: 42px;
 }
-</style>
-{% endblock %} {% block content %}
+{% endblock %}
+
+{% block content %}
 <h1 id="logo">
 	<font color="orange">Proyecto</font> Simón
 </h1>
@@ -68,8 +64,9 @@
 	</div>
 </a>
 
-<div class="homeBox" style="box-shadow: 0 0 0 0; height: 330px; margin-bottom: -160px; margin-top: 20px">
-	<img class="logo" src="/static/imgs/logos/twitter-logo.png" width="70px" style="position: absolute;">
+<div class="homeBox" style="box-shadow: 0 0 0 0; height: 330px; margin-bottom: -160px; margin-top: 10px">
+<!-- 	<img class="logo" src="/static/imgs/logos/twitter-logo.png" width="70px" style="position: absolute;"> -->
+<!-- 	<img src="/static/imgs/logos/twitter.png" style="margin: -15px; margin-top: -30px"> -->
 	<a class="twitter-timeline" href="https://twitter.com/proyectosimon" data-widget-id="507899035131199488" data-chrome="nofooter noheader">
 		Tweets por @proyectosimon
 	</a>
@@ -128,6 +125,8 @@
 	</div>
 </a>
 
+<h1>Consola</h1>
+<p>[IP] - [latencia] - (promedio)</p>
 <div id="console" class="homeBox"
 	style="padding-bottom: 10px; padding-left: 10px; width: 910px; height: 150px;">
 </div>

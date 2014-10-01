@@ -1,9 +1,13 @@
-from simon_app.models import Country, ThroughputResults, Results, TestPoint, Images, Images_in_TestPoints, OfflineReport, Configs, AS
+from simon_app.models import Country, ThroughputResults, Results, ResultsManager, TestPoint, Images, Images_in_TestPoints, OfflineReport, Configs, AS
 from django.contrib import admin
 
+class ResultsAdmin(admin.ModelAdmin):
+    fields = ()
+    readonly_fields = ('as_origin', 'as_destination')
+    
 admin.site.register(Country)
 admin.site.register(ThroughputResults)
-admin.site.register(Results)
+admin.site.register(Results, ResultsAdmin)
 admin.site.register(TestPoint)
 admin.site.register(Images)
 admin.site.register(Images_in_TestPoints)

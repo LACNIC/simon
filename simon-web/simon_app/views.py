@@ -3,9 +3,7 @@
 from __future__ import division
 
 import datetime
-import locale
 import math
-import random
 import re
 from smtplib import SMTPException
 from socket import gaierror
@@ -37,7 +35,7 @@ from simon_app.api_views import \
 from simon_app.functions import KMG2bps, inLACNICResources, whoIs, bps2KMG
 from simon_app.javascript_latency import CountryForm
 from simon_app.models import Country, Results, TestPoint, ThroughputResults, \
-    OfflineReport, Images_in_TestPoints, Images, ActiveTokens, Params
+    OfflineReport, Images_in_TestPoints, Images, ActiveTokens, Params, AS
 from simon_app.reportes import ResultsForm, AddNewWebPointForm, AddNewNtpPointForm, GMTUY, CountryDropdownForm, ReportForm
 import simon_project.settings as settings
 from _socket import timeout
@@ -214,11 +212,16 @@ def throughput_tables(request, country_iso, ip_version, year, month, tester, tes
     json, ip_version, country_name, date, now, tester, tester_version = throughput_tables_api(request, country_iso, ip_version, year, month, tester, tester_version)
     return render_to_response('table.html', {'json': json, 'ip_version':ip_version, 'country':country_name, 'date':date, 'now':now, 'tester':tester, 'tester_version':tester_version}, getContext(request))
 
+def err404(request):
+    return render_to_response('404.html')
+
 @csrf_exempt
 def post_xml_result(request):
+    
     """
     View que recibe los datos de las mediciones
     """
+    
     if (request.method != 'POST'):  # and request.method != 'GET'
         return HttpResponse("invalid method: %s" % request.method)
     
@@ -248,6 +251,8 @@ def post_xml_result(request):
                 result.country_destination = TestPoint.objects.get(ip_address=result.ip_destination).country
                 result.tester = simon.find('tester').text
                 result.tester_version = simon.find('tester_version').text
+                result.as_origin = AS.objects.get_as_by_ip(result.ip_origin)
+                result.as_destination = AS.objects.get_as_by_ip(result.ip_destination)
                 result.user_agent = simon.find('user_agent').text
                 result.url = simon.find('url').text
                 
@@ -342,7 +347,7 @@ def post_offline_testpoints (request):
                         dbTestPoint = TestPoint.objects.get(ip_address=dbPoint.ip_address)
                         
                         dbTestPoint.enabled = False  ###################################33
-                        dbTestPoint.save()  #########################################33
+#                         dbTestPoint.save()  #########################################33
                         
 #                         token = ActiveTokens(token_value=''.join(random.choice('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz') for i in range(settings.TOKEN_LENGTH)), token_expiration=datetime.datetime.now() + datetime.timedelta(minutes=settings.TOKEN_TIMEOUT), testpoint=dbTestPoint)
 #                         token.save()
@@ -363,7 +368,7 @@ def post_offline_testpoints (request):
 #                         except SMTPException as e:
 #                             print e
 
-                    dbPoint.save()
+#                     dbPoint.save()
                 except OfflineReport.DoesNotExist:
                     # new report
                     offlinePoint = OfflineReport()

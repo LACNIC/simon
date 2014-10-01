@@ -42,7 +42,7 @@ EMAIL_USE_TLS = passwords.EMAIL_USE_TLS
 DEFAULT_FROM_EMAIL = passwords.DEFAULT_FROM_EMAIL
 SERVER_EMAIL = passwords.SERVER_EMAIL
 
-TESTPOINT_OFFLINE_OCCURRENCES = 3  # number of times a test point is allowed to be reported offline before an alarm is triggered
+TESTPOINT_OFFLINE_OCCURRENCES = 10  # number of times a test point is allowed to be reported offline before an alarm is triggered
 TOKEN_TIMEOUT = 60  # in minutes
 TOKEN_LENGTH = 32  # number of digits for the token
 
@@ -63,7 +63,7 @@ TIME_ZONE = 'America/Montevideo'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'es-uy'#'en-us'
 
 SITE_ID = 1
 
@@ -230,7 +230,7 @@ else:
     URL_PFX = ''
     UNSUBSCRIBE_TESTPOINT_URL = '/removetestpoint'
 #     MEDIA_ROOT = '/Users/agustin/Desktop'
-    SIMON_URL = 'http://200.7.87.138'
+    SIMON_URL = 'http://200.7.87.92/'
     v4_URL = 'http://simon.v4.labs.lacnic.net/cemd/getip/jsonp'
     v6_URL = 'http://simon.v6.labs.lacnic.net/cemd/getip/jsonp'
 TEMPLATE_DEBUG = DEBUG

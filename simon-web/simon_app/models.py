@@ -3,6 +3,7 @@ from django.db import models, connection
 from django.db.models.fields import CharField
 from django.db.models.fields.related import ForeignKey
 from netaddr import IPAddress, IPNetwork
+from datetime import datetime
 
 class Region(models.Model):
 	name = models.CharField(max_length=80)
@@ -10,6 +11,17 @@ class Region(models.Model):
 	
 	def __unicode__(self):
 		return self.printable_name
+
+class CountryManager(models.Manager):
+	# TERMINAR
+	"""
+	
+	"""
+	def get_with_points(self):
+		return Country.objects.raw('SELECT * FROM simon_app_country WHERE iso IN (SELECT country\
+																				  FROM simon_app_testpoint\
+																				  GROUP BY country; )\
+									ORDER BY RAND() LIMIT 1 ')
 	
 class Country(models.Model):
 	iso = models.CharField(max_length=2)
@@ -18,6 +30,7 @@ class Country(models.Model):
 	iso3 = models.CharField(max_length=3, null=True, blank=True)
 	numcode = models.IntegerField(null=True)
 	region = models.ForeignKey(Region)
+	objects = CountryManager()
 	
 	def __unicode__(self):
 		return self.printable_name
@@ -64,6 +77,7 @@ class ThroughputResults(models.Model):
 			self.tester_version = text
 
 class ASManager(models.Manager):
+	
 	def get_as_by_ip(self, ip_address):
 		try:
 			return AS.objects.raw('SELECT * FROM simon_app_as where network >>= inet \'%s\' ORDER BY pfx_length DESC LIMIT 1' % ip_address)[0]
@@ -78,9 +92,14 @@ class AS(models.Model):
 	network = models.GenericIPAddressField()
 	pfx_length = models.IntegerField()
 	objects = ASManager()
-
+	
+	def __unicode__(self):
+		return "ASN %s" % (self.asn)
+	
+	
 from itertools import chain
 class ResultsManager(models.Manager):
+	
 	def get_results_by_as_origin(self, as_number):
 		res = []
 		for asn in AS.objects.filter(asn=as_number):# asns list
@@ -133,7 +152,7 @@ class Results(models.Model):
 	
 	
 	def __unicode__(self):
-		return self.ip_origin
+		return "%s -> %s | %s/%s/%s/%s | %s | %s v.%s" % (self.country_origin, self.country_destination, self.min_rtt, self.ave_rtt, self.max_rtt, self.dev_rtt, self.date_test.strftime('%d/%m/%Y %H:%M'), self.tester, self.tester_version)
 	
 	def set_date_time(self, date, time):
 		self.date_test = date + " " + time
