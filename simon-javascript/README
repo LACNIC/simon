@@ -1,16 +1,12 @@
-README file for Simon Javascript tester
-LACNIC 2012
---------------------------------------------------
+# Simon Javascript tester
+# LACNIC 2012
 
- 1 - ABOUT THE TESTS
+ ## ABOUT THE TESTS
 The tests are executed in the following order:
 
 	1 - Online test
 	2 - Latency test
-	3 - Bandwidth test
+	3 - Post results
 
-It is mandatory that latency tests precede bandwith tests.
-
-
- 2 - ABOUT THE UI
+ ## ABOUT THE UI
 Simon Javascript is compatible with Jquery UI Themeroller
