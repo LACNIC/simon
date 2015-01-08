@@ -18,6 +18,10 @@ form .form-row p {
     font-size: 11px;
 }
 
+.hidden {
+    display: none;
+}
+
 /* FORM LABELS */
 
 form h4 {
@@ -65,6 +69,7 @@ form ul.inline li {
     padding: 3px 10px 0 0;
     float: left;
     width: 8em;
+    word-wrap: break-word;
 }
 
 .aligned ul label {
@@ -153,7 +158,7 @@ fieldset.collapsed .collapse-toggle {
 /* MONOSPACE TEXTAREAS */
 
 fieldset.monospace textarea {
-    font-family: "Bitstream Vera Sans Mono",Monaco,"Courier New",Courier,monospace;
+    font-family: "Bitstream Vera Sans Mono", Monaco, "Courier New", Courier, monospace;
 }
 
 /* SUBMIT ROW */
@@ -202,6 +207,14 @@ body.popup .submit-row {
     margin-right: 2px;
 }
 
+.vDateField {
+    min-width: 6.85em;
+}
+
+.vTimeField {
+    min-width: 4.7em;
+}
+
 .vURLField {
     width: 30em;
 }
@@ -224,6 +237,10 @@ body.popup .submit-row {
 
 .vIntegerField {
     width: 5em;
+}
+
+.vBigIntegerField {
+    width: 10em;
 }
 
 .vForeignKeyRawIdAdminField {
@@ -268,6 +285,7 @@ body.popup .submit-row {
     margin: 0;
     background: #fff;
     border: none;
+    width: 100%;
 }
 
 .inline-related fieldset.module h3 {
@@ -355,4 +373,23 @@ body.popup .submit-row {
 
 .empty-form {
     display: none;
+}
+
+/* RELATED FIELD ADD ONE / LOOKUP */
+
+.add-another, .related-lookup {
+    margin-left: 5px;
+    display: inline-block;
+}
+
+.add-another {
+    width: 10px;
+    height: 10px;
+    background-image: url(../img/icon_addlink.gif);
+}
+
+.related-lookup {
+    width: 16px;
+    height: 16px;
+    background-image: url(../img/selector-search.gif);
 }

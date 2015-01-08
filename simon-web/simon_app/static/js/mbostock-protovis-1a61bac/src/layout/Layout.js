@@ -32,8 +32,8 @@
  *
  * @extends pv.Panel
  */
-pv.Layout = function() {
-  pv.Panel.call(this);
+pv.Layout = function () {
+    pv.Panel.call(this);
 };
 
 pv.Layout.prototype = pv.extend(pv.Panel);
@@ -46,11 +46,11 @@ pv.Layout.prototype = pv.extend(pv.Panel);
  * @param {string} name the property name.
  * @param {function} [cast] the cast function for this property.
  */
-pv.Layout.prototype.property = function(name, cast) {
-  if (!this.hasOwnProperty("properties")) {
-    this.properties = pv.extend(this.properties);
-  }
-  this.properties[name] = true;
-  this.propertyMethod(name, false, pv.Mark.cast[name] = cast);
-  return this;
+pv.Layout.prototype.property = function (name, cast) {
+    if (!this.hasOwnProperty("properties")) {
+        this.properties = pv.extend(this.properties);
+    }
+    this.properties[name] = true;
+    this.propertyMethod(name, false, pv.Mark.cast[name] = cast);
+    return this;
 };

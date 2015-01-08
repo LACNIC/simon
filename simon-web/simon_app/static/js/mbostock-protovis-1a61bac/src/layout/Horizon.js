@@ -37,60 +37,68 @@
  *
  * @extends pv.Layout
  */
-pv.Layout.Horizon = function() {
-  pv.Layout.call(this);
-  var that = this,
-      bands, // cached bands
-      mode, // cached mode
-      size, // cached height
-      fill, // cached background style
-      red, // cached negative color (ramp)
-      blue, // cached positive color (ramp)
-      buildImplied = this.buildImplied;
+pv.Layout.Horizon = function () {
+    pv.Layout.call(this);
+    var that = this,
+        bands, // cached bands
+        mode, // cached mode
+        size, // cached height
+        fill, // cached background style
+        red, // cached negative color (ramp)
+        blue, // cached positive color (ramp)
+        buildImplied = this.buildImplied;
 
-  /** @private Cache the layout state to optimize properties. */
-  this.buildImplied = function(s) {
-    buildImplied.call(this, s);
-    bands = s.bands;
-    mode = s.mode;
-    size = Math.round((mode == "color" ? .5 : 1) * s.height);
-    fill = s.backgroundStyle;
-    red = pv.ramp(fill, s.negativeStyle).domain(0, bands);
-    blue = pv.ramp(fill, s.positiveStyle).domain(0, bands);
-  };
+    /** @private Cache the layout state to optimize properties. */
+    this.buildImplied = function (s) {
+        buildImplied.call(this, s);
+        bands = s.bands;
+        mode = s.mode;
+        size = Math.round((mode == "color" ? .5 : 1) * s.height);
+        fill = s.backgroundStyle;
+        red = pv.ramp(fill, s.negativeStyle).domain(0, bands);
+        blue = pv.ramp(fill, s.positiveStyle).domain(0, bands);
+    };
 
-  var bands = new pv.Panel()
-      .data(function() { return pv.range(bands * 2); })
-      .overflow("hidden")
-      .height(function() { return size; })
-      .top(function(i) { return mode == "color" ? (i & 1) * size : 0; })
-      .fillStyle(function(i) { return i ? null : fill; });
-
-  /**
-   * The band prototype. This prototype is intended to be used with an Area
-   * mark to render the horizon bands.
-   *
-   * @type pv.Mark
-   * @name pv.Layout.Horizon.prototype.band
-   */
-  this.band = new pv.Mark()
-      .top(function(d, i) {
-          return mode == "mirror" && i & 1
-              ? (i + 1 >> 1) * size
-              : null;
+    var bands = new pv.Panel()
+        .data(function () {
+            return pv.range(bands * 2);
         })
-      .bottom(function(d, i) {
-          return mode == "mirror"
-              ? (i & 1 ? null : (i + 1 >> 1) * -size)
-              : ((i & 1 || -1) * (i + 1 >> 1) * size);
+        .overflow("hidden")
+        .height(function () {
+            return size;
         })
-      .fillStyle(function(d, i) {
-          return (i & 1 ? red : blue)((i >> 1) + 1);
+        .top(function (i) {
+            return mode == "color" ? (i & 1) * size : 0;
+        })
+        .fillStyle(function (i) {
+            return i ? null : fill;
         });
 
-  this.band.add = function(type) {
-    return that.add(pv.Panel).extend(bands).add(type).extend(this);
-  };
+    /**
+     * The band prototype. This prototype is intended to be used with an Area
+     * mark to render the horizon bands.
+     *
+     * @type pv.Mark
+     * @name pv.Layout.Horizon.prototype.band
+     */
+    this.band = new pv.Mark()
+        .top(function (d, i) {
+            return mode == "mirror" && i & 1
+                ? (i + 1 >> 1) * size
+                : null;
+        })
+        .bottom(function (d, i) {
+            return mode == "mirror"
+                ? (i & 1 ? null : (i + 1 >> 1) * -size)
+                : ((i & 1 || -1) * (i + 1 >> 1) * size);
+        })
+        .fillStyle(function (d, i) {
+            return (i & 1 ? red : blue)((i >> 1) + 1);
+        });
+
+    this.band.add = function (type) {
+        return that.add(pv.Panel).extend(bands).add(type).extend(this);
+    };
 };
 
 pv.Layout.Horizon.prototype = pv.extend(pv.Layout)

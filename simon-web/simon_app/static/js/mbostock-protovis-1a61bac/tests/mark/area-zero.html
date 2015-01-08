@@ -1,11 +1,11 @@
 <html>
-  <head>
+<head>
     <title>Area Chart</title>
     <script type="text/javascript" src="../../protovis.js"></script>
     <link rel="stylesheet" type="text/css" href="../style.css"/>
-  </head>
-  <body>
-    <script type="text/javascript+protovis">
+</head>
+<body>
+<script type="text/javascript+protovis">
 
 var vis = new pv.Panel()
     .data(["step-before", "linear", "step-after", "basis"])
@@ -23,10 +23,13 @@ vis.add(pv.Area)
 
 vis.render();
 
-    </script><p>
+
+
+</script>
+<p>
 
     This test verifies that when an area has points zero height, the path is
     broken up into multiple subpaths. This avoids unnecessary strokes when the
     data is zero.
-  </body>
+</body>
 </html>

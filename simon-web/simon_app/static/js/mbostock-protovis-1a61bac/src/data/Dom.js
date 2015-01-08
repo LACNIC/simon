@@ -8,8 +8,8 @@
  * @param map a map from which to construct a DOM.
  * @returns {pv.Dom} a DOM operator for the specified map.
  */
-pv.dom = function(map) {
-  return new pv.Dom(map);
+pv.dom = function (map) {
+    return new pv.Dom(map);
 };
 
 /**
@@ -27,13 +27,13 @@ pv.dom = function(map) {
  *
  * @param map a map from which to construct a DOM.
  */
-pv.Dom = function(map) {
-  this.$map = map;
+pv.Dom = function (map) {
+    this.$map = map;
 };
 
 /** @private The default leaf function. */
-pv.Dom.prototype.$leaf = function(n) {
-  return typeof n != "object";
+pv.Dom.prototype.$leaf = function (n) {
+    return typeof n != "object";
 };
 
 /**
@@ -45,12 +45,12 @@ pv.Dom.prototype.$leaf = function(n) {
  * @param {function} f the new leaf function.
  * @returns the current leaf function, or <tt>this</tt>.
  */
-pv.Dom.prototype.leaf = function(f) {
-  if (arguments.length) {
-    this.$leaf = f;
-    return this;
-  }
-  return this.$leaf;
+pv.Dom.prototype.leaf = function (f) {
+    if (arguments.length) {
+        this.$leaf = f;
+        return this;
+    }
+    return this.$leaf;
 };
 
 /**
@@ -59,21 +59,21 @@ pv.Dom.prototype.leaf = function(f) {
  * @returns {pv.Dom.Node} the root node.
  * @param {string} [nodeName] optional node name for the root.
  */
-pv.Dom.prototype.root = function(nodeName) {
-  var leaf = this.$leaf, root = recurse(this.$map);
+pv.Dom.prototype.root = function (nodeName) {
+    var leaf = this.$leaf, root = recurse(this.$map);
 
-  /** @private */
-  function recurse(map) {
-    var n = new pv.Dom.Node();
-    for (var k in map) {
-      var v = map[k];
-      n.appendChild(leaf(v) ? new pv.Dom.Node(v) : recurse(v)).nodeName = k;
+    /** @private */
+    function recurse(map) {
+        var n = new pv.Dom.Node();
+        for (var k in map) {
+            var v = map[k];
+            n.appendChild(leaf(v) ? new pv.Dom.Node(v) : recurse(v)).nodeName = k;
+        }
+        return n;
     }
-    return n;
-  }
 
-  root.nodeName = nodeName;
-  return root;
+    root.nodeName = nodeName;
+    return root;
 };
 
 /**
@@ -82,8 +82,8 @@ pv.Dom.prototype.root = function(nodeName) {
  *
  * @returns {array} the array of nodes in preorder traversal.
  */
-pv.Dom.prototype.nodes = function() {
-  return this.root().nodes();
+pv.Dom.prototype.nodes = function () {
+    return this.root().nodes();
 };
 
 /**
@@ -93,9 +93,9 @@ pv.Dom.prototype.nodes = function() {
  *
  * @class Represents a <tt>Node</tt> in the W3C Document Object Model.
  */
-pv.Dom.Node = function(value) {
-  this.nodeValue = value;
-  this.childNodes = [];
+pv.Dom.Node = function (value) {
+    this.nodeValue = value;
+    this.childNodes = [];
 };
 
 /**
@@ -163,18 +163,18 @@ pv.Dom.Node.prototype.nextSibling = null;
  * @throws Error if the specified child is not a child of this node.
  * @returns {pv.Dom.Node} the removed child.
  */
-pv.Dom.Node.prototype.removeChild = function(n) {
-  var i = this.childNodes.indexOf(n);
-  if (i == -1) throw new Error("child not found");
-  this.childNodes.splice(i, 1);
-  if (n.previousSibling) n.previousSibling.nextSibling = n.nextSibling;
-  else this.firstChild = n.nextSibling;
-  if (n.nextSibling) n.nextSibling.previousSibling = n.previousSibling;
-  else this.lastChild = n.previousSibling;
-  delete n.nextSibling;
-  delete n.previousSibling;
-  delete n.parentNode;
-  return n;
+pv.Dom.Node.prototype.removeChild = function (n) {
+    var i = this.childNodes.indexOf(n);
+    if (i == -1) throw new Error("child not found");
+    this.childNodes.splice(i, 1);
+    if (n.previousSibling) n.previousSibling.nextSibling = n.nextSibling;
+    else this.firstChild = n.nextSibling;
+    if (n.nextSibling) n.nextSibling.previousSibling = n.previousSibling;
+    else this.lastChild = n.previousSibling;
+    delete n.nextSibling;
+    delete n.previousSibling;
+    delete n.parentNode;
+    return n;
 };
 
 /**
@@ -184,15 +184,15 @@ pv.Dom.Node.prototype.removeChild = function(n) {
  *
  * @returns {pv.Dom.Node} the appended child.
  */
-pv.Dom.Node.prototype.appendChild = function(n) {
-  if (n.parentNode) n.parentNode.removeChild(n);
-  n.parentNode = this;
-  n.previousSibling = this.lastChild;
-  if (this.lastChild) this.lastChild.nextSibling = n;
-  else this.firstChild = n;
-  this.lastChild = n;
-  this.childNodes.push(n);
-  return n;
+pv.Dom.Node.prototype.appendChild = function (n) {
+    if (n.parentNode) n.parentNode.removeChild(n);
+    n.parentNode = this;
+    n.previousSibling = this.lastChild;
+    if (this.lastChild) this.lastChild.nextSibling = n;
+    else this.firstChild = n;
+    this.lastChild = n;
+    this.childNodes.push(n);
+    return n;
 };
 
 /**
@@ -204,22 +204,22 @@ pv.Dom.Node.prototype.appendChild = function(n) {
  * @throws Error if <i>r</i> is non-null and not a child of this node.
  * @returns {pv.Dom.Node} the inserted child.
  */
-pv.Dom.Node.prototype.insertBefore = function(n, r) {
-  if (!r) return this.appendChild(n);
-  var i = this.childNodes.indexOf(r);
-  if (i == -1) throw new Error("child not found");
-  if (n.parentNode) n.parentNode.removeChild(n);
-  n.parentNode = this;
-  n.nextSibling = r;
-  n.previousSibling = r.previousSibling;
-  if (r.previousSibling) {
-    r.previousSibling.nextSibling = n;
-  } else {
-    if (r == this.lastChild) this.lastChild = n;
-    this.firstChild = n;
-  }
-  this.childNodes.splice(i, 0, n);
-  return n;
+pv.Dom.Node.prototype.insertBefore = function (n, r) {
+    if (!r) return this.appendChild(n);
+    var i = this.childNodes.indexOf(r);
+    if (i == -1) throw new Error("child not found");
+    if (n.parentNode) n.parentNode.removeChild(n);
+    n.parentNode = this;
+    n.nextSibling = r;
+    n.previousSibling = r.previousSibling;
+    if (r.previousSibling) {
+        r.previousSibling.nextSibling = n;
+    } else {
+        if (r == this.lastChild) this.lastChild = n;
+        this.firstChild = n;
+    }
+    this.childNodes.splice(i, 0, n);
+    return n;
 };
 
 /**
@@ -228,19 +228,19 @@ pv.Dom.Node.prototype.insertBefore = function(n, r) {
  *
  * @throws Error if <i>r</i> is not a child of this node.
  */
-pv.Dom.Node.prototype.replaceChild = function(n, r) {
-  var i = this.childNodes.indexOf(r);
-  if (i == -1) throw new Error("child not found");
-  if (n.parentNode) n.parentNode.removeChild(n);
-  n.parentNode = this;
-  n.nextSibling = r.nextSibling;
-  n.previousSibling = r.previousSibling;
-  if (r.previousSibling) r.previousSibling.nextSibling = n;
-  else this.firstChild = n;
-  if (r.nextSibling) r.nextSibling.previousSibling = n;
-  else this.lastChild = n;
-  this.childNodes[i] = n;
-  return r;
+pv.Dom.Node.prototype.replaceChild = function (n, r) {
+    var i = this.childNodes.indexOf(r);
+    if (i == -1) throw new Error("child not found");
+    if (n.parentNode) n.parentNode.removeChild(n);
+    n.parentNode = this;
+    n.nextSibling = r.nextSibling;
+    n.previousSibling = r.previousSibling;
+    if (r.previousSibling) r.previousSibling.nextSibling = n;
+    else this.firstChild = n;
+    if (r.nextSibling) r.nextSibling.previousSibling = n;
+    else this.lastChild = n;
+    this.childNodes[i] = n;
+    return r;
 };
 
 /**
@@ -252,14 +252,15 @@ pv.Dom.Node.prototype.replaceChild = function(n, r) {
  *
  * @param {function} f a function to apply to each node.
  */
-pv.Dom.Node.prototype.visitBefore = function(f) {
-  function visit(n, i) {
-    f(n, i);
-    for (var c = n.firstChild; c; c = c.nextSibling) {
-      visit(c, i + 1);
+pv.Dom.Node.prototype.visitBefore = function (f) {
+    function visit(n, i) {
+        f(n, i);
+        for (var c = n.firstChild; c; c = c.nextSibling) {
+            visit(c, i + 1);
+        }
     }
-  }
-  visit(this, 0);
+
+    visit(this, 0);
 };
 
 /**
@@ -271,14 +272,15 @@ pv.Dom.Node.prototype.visitBefore = function(f) {
  *
  * @param {function} f a function to apply to each node.
  */
-pv.Dom.Node.prototype.visitAfter = function(f) {
-  function visit(n, i) {
-    for (var c = n.firstChild; c; c = c.nextSibling) {
-      visit(c, i + 1);
+pv.Dom.Node.prototype.visitAfter = function (f) {
+    function visit(n, i) {
+        for (var c = n.firstChild; c; c = c.nextSibling) {
+            visit(c, i + 1);
+        }
+        f(n, i);
     }
-    f(n, i);
-  }
-  visit(this, 0);
+
+    visit(this, 0);
 };
 
 /**
@@ -294,22 +296,22 @@ pv.Dom.Node.prototype.visitAfter = function(f) {
  * @param {function} f a comparator function.
  * @returns this.
  */
-pv.Dom.Node.prototype.sort = function(f) {
-  if (this.firstChild) {
-    this.childNodes.sort(f);
-    var p = this.firstChild = this.childNodes[0], c;
-    delete p.previousSibling;
-    for (var i = 1; i < this.childNodes.length; i++) {
-      p.sort(f);
-      c = this.childNodes[i];
-      c.previousSibling = p;
-      p = p.nextSibling = c;
+pv.Dom.Node.prototype.sort = function (f) {
+    if (this.firstChild) {
+        this.childNodes.sort(f);
+        var p = this.firstChild = this.childNodes[0], c;
+        delete p.previousSibling;
+        for (var i = 1; i < this.childNodes.length; i++) {
+            p.sort(f);
+            c = this.childNodes[i];
+            c.previousSibling = p;
+            p = p.nextSibling = c;
+        }
+        this.lastChild = p;
+        delete p.nextSibling;
+        p.sort(f);
     }
-    this.lastChild = p;
-    delete p.nextSibling;
-    p.sort(f);
-  }
-  return this;
+    return this;
 };
 
 /**
@@ -317,27 +319,27 @@ pv.Dom.Node.prototype.sort = function(f) {
  *
  * @returns this.
  */
-pv.Dom.Node.prototype.reverse = function() {
-  var childNodes = [];
-  this.visitAfter(function(n) {
-      while (n.lastChild) childNodes.push(n.removeChild(n.lastChild));
-      for (var c; c = childNodes.pop();) n.insertBefore(c, n.firstChild);
+pv.Dom.Node.prototype.reverse = function () {
+    var childNodes = [];
+    this.visitAfter(function (n) {
+        while (n.lastChild) childNodes.push(n.removeChild(n.lastChild));
+        for (var c; c = childNodes.pop();) n.insertBefore(c, n.firstChild);
     });
-  return this;
+    return this;
 };
 
 /** Returns all descendants of this node in preorder traversal. */
-pv.Dom.Node.prototype.nodes = function() {
-  var array = [];
+pv.Dom.Node.prototype.nodes = function () {
+    var array = [];
 
-  /** @private */
-  function flatten(node) {
-    array.push(node);
-    node.childNodes.forEach(flatten);
-  }
+    /** @private */
+    function flatten(node) {
+        array.push(node);
+        node.childNodes.forEach(flatten);
+    }
 
-  flatten(this, array);
-  return array;
+    flatten(this, array);
+    return array;
 };
 
 /**
@@ -350,18 +352,22 @@ pv.Dom.Node.prototype.nodes = function() {
  *
  * @param {boolean} [recursive] whether the toggle should apply to descendants.
  */
-pv.Dom.Node.prototype.toggle = function(recursive) {
-  if (recursive) return this.toggled
-      ? this.visitBefore(function(n) { if (n.toggled) n.toggle(); })
-      : this.visitAfter(function(n) { if (!n.toggled) n.toggle(); });
-  var n = this;
-  if (n.toggled) {
-    for (var c; c = n.toggled.pop();) n.appendChild(c);
-    delete n.toggled;
-  } else if (n.lastChild) {
-    n.toggled = [];
-    while (n.lastChild) n.toggled.push(n.removeChild(n.lastChild));
-  }
+pv.Dom.Node.prototype.toggle = function (recursive) {
+    if (recursive) return this.toggled
+        ? this.visitBefore(function (n) {
+        if (n.toggled) n.toggle();
+    })
+        : this.visitAfter(function (n) {
+        if (!n.toggled) n.toggle();
+    });
+    var n = this;
+    if (n.toggled) {
+        for (var c; c = n.toggled.pop();) n.appendChild(c);
+        delete n.toggled;
+    } else if (n.lastChild) {
+        n.toggled = [];
+        while (n.lastChild) n.toggled.push(n.removeChild(n.lastChild));
+    }
 };
 
 /**
@@ -371,10 +377,10 @@ pv.Dom.Node.prototype.toggle = function(recursive) {
  * @param {array} values.
  * @returns {array} nodes.
  */
-pv.nodes = function(values) {
-  var root = new pv.Dom.Node();
-  for (var i = 0; i < values.length; i++) {
-    root.appendChild(new pv.Dom.Node(values[i]));
-  }
-  return root.nodes();
+pv.nodes = function (values) {
+    var root = new pv.Dom.Node();
+    for (var i = 0; i < values.length; i++) {
+        root.appendChild(new pv.Dom.Node(values[i]));
+    }
+    return root.nodes();
 };

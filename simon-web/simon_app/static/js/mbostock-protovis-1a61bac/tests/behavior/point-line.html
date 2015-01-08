@@ -1,10 +1,10 @@
 <html>
-  <head>
+<head>
     <title>Line Chart</title>
     <script type="text/javascript" src="../../protovis.js"></script>
-  </head>
-  <body>
-    <script type="text/javascript+protovis">
+</head>
+<body>
+<script type="text/javascript+protovis">
 
 var data = pv.range(0, 10, .1).map(function(x) {
         return {x: x, y: Math.sin(x) + Math.random() * .5 + 2};
@@ -57,6 +57,8 @@ vis.add(pv.Line)
 
 vis.render();
 
-    </script>
-  </body>
+
+
+</script>
+</body>
 </html>

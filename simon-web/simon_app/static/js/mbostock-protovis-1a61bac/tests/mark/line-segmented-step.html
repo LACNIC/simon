@@ -1,11 +1,11 @@
 <html>
-  <head>
+<head>
     <title>Segmented Line with Step Interpolation</title>
     <script type="text/javascript" src="../../protovis.js"></script>
     <link rel="stylesheet" type="text/css" href="../style.css"/>
-  </head>
-  <body>
-    <script type="text/javascript+protovis">
+</head>
+<body>
+<script type="text/javascript+protovis">
 
 var vis = new pv.Panel()
     .width(500)
@@ -30,12 +30,14 @@ var line = vis.add(pv.Line)
 
 vis.render();
 
-    </script>
+
+
+</script>
 
 <p>The orange-red line uses "step-before"; the yellow-green line uses
-"step-after". The orange-red line should precede the blue-cyan line, which uses
-"linear" interpolation, while the yellow-green line should follow the blue-cyan
-line.
+    "step-after". The orange-red line should precede the blue-cyan line, which uses
+    "linear" interpolation, while the yellow-green line should follow the blue-cyan
+    line.
 
-  </body>
+</body>
 </html>

@@ -37,49 +37,49 @@
  * @see pv.Mark#scale
  * @param {number} speed
  */
-pv.Behavior.zoom = function(speed) {
-  var bound; // whether to bound to the panel
+pv.Behavior.zoom = function (speed) {
+    var bound; // whether to bound to the panel
 
-  if (!arguments.length) speed = 1 / 48;
+    if (!arguments.length) speed = 1 / 48;
 
-  /** @private */
-  function mousewheel() {
-    var v = this.mouse(),
-        k = pv.event.wheel * speed,
-        m = this.transform().translate(v.x, v.y)
-            .scale((k < 0) ? (1e3 / (1e3 - k)) : ((1e3 + k) / 1e3))
-            .translate(-v.x, -v.y);
-    if (bound) {
-      m.k = Math.max(1, m.k);
-      m.x = Math.max((1 - m.k) * this.width(), Math.min(0, m.x));
-      m.y = Math.max((1 - m.k) * this.height(), Math.min(0, m.y));
+    /** @private */
+    function mousewheel() {
+        var v = this.mouse(),
+            k = pv.event.wheel * speed,
+            m = this.transform().translate(v.x, v.y)
+                .scale((k < 0) ? (1e3 / (1e3 - k)) : ((1e3 + k) / 1e3))
+                .translate(-v.x, -v.y);
+        if (bound) {
+            m.k = Math.max(1, m.k);
+            m.x = Math.max((1 - m.k) * this.width(), Math.min(0, m.x));
+            m.y = Math.max((1 - m.k) * this.height(), Math.min(0, m.y));
+        }
+        this.transform(m).render();
+        pv.Mark.dispatch("zoom", this.scene, this.index);
     }
-    this.transform(m).render();
-    pv.Mark.dispatch("zoom", this.scene, this.index);
-  }
 
-  /**
-   * Sets or gets the bound parameter. If bounding is enabled, the user will not
-   * be able to zoom out farther than the initial panel bounds. Bounding is not
-   * enabled by default. If this behavior is used in tandem with the pan
-   * behavior, both should use the same bound parameter.
-   *
-   * <p>Note: enabling bounding after zooming has already occurred will not
-   * immediately reset the transform. Bounding should be enabled before the zoom
-   * behavior is applied.
-   *
-   * @function
-   * @returns {pv.Behavior.zoom} this, or the current bound parameter.
-   * @name pv.Behavior.zoom.prototype.bound
-   * @param {boolean} [x] the new bound parameter.
-   */
-  mousewheel.bound = function(x) {
-    if (arguments.length) {
-      bound = Boolean(x);
-      return this;
-    }
-    return Boolean(bound);
-  };
+    /**
+     * Sets or gets the bound parameter. If bounding is enabled, the user will not
+     * be able to zoom out farther than the initial panel bounds. Bounding is not
+     * enabled by default. If this behavior is used in tandem with the pan
+     * behavior, both should use the same bound parameter.
+     *
+     * <p>Note: enabling bounding after zooming has already occurred will not
+     * immediately reset the transform. Bounding should be enabled before the zoom
+     * behavior is applied.
+     *
+     * @function
+     * @returns {pv.Behavior.zoom} this, or the current bound parameter.
+     * @name pv.Behavior.zoom.prototype.bound
+     * @param {boolean} [x] the new bound parameter.
+     */
+    mousewheel.bound = function (x) {
+        if (arguments.length) {
+            bound = Boolean(x);
+            return this;
+        }
+        return Boolean(bound);
+    };
 
-  return mousewheel;
+    return mousewheel;
 };

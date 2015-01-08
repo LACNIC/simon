@@ -25,7 +25,9 @@ pv.version = "3.3.1";
  * @param x a value.
  * @returns the value <tt>x</tt>.
  */
-pv.identity = function(x) { return x; };
+pv.identity = function (x) {
+    return x;
+};
 
 /**
  * Returns <tt>this.index</tt>. This method is provided for convenience for use
@@ -41,7 +43,9 @@ pv.identity = function(x) { return x; };
  * @see pv.Scale
  * @see pv.Mark#index
  */
-pv.index = function() { return this.index; };
+pv.index = function () {
+    return this.index;
+};
 
 /**
  * Returns <tt>this.childIndex</tt>. This method is provided for convenience for
@@ -55,7 +59,9 @@ pv.index = function() { return this.index; };
  * @see pv.Scale
  * @see pv.Mark#childIndex
  */
-pv.child = function() { return this.childIndex; };
+pv.child = function () {
+    return this.childIndex;
+};
 
 /**
  * Returns <tt>this.parent.index</tt>. This method is provided for convenience
@@ -70,7 +76,9 @@ pv.child = function() { return this.childIndex; };
  * @see pv.Scale
  * @see pv.Mark#index
  */
-pv.parent = function() { return this.parent.index; };
+pv.parent = function () {
+    return this.parent.index;
+};
 
 /**
  * Stores the current event. This field is only set within event handlers.

@@ -14,25 +14,25 @@
  * @param {number} [step] the step value.
  * @returns {number[]} an array of numbers.
  */
-pv.range = function(start, stop, step) {
-  if (arguments.length == 1) {
-    stop = start;
-    start = 0;
-  }
-  if (step == undefined) step = 1;
-  if ((stop - start) / step == Infinity) throw new Error("range must be finite");
-  var array = [], i = 0, j;
-  stop -= (stop - start) * 1e-10; // floating point precision!
-  if (step < 0) {
-    while ((j = start + step * i++) > stop) {
-      array.push(j);
+pv.range = function (start, stop, step) {
+    if (arguments.length == 1) {
+        stop = start;
+        start = 0;
     }
-  } else {
-    while ((j = start + step * i++) < stop) {
-      array.push(j);
+    if (step == undefined) step = 1;
+    if ((stop - start) / step == Infinity) throw new Error("range must be finite");
+    var array = [], i = 0, j;
+    stop -= (stop - start) * 1e-10; // floating point precision!
+    if (step < 0) {
+        while ((j = start + step * i++) > stop) {
+            array.push(j);
+        }
+    } else {
+        while ((j = start + step * i++) < stop) {
+            array.push(j);
+        }
     }
-  }
-  return array;
+    return array;
 };
 
 /**
@@ -47,15 +47,15 @@ pv.range = function(start, stop, step) {
  * @param {number} [step] the step value.
  * @returns {number} a random number between <i>start</i> and <i>stop</i>.
  */
-pv.random = function(start, stop, step) {
-  if (arguments.length == 1) {
-    stop = start;
-    start = 0;
-  }
-  if (step == undefined) step = 1;
-  return step
-      ? (Math.floor(Math.random() * (stop - start) / step) * step + start)
-      : (Math.random() * (stop - start) + start);
+pv.random = function (start, stop, step) {
+    if (arguments.length == 1) {
+        stop = start;
+        start = 0;
+    }
+    if (step == undefined) step = 1;
+    return step
+        ? (Math.floor(Math.random() * (stop - start) / step) * step + start)
+        : (Math.random() * (stop - start) + start);
 };
 
 /**
@@ -68,11 +68,16 @@ pv.random = function(start, stop, step) {
  * @param {function} [f] an optional accessor function.
  * @returns {number} the sum of the specified array.
  */
-pv.sum = function(array, f) {
-  var o = {};
-  return array.reduce(f
-      ? function(p, d, i) { o.index = i; return p + f.call(o, d); }
-      : function(p, d) { return p + d; }, 0);
+pv.sum = function (array, f) {
+    var o = {};
+    return array.reduce(f
+        ? function (p, d, i) {
+        o.index = i;
+        return p + f.call(o, d);
+    }
+        : function (p, d) {
+        return p + d;
+    }, 0);
 };
 
 /**
@@ -85,9 +90,9 @@ pv.sum = function(array, f) {
  * @param {function} [f] an optional accessor function.
  * @returns {number} the maximum value of the specified array.
  */
-pv.max = function(array, f) {
-  if (f == pv.index) return array.length - 1;
-  return Math.max.apply(null, f ? pv.map(array, f) : array);
+pv.max = function (array, f) {
+    if (f == pv.index) return array.length - 1;
+    return Math.max.apply(null, f ? pv.map(array, f) : array);
 };
 
 /**
@@ -101,20 +106,20 @@ pv.max = function(array, f) {
  * @param {function} [f] an optional accessor function.
  * @returns {number} the index of the maximum value of the specified array.
  */
-pv.max.index = function(array, f) {
-  if (!array.length) return -1;
-  if (f == pv.index) return array.length - 1;
-  if (!f) f = pv.identity;
-  var maxi = 0, maxx = -Infinity, o = {};
-  for (var i = 0; i < array.length; i++) {
-    o.index = i;
-    var x = f.call(o, array[i]);
-    if (x > maxx) {
-      maxx = x;
-      maxi = i;
+pv.max.index = function (array, f) {
+    if (!array.length) return -1;
+    if (f == pv.index) return array.length - 1;
+    if (!f) f = pv.identity;
+    var maxi = 0, maxx = -Infinity, o = {};
+    for (var i = 0; i < array.length; i++) {
+        o.index = i;
+        var x = f.call(o, array[i]);
+        if (x > maxx) {
+            maxx = x;
+            maxi = i;
+        }
     }
-  }
-  return maxi;
+    return maxi;
 }
 
 /**
@@ -127,9 +132,9 @@ pv.max.index = function(array, f) {
  * @param {function} [f] an optional accessor function.
  * @returns {number} the minimum value of the specified array.
  */
-pv.min = function(array, f) {
-  if (f == pv.index) return 0;
-  return Math.min.apply(null, f ? pv.map(array, f) : array);
+pv.min = function (array, f) {
+    if (f == pv.index) return 0;
+    return Math.min.apply(null, f ? pv.map(array, f) : array);
 };
 
 /**
@@ -143,20 +148,20 @@ pv.min = function(array, f) {
  * @param {function} [f] an optional accessor function.
  * @returns {number} the index of the minimum value of the specified array.
  */
-pv.min.index = function(array, f) {
-  if (!array.length) return -1;
-  if (f == pv.index) return 0;
-  if (!f) f = pv.identity;
-  var mini = 0, minx = Infinity, o = {};
-  for (var i = 0; i < array.length; i++) {
-    o.index = i;
-    var x = f.call(o, array[i]);
-    if (x < minx) {
-      minx = x;
-      mini = i;
+pv.min.index = function (array, f) {
+    if (!array.length) return -1;
+    if (f == pv.index) return 0;
+    if (!f) f = pv.identity;
+    var mini = 0, minx = Infinity, o = {};
+    for (var i = 0; i < array.length; i++) {
+        o.index = i;
+        var x = f.call(o, array[i]);
+        if (x < minx) {
+            minx = x;
+            mini = i;
+        }
     }
-  }
-  return mini;
+    return mini;
 }
 
 /**
@@ -170,8 +175,8 @@ pv.min.index = function(array, f) {
  * @param {function} [f] an optional accessor function.
  * @returns {number} the mean of the specified array.
  */
-pv.mean = function(array, f) {
-  return pv.sum(array, f) / array.length;
+pv.mean = function (array, f) {
+    return pv.sum(array, f) / array.length;
 };
 
 /**
@@ -184,12 +189,12 @@ pv.mean = function(array, f) {
  * @param {function} [f] an optional accessor function.
  * @returns {number} the median of the specified array.
  */
-pv.median = function(array, f) {
-  if (f == pv.index) return (array.length - 1) / 2;
-  array = pv.map(array, f).sort(pv.naturalOrder);
-  if (array.length % 2) return array[Math.floor(array.length / 2)];
-  var i = array.length / 2;
-  return (array[i - 1] + array[i]) / 2;
+pv.median = function (array, f) {
+    if (f == pv.index) return (array.length - 1) / 2;
+    array = pv.map(array, f).sort(pv.naturalOrder);
+    if (array.length % 2) return array[Math.floor(array.length / 2)];
+    var i = array.length / 2;
+    return (array[i - 1] + array[i]) / 2;
 };
 
 /**
@@ -202,17 +207,17 @@ pv.median = function(array, f) {
  * @param {function} [f] an optional accessor function.
  * @returns {number} the variance of the specified array.
  */
-pv.variance = function(array, f) {
-  if (array.length < 1) return NaN;
-  if (array.length == 1) return 0;
-  var mean = pv.mean(array, f), sum = 0, o = {};
-  if (!f) f = pv.identity;
-  for (var i = 0; i < array.length; i++) {
-    o.index = i;
-    var d = f.call(o, array[i]) - mean;
-    sum += d * d;
-  }
-  return sum;
+pv.variance = function (array, f) {
+    if (array.length < 1) return NaN;
+    if (array.length == 1) return 0;
+    var mean = pv.mean(array, f), sum = 0, o = {};
+    if (!f) f = pv.identity;
+    for (var i = 0; i < array.length; i++) {
+        o.index = i;
+        var d = f.call(o, array[i]) - mean;
+        sum += d * d;
+    }
+    return sum;
 };
 
 /**
@@ -226,8 +231,8 @@ pv.variance = function(array, f) {
  * @param {function} [f] an optional accessor function.
  * @returns {number} the standard deviation of the specified array.
  */
-pv.deviation = function(array, f) {
-  return Math.sqrt(pv.variance(array, f) / (array.length - 1));
+pv.deviation = function (array, f) {
+    return Math.sqrt(pv.variance(array, f) / (array.length - 1));
 };
 
 /**
@@ -237,8 +242,8 @@ pv.deviation = function(array, f) {
  * @param {number} b the base of the logarithm.
  * @returns {number} the logarithm value.
  */
-pv.log = function(x, b) {
-  return Math.log(x) / Math.log(b);
+pv.log = function (x, b) {
+    return Math.log(x) / Math.log(b);
 };
 
 /**
@@ -250,8 +255,8 @@ pv.log = function(x, b) {
  * @param {number} b the base of the logarithm.
  * @returns {number} the symmetric log value.
  */
-pv.logSymmetric = function(x, b) {
-  return (x == 0) ? 0 : ((x < 0) ? -pv.log(-x, b) : pv.log(x, b));
+pv.logSymmetric = function (x, b) {
+    return (x == 0) ? 0 : ((x < 0) ? -pv.log(-x, b) : pv.log(x, b));
 };
 
 /**
@@ -264,11 +269,11 @@ pv.logSymmetric = function(x, b) {
  * @param {number} b the base of the logarithm.
  * @returns {number} the adjusted, symmetric log value.
  */
-pv.logAdjusted = function(x, b) {
-  if (!isFinite(x)) return x;
-  var negative = x < 0;
-  if (x < b) x += (b - x) / b;
-  return negative ? -pv.log(x, b) : pv.log(x, b);
+pv.logAdjusted = function (x, b) {
+    if (!isFinite(x)) return x;
+    var negative = x < 0;
+    if (x < b) x += (b - x) / b;
+    return negative ? -pv.log(x, b) : pv.log(x, b);
 };
 
 /**
@@ -280,10 +285,10 @@ pv.logAdjusted = function(x, b) {
  * @param {number} b the base of the logarithm.
  * @returns {number} the rounded-by-logarithm value.
  */
-pv.logFloor = function(x, b) {
-  return (x > 0)
-      ? Math.pow(b, Math.floor(pv.log(x, b)))
-      : -Math.pow(b, -Math.floor(-pv.log(-x, b)));
+pv.logFloor = function (x, b) {
+    return (x > 0)
+        ? Math.pow(b, Math.floor(pv.log(x, b)))
+        : -Math.pow(b, -Math.floor(-pv.log(-x, b)));
 };
 
 /**
@@ -295,19 +300,23 @@ pv.logFloor = function(x, b) {
  * @param {number} b the base of the logarithm.
  * @returns {number} the rounded-by-logarithm value.
  */
-pv.logCeil = function(x, b) {
-  return (x > 0)
-      ? Math.pow(b, Math.ceil(pv.log(x, b)))
-      : -Math.pow(b, -Math.ceil(-pv.log(-x, b)));
+pv.logCeil = function (x, b) {
+    return (x > 0)
+        ? Math.pow(b, Math.ceil(pv.log(x, b)))
+        : -Math.pow(b, -Math.ceil(-pv.log(-x, b)));
 };
 
-(function() {
-  var radians = Math.PI / 180,
-      degrees = 180 / Math.PI;
+(function () {
+    var radians = Math.PI / 180,
+        degrees = 180 / Math.PI;
 
-  /** Returns the number of radians corresponding to the specified degrees. */
-  pv.radians = function(degrees) { return radians * degrees; };
+    /** Returns the number of radians corresponding to the specified degrees. */
+    pv.radians = function (degrees) {
+        return radians * degrees;
+    };
 
-  /** Returns the number of degrees corresponding to the specified radians. */
-  pv.degrees = function(radians) { return degrees * radians; };
+    /** Returns the number of degrees corresponding to the specified radians. */
+    pv.degrees = function (radians) {
+        return degrees * radians;
+    };
 })();

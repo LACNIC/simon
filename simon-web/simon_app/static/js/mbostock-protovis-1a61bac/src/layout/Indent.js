@@ -24,9 +24,9 @@
  *
  * @extends pv.Layout.Hierarchy
  */
-pv.Layout.Indent = function() {
-  pv.Layout.Hierarchy.call(this);
-  this.link.interpolate("step-after");
+pv.Layout.Indent = function () {
+    pv.Layout.Hierarchy.call(this);
+    this.link.interpolate("step-after");
 };
 
 pv.Layout.Indent.prototype = pv.extend(pv.Layout.Hierarchy)
@@ -59,25 +59,25 @@ pv.Layout.Indent.prototype.defaults = new pv.Layout.Indent()
     .breadth(15);
 
 /** @private */
-pv.Layout.Indent.prototype.buildImplied = function(s) {
-  if (pv.Layout.Hierarchy.prototype.buildImplied.call(this, s)) return;
+pv.Layout.Indent.prototype.buildImplied = function (s) {
+    if (pv.Layout.Hierarchy.prototype.buildImplied.call(this, s)) return;
 
-  var nodes = s.nodes,
-      bspace = s.breadth,
-      dspace = s.depth,
-      ax = 0,
-      ay = 0;
+    var nodes = s.nodes,
+        bspace = s.breadth,
+        dspace = s.depth,
+        ax = 0,
+        ay = 0;
 
-  /** @private */
-  function position(n, breadth, depth) {
-    n.x = ax + depth++ * dspace;
-    n.y = ay + breadth++ * bspace;
-    n.midAngle = 0;
-    for (var c = n.firstChild; c; c = c.nextSibling) {
-      breadth = position(c, breadth, depth);
+    /** @private */
+    function position(n, breadth, depth) {
+        n.x = ax + depth++ * dspace;
+        n.y = ay + breadth++ * bspace;
+        n.midAngle = 0;
+        for (var c = n.firstChild; c; c = c.nextSibling) {
+            breadth = position(c, breadth, depth);
+        }
+        return breadth;
     }
-    return breadth;
-  }
 
-  position(nodes[0], 1, 1);
+    position(nodes[0], 1, 1);
 };

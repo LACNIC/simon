@@ -1,32 +1,34 @@
 <html>
-  <head>
+<head>
     <title>Cars</title>
     <link type="text/css" rel="stylesheet" href="../ex.css"/>
     <script type="text/javascript" src="../../protovis.js"></script>
     <script type="text/javascript" src="cars.js"></script>
     <style type="text/css">
 
-#fig {
-  width: 880px;
-  height: 460px;
-}
+        #fig {
+            width: 880px;
+            height: 460px;
+        }
 
-#title {
-  position: absolute;
-  top: 70px;
-  left: 200px;
-  padding: 10px;
-  background: white;
-}
+        #title {
+            position: absolute;
+            top: 70px;
+            left: 200px;
+            padding: 10px;
+            background: white;
+        }
 
-large {
-  font-size: medium;
-}
+        large {
+            font-size: medium;
+        }
 
     </style>
-  </head>
-  <body><div id="center"><div id="fig">
-    <script type="text/javascript+protovis">
+</head>
+<body>
+<div id="center">
+    <div id="fig">
+        <script type="text/javascript+protovis">
 
 /* The dimensions to visualize, in order. */
 var dims = [
@@ -85,6 +87,10 @@ vis.add(pv.Panel)
 
 vis.render();
 
-    </script>
-  </div></div></body>
+
+
+        </script>
+    </div>
+</div>
+</body>
 </html>

@@ -2,53 +2,53 @@
 
 {% block content %}
 
-<div class="">
-	<h1>Reportes</h1>
-	<p>En esta sección se muestran los datos de latencia por país y
-		año. Los histogramas pueden presentar uno o varios picos. Para
-		aquellos histogramas que presentan un sólo pico, no hay mayores
-		conclusiones que sacar: la media de la latencia de la conexión entre
-		esos dos países la media del histograma. Pero para aquellos
-		histogramas que presentan más de un pico, se puede decir que los
-		paquetes viajaron en diferentes tiempos, y muy probablemente haya sido
-		por rutas diferentes. Uno de los propósitos de este proyecto es
-		identificar esas rutas entre pares de países y dar información acerca
-		del impacto que el enrutamiento sub-óptimo causa en sistemas que usan
-		Internet y en el usuario final</p>
+    <div>
+        <h1>Reportes</h1>
 
-	<p>
-		Las muestras consideradas en estos reportes fueron obtenidas por <a href="{{ URL_PFX }}/participate">la
-			contribución de cientos de usuarios</a> en cada uno de los países.
-	</p>
+        <p>En esta sección se muestran los datos de latencia por país y
+            año. Los histogramas pueden presentar uno o varios picos. Para
+            aquellos histogramas que presentan un sólo pico, no hay mayores
+            conclusiones que sacar: la media de la latencia de la conexión entre
+            esos dos países la media del histograma. Pero para aquellos
+            histogramas que presentan más de un pico, se puede decir que los
+            paquetes viajaron en diferentes tiempos, y muy probablemente haya sido
+            por rutas diferentes. Uno de los propósitos de este proyecto es
+            identificar esas rutas entre pares de países y dar información acerca
+            del impacto que el enrutamiento sub-óptimo causa en sistemas que usan
+            Internet y en el usuario final</p>
 
-</div>
+        <p>
+            Las muestras consideradas en estos reportes fueron obtenidas por <a href="{{ URL_PFX }}/participate">la
+            contribución de cientos de usuarios</a> en cada uno de los países.
+        </p>
+    </div>
 
-<!-- Latency form -->
-<div class="">
+    <div>
 
-	<form id="country_form" action="{{ URL_PFX }}/reports/" method="post">
-		{% csrf_token %} {{ form.as_p }} <input type="submit" value="Submit"
-			id="submit" />
-	</form>
+        <form id="country_form" action="{{ URL_PFX }}/reports/" method="post">
+            {% csrf_token %} {{ form.as_p }} <input type="submit" value="Submit"
+                                                    id="submit"/>
+        </form>
 
-	{% for image in images %}
-	<figure style="float: left;">
+        {% for image in images %}
+            <figure style="float: left;" class="chart">
 
-		<a href="/static/histograms/countries/{{ image.name }}"
-			title="Histograma de latencia entre {{ image.origin }} y {{ image.destination }}, {{ image.year }}">
-			<img
-			alt="Histograma de latencia entre {{ image.origin }} y {{ image.destination }}, {{ image.year }}"
-			src="/static/histograms/countries/{{ image.name }}"
-			style="width: 250px" class="hover" />
-		</a>
+                <a href="/static/histograms/countries/{{ image.name }}"
+                   title="Histograma de latencia entre {{ image.origin }} y {{ image.destination }}, {{ image.year }}">
+                    <img
+                            alt="Histograma de latencia entre {{ image.origin }} y {{ image.destination }}, {{ image.year }}"
+                            src="/static/histograms/countries/{{ image.name }}"
+                            style="width: 200px" class=""/>
+                </a>
 
-		<figcaption class="caption" style="text-align: center;">Latencia entre {{ image.origin }} y {{ image.destination }}, {{ image.year }}.</figcaption>
+                <figcaption class="caption" style="text-align: center;">Latencia entre {{ image.origin }}
+                    y {{ image.destination }}, {{ image.year }}.
+                </figcaption>
 
-	</figure>
-	{% endfor %}
+            </figure>
+        {% endfor %}
 
 
-
-</div>
+    </div>
 
 {% endblock %}

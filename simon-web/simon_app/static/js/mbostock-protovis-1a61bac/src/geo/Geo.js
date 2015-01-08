@@ -2,4 +2,5 @@
  * @ignore
  * @namespace
  */
-pv.Geo = function() {};
+pv.Geo = function () {
+};

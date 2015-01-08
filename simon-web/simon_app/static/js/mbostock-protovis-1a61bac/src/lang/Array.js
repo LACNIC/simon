@@ -16,15 +16,15 @@
  * an element of the current one.
  * @param [o] object to use as <tt>this</tt> when executing <tt>f</tt>.
  */
-if (!Array.prototype.map) Array.prototype.map = function(f, o) {
-  var n = this.length;
-  var result = new Array(n);
-  for (var i = 0; i < n; i++) {
-    if (i in this) {
-      result[i] = f.call(o, this[i], i, this);
+if (!Array.prototype.map) Array.prototype.map = function (f, o) {
+    var n = this.length;
+    var result = new Array(n);
+    for (var i = 0; i < n; i++) {
+        if (i in this) {
+            result[i] = f.call(o, this[i], i, this);
+        }
     }
-  }
-  return result;
+    return result;
 };
 
 /**
@@ -39,16 +39,16 @@ if (!Array.prototype.map) Array.prototype.map = function(f, o) {
  * @param {function} f function to test each element of the array.
  * @param [o] object to use as <tt>this</tt> when executing <tt>f</tt>.
  */
-if (!Array.prototype.filter) Array.prototype.filter = function(f, o) {
-  var n = this.length;
-  var result = new Array();
-  for (var i = 0; i < n; i++) {
-    if (i in this) {
-      var v = this[i];
-      if (f.call(o, v, i, this)) result.push(v);
+if (!Array.prototype.filter) Array.prototype.filter = function (f, o) {
+    var n = this.length;
+    var result = new Array();
+    for (var i = 0; i < n; i++) {
+        if (i in this) {
+            var v = this[i];
+            if (f.call(o, v, i, this)) result.push(v);
+        }
     }
-  }
-  return result;
+    return result;
 };
 
 /**
@@ -63,11 +63,11 @@ if (!Array.prototype.filter) Array.prototype.filter = function(f, o) {
  * @param {function} f function to execute for each element.
  * @param [o] object to use as <tt>this</tt> when executing <tt>f</tt>.
  */
-if (!Array.prototype.forEach) Array.prototype.forEach = function(f, o) {
-  var n = this.length >>> 0;
-  for (var i = 0; i < n; i++) {
-    if (i in this) f.call(o, this[i], i, this);
-  }
+if (!Array.prototype.forEach) Array.prototype.forEach = function (f, o) {
+    var n = this.length >>> 0;
+    for (var i = 0; i < n; i++) {
+        if (i in this) f.call(o, this[i], i, this);
+    }
 };
 
 /**
@@ -84,29 +84,29 @@ if (!Array.prototype.forEach) Array.prototype.forEach = function(f, o) {
  * @param [v] object to use as the first argument to the first call of
  * <tt>t</tt>.
  */
-if (!Array.prototype.reduce) Array.prototype.reduce = function(f, v) {
-  var len = this.length;
-  if (!len && (arguments.length == 1)) {
-    throw new Error("reduce: empty array, no initial value");
-  }
-
-  var i = 0;
-  if (arguments.length < 2) {
-    while (true) {
-      if (i in this) {
-        v = this[i++];
-        break;
-      }
-      if (++i >= len) {
-        throw new Error("reduce: no values, no initial value");
-      }
+if (!Array.prototype.reduce) Array.prototype.reduce = function (f, v) {
+    var len = this.length;
+    if (!len && (arguments.length == 1)) {
+        throw new Error("reduce: empty array, no initial value");
     }
-  }
 
-  for (; i < len; i++) {
-    if (i in this) {
-      v = f(v, this[i], i, this);
+    var i = 0;
+    if (arguments.length < 2) {
+        while (true) {
+            if (i in this) {
+                v = this[i++];
+                break;
+            }
+            if (++i >= len) {
+                throw new Error("reduce: no values, no initial value");
+            }
+        }
     }
-  }
-  return v;
+
+    for (; i < len; i++) {
+        if (i in this) {
+            v = f(v, this[i], i, this);
+        }
+    }
+    return v;
 };

@@ -2,11 +2,14 @@
  * @private A private variant of Array.prototype.map that supports the index
  * property.
  */
-pv.map = function(array, f) {
-  var o = {};
-  return f
-      ? array.map(function(d, i) { o.index = i; return f.call(o, d); })
-      : array.slice();
+pv.map = function (array, f) {
+    var o = {};
+    return f
+        ? array.map(function (d, i) {
+        o.index = i;
+        return f.call(o, d);
+    })
+        : array.slice();
 };
 
 /**
@@ -17,9 +20,11 @@ pv.map = function(array, f) {
  * @param {number} [n] the number of times to repeat; defaults to two.
  * @returns {array} an array that repeats the specified array.
  */
-pv.repeat = function(array, n) {
-  if (arguments.length == 1) n = 2;
-  return pv.blend(pv.range(n).map(function() { return array; }));
+pv.repeat = function (array, n) {
+    if (arguments.length == 1) n = 2;
+    return pv.blend(pv.range(n).map(function () {
+        return array;
+    }));
 };
 
 /**
@@ -37,14 +42,14 @@ pv.repeat = function(array, n) {
  * @param {array} b an array.
  * @returns {array} an array of pairs of elements in <tt>a</tt> and <tt>b</tt>.
  */
-pv.cross = function(a, b) {
-  var array = [];
-  for (var i = 0, n = a.length, m = b.length; i < n; i++) {
-    for (var j = 0, x = a[i]; j < m; j++) {
-      array.push([x, b[j]]);
+pv.cross = function (a, b) {
+    var array = [];
+    for (var i = 0, n = a.length, m = b.length; i < n; i++) {
+        for (var j = 0, x = a[i]; j < m; j++) {
+            array.push([x, b[j]]);
+        }
     }
-  }
-  return array;
+    return array;
 };
 
 /**
@@ -62,8 +67,8 @@ pv.cross = function(a, b) {
  * @returns {array} an array containing all the elements of each array in
  * <tt>arrays</tt>.
  */
-pv.blend = function(arrays) {
-  return Array.prototype.concat.apply([], arrays);
+pv.blend = function (arrays) {
+    return Array.prototype.concat.apply([], arrays);
 };
 
 /**
@@ -77,40 +82,42 @@ pv.blend = function(arrays) {
  * @param {array[]} arrays an array of arrays.
  * @returns {array[]} the passed-in array, after transposing the elements.
  */
-pv.transpose = function(arrays) {
-  var n = arrays.length, m = pv.max(arrays, function(d) { return d.length; });
+pv.transpose = function (arrays) {
+    var n = arrays.length, m = pv.max(arrays, function (d) {
+        return d.length;
+    });
 
-  if (m > n) {
+    if (m > n) {
+        arrays.length = m;
+        for (var i = n; i < m; i++) {
+            arrays[i] = new Array(n);
+        }
+        for (var i = 0; i < n; i++) {
+            for (var j = i + 1; j < m; j++) {
+                var t = arrays[i][j];
+                arrays[i][j] = arrays[j][i];
+                arrays[j][i] = t;
+            }
+        }
+    } else {
+        for (var i = 0; i < m; i++) {
+            arrays[i].length = n;
+        }
+        for (var i = 0; i < n; i++) {
+            for (var j = 0; j < i; j++) {
+                var t = arrays[i][j];
+                arrays[i][j] = arrays[j][i];
+                arrays[j][i] = t;
+            }
+        }
+    }
+
     arrays.length = m;
-    for (var i = n; i < m; i++) {
-      arrays[i] = new Array(n);
-    }
-    for (var i = 0; i < n; i++) {
-      for (var j = i + 1; j < m; j++) {
-        var t = arrays[i][j];
-        arrays[i][j] = arrays[j][i];
-        arrays[j][i] = t;
-      }
-    }
-  } else {
     for (var i = 0; i < m; i++) {
-      arrays[i].length = n;
+        arrays[i].length = n;
     }
-    for (var i = 0; i < n; i++) {
-      for (var j = 0; j < i; j++) {
-        var t = arrays[i][j];
-        arrays[i][j] = arrays[j][i];
-        arrays[j][i] = t;
-      }
-    }
-  }
 
-  arrays.length = m;
-  for (var i = 0; i < m; i++) {
-    arrays[i].length = n;
-  }
-
-  return arrays;
+    return arrays;
 };
 
 /**
@@ -130,10 +137,10 @@ pv.transpose = function(arrays) {
  * @param {function} [f] an optional accessor function.
  * @returns {number[]} an array of numbers that sums to one.
  */
-pv.normalize = function(array, f) {
-  var norm = pv.map(array, f), sum = pv.sum(norm);
-  for (var i = 0; i < norm.length; i++) norm[i] /= sum;
-  return norm;
+pv.normalize = function (array, f) {
+    var norm = pv.map(array, f), sum = pv.sum(norm);
+    for (var i = 0; i < norm.length; i++) norm[i] /= sum;
+    return norm;
 };
 
 /**
@@ -154,11 +161,14 @@ pv.normalize = function(array, f) {
  * @param {function} [f] an optional accessor function.
  * @returns {array} an array of elements from <tt>array</tt>; a permutation.
  */
-pv.permute = function(array, indexes, f) {
-  if (!f) f = pv.identity;
-  var p = new Array(indexes.length), o = {};
-  indexes.forEach(function(j, i) { o.index = j; p[i] = f.call(o, array[j]); });
-  return p;
+pv.permute = function (array, indexes, f) {
+    if (!f) f = pv.identity;
+    var p = new Array(indexes.length), o = {};
+    indexes.forEach(function (j, i) {
+        o.index = j;
+        p[i] = f.call(o, array[j]);
+    });
+    return p;
 };
 
 /**
@@ -177,11 +187,14 @@ pv.permute = function(array, indexes, f) {
  * @param {function} [f] an optional key function.
  * @returns a map from key to index.
  */
-pv.numerate = function(keys, f) {
-  if (!f) f = pv.identity;
-  var map = {}, o = {};
-  keys.forEach(function(x, i) { o.index = i; map[f.call(o, x)] = i; });
-  return map;
+pv.numerate = function (keys, f) {
+    if (!f) f = pv.identity;
+    var map = {}, o = {};
+    keys.forEach(function (x, i) {
+        o.index = i;
+        map[f.call(o, x)] = i;
+    });
+    return map;
 };
 
 /**
@@ -196,15 +209,15 @@ pv.numerate = function(keys, f) {
  * @param {function} [f] an optional key function.
  * @returns {array} the unique values.
  */
-pv.uniq = function(array, f) {
-  if (!f) f = pv.identity;
-  var map = {}, keys = [], o = {}, y;
-  array.forEach(function(x, i) {
-    o.index = i;
-    y = f.call(o, x);
-    if (!(y in map)) map[y] = keys.push(y);
-  });
-  return keys;
+pv.uniq = function (array, f) {
+    if (!f) f = pv.identity;
+    var map = {}, keys = [], o = {}, y;
+    array.forEach(function (x, i) {
+        o.index = i;
+        y = f.call(o, x);
+        if (!(y in map)) map[y] = keys.push(y);
+    });
+    return keys;
 };
 
 /**
@@ -220,8 +233,8 @@ pv.uniq = function(array, f) {
  * @param b an element to compare.
  * @returns {number} negative if a &lt; b; positive if a &gt; b; otherwise 0.
  */
-pv.naturalOrder = function(a, b) {
-  return (a < b) ? -1 : ((a > b) ? 1 : 0);
+pv.naturalOrder = function (a, b) {
+    return (a < b) ? -1 : ((a > b) ? 1 : 0);
 };
 
 /**
@@ -236,8 +249,8 @@ pv.naturalOrder = function(a, b) {
  * @param b an element to compare.
  * @returns {number} negative if a &lt; b; positive if a &gt; b; otherwise 0.
  */
-pv.reverseOrder = function(b, a) {
-  return (a < b) ? -1 : ((a > b) ? 1 : 0);
+pv.reverseOrder = function (b, a) {
+    return (a < b) ? -1 : ((a > b) ? 1 : 0);
 };
 
 /**
@@ -259,19 +272,19 @@ pv.reverseOrder = function(b, a) {
  * otherwise, (-(<i>insertion point</i>) - 1).
  * @param {function} [f] an optional key function.
  */
-pv.search = function(array, value, f) {
-  if (!f) f = pv.identity;
-  var low = 0, high = array.length - 1;
-  while (low <= high) {
-    var mid = (low + high) >> 1, midValue = f(array[mid]);
-    if (midValue < value) low = mid + 1;
-    else if (midValue > value) high = mid - 1;
-    else return mid;
-  }
-  return -low - 1;
+pv.search = function (array, value, f) {
+    if (!f) f = pv.identity;
+    var low = 0, high = array.length - 1;
+    while (low <= high) {
+        var mid = (low + high) >> 1, midValue = f(array[mid]);
+        if (midValue < value) low = mid + 1;
+        else if (midValue > value) high = mid - 1;
+        else return mid;
+    }
+    return -low - 1;
 };
 
-pv.search.index = function(array, value, f) {
-  var i = pv.search(array, value, f);
-  return (i < 0) ? (-i - 1) : i;
+pv.search.index = function (array, value, f) {
+    var i = pv.search(array, value, f);
+    return (i < 0) ? (-i - 1) : i;
 };

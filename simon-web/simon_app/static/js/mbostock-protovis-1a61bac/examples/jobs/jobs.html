@@ -1,21 +1,22 @@
 <html>
-  <head>
+<head>
     <title>Job Voyager</title>
     <link type="text/css" rel="stylesheet" href="../ex.css"/>
     <script type="text/javascript" src="../../protovis.js"></script>
     <script type="text/javascript" src="jobs.js"></script>
     <style type="text/css">
 
-#fig {
-  width: 860px;
-  height: 580px;
-}
+        #fig {
+            width: 860px;
+            height: 580px;
+        }
 
     </style>
-  </head>
-  <body>
-    <div id="center"><div id="fig">
-    <script type="text/javascript+protovis">
+</head>
+<body>
+<div id="center">
+    <div id="fig">
+        <script type="text/javascript+protovis">
 
 /* Flatten the tree into an array to faciliate transformation. */
 var jobs = pv.flatten(jobs)
@@ -66,6 +67,10 @@ var area = vis.add(pv.Layout.Stack)
 
 vis.render();
 
-    </script>
-  </div></div></body>
+
+
+        </script>
+    </div>
+</div>
+</body>
 </html>

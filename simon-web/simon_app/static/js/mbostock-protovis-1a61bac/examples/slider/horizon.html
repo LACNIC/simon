@@ -1,49 +1,51 @@
 <html>
-  <head>
+<head>
     <title>Horizon Explorer</title>
     <script type="text/javascript" src="../../protovis.js"></script>
-		<script type="text/javascript" src="../jquery-1.4.2.min.js"></script>
-		<script type="text/javascript" src="jquery-ui-1.8rc3.custom.min.js"></script>
-		<link type="text/css" href="ui-lightness/jquery-ui-1.8rc3.custom.css" rel="stylesheet"/>
+    <script type="text/javascript" src="../jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="jquery-ui-1.8rc3.custom.min.js"></script>
+    <link type="text/css" href="ui-lightness/jquery-ui-1.8rc3.custom.css" rel="stylesheet"/>
     <link type="text/css" href="../../tests/style.css" rel="stylesheet"/>
     <style type="text/css">
 
-.ui-slider {
-  font-size: 10px;
-  width: 300px;
-  margin-top: 5px;
-}
+        .ui-slider {
+            font-size: 10px;
+            width: 300px;
+            margin-top: 5px;
+        }
 
-.ui-state-focus {
-  outline: none;
-}
+        .ui-state-focus {
+            outline: none;
+        }
 
-#slider {
-  width: 300px;
-  display: inline-block;
-  margin-left: 10px;
-  margin-right: 10px;
-}
+        #slider {
+            width: 300px;
+            display: inline-block;
+            margin-left: 10px;
+            margin-right: 10px;
+        }
 
-#bands {
-  display: inline-block;
-  width: 20px;
-  text-align: right;
-}
+        #bands {
+            display: inline-block;
+            width: 20px;
+            text-align: right;
+        }
 
     </style>
-  </head>
-  <body>
-    <h3>Horizon Explorer</h3>
-    <div style="width:600px;">
-      bands: <span id="slider"></span><span id="bands">1</span>
+</head>
+<body>
+<h3>Horizon Explorer</h3>
+
+<div style="width:600px;">
+    bands: <span id="slider"></span><span id="bands">1</span>
       <span style="float:right;">
         mode: <input type="radio" id="mirror" name="mode" value="mirror">
         <label for="mirror">mirror</label>
         <input type="radio" checked id="offset" name="mode" value="offset">
         <label for="offset">offset</label>
       </span>
-    </div><p>
+</div>
+<p>
     <script type="text/javascript+protovis">
 
 var w = 600,
@@ -80,6 +82,8 @@ $([mirror, offset]).change(function() {
   vis.render();
 });
 
+
+
     </script>
-  </body>
+</body>
 </html>

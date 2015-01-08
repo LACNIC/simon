@@ -6,8 +6,8 @@
  * @param {array} array an array from which to construct a tree.
  * @returns {pv.Tree} a tree operator for the specified array.
  */
-pv.tree = function(array) {
-  return new pv.Tree(array);
+pv.tree = function (array) {
+    return new pv.Tree(array);
 };
 
 /**
@@ -71,8 +71,8 @@ pv.tree = function(array) {
  *
  * @param {array} array an array from which to construct a tree.
  */
-pv.Tree = function(array) {
-  this.array = array;
+pv.Tree = function (array) {
+    this.array = array;
 };
 
 /**
@@ -85,9 +85,9 @@ pv.Tree = function(array) {
  * @param {function} k the keys function.
  * @returns {pv.Tree} this.
  */
-pv.Tree.prototype.keys = function(k) {
-  this.k = k;
-  return this;
+pv.Tree.prototype.keys = function (k) {
+    this.k = k;
+    return this;
 };
 
 /**
@@ -99,9 +99,9 @@ pv.Tree.prototype.keys = function(k) {
  * @param {function} k the value function.
  * @returns {pv.Tree} this.
  */
-pv.Tree.prototype.value = function(v) {
-  this.v = v;
-  return this;
+pv.Tree.prototype.value = function (v) {
+    this.v = v;
+    return this;
 };
 
 /**
@@ -110,15 +110,15 @@ pv.Tree.prototype.value = function(v) {
  *
  * @returns a hierarchical map of values.
  */
-pv.Tree.prototype.map = function() {
-  var map = {}, o = {};
-  for (var i = 0; i < this.array.length; i++) {
-    o.index = i;
-    var value = this.array[i], keys = this.k.call(o, value), node = map;
-    for (var j = 0; j < keys.length - 1; j++) {
-      node = node[keys[j]] || (node[keys[j]] = {});
+pv.Tree.prototype.map = function () {
+    var map = {}, o = {};
+    for (var i = 0; i < this.array.length; i++) {
+        o.index = i;
+        var value = this.array[i], keys = this.k.call(o, value), node = map;
+        for (var j = 0; j < keys.length - 1; j++) {
+            node = node[keys[j]] || (node[keys[j]] = {});
+        }
+        node[keys[j]] = this.v ? this.v.call(o, value) : value;
     }
-    node[keys[j]] = this.v ? this.v.call(o, value) : value;
-  }
-  return map;
+    return map;
 };

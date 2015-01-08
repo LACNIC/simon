@@ -1,11 +1,11 @@
 <html>
-  <head>
+<head>
     <title>Event Render</title>
     <script type="text/javascript" src="../../protovis.js"></script>
     <link rel="stylesheet" type="text/css" href="../style.css"/>
-  </head>
-  <body>
-    <script type="text/javascript+protovis">
+</head>
+<body>
+<script type="text/javascript+protovis">
 
 var vis = new pv.Panel()
     .width(200)
@@ -31,15 +31,20 @@ var label = bar.anchor("center").add(pv.Label)
 
 vis.render();
 
-    </script><p>
 
-This test verifies that <tt>render</tt> does not lose scene context.<p>
 
-This test works by redefining the <tt>fillStyle</tt> on the bar on
-mouseover. The bar is immediately rendered, and then the label's text property
-is set to the evaluated <tt>fillStyle</tt>. This property value can be queried
-because rendering does not blindly erase the <tt>scene</tt> and <tt>index</tt>
-attributes associated with bar after rendering.
+</script>
+<p>
 
-  </body>
+    This test verifies that <tt>render</tt> does not lose scene context.
+
+<p>
+
+    This test works by redefining the <tt>fillStyle</tt> on the bar on
+    mouseover. The bar is immediately rendered, and then the label's text property
+    is set to the evaluated <tt>fillStyle</tt>. This property value can be queried
+    because rendering does not blindly erase the <tt>scene</tt> and <tt>index</tt>
+    attributes associated with bar after rendering.
+
+</body>
 </html>

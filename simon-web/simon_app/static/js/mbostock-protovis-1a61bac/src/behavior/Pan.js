@@ -37,74 +37,74 @@
  * @see pv.Behavior.zoom
  * @see pv.Panel#transform
  */
-pv.Behavior.pan = function() {
-  var scene, // scene context
-      index, // scene context
-      m1, // transformation matrix at the start of panning
-      v1, // mouse location at the start of panning
-      k, // inverse scale
-      bound; // whether to bound to the panel
+pv.Behavior.pan = function () {
+    var scene, // scene context
+        index, // scene context
+        m1, // transformation matrix at the start of panning
+        v1, // mouse location at the start of panning
+        k, // inverse scale
+        bound; // whether to bound to the panel
 
-  /** @private */
-  function mousedown() {
-    index = this.index;
-    scene = this.scene;
-    v1 = pv.vector(pv.event.pageX, pv.event.pageY);
-    m1 = this.transform();
-    k = 1 / (m1.k * this.scale);
-    if (bound) {
-      bound = {
-        x: (1 - m1.k) * this.width(),
-        y: (1 - m1.k) * this.height()
-      };
-    }
-  }
-
-  /** @private */
-  function mousemove() {
-    if (!scene) return;
-    scene.mark.context(scene, index, function() {
-        var x = (pv.event.pageX - v1.x) * k,
-            y = (pv.event.pageY - v1.y) * k,
-            m = m1.translate(x, y);
+    /** @private */
+    function mousedown() {
+        index = this.index;
+        scene = this.scene;
+        v1 = pv.vector(pv.event.pageX, pv.event.pageY);
+        m1 = this.transform();
+        k = 1 / (m1.k * this.scale);
         if (bound) {
-          m.x = Math.max(bound.x, Math.min(0, m.x));
-          m.y = Math.max(bound.y, Math.min(0, m.y));
+            bound = {
+                x: (1 - m1.k) * this.width(),
+                y: (1 - m1.k) * this.height()
+            };
         }
-        this.transform(m).render();
-      });
-    pv.Mark.dispatch("pan", scene, index);
-  }
-
-  /** @private */
-  function mouseup() {
-    scene = null;
-  }
-
-  /**
-   * Sets or gets the bound parameter. If bounding is enabled, the user will not
-   * be able to pan outside the initial panel bounds; this typically applies
-   * only when the pan behavior is used in tandem with the zoom behavior.
-   * Bounding is not enabled by default.
-   *
-   * <p>Note: enabling bounding after panning has already occurred will not
-   * immediately reset the transform. Bounding should be enabled before the
-   * panning behavior is applied.
-   *
-   * @function
-   * @returns {pv.Behavior.pan} this, or the current bound parameter.
-   * @name pv.Behavior.pan.prototype.bound
-   * @param {boolean} [x] the new bound parameter.
-   */
-  mousedown.bound = function(x) {
-    if (arguments.length) {
-      bound = Boolean(x);
-      return this;
     }
-    return Boolean(bound);
-  };
 
-  pv.listen(window, "mousemove", mousemove);
-  pv.listen(window, "mouseup", mouseup);
-  return mousedown;
+    /** @private */
+    function mousemove() {
+        if (!scene) return;
+        scene.mark.context(scene, index, function () {
+            var x = (pv.event.pageX - v1.x) * k,
+                y = (pv.event.pageY - v1.y) * k,
+                m = m1.translate(x, y);
+            if (bound) {
+                m.x = Math.max(bound.x, Math.min(0, m.x));
+                m.y = Math.max(bound.y, Math.min(0, m.y));
+            }
+            this.transform(m).render();
+        });
+        pv.Mark.dispatch("pan", scene, index);
+    }
+
+    /** @private */
+    function mouseup() {
+        scene = null;
+    }
+
+    /**
+     * Sets or gets the bound parameter. If bounding is enabled, the user will not
+     * be able to pan outside the initial panel bounds; this typically applies
+     * only when the pan behavior is used in tandem with the zoom behavior.
+     * Bounding is not enabled by default.
+     *
+     * <p>Note: enabling bounding after panning has already occurred will not
+     * immediately reset the transform. Bounding should be enabled before the
+     * panning behavior is applied.
+     *
+     * @function
+     * @returns {pv.Behavior.pan} this, or the current bound parameter.
+     * @name pv.Behavior.pan.prototype.bound
+     * @param {boolean} [x] the new bound parameter.
+     */
+    mousedown.bound = function (x) {
+        if (arguments.length) {
+            bound = Boolean(x);
+            return this;
+        }
+        return Boolean(bound);
+    };
+
+    pv.listen(window, "mousemove", mousemove);
+    pv.listen(window, "mouseup", mouseup);
+    return mousedown;
 };

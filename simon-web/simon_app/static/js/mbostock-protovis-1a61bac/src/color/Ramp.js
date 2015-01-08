@@ -10,8 +10,8 @@
  * @returns {Function} a color ramp from <tt>start</tt> to <tt>end</tt>.
  * @see pv.Scale.linear
  */
-pv.ramp = function(start, end) {
-  var scale = pv.Scale.linear();
-  scale.range.apply(scale, arguments);
-  return scale;
+pv.ramp = function (start, end) {
+    var scale = pv.Scale.linear();
+    scale.range.apply(scale, arguments);
+    return scale;
 };

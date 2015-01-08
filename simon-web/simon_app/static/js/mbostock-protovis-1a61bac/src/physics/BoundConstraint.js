@@ -16,60 +16,60 @@
  * @see pv.Layout.Force
  * @extends pv.Constraint
  */
-pv.Constraint.bound = function() {
-  var constraint = {},
-      x,
-      y;
+pv.Constraint.bound = function () {
+    var constraint = {},
+        x,
+        y;
 
-  /**
-   * Sets or gets the bounds on the x-coordinate.
-   *
-   * @function
-   * @name pv.Constraint.bound.prototype.x
-   * @param {number} min the minimum allowed x-coordinate.
-   * @param {number} max the maximum allowed x-coordinate.
-   * @returns {pv.Constraint.bound} this.
-   */
-  constraint.x = function(min, max) {
-    if (arguments.length) {
-      x = {min: Math.min(min, max), max: Math.max(min, max)};
-      return this;
-    }
-    return x;
-  };
+    /**
+     * Sets or gets the bounds on the x-coordinate.
+     *
+     * @function
+     * @name pv.Constraint.bound.prototype.x
+     * @param {number} min the minimum allowed x-coordinate.
+     * @param {number} max the maximum allowed x-coordinate.
+     * @returns {pv.Constraint.bound} this.
+     */
+    constraint.x = function (min, max) {
+        if (arguments.length) {
+            x = {min: Math.min(min, max), max: Math.max(min, max)};
+            return this;
+        }
+        return x;
+    };
 
-  /**
-   * Sets or gets the bounds on the y-coordinate.
-   *
-   * @function
-   * @name pv.Constraint.bound.prototype.y
-   * @param {number} min the minimum allowed y-coordinate.
-   * @param {number} max the maximum allowed y-coordinate.
-   * @returns {pv.Constraint.bound} this.
-   */
-  constraint.y = function(min, max) {
-    if (arguments.length) {
-      y = {min: Math.min(min, max), max: Math.max(min, max)};
-      return this;
-    }
-    return y;
-  };
+    /**
+     * Sets or gets the bounds on the y-coordinate.
+     *
+     * @function
+     * @name pv.Constraint.bound.prototype.y
+     * @param {number} min the minimum allowed y-coordinate.
+     * @param {number} max the maximum allowed y-coordinate.
+     * @returns {pv.Constraint.bound} this.
+     */
+    constraint.y = function (min, max) {
+        if (arguments.length) {
+            y = {min: Math.min(min, max), max: Math.max(min, max)};
+            return this;
+        }
+        return y;
+    };
 
-  /**
-   * Applies this constraint to the specified particles.
-   *
-   * @function
-   * @name pv.Constraint.bound.prototype.apply
-   * @param {pv.Particle} particles particles to which to apply this constraint.
-   */
-  constraint.apply = function(particles) {
-    if (x) for (var p = particles; p; p = p.next) {
-      p.x = p.x < x.min ? x.min : (p.x > x.max ? x.max : p.x);
-    }
-    if (y) for (var p = particles; p; p = p.next) {
-      p.y = p.y < y.min ? y.min : (p.y > y.max ? y.max : p.y);
-    }
-  };
+    /**
+     * Applies this constraint to the specified particles.
+     *
+     * @function
+     * @name pv.Constraint.bound.prototype.apply
+     * @param {pv.Particle} particles particles to which to apply this constraint.
+     */
+    constraint.apply = function (particles) {
+        if (x) for (var p = particles; p; p = p.next) {
+            p.x = p.x < x.min ? x.min : (p.x > x.max ? x.max : p.x);
+        }
+        if (y) for (var p = particles; p; p = p.next) {
+            p.y = p.y < y.min ? y.min : (p.y > y.max ? y.max : p.y);
+        }
+    };
 
-  return constraint;
+    return constraint;
 };

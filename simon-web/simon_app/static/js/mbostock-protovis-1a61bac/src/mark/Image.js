@@ -21,8 +21,8 @@
  *
  * @extends pv.Bar
  */
-pv.Image = function() {
-  pv.Bar.call(this);
+pv.Image = function () {
+    pv.Bar.call(this);
 };
 
 pv.Image.prototype = pv.extend(pv.Bar)
@@ -93,62 +93,62 @@ pv.Image.prototype.defaults = new pv.Image()
  * @param {function} f the new sizing function.
  * @returns {pv.Layout.Pack} this.
  */
-pv.Image.prototype.image = function(f) {
-  /** @private */
-  this.$image = function() {
-      var c = f.apply(this, arguments);
-      return c == null ? pv.Color.transparent
-          : typeof c == "string" ? pv.color(c)
-          : c;
+pv.Image.prototype.image = function (f) {
+    /** @private */
+    this.$image = function () {
+        var c = f.apply(this, arguments);
+        return c == null ? pv.Color.transparent
+            : typeof c == "string" ? pv.color(c)
+            : c;
     };
-  return this;
+    return this;
 };
 
 /** @private Scan the proto chain for an image function. */
-pv.Image.prototype.bind = function() {
-  pv.Bar.prototype.bind.call(this);
-  var binds = this.binds, mark = this;
-  do {
-    binds.image = mark.$image;
-  } while (!binds.image && (mark = mark.proto));
+pv.Image.prototype.bind = function () {
+    pv.Bar.prototype.bind.call(this);
+    var binds = this.binds, mark = this;
+    do {
+        binds.image = mark.$image;
+    } while (!binds.image && (mark = mark.proto));
 };
 
 /** @private */
-pv.Image.prototype.buildImplied = function(s) {
-  pv.Bar.prototype.buildImplied.call(this, s);
-  if (!s.visible) return;
+pv.Image.prototype.buildImplied = function (s) {
+    pv.Bar.prototype.buildImplied.call(this, s);
+    if (!s.visible) return;
 
-  /* Compute the implied image dimensions. */
-  if (s.imageWidth == null) s.imageWidth = s.width;
-  if (s.imageHeight == null) s.imageHeight = s.height;
+    /* Compute the implied image dimensions. */
+    if (s.imageWidth == null) s.imageWidth = s.width;
+    if (s.imageHeight == null) s.imageHeight = s.height;
 
-  /* Compute the pixel values. */
-  if ((s.url == null) && this.binds.image) {
+    /* Compute the pixel values. */
+    if ((s.url == null) && this.binds.image) {
 
-    /* Cache the canvas element to reuse across renders. */
-    var canvas = this.$canvas || (this.$canvas = document.createElement("canvas")),
-        context = canvas.getContext("2d"),
-        w = s.imageWidth,
-        h = s.imageHeight,
-        stack = pv.Mark.stack,
-        data;
+        /* Cache the canvas element to reuse across renders. */
+        var canvas = this.$canvas || (this.$canvas = document.createElement("canvas")),
+            context = canvas.getContext("2d"),
+            w = s.imageWidth,
+            h = s.imageHeight,
+            stack = pv.Mark.stack,
+            data;
 
-    /* Evaluate the image function, storing into a CanvasPixelArray. */
-    canvas.width = w;
-    canvas.height = h;
-    data = (s.image = context.createImageData(w, h)).data;
-    stack.unshift(null, null);
-    for (var y = 0, p = 0; y < h; y++) {
-      stack[1] = y;
-      for (var x = 0; x < w; x++) {
-        stack[0] = x;
-        var color = this.binds.image.apply(this, stack);
-        data[p++] = color.r;
-        data[p++] = color.g;
-        data[p++] = color.b;
-        data[p++] = 255 * color.a;
-      }
+        /* Evaluate the image function, storing into a CanvasPixelArray. */
+        canvas.width = w;
+        canvas.height = h;
+        data = (s.image = context.createImageData(w, h)).data;
+        stack.unshift(null, null);
+        for (var y = 0, p = 0; y < h; y++) {
+            stack[1] = y;
+            for (var x = 0; x < w; x++) {
+                stack[0] = x;
+                var color = this.binds.image.apply(this, stack);
+                data[p++] = color.r;
+                data[p++] = color.g;
+                data[p++] = color.b;
+                data[p++] = 255 * color.a;
+            }
+        }
+        stack.splice(0, 2);
     }
-    stack.splice(0, 2);
-  }
 };

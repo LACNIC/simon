@@ -2,134 +2,136 @@
 
 {% block headers %}
 
-<script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
 
 {% endblock %}
 
-{% block css%}
+{% block css %}
 
 {% endblock %}
 
 {% block javascript %}
 
-var CATEGORIES = 30;
-var MIN = 0;
-var MAX = 900;
-var data = [];
-var ip = "";
+    var CATEGORIES = 30;
+    var MIN = 0;
+    var MAX = 900;
+    var data = [];
+    var ip = "";
 
-function updateChart(rtt) {
- 		var i = Math.floor((rtt - MIN) / (MAX / CATEGORIES));
- 		var viejo = $('#container').highcharts().series[0].data[i]['y'];
- 		$('#container').highcharts().series[0].data[i].update(++viejo);
-		
- 		$('#container').highcharts().setTitle({text: SIMON.summary(SIMON.quartiles.filter(SIMON.getNumericalValues(SIMON.points[0].results)))});
- 	}
+    function updateChart(rtt) {
+    var i = Math.floor((rtt - MIN) / (MAX / CATEGORIES));
+    var viejo = $('#container').highcharts().series[0].data[i]['y'];
+    $('#container').highcharts().series[0].data[i].update(++viejo);
 
-$(document).ready(function() {
-	SIMON.params = {
-		percentage : 1.0,
-		amount : 1,
-		numTests : 10,
-		post : true,
-		print : true,
-		console : 'console'
-	};
-	
-	SIMON.before_start = function() {
-		ip = $("#textfield").val();
-	};
-	
-	SIMON.after_each = function(rtt) {
-			updateChart(rtt);
- 			data.push(rtt);
-	};
-	
-	SIMON.after_points = function() {
-		var testPoint = {
-					"ip" : ip,
-					"url" : "",
-					"country" : "",
-					"countryName" : "",
-					"city" : "",
-					"region" : "",
-					"results" : [],
-					"throughputResults" : [],
-					"online" : false,
-					"onlineFinished" : false
-				};
-		SIMON.points[0] = testPoint;
-	};
-		
-		
+    $('#container').highcharts().setTitle({text:
+    SIMON.summary(SIMON.quartiles.filter(SIMON.getNumericalValues(SIMON.points[0].results)))});
+    }
 
-	/*
-	Generate data and categories arrays first
-	 */
-	var categories = [];
-	var radio = (MAX - MIN) / (2 * CATEGORIES);
-	for (var i = MIN; i < MAX; i = i + 2 * radio) {
-		categories.push('~' + (i + radio));// + '±' + (radio));
-		data.push(0);
-	}
+    $(document).ready(function() {
+    SIMON.params = {
+    percentage : 1.0,
+    amount : 1,
+    numTests : 900,
+    post : true,
+    print : true,
+    console : 'console'
+    };
 
-	$('#container').highcharts(
-			{
-				chart : {
-					type : 'column',
-					backgroundColor : 'rgba(255, 255, 255, 0.1)',
-					animation : false
-				},
-				plotOptions : {
-					column : {
-						shadow : false,
-						borderWidth : .5,
-						borderColor : '#666',
-						pointPadding : 0,
-						groupPadding : 0,
-						color : 'rgba(204,204,204,.85)'
-					}
-				},
-				title : {
-					text : 'Distribución'
-				},
-				xAxis : {
-					categories : categories
-				},
-				yAxis : {
-					title : {
-						text : 'Densidad'
-					}
-				},
-				series : [{
-					name : 'Latencia ' + '(categorías de '
-							+ ((MAX - MIN) / CATEGORIES) + ' ms)',
-					data : data
-				}]
-			});
-});
+    SIMON.before_start = function() {
+    ip = $("#textfield").val();
+    };
+
+    SIMON.after_each = function(rtt) {
+    updateChart(rtt);
+    data.push(rtt);
+    };
+
+    SIMON.after_points = function() {
+    var testPoint = {
+    "ip" : ip,
+    "url" : "",
+    "country" : "",
+    "countryName" : "",
+    "city" : "",
+    "region" : "",
+    "results" : [],
+    "throughputResults" : [],
+    "online" : false,
+    "onlineFinished" : false
+    };
+    SIMON.points[0] = testPoint;
+    };
+
+
+
+    /*
+    Generate data and categories arrays first
+    */
+    var categories = [];
+    var radio = (MAX - MIN) / (2 * CATEGORIES);
+    for (var i = MIN; i < MAX; i = i + 2 * radio) {
+    categories.push('~' + (i + radio));// + '±' + (radio));
+    data.push(0);
+    }
+
+    $('#container').highcharts(
+    {
+    chart : {
+    type : 'column',
+    backgroundColor : 'rgba(255, 255, 255, 0.1)',
+    animation : false
+    },
+    plotOptions : {
+    column : {
+    shadow : false,
+    borderWidth : .5,
+    borderColor : '#666',
+    pointPadding : 0,
+    groupPadding : 0,
+    color : 'rgba(204,204,204,.85)'
+    }
+    },
+    title : {
+    text : 'Distribución'
+    },
+    xAxis : {
+    categories : categories
+    },
+    yAxis : {
+    title : {
+    text : 'Densidad'
+    }
+    },
+    series : [{
+    name : 'Latencia ' + '(categorías de '
+    + ((MAX - MIN) / CATEGORIES) + ' ms)',
+    data : data
+    }]
+    });
+    });
 {% endblock %}
 
 {% block content %}
 
-	<h1>Latency Lab</h1>
-	<p>
-		Este espacio permite la exploración del medidor JavaScript. Para
-		iniciar una prueba, digite una dirección IP y oprima el botón de <i>Iniciar</i>.
-	</p>
-	<p>Debajo se muestra una gráfica que va mostrando la distribución
-		de los resultados obtenidos, y una consola que imprime los valores de
-		RTT percibidos en cada test. Bien comiencen las pruebas, la
-		distribución comenzará a variar, pero una vez transcurrido un
-		intervalo de tiempo la misma deberá estabilizarse y comenzar a
-		aproximarse a su forma para N --> inf.</p>
-	<input type="text" id="textfield" autofocus="autofocus"
-		placeholder="Dirección IP (v4 o v6)" style="width: 30em" />
-	<button onclick="SIMON.init()">
-		Iniciar</button>
+    <h1>Latency Lab</h1>
+    <p>
+        Este espacio permite la exploración del medidor JavaScript. Para
+        iniciar una prueba, digite una dirección IP y oprima el botón de <i>Iniciar</i>.
+    </p>
+    <p>Debajo se muestra una gráfica que va mostrando la distribución
+        de los resultados obtenidos, y una consola que imprime los valores de
+        RTT percibidos en cada test. Bien comiencen las pruebas, la
+        distribución comenzará a variar, pero una vez transcurrido un
+        intervalo de tiempo la misma deberá estabilizarse y comenzar a
+        aproximarse a su forma para N --> inf.</p>
+    <input type="text" id="textfield" autofocus="autofocus"
+           placeholder="Dirección IP (v4 o v6)" style="width: 30em"/>
+    <button onclick="SIMON.init()">
+        Iniciar
+    </button>
 
-	<div id="container" style="width: 100%; height: 300px; margin-top: 3em"></div>
-	<div id="console"
-		style="padding-bottom: 10px; padding-left: 10px; width: 910px; height: 150px; margin-top: 3em"></div>
+    <div id="container" style="width: 100%; height: 300px; margin-top: 3em"></div>
+    <div id="console"
+         style="padding-bottom: 10px; padding-left: 10px; width: 910px; height: 150px; margin-top: 3em"></div>
 
 {% endblock %}

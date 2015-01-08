@@ -19,8 +19,8 @@
  *
  * @extends pv.Mark
  */
-pv.Area = function() {
-  pv.Mark.call(this);
+pv.Area = function () {
+    pv.Mark.call(this);
 };
 
 pv.Area.prototype = pv.extend(pv.Mark)
@@ -148,21 +148,21 @@ pv.Area.prototype.defaults = new pv.Area()
     .tension(.7);
 
 /** @private Sets width and height to zero if null. */
-pv.Area.prototype.buildImplied = function(s) {
-  if (s.height == null) s.height = 0;
-  if (s.width == null) s.width = 0;
-  pv.Mark.prototype.buildImplied.call(this, s);
+pv.Area.prototype.buildImplied = function (s) {
+    if (s.height == null) s.height = 0;
+    if (s.width == null) s.width = 0;
+    pv.Mark.prototype.buildImplied.call(this, s);
 };
 
 /** @private Records which properties may be fixed. */
 pv.Area.fixed = {
-  lineWidth: 1,
-  lineJoin: 1,
-  strokeStyle: 1,
-  fillStyle: 1,
-  segmented: 1,
-  interpolate: 1,
-  tension: 1
+    lineWidth: 1,
+    lineJoin: 1,
+    strokeStyle: 1,
+    fillStyle: 1,
+    segmented: 1,
+    interpolate: 1,
+    tension: 1
 };
 
 /**
@@ -170,25 +170,25 @@ pv.Area.fixed = {
  * evaluated, even if the first segment is not visible. Also cache which
  * properties are normally fixed.
  */
-pv.Area.prototype.bind = function() {
-  pv.Mark.prototype.bind.call(this);
-  var binds = this.binds,
-      required = binds.required,
-      optional = binds.optional;
-  for (var i = 0, n = optional.length; i < n; i++) {
-    var p = optional[i];
-    p.fixed = p.name in pv.Area.fixed;
-    if (p.name == "segmented") {
-      required.push(p);
-      optional.splice(i, 1);
-      i--;
-      n--;
+pv.Area.prototype.bind = function () {
+    pv.Mark.prototype.bind.call(this);
+    var binds = this.binds,
+        required = binds.required,
+        optional = binds.optional;
+    for (var i = 0, n = optional.length; i < n; i++) {
+        var p = optional[i];
+        p.fixed = p.name in pv.Area.fixed;
+        if (p.name == "segmented") {
+            required.push(p);
+            optional.splice(i, 1);
+            i--;
+            n--;
+        }
     }
-  }
 
-  /* Cache the original arrays so they can be restored on build. */
-  this.binds.$required = required;
-  this.binds.$optional = optional;
+    /* Cache the original arrays so they can be restored on build. */
+    this.binds.$required = required;
+    this.binds.$optional = optional;
 };
 
 /**
@@ -198,36 +198,39 @@ pv.Area.prototype.bind = function() {
  * although their values are propagated to subsequent instances, so that they
  * are available for property chaining and the like.
  */
-pv.Area.prototype.buildInstance = function(s) {
-  var binds = this.binds;
+pv.Area.prototype.buildInstance = function (s) {
+    var binds = this.binds;
 
-  /* Handle fixed properties on secondary instances. */
-  if (this.index) {
-    var fixed = binds.fixed;
+    /* Handle fixed properties on secondary instances. */
+    if (this.index) {
+        var fixed = binds.fixed;
 
-    /* Determine which properties are fixed. */
-    if (!fixed) {
-      fixed = binds.fixed = [];
-      function f(p) { return !p.fixed || (fixed.push(p), false); }
-      binds.required = binds.required.filter(f);
-      if (!this.scene[0].segmented) binds.optional = binds.optional.filter(f);
+        /* Determine which properties are fixed. */
+        if (!fixed) {
+            fixed = binds.fixed = [];
+            function f(p) {
+                return !p.fixed || (fixed.push(p), false);
+            }
+
+            binds.required = binds.required.filter(f);
+            if (!this.scene[0].segmented) binds.optional = binds.optional.filter(f);
+        }
+
+        /* Copy fixed property values from the first instance. */
+        for (var i = 0, n = fixed.length; i < n; i++) {
+            var p = fixed[i].name;
+            s[p] = this.scene[0][p];
+        }
     }
 
-    /* Copy fixed property values from the first instance. */
-    for (var i = 0, n = fixed.length; i < n; i++) {
-      var p = fixed[i].name;
-      s[p] = this.scene[0][p];
+    /* Evaluate all properties on the first instance. */
+    else {
+        binds.required = binds.$required;
+        binds.optional = binds.$optional;
+        binds.fixed = null;
     }
-  }
 
-  /* Evaluate all properties on the first instance. */
-  else {
-    binds.required = binds.$required;
-    binds.optional = binds.$optional;
-    binds.fixed = null;
-  }
-
-  pv.Mark.prototype.buildInstance.call(this, s);
+    pv.Mark.prototype.buildInstance.call(this, s);
 };
 
 /**
@@ -253,15 +256,15 @@ pv.Area.prototype.buildInstance = function(s) {
  * @param {string} name the anchor name; either a string or a property function.
  * @returns {pv.Anchor}
  */
-pv.Area.prototype.anchor = function(name) {
-  return pv.Mark.prototype.anchor.call(this, name)
-    .interpolate(function() {
-       return this.scene.target[this.index].interpolate;
-      })
-    .eccentricity(function() {
-       return this.scene.target[this.index].eccentricity;
-      })
-    .tension(function() {
-        return this.scene.target[this.index].tension;
-      });
+pv.Area.prototype.anchor = function (name) {
+    return pv.Mark.prototype.anchor.call(this, name)
+        .interpolate(function () {
+            return this.scene.target[this.index].interpolate;
+        })
+        .eccentricity(function () {
+            return this.scene.target[this.index].eccentricity;
+        })
+        .tension(function () {
+            return this.scene.target[this.index].tension;
+        });
 };

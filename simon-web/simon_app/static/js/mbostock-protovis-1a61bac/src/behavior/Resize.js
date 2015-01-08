@@ -56,49 +56,57 @@
  * @see pv.Behavior.select
  * @see pv.Behavior.drag
  */
-pv.Behavior.resize = function(side) {
-  var scene, // scene context
-      index, // scene context
-      r, // region being selected
-      m1; // initial mouse position
+pv.Behavior.resize = function (side) {
+    var scene, // scene context
+        index, // scene context
+        r, // region being selected
+        m1; // initial mouse position
 
-  /** @private */
-  function mousedown(d) {
-    index = this.index;
-    scene = this.scene;
-    m1 = this.mouse();
-    r = d;
-    switch (side) {
-      case "left": m1.x = r.x + r.dx; break;
-      case "right": m1.x = r.x; break;
-      case "top": m1.y = r.y + r.dy; break;
-      case "bottom": m1.y = r.y; break;
+    /** @private */
+    function mousedown(d) {
+        index = this.index;
+        scene = this.scene;
+        m1 = this.mouse();
+        r = d;
+        switch (side) {
+            case "left":
+                m1.x = r.x + r.dx;
+                break;
+            case "right":
+                m1.x = r.x;
+                break;
+            case "top":
+                m1.y = r.y + r.dy;
+                break;
+            case "bottom":
+                m1.y = r.y;
+                break;
+        }
+        pv.Mark.dispatch("resizestart", scene, index);
     }
-    pv.Mark.dispatch("resizestart", scene, index);
-  }
 
-  /** @private */
-  function mousemove() {
-    if (!scene) return;
-    scene.mark.context(scene, index, function() {
-        var m2 = this.mouse();
-        r.x = Math.max(0, Math.min(m1.x, m2.x));
-        r.y = Math.max(0, Math.min(m1.y, m2.y));
-        r.dx = Math.min(this.parent.width(), Math.max(m2.x, m1.x)) - r.x;
-        r.dy = Math.min(this.parent.height(), Math.max(m2.y, m1.y)) - r.y;
-        this.render();
-      });
-    pv.Mark.dispatch("resize", scene, index);
-  }
+    /** @private */
+    function mousemove() {
+        if (!scene) return;
+        scene.mark.context(scene, index, function () {
+            var m2 = this.mouse();
+            r.x = Math.max(0, Math.min(m1.x, m2.x));
+            r.y = Math.max(0, Math.min(m1.y, m2.y));
+            r.dx = Math.min(this.parent.width(), Math.max(m2.x, m1.x)) - r.x;
+            r.dy = Math.min(this.parent.height(), Math.max(m2.y, m1.y)) - r.y;
+            this.render();
+        });
+        pv.Mark.dispatch("resize", scene, index);
+    }
 
-  /** @private */
-  function mouseup() {
-    if (!scene) return;
-    pv.Mark.dispatch("resizeend", scene, index);
-    scene = null;
-  }
+    /** @private */
+    function mouseup() {
+        if (!scene) return;
+        pv.Mark.dispatch("resizeend", scene, index);
+        scene = null;
+    }
 
-  pv.listen(window, "mousemove", mousemove);
-  pv.listen(window, "mouseup", mouseup);
-  return mousedown;
+    pv.listen(window, "mousemove", mousemove);
+    pv.listen(window, "mouseup", mouseup);
+    return mousedown;
 };

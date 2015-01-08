@@ -23,8 +23,8 @@
  *
  * @extends pv.Mark
  */
-pv.Bar = function() {
-  pv.Mark.call(this);
+pv.Bar = function () {
+    pv.Mark.call(this);
 };
 
 pv.Bar.prototype = pv.extend(pv.Mark)

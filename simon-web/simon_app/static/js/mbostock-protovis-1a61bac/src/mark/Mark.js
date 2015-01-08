@@ -57,16 +57,16 @@
  *
  * <p>See also the <a href="../../api/">Protovis guide</a>.
  */
-pv.Mark = function() {
-  /*
-   * TYPE 0 constant defs
-   * TYPE 1 function defs
-   * TYPE 2 constant properties
-   * TYPE 3 function properties
-   * in order of evaluation!
-   */
-  this.$properties = [];
-  this.$handlers = {};
+pv.Mark = function () {
+    /*
+     * TYPE 0 constant defs
+     * TYPE 1 function defs
+     * TYPE 2 constant properties
+     * TYPE 3 function properties
+     * in order of evaluation!
+     */
+    this.$properties = [];
+    this.$handlers = {};
 };
 
 /** @private Records which properties are defined on this mark type. */
@@ -80,7 +80,7 @@ pv.Mark.cast = {};
  * given name.  This method should be called on a mark class prototype to define
  * each exposed property. (Note this refers to the JavaScript
  * <tt>prototype</tt>, not the Protovis mark prototype, which is the {@link
- * #proto} field.)
+    * #proto} field.)
  *
  * <p>The created property method supports several modes of invocation: <ol>
  *
@@ -129,21 +129,21 @@ pv.Mark.cast = {};
  * @param {string} name the property name.
  * @param {function} [cast] the cast function for this property.
  */
-pv.Mark.prototype.property = function(name, cast) {
-  if (!this.hasOwnProperty("properties")) {
-    this.properties = pv.extend(this.properties);
-  }
-  this.properties[name] = true;
+pv.Mark.prototype.property = function (name, cast) {
+    if (!this.hasOwnProperty("properties")) {
+        this.properties = pv.extend(this.properties);
+    }
+    this.properties[name] = true;
 
-  /*
-   * Define the setter-getter globally, since the default behavior should be the
-   * same for all properties, and since the Protovis inheritance chain is
-   * independent of the JavaScript inheritance chain. For example, anchors
-   * define a "name" property that is evaluated on derived marks, even though
-   * those marks don't normally have a name.
-   */
-  pv.Mark.prototype.propertyMethod(name, false, pv.Mark.cast[name] = cast);
-  return this;
+    /*
+     * Define the setter-getter globally, since the default behavior should be the
+     * same for all properties, and since the Protovis inheritance chain is
+     * independent of the JavaScript inheritance chain. For example, anchors
+     * define a "name" property that is evaluated on derived marks, even though
+     * those marks don't normally have a name.
+     */
+    pv.Mark.prototype.propertyMethod(name, false, pv.Mark.cast[name] = cast);
+    return this;
 };
 
 /**
@@ -158,48 +158,48 @@ pv.Mark.prototype.property = function(name, cast) {
  * @param {boolean} [def] whether is a property or a def.
  * @param {function} [cast] the cast function for this property.
  */
-pv.Mark.prototype.propertyMethod = function(name, def, cast) {
-  if (!cast) cast = pv.Mark.cast[name];
-  this[name] = function(v) {
+pv.Mark.prototype.propertyMethod = function (name, def, cast) {
+    if (!cast) cast = pv.Mark.cast[name];
+    this[name] = function (v) {
 
-      /* If this is a def, use it rather than property. */
-      if (def && this.scene) {
-        var defs = this.scene.defs;
-        if (arguments.length) {
-          defs[name] = {
-            id: (v == null) ? 0 : pv.id(),
-            value: ((v != null) && cast) ? cast(v) : v
-          };
-          return this;
+        /* If this is a def, use it rather than property. */
+        if (def && this.scene) {
+            var defs = this.scene.defs;
+            if (arguments.length) {
+                defs[name] = {
+                    id: (v == null) ? 0 : pv.id(),
+                    value: ((v != null) && cast) ? cast(v) : v
+                };
+                return this;
+            }
+            return defs[name] ? defs[name].value : null;
         }
-        return defs[name] ? defs[name].value : null;
-      }
 
-      /* If arguments are specified, set the property value. */
-      if (arguments.length) {
-        var type = !def << 1 | (typeof v == "function");
-        this.propertyValue(name, (type & 1 && cast) ? function() {
-            var x = v.apply(this, arguments);
-            return (x != null) ? cast(x) : null;
-          } : (((v != null) && cast) ? cast(v) : v)).type = type;
-        return this;
-      }
+        /* If arguments are specified, set the property value. */
+        if (arguments.length) {
+            var type = !def << 1 | (typeof v == "function");
+            this.propertyValue(name, (type & 1 && cast) ? function () {
+                var x = v.apply(this, arguments);
+                return (x != null) ? cast(x) : null;
+            } : (((v != null) && cast) ? cast(v) : v)).type = type;
+            return this;
+        }
 
-      return this.instance()[name];
+        return this.instance()[name];
     };
 };
 
 /** @private Sets the value of the property <i>name</i> to <i>v</i>. */
-pv.Mark.prototype.propertyValue = function(name, v) {
-  var properties = this.$properties, p = {name: name, id: pv.id(), value: v};
-  for (var i = 0; i < properties.length; i++) {
-    if (properties[i].name == name) {
-      properties.splice(i, 1);
-      break;
+pv.Mark.prototype.propertyValue = function (name, v) {
+    var properties = this.$properties, p = {name: name, id: pv.id(), value: v};
+    for (var i = 0; i < properties.length; i++) {
+        if (properties[i].name == name) {
+            properties.splice(i, 1);
+            break;
+        }
     }
-  }
-  properties.push(p);
-  return p;
+    properties.push(p);
+    return p;
 };
 
 /* Define all global properties. */
@@ -429,7 +429,9 @@ pv.Mark.prototype.scale = 1;
  * @type pv.Mark
  */
 pv.Mark.prototype.defaults = new pv.Mark()
-    .data(function(d) { return [d]; })
+    .data(function (d) {
+        return [d];
+    })
     .visible(true)
     .antialias(true)
     .events("painted");
@@ -445,10 +447,10 @@ pv.Mark.prototype.defaults = new pv.Mark()
  * @returns {pv.Mark} this mark.
  * @see #add
  */
-pv.Mark.prototype.extend = function(proto) {
-  this.proto = proto;
-  this.target = proto.target;
-  return this;
+pv.Mark.prototype.extend = function (proto) {
+    this.proto = proto;
+    this.target = proto.target;
+    return this;
 };
 
 /**
@@ -460,8 +462,8 @@ pv.Mark.prototype.extend = function(proto) {
  * @returns {pv.Mark} the new mark.
  * @see #extend
  */
-pv.Mark.prototype.add = function(type) {
-  return this.parent.add(type).extend(this);
+pv.Mark.prototype.add = function (type) {
+    return this.parent.add(type).extend(this);
 };
 
 /**
@@ -481,9 +483,9 @@ pv.Mark.prototype.add = function(type) {
  * @param {function} [v] an optional initializer; may be a constant or a
  * function.
  */
-pv.Mark.prototype.def = function(name, v) {
-  this.propertyMethod(name, true);
-  return this[name](arguments.length > 1 ? v : null);
+pv.Mark.prototype.def = function (name, v) {
+    this.propertyMethod(name, true);
+    return this[name](arguments.length > 1 ? v : null);
 };
 
 /**
@@ -512,67 +514,77 @@ pv.Mark.prototype.def = function(name, v) {
  * @param {string} name the anchor name; either a string or a property function.
  * @returns {pv.Anchor} the new anchor.
  */
-pv.Mark.prototype.anchor = function(name) {
-  if (!name) name = "center"; // default anchor name
-  return new pv.Anchor(this)
-    .name(name)
-    .data(function() {
-        return this.scene.target.map(function(s) { return s.data; });
-      })
-    .visible(function() {
-        return this.scene.target[this.index].visible;
-      })
-    .left(function() {
-        var s = this.scene.target[this.index], w = s.width || 0;
-        switch (this.name()) {
-          case "bottom":
-          case "top":
-          case "center": return s.left + w / 2;
-          case "left": return null;
-        }
-        return s.left + w;
-      })
-    .top(function() {
-        var s = this.scene.target[this.index], h = s.height || 0;
-        switch (this.name()) {
-          case "left":
-          case "right":
-          case "center": return s.top + h / 2;
-          case "top": return null;
-        }
-        return s.top + h;
-      })
-    .right(function() {
-        var s = this.scene.target[this.index];
-        return this.name() == "left" ? s.right + (s.width || 0) : null;
-      })
-    .bottom(function() {
-        var s = this.scene.target[this.index];
-        return this.name() == "top" ? s.bottom + (s.height || 0) : null;
-      })
-    .textAlign(function() {
-        switch (this.name()) {
-          case "bottom":
-          case "top":
-          case "center": return "center";
-          case "right": return "right";
-        }
-        return "left";
-      })
-    .textBaseline(function() {
-        switch (this.name()) {
-          case "right":
-          case "left":
-          case "center": return "middle";
-          case "top": return "top";
-        }
-        return "bottom";
-      });
+pv.Mark.prototype.anchor = function (name) {
+    if (!name) name = "center"; // default anchor name
+    return new pv.Anchor(this)
+        .name(name)
+        .data(function () {
+            return this.scene.target.map(function (s) {
+                return s.data;
+            });
+        })
+        .visible(function () {
+            return this.scene.target[this.index].visible;
+        })
+        .left(function () {
+            var s = this.scene.target[this.index], w = s.width || 0;
+            switch (this.name()) {
+                case "bottom":
+                case "top":
+                case "center":
+                    return s.left + w / 2;
+                case "left":
+                    return null;
+            }
+            return s.left + w;
+        })
+        .top(function () {
+            var s = this.scene.target[this.index], h = s.height || 0;
+            switch (this.name()) {
+                case "left":
+                case "right":
+                case "center":
+                    return s.top + h / 2;
+                case "top":
+                    return null;
+            }
+            return s.top + h;
+        })
+        .right(function () {
+            var s = this.scene.target[this.index];
+            return this.name() == "left" ? s.right + (s.width || 0) : null;
+        })
+        .bottom(function () {
+            var s = this.scene.target[this.index];
+            return this.name() == "top" ? s.bottom + (s.height || 0) : null;
+        })
+        .textAlign(function () {
+            switch (this.name()) {
+                case "bottom":
+                case "top":
+                case "center":
+                    return "center";
+                case "right":
+                    return "right";
+            }
+            return "left";
+        })
+        .textBaseline(function () {
+            switch (this.name()) {
+                case "right":
+                case "left":
+                case "center":
+                    return "middle";
+                case "top":
+                    return "top";
+            }
+            return "bottom";
+        });
 };
 
 /** @deprecated Replaced by {@link #target}. */
-pv.Mark.prototype.anchorTarget = function() {
-  return this.target;
+pv.Mark.prototype.anchorTarget = function () {
+    return this.target;
 };
 
 /**
@@ -584,8 +596,8 @@ pv.Mark.prototype.anchorTarget = function() {
  * @see #bottom
  * @returns {pv.Mark} this.
  */
-pv.Mark.prototype.margin = function(n) {
-  return this.left(n).right(n).top(n).bottom(n);
+pv.Mark.prototype.margin = function (n) {
+    return this.left(n).right(n).top(n).bottom(n);
 };
 
 /**
@@ -598,10 +610,10 @@ pv.Mark.prototype.margin = function(n) {
  *
  * @returns a node in the scene graph.
  */
-pv.Mark.prototype.instance = function(defaultIndex) {
-  var scene = this.scene || this.parent.instance(-1).children[this.childIndex],
-      index = !arguments.length || this.hasOwnProperty("index") ? this.index : defaultIndex;
-  return scene[index < 0 ? scene.length - 1 : index];
+pv.Mark.prototype.instance = function (defaultIndex) {
+    var scene = this.scene || this.parent.instance(-1).children[this.childIndex],
+        index = !arguments.length || this.hasOwnProperty("index") ? this.index : defaultIndex;
+    return scene[index < 0 ? scene.length - 1 : index];
 };
 
 /**
@@ -609,31 +621,31 @@ pv.Mark.prototype.instance = function(defaultIndex) {
  *
  * @see pv.Anchor
  */
-pv.Mark.prototype.instances = function(source) {
-  var mark = this, index = [], scene;
+pv.Mark.prototype.instances = function (source) {
+    var mark = this, index = [], scene;
 
-  /* Mirrored descent. */
-  while (!(scene = mark.scene)) {
-    source = source.parent;
-    index.push({index: source.index, childIndex: mark.childIndex});
-    mark = mark.parent;
-  }
-  while (index.length) {
-    var i = index.pop();
-    scene = scene[i.index].children[i.childIndex];
-  }
+    /* Mirrored descent. */
+    while (!(scene = mark.scene)) {
+        source = source.parent;
+        index.push({index: source.index, childIndex: mark.childIndex});
+        mark = mark.parent;
+    }
+    while (index.length) {
+        var i = index.pop();
+        scene = scene[i.index].children[i.childIndex];
+    }
 
-  /*
-   * When the anchor target is also an ancestor, as in the case of adding
-   * to a panel anchor, only generate one instance per panel. Also, set
-   * the margins to zero, since they are offset by the enclosing panel.
-   */
-  if (this.hasOwnProperty("index")) {
-    var s = pv.extend(scene[this.index]);
-    s.right = s.top = s.left = s.bottom = 0;
-    return [s];
-  }
-  return scene;
+    /*
+     * When the anchor target is also an ancestor, as in the case of adding
+     * to a panel anchor, only generate one instance per panel. Also, set
+     * the margins to zero, since they are offset by the enclosing panel.
+     */
+    if (this.hasOwnProperty("index")) {
+        var s = pv.extend(scene[this.index]);
+        s.right = s.top = s.left = s.bottom = 0;
+        return [s];
+    }
+    return scene;
 };
 
 /**
@@ -643,8 +655,8 @@ pv.Mark.prototype.instances = function(source) {
  *
  * @returns a node in the scene graph.
  */
-pv.Mark.prototype.first = function() {
-  return this.scene[0];
+pv.Mark.prototype.first = function () {
+    return this.scene[0];
 };
 
 /**
@@ -656,8 +668,8 @@ pv.Mark.prototype.first = function() {
  *
  * @returns a node in the scene graph.
  */
-pv.Mark.prototype.last = function() {
-  return this.scene[this.scene.length - 1];
+pv.Mark.prototype.last = function () {
+    return this.scene[this.scene.length - 1];
 };
 
 /**
@@ -666,8 +678,8 @@ pv.Mark.prototype.last = function() {
  *
  * @returns a node in the scene graph, or null.
  */
-pv.Mark.prototype.sibling = function() {
-  return (this.index == 0) ? null : this.scene[this.index - 1];
+pv.Mark.prototype.sibling = function () {
+    return (this.index == 0) ? null : this.scene[this.index - 1];
 };
 
 /**
@@ -677,9 +689,9 @@ pv.Mark.prototype.sibling = function() {
  *
  * @returns a node in the scene graph, or null.
  */
-pv.Mark.prototype.cousin = function() {
-  var p = this.parent, s = p && p.sibling();
-  return (s && s.children) ? s.children[this.childIndex][this.index] : null;
+pv.Mark.prototype.cousin = function () {
+    var p = this.parent, s = p && p.sibling();
+    return (s && s.children) ? s.children[this.childIndex][this.index] : null;
 };
 
 /**
@@ -695,104 +707,106 @@ pv.Mark.prototype.cousin = function() {
  * of the panel will be rendered; otherwise, all visible instances of the mark
  * will be rendered.
  */
-pv.Mark.prototype.render = function() {
-  var parent = this.parent,
-      stack = pv.Mark.stack;
+pv.Mark.prototype.render = function () {
+    var parent = this.parent,
+        stack = pv.Mark.stack;
 
-  /* For the first render, take it from the top. */
-  if (parent && !this.root.scene) {
-    this.root.render();
-    return;
-  }
+    /* For the first render, take it from the top. */
+    if (parent && !this.root.scene) {
+        this.root.render();
+        return;
+    }
 
-  /* Record the path to this mark. */
-  var indexes = [];
-  for (var mark = this; mark.parent; mark = mark.parent) {
-    indexes.unshift(mark.childIndex);
-  }
+    /* Record the path to this mark. */
+    var indexes = [];
+    for (var mark = this; mark.parent; mark = mark.parent) {
+        indexes.unshift(mark.childIndex);
+    }
 
-  /** @private */
-  function render(mark, depth, scale) {
-    mark.scale = scale;
-    if (depth < indexes.length) {
-      stack.unshift(null);
-      if (mark.hasOwnProperty("index")) {
-        renderInstance(mark, depth, scale);
-      } else {
-        for (var i = 0, n = mark.scene.length; i < n; i++) {
-          mark.index = i;
-          renderInstance(mark, depth, scale);
+    /** @private */
+    function render(mark, depth, scale) {
+        mark.scale = scale;
+        if (depth < indexes.length) {
+            stack.unshift(null);
+            if (mark.hasOwnProperty("index")) {
+                renderInstance(mark, depth, scale);
+            } else {
+                for (var i = 0, n = mark.scene.length; i < n; i++) {
+                    mark.index = i;
+                    renderInstance(mark, depth, scale);
+                }
+                delete mark.index;
+            }
+            stack.shift();
+        } else {
+            mark.build();
+
+            /*
+             * In the update phase, the scene is rendered by creating and updating
+             * elements and attributes in the SVG image. No properties are evaluated
+             * during the update phase; instead the values computed previously in the
+             * build phase are simply translated into SVG. The update phase is
+             * decoupled (see pv.Scene) to allow different rendering engines.
+             */
+            pv.Scene.scale = scale;
+            pv.Scene.updateAll(mark.scene);
         }
-        delete mark.index;
-      }
-      stack.shift();
-    } else {
-      mark.build();
-
-      /*
-       * In the update phase, the scene is rendered by creating and updating
-       * elements and attributes in the SVG image. No properties are evaluated
-       * during the update phase; instead the values computed previously in the
-       * build phase are simply translated into SVG. The update phase is
-       * decoupled (see pv.Scene) to allow different rendering engines.
-       */
-      pv.Scene.scale = scale;
-      pv.Scene.updateAll(mark.scene);
+        delete mark.scale;
     }
-    delete mark.scale;
-  }
 
-  /**
-   * @private Recursively renders the current instance of the specified mark.
-   * This is slightly tricky because `index` and `scene` properties may or may
-   * not already be set; if they are set, it means we are rendering only a
-   * specific instance; if they are unset, we are rendering all instances.
-   * Furthermore, we must preserve the original context of these properties when
-   * rendering completes.
-   *
-   * <p>Another tricky aspect is that the `scene` attribute should be set for
-   * any preceding children, so as to allow property chaining. This is
-   * consistent with first-pass rendering.
-   */
-  function renderInstance(mark, depth, scale) {
-    var s = mark.scene[mark.index], i;
-    if (s.visible) {
-      var childIndex = indexes[depth],
-          child = mark.children[childIndex];
+    /**
+     * @private Recursively renders the current instance of the specified mark.
+     * This is slightly tricky because `index` and `scene` properties may or may
+     * not already be set; if they are set, it means we are rendering only a
+     * specific instance; if they are unset, we are rendering all instances.
+     * Furthermore, we must preserve the original context of these properties when
+     * rendering completes.
+     *
+     * <p>Another tricky aspect is that the `scene` attribute should be set for
+     * any preceding children, so as to allow property chaining. This is
+     * consistent with first-pass rendering.
+     */
+    function renderInstance(mark, depth, scale) {
+        var s = mark.scene[mark.index], i;
+        if (s.visible) {
+            var childIndex = indexes[depth],
+                child = mark.children[childIndex];
 
-      /* Set preceding child scenes. */
-      for (i = 0; i < childIndex; i++) {
-        mark.children[i].scene = s.children[i];
-      }
+            /* Set preceding child scenes. */
+            for (i = 0; i < childIndex; i++) {
+                mark.children[i].scene = s.children[i];
+            }
 
-      /* Set current child scene, if necessary. */
-      stack[0] = s.data;
-      if (child.scene) {
-        render(child, depth + 1, scale * s.transform.k);
-      } else {
-        child.scene = s.children[childIndex];
-        render(child, depth + 1, scale * s.transform.k);
-        delete child.scene;
-      }
+            /* Set current child scene, if necessary. */
+            stack[0] = s.data;
+            if (child.scene) {
+                render(child, depth + 1, scale * s.transform.k);
+            } else {
+                child.scene = s.children[childIndex];
+                render(child, depth + 1, scale * s.transform.k);
+                delete child.scene;
+            }
 
-      /* Clear preceding child scenes. */
-      for (i = 0; i < childIndex; i++) {
-        delete mark.children[i].scene;
-      }
+            /* Clear preceding child scenes. */
+            for (i = 0; i < childIndex; i++) {
+                delete mark.children[i].scene;
+            }
+        }
     }
-  }
 
-  /* Bind this mark's property definitions. */
-  this.bind();
+    /* Bind this mark's property definitions. */
+    this.bind();
 
-  /* The render context is the first ancestor with an explicit index. */
-  while (parent && !parent.hasOwnProperty("index")) parent = parent.parent;
+    /* The render context is the first ancestor with an explicit index. */
+    while (parent && !parent.hasOwnProperty("index")) parent = parent.parent;
 
-  /* Recursively render all instances of this mark. */
-  this.context(
-      parent ? parent.scene : undefined,
-      parent ? parent.index : -1,
-      function() { render(this.root, 0, 1); });
+    /* Recursively render all instances of this mark. */
+    this.context(
+        parent ? parent.scene : undefined,
+        parent ? parent.index : -1,
+        function () {
+            render(this.root, 0, 1);
+        });
 };
 
 /** @private Stores the current data stack. */
@@ -802,55 +816,66 @@ pv.Mark.stack = [];
  * @private In the bind phase, inherited property definitions are cached so they
  * do not need to be queried during build.
  */
-pv.Mark.prototype.bind = function() {
-  var seen = {}, types = [[], [], [], []], data, visible;
+pv.Mark.prototype.bind = function () {
+    var seen = {}, types = [
+        [],
+        [],
+        [],
+        []
+    ], data, visible;
 
-  /** Scans the proto chain for the specified mark. */
-  function bind(mark) {
-    do {
-      var properties = mark.$properties;
-      for (var i = properties.length - 1; i >= 0 ; i--) {
-        var p = properties[i];
-        if (!(p.name in seen)) {
-          seen[p.name] = p;
-          switch (p.name) {
-            case "data": data = p; break;
-            case "visible": visible = p; break;
-            default: types[p.type].push(p); break;
-          }
-        }
-      }
-    } while (mark = mark.proto);
-  }
-
-  /* Scan the proto chain for all defined properties. */
-  bind(this);
-  bind(this.defaults);
-  types[1].reverse();
-  types[3].reverse();
-
-  /* Any undefined properties are null. */
-  var mark = this;
-  do for (var name in mark.properties) {
-    if (!(name in seen)) {
-      types[2].push(seen[name] = {name: name, type: 2, value: null});
+    /** Scans the proto chain for the specified mark. */
+    function bind(mark) {
+        do {
+            var properties = mark.$properties;
+            for (var i = properties.length - 1; i >= 0; i--) {
+                var p = properties[i];
+                if (!(p.name in seen)) {
+                    seen[p.name] = p;
+                    switch (p.name) {
+                        case "data":
+                            data = p;
+                            break;
+                        case "visible":
+                            visible = p;
+                            break;
+                        default:
+                            types[p.type].push(p);
+                            break;
+                    }
+                }
+            }
+        } while (mark = mark.proto);
     }
-  } while (mark = mark.proto);
 
-  /* Define setter-getter for inherited defs. */
-  var defs = types[0].concat(types[1]);
-  for (var i = 0; i < defs.length; i++) {
-    this.propertyMethod(defs[i].name, true);
-  }
+    /* Scan the proto chain for all defined properties. */
+    bind(this);
+    bind(this.defaults);
+    types[1].reverse();
+    types[3].reverse();
 
-  /* Setup binds to evaluate constants before functions. */
-  this.binds = {
-    properties: seen,
-    data: data,
-    defs: defs,
-    required: [visible],
-    optional: pv.blend(types)
-  };
+    /* Any undefined properties are null. */
+    var mark = this;
+    do for (var name in mark.properties) {
+        if (!(name in seen)) {
+            types[2].push(seen[name] = {name: name, type: 2, value: null});
+        }
+    } while (mark = mark.proto);
+
+    /* Define setter-getter for inherited defs. */
+    var defs = types[0].concat(types[1]);
+    for (var i = 0; i < defs.length; i++) {
+        this.propertyMethod(defs[i].name, true);
+    }
+
+    /* Setup binds to evaluate constants before functions. */
+    this.binds = {
+        properties: seen,
+        data: data,
+        defs: defs,
+        required: [visible],
+        optional: pv.blend(types)
+    };
 };
 
 /**
@@ -887,56 +912,56 @@ pv.Mark.prototype.bind = function() {
  *
  * @param parent the instance of the parent panel from the scene graph.
  */
-pv.Mark.prototype.build = function() {
-  var scene = this.scene, stack = pv.Mark.stack;
-  if (!scene) {
-    scene = this.scene = [];
-    scene.mark = this;
-    scene.type = this.type;
-    scene.childIndex = this.childIndex;
-    if (this.parent) {
-      scene.parent = this.parent.scene;
-      scene.parentIndex = this.parent.index;
+pv.Mark.prototype.build = function () {
+    var scene = this.scene, stack = pv.Mark.stack;
+    if (!scene) {
+        scene = this.scene = [];
+        scene.mark = this;
+        scene.type = this.type;
+        scene.childIndex = this.childIndex;
+        if (this.parent) {
+            scene.parent = this.parent.scene;
+            scene.parentIndex = this.parent.index;
+        }
     }
-  }
 
-  /* Resolve anchor target. */
-  if (this.target) scene.target = this.target.instances(scene);
+    /* Resolve anchor target. */
+    if (this.target) scene.target = this.target.instances(scene);
 
-  /* Evaluate defs. */
-  if (this.binds.defs.length) {
-    var defs = scene.defs;
-    if (!defs) scene.defs = defs = {};
-    for (var i = 0; i < this.binds.defs.length; i++) {
-      var p = this.binds.defs[i], d = defs[p.name];
-      if (!d || (p.id > d.id)) {
-        defs[p.name] = {
-          id: 0, // this def will be re-evaluated on next build
-          value: (p.type & 1) ? p.value.apply(this, stack) : p.value
-        };
-      }
+    /* Evaluate defs. */
+    if (this.binds.defs.length) {
+        var defs = scene.defs;
+        if (!defs) scene.defs = defs = {};
+        for (var i = 0; i < this.binds.defs.length; i++) {
+            var p = this.binds.defs[i], d = defs[p.name];
+            if (!d || (p.id > d.id)) {
+                defs[p.name] = {
+                    id: 0, // this def will be re-evaluated on next build
+                    value: (p.type & 1) ? p.value.apply(this, stack) : p.value
+                };
+            }
+        }
     }
-  }
 
-  /* Evaluate special data property. */
-  var data = this.binds.data;
-  data = data.type & 1 ? data.value.apply(this, stack) : data.value;
+    /* Evaluate special data property. */
+    var data = this.binds.data;
+    data = data.type & 1 ? data.value.apply(this, stack) : data.value;
 
-  /* Create, update and delete scene nodes. */
-  stack.unshift(null);
-  scene.length = data.length;
-  for (var i = 0; i < data.length; i++) {
-    pv.Mark.prototype.index = this.index = i;
-    var s = scene[i];
-    if (!s) scene[i] = s = {};
-    s.data = stack[0] = data[i];
-    this.buildInstance(s);
-  }
-  pv.Mark.prototype.index = -1;
-  delete this.index;
-  stack.shift();
+    /* Create, update and delete scene nodes. */
+    stack.unshift(null);
+    scene.length = data.length;
+    for (var i = 0; i < data.length; i++) {
+        pv.Mark.prototype.index = this.index = i;
+        var s = scene[i];
+        if (!s) scene[i] = s = {};
+        s.data = stack[0] = data[i];
+        this.buildInstance(s);
+    }
+    pv.Mark.prototype.index = -1;
+    delete this.index;
+    stack.shift();
 
-  return this;
+    return this;
 };
 
 /**
@@ -946,23 +971,27 @@ pv.Mark.prototype.build = function() {
  * @param s a node in the scene graph; the instance of the mark to build.
  * @param properties an array of properties.
  */
-pv.Mark.prototype.buildProperties = function(s, properties) {
-  for (var i = 0, n = properties.length; i < n; i++) {
-    var p = properties[i], v = p.value; // assume case 2 (constant)
-    switch (p.type) {
-      case 0:
-      case 1: v = this.scene.defs[p.name].value; break;
-      case 3: v = v.apply(this, pv.Mark.stack); break;
+pv.Mark.prototype.buildProperties = function (s, properties) {
+    for (var i = 0, n = properties.length; i < n; i++) {
+        var p = properties[i], v = p.value; // assume case 2 (constant)
+        switch (p.type) {
+            case 0:
+            case 1:
+                v = this.scene.defs[p.name].value;
+                break;
+            case 3:
+                v = v.apply(this, pv.Mark.stack);
+                break;
+        }
+        s[p.name] = v;
     }
-    s[p.name] = v;
-  }
 };
 
 /**
  * @private Evaluates all of the properties for this mark for the specified
  * instance <tt>s</tt> in the scene graph. The set of properties to evaluate is
  * retrieved from the {@link #properties} array for this mark type (see {@link
- * #type}).  After these properties are evaluated, any <b>implied</b> properties
+    * #type}).  After these properties are evaluated, any <b>implied</b> properties
  * may be computed by the mark and set on the scene graph; see
  * {@link #buildImplied}.
  *
@@ -972,12 +1001,12 @@ pv.Mark.prototype.buildProperties = function(s, properties) {
  *
  * @param s a node in the scene graph; the instance of the mark to build.
  */
-pv.Mark.prototype.buildInstance = function(s) {
-  this.buildProperties(s, this.binds.required);
-  if (s.visible) {
-    this.buildProperties(s, this.binds.optional);
-    this.buildImplied(s);
-  }
+pv.Mark.prototype.buildInstance = function (s) {
+    this.buildProperties(s, this.binds.required);
+    if (s.visible) {
+        this.buildProperties(s, this.binds.optional);
+        this.buildImplied(s);
+    }
 };
 
 /**
@@ -990,58 +1019,58 @@ pv.Mark.prototype.buildInstance = function(s) {
  *
  * @param s a node in the scene graph; the instance of the mark to build.
  */
-pv.Mark.prototype.buildImplied = function(s) {
-  var l = s.left;
-  var r = s.right;
-  var t = s.top;
-  var b = s.bottom;
+pv.Mark.prototype.buildImplied = function (s) {
+    var l = s.left;
+    var r = s.right;
+    var t = s.top;
+    var b = s.bottom;
 
-  /* Assume width and height are zero if not supported by this mark type. */
-  var p = this.properties;
-  var w = p.width ? s.width : 0;
-  var h = p.height ? s.height : 0;
+    /* Assume width and height are zero if not supported by this mark type. */
+    var p = this.properties;
+    var w = p.width ? s.width : 0;
+    var h = p.height ? s.height : 0;
 
-  /* Compute implied width, right and left. */
-  var width = this.parent ? this.parent.width() : (w + l + r);
-  if (w == null) {
-    w = width - (r = r || 0) - (l = l || 0);
-  } else if (r == null) {
-    if (l == null) {
-      l = r = (width - w) / 2;
-    } else {
-      r = width - w - (l = l || 0);
+    /* Compute implied width, right and left. */
+    var width = this.parent ? this.parent.width() : (w + l + r);
+    if (w == null) {
+        w = width - (r = r || 0) - (l = l || 0);
+    } else if (r == null) {
+        if (l == null) {
+            l = r = (width - w) / 2;
+        } else {
+            r = width - w - (l = l || 0);
+        }
+    } else if (l == null) {
+        l = width - w - r;
     }
-  } else if (l == null) {
-    l = width - w - r;
-  }
 
-  /* Compute implied height, bottom and top. */
-  var height = this.parent ? this.parent.height() : (h + t + b);
-  if (h == null) {
-    h = height - (t = t || 0) - (b = b || 0);
-  } else if (b == null) {
-    if (t == null) {
-      b = t = (height - h) / 2;
-    } else {
-      b = height - h - (t = t || 0);
+    /* Compute implied height, bottom and top. */
+    var height = this.parent ? this.parent.height() : (h + t + b);
+    if (h == null) {
+        h = height - (t = t || 0) - (b = b || 0);
+    } else if (b == null) {
+        if (t == null) {
+            b = t = (height - h) / 2;
+        } else {
+            b = height - h - (t = t || 0);
+        }
+    } else if (t == null) {
+        t = height - h - b;
     }
-  } else if (t == null) {
-    t = height - h - b;
-  }
 
-  s.left = l;
-  s.right = r;
-  s.top = t;
-  s.bottom = b;
+    s.left = l;
+    s.right = r;
+    s.top = t;
+    s.bottom = b;
 
-  /* Only set width and height if they are supported by this mark type. */
-  if (p.width) s.width = w;
-  if (p.height) s.height = h;
+    /* Only set width and height if they are supported by this mark type. */
+    if (p.width) s.width = w;
+    if (p.height) s.height = h;
 
-  /* Set any null colors to pv.Color.transparent. */
-  if (p.textStyle && !s.textStyle) s.textStyle = pv.Color.transparent;
-  if (p.fillStyle && !s.fillStyle) s.fillStyle = pv.Color.transparent;
-  if (p.strokeStyle && !s.strokeStyle) s.strokeStyle = pv.Color.transparent;
+    /* Set any null colors to pv.Color.transparent. */
+    if (p.textStyle && !s.textStyle) s.textStyle = pv.Color.transparent;
+    if (p.fillStyle && !s.fillStyle) s.fillStyle = pv.Color.transparent;
+    if (p.strokeStyle && !s.strokeStyle) s.strokeStyle = pv.Color.transparent;
 };
 
 /**
@@ -1051,26 +1080,28 @@ pv.Mark.prototype.buildImplied = function(s) {
  *
  * @returns {pv.Vector} the mouse location.
  */
-pv.Mark.prototype.mouse = function() {
+pv.Mark.prototype.mouse = function () {
 
-  /* Compute xy-coordinates relative to the panel. */
-  var x = pv.event.pageX || 0,
-      y = pv.event.pageY || 0,
-      n = this.root.canvas();
-  do {
-    x -= n.offsetLeft;
-    y -= n.offsetTop;
-  } while (n = n.offsetParent);
+    /* Compute xy-coordinates relative to the panel. */
+    var x = pv.event.pageX || 0,
+        y = pv.event.pageY || 0,
+        n = this.root.canvas();
+    do {
+        x -= n.offsetLeft;
+        y -= n.offsetTop;
+    } while (n = n.offsetParent);
 
-  /* Compute the inverse transform of all enclosing panels. */
-  var t = pv.Transform.identity,
-      p = this.properties.transform ? this : this.parent,
-      pz = [];
-  do { pz.push(p); } while (p = p.parent);
-  while (p = pz.pop()) t = t.translate(p.left(), p.top()).times(p.transform());
-  t = t.invert();
+    /* Compute the inverse transform of all enclosing panels. */
+    var t = pv.Transform.identity,
+        p = this.properties.transform ? this : this.parent,
+        pz = [];
+    do {
+        pz.push(p);
+    } while (p = p.parent);
+    while (p = pz.pop()) t = t.translate(p.left(), p.top()).times(p.transform());
+    t = t.invert();
 
-  return pv.vector(x * t.k + t.x, y * t.k + t.y);
+    return pv.vector(x * t.k + t.x, y * t.k + t.y);
 };
 
 /**
@@ -1121,96 +1152,96 @@ pv.Mark.prototype.mouse = function() {
  * @param {function} handler the event handler.
  * @returns {pv.Mark} this.
  */
-pv.Mark.prototype.event = function(type, handler) {
-  this.$handlers[type] = pv.functor(handler);
-  return this;
+pv.Mark.prototype.event = function (type, handler) {
+    this.$handlers[type] = pv.functor(handler);
+    return this;
 };
 
 /** @private Evaluates the function <i>f</i> with the specified context. */
-pv.Mark.prototype.context = function(scene, index, f) {
-  var proto = pv.Mark.prototype,
-      stack = pv.Mark.stack,
-      oscene = pv.Mark.scene,
-      oindex = proto.index;
+pv.Mark.prototype.context = function (scene, index, f) {
+    var proto = pv.Mark.prototype,
+        stack = pv.Mark.stack,
+        oscene = pv.Mark.scene,
+        oindex = proto.index;
 
-  /** @private Sets the context. */
-  function apply(scene, index) {
-    pv.Mark.scene = scene;
-    proto.index = index;
-    if (!scene) return;
+    /** @private Sets the context. */
+    function apply(scene, index) {
+        pv.Mark.scene = scene;
+        proto.index = index;
+        if (!scene) return;
 
-    var that = scene.mark,
-        mark = that,
-        ancestors = [];
+        var that = scene.mark,
+            mark = that,
+            ancestors = [];
 
-    /* Set ancestors' scene and index; populate data stack. */
-    do {
-      ancestors.push(mark);
-      stack.push(scene[index].data);
-      mark.index = index;
-      mark.scene = scene;
-      index = scene.parentIndex;
-      scene = scene.parent;
-    } while (mark = mark.parent);
+        /* Set ancestors' scene and index; populate data stack. */
+        do {
+            ancestors.push(mark);
+            stack.push(scene[index].data);
+            mark.index = index;
+            mark.scene = scene;
+            index = scene.parentIndex;
+            scene = scene.parent;
+        } while (mark = mark.parent);
 
-    /* Set ancestors' scale; requires top-down. */
-    for (var i = ancestors.length - 1, k = 1; i > 0; i--) {
-      mark = ancestors[i];
-      mark.scale = k;
-      k *= mark.scene[mark.index].transform.k;
+        /* Set ancestors' scale; requires top-down. */
+        for (var i = ancestors.length - 1, k = 1; i > 0; i--) {
+            mark = ancestors[i];
+            mark.scale = k;
+            k *= mark.scene[mark.index].transform.k;
+        }
+
+        /* Set children's scene and scale. */
+        if (that.children) for (var i = 0, n = that.children.length; i < n; i++) {
+            mark = that.children[i];
+            mark.scene = that.scene[that.index].children[i];
+            mark.scale = k;
+        }
     }
 
-    /* Set children's scene and scale. */
-    if (that.children) for (var i = 0, n = that.children.length; i < n; i++) {
-      mark = that.children[i];
-      mark.scene = that.scene[that.index].children[i];
-      mark.scale = k;
+    /** @private Clears the context. */
+    function clear(scene, index) {
+        if (!scene) return;
+        var that = scene.mark,
+            mark;
+
+        /* Reset children. */
+        if (that.children) for (var i = 0, n = that.children.length; i < n; i++) {
+            mark = that.children[i];
+            delete mark.scene;
+            delete mark.scale;
+        }
+
+        /* Reset ancestors. */
+        mark = that;
+        do {
+            stack.pop();
+            if (mark.parent) {
+                delete mark.scene;
+                delete mark.scale;
+            }
+            delete mark.index;
+        } while (mark = mark.parent);
     }
-  }
 
-  /** @private Clears the context. */
-  function clear(scene, index) {
-    if (!scene) return;
-    var that = scene.mark,
-        mark;
-
-    /* Reset children. */
-    if (that.children) for (var i = 0, n = that.children.length; i < n; i++) {
-      mark = that.children[i];
-      delete mark.scene;
-      delete mark.scale;
+    /* Context switch, invoke the function, then switch back. */
+    clear(oscene, oindex);
+    apply(scene, index);
+    try {
+        f.apply(this, stack);
+    } finally {
+        clear(scene, index);
+        apply(oscene, oindex);
     }
-
-    /* Reset ancestors. */
-    mark = that;
-    do {
-      stack.pop();
-      if (mark.parent) {
-        delete mark.scene;
-        delete mark.scale;
-      }
-      delete mark.index;
-    } while (mark = mark.parent);
-  }
-
-  /* Context switch, invoke the function, then switch back. */
-  clear(oscene, oindex);
-  apply(scene, index);
-  try {
-    f.apply(this, stack);
-  } finally {
-    clear(scene, index);
-    apply(oscene, oindex);
-  }
 };
 
 /** @private Execute the event listener, then re-render. */
-pv.Mark.dispatch = function(type, scene, index) {
-  var m = scene.mark, p = scene.parent, l = m.$handlers[type];
-  if (!l) return p && pv.Mark.dispatch(type, p, scene.parentIndex);
-  m.context(scene, index, function() {
-      m = l.apply(m, pv.Mark.stack);
-      if (m && m.render) m.render();
+pv.Mark.dispatch = function (type, scene, index) {
+    var m = scene.mark, p = scene.parent, l = m.$handlers[type];
+    if (!l) return p && pv.Mark.dispatch(type, p, scene.parentIndex);
+    m.context(scene, index, function () {
+        m = l.apply(m, pv.Mark.stack);
+        if (m && m.render) m.render();
     });
-  return true;
+    return true;
 };

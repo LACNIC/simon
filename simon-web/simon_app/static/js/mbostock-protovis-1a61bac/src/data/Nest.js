@@ -6,8 +6,8 @@
  * @param {array} array an array of elements to nest.
  * @returns {pv.Nest} a nest operator for the specified array.
  */
-pv.nest = function(array) {
-  return new pv.Nest(array);
+pv.nest = function (array) {
+    return new pv.Nest(array);
 };
 
 /**
@@ -61,9 +61,9 @@ pv.nest = function(array) {
  *
  * @param {array} array an array of elements to nest.
  */
-pv.Nest = function(array) {
-  this.array = array;
-  this.keys = [];
+pv.Nest = function (array) {
+    this.array = array;
+    this.keys = [];
 };
 
 /**
@@ -74,9 +74,9 @@ pv.Nest = function(array) {
  * key.
  * @returns {pv.Nest} this.
  */
-pv.Nest.prototype.key = function(key) {
-  this.keys.push(key);
-  return this;
+pv.Nest.prototype.key = function (key) {
+    this.keys.push(key);
+    return this;
 };
 
 /**
@@ -102,9 +102,9 @@ pv.Nest.prototype.key = function(key) {
  * @param {function} [order] an optional comparator function.
  * @returns {pv.Nest} this.
  */
-pv.Nest.prototype.sortKeys = function(order) {
-  this.keys[this.keys.length - 1].order = order || pv.naturalOrder;
-  return this;
+pv.Nest.prototype.sortKeys = function (order) {
+    this.keys[this.keys.length - 1].order = order || pv.naturalOrder;
+    return this;
 };
 
 /**
@@ -129,9 +129,9 @@ pv.Nest.prototype.sortKeys = function(order) {
  * @param {function} [order] an optional comparator function.
  * @returns {pv.Nest} this.
  */
-pv.Nest.prototype.sortValues = function(order) {
-  this.order = order || pv.naturalOrder;
-  return this;
+pv.Nest.prototype.sortValues = function (order) {
+    this.order = order || pv.naturalOrder;
+    return this;
 };
 
 /**
@@ -151,35 +151,35 @@ pv.Nest.prototype.sortValues = function(order) {
  *
  * @returns a hierarchical map of values.
  */
-pv.Nest.prototype.map = function() {
-  var map = {}, values = [];
+pv.Nest.prototype.map = function () {
+    var map = {}, values = [];
 
-  /* Build the map. */
-  for (var i, j = 0; j < this.array.length; j++) {
-    var x = this.array[j];
-    var m = map;
-    for (i = 0; i < this.keys.length - 1; i++) {
-      var k = this.keys[i](x);
-      if (!m[k]) m[k] = {};
-      m = m[k];
+    /* Build the map. */
+    for (var i, j = 0; j < this.array.length; j++) {
+        var x = this.array[j];
+        var m = map;
+        for (i = 0; i < this.keys.length - 1; i++) {
+            var k = this.keys[i](x);
+            if (!m[k]) m[k] = {};
+            m = m[k];
+        }
+        k = this.keys[i](x);
+        if (!m[k]) {
+            var a = [];
+            values.push(a);
+            m[k] = a;
+        }
+        m[k].push(x);
     }
-    k = this.keys[i](x);
-    if (!m[k]) {
-      var a = [];
-      values.push(a);
-      m[k] = a;
-    }
-    m[k].push(x);
-  }
 
-  /* Sort each leaf array. */
-  if (this.order) {
-    for (var i = 0; i < values.length; i++) {
-      values[i].sort(this.order);
+    /* Sort each leaf array. */
+    if (this.order) {
+        for (var i = 0; i < values.length; i++) {
+            values[i].sort(this.order);
+        }
     }
-  }
 
-  return map;
+    return map;
 };
 
 /**
@@ -195,31 +195,34 @@ pv.Nest.prototype.map = function() {
  *
  * @returns a hierarchical nested array.
  */
-pv.Nest.prototype.entries = function() {
+pv.Nest.prototype.entries = function () {
 
-  /** Recursively extracts the entries for the given map. */
-  function entries(map) {
-    var array = [];
-    for (var k in map) {
-      var v = map[k];
-      array.push({ key: k, values: (v instanceof Array) ? v : entries(v) });
-    };
-    return array;
-  }
-
-  /** Recursively sorts the values for the given key-values array. */
-  function sort(array, i) {
-    var o = this.keys[i].order;
-    if (o) array.sort(function(a, b) { return o(a.key, b.key); });
-    if (++i < this.keys.length) {
-      for (var j = 0; j < array.length; j++) {
-        sort.call(this, array[j].values, i);
-      }
+    /** Recursively extracts the entries for the given map. */
+    function entries(map) {
+        var array = [];
+        for (var k in map) {
+            var v = map[k];
+            array.push({ key: k, values: (v instanceof Array) ? v : entries(v) });
+        }
+        ;
+        return array;
     }
-    return array;
-  }
 
-  return sort.call(this, entries(this.map()), 0);
+    /** Recursively sorts the values for the given key-values array. */
+    function sort(array, i) {
+        var o = this.keys[i].order;
+        if (o) array.sort(function (a, b) {
+            return o(a.key, b.key);
+        });
+        if (++i < this.keys.length) {
+            for (var j = 0; j < array.length; j++) {
+                sort.call(this, array[j].values, i);
+            }
+        }
+        return array;
+    }
+
+    return sort.call(this, entries(this.map()), 0);
 };
 
 /**
@@ -238,20 +241,20 @@ pv.Nest.prototype.entries = function() {
  * @param {function} f a rollup function.
  * @returns a hierarchical map, with the leaf values computed by <tt>f</tt>.
  */
-pv.Nest.prototype.rollup = function(f) {
+pv.Nest.prototype.rollup = function (f) {
 
-  /** Recursively descends to the leaf nodes (arrays) and does rollup. */
-  function rollup(map) {
-    for (var key in map) {
-      var value = map[key];
-      if (value instanceof Array) {
-        map[key] = f(value);
-      } else {
-        rollup(value);
-      }
+    /** Recursively descends to the leaf nodes (arrays) and does rollup. */
+    function rollup(map) {
+        for (var key in map) {
+            var value = map[key];
+            if (value instanceof Array) {
+                map[key] = f(value);
+            } else {
+                rollup(value);
+            }
+        }
+        return map;
     }
-    return map;
-  }
 
-  return rollup(this.map());
+    return rollup(this.map());
 };

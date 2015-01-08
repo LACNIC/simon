@@ -7,15 +7,15 @@ This page calls init() with no parameters, so onload should fire and try to meas
 Status: <span id="state" style="background-color:green;">PASS</span>
 
 <script type="text/javascript">
-window.onerror = function() {
-	var st = document.getElementById("state");
-	st.style.backgroundColor="red";
-	st.innerHTML = "FAIL";
-}
+    window.onerror = function () {
+        var st = document.getElementById("state");
+        st.style.backgroundColor = "red";
+        st.innerHTML = "FAIL";
+    }
 </script>
 <script src="../boomerang.js" type="text/javascript"></script>
 <script type="text/javascript">
-BOOMR.init();
+    BOOMR.init();
 </script>
 </body>
 </html>

@@ -47,8 +47,8 @@
  * @param {number...} domain... optional domain values.
  * @extends pv.Scale.quantitative
  */
-pv.Scale.linear = function() {
-  var scale = pv.Scale.quantitative();
-  scale.domain.apply(scale, arguments);
-  return scale;
+pv.Scale.linear = function () {
+    var scale = pv.Scale.quantitative();
+    scale.domain.apply(scale, arguments);
+    return scale;
 };

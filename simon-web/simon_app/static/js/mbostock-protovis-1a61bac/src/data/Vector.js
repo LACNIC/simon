@@ -8,8 +8,8 @@
  * @param {number} y the <i>y</i> coordinate.
  * @returns {pv.Vector} a vector for the specified coordinates.
  */
-pv.vector = function(x, y) {
-  return new pv.Vector(x, y);
+pv.vector = function (x, y) {
+    return new pv.Vector(x, y);
 };
 
 /**
@@ -26,9 +26,9 @@ pv.vector = function(x, y) {
  * @param {number} x the <i>x</i> coordinate.
  * @param {number} y the <i>y</i> coordinate.
  */
-pv.Vector = function(x, y) {
-  this.x = x;
-  this.y = y;
+pv.Vector = function (x, y) {
+    this.x = x;
+    this.y = y;
 };
 
 /**
@@ -36,8 +36,8 @@ pv.Vector = function(x, y) {
  *
  * @returns {pv.Vector} a perpendicular vector.
  */
-pv.Vector.prototype.perp = function() {
-  return new pv.Vector(-this.y, this.x);
+pv.Vector.prototype.perp = function () {
+    return new pv.Vector(-this.y, this.x);
 };
 
 /**
@@ -47,9 +47,9 @@ pv.Vector.prototype.perp = function() {
  *
  * @returns {pv.Vector} a unit vector.
  */
-pv.Vector.prototype.norm = function() {
-  var l = this.length();
-  return this.times(l ? (1 / l) : 1);
+pv.Vector.prototype.norm = function () {
+    var l = this.length();
+    return this.times(l ? (1 / l) : 1);
 };
 
 /**
@@ -57,8 +57,8 @@ pv.Vector.prototype.norm = function() {
  *
  * @returns {number} a length.
  */
-pv.Vector.prototype.length = function() {
-  return Math.sqrt(this.x * this.x + this.y * this.y);
+pv.Vector.prototype.length = function () {
+    return Math.sqrt(this.x * this.x + this.y * this.y);
 };
 
 /**
@@ -68,8 +68,8 @@ pv.Vector.prototype.length = function() {
  * @param {number} k the scale factor.
  * @returns {pv.Vector} a scaled vector.
  */
-pv.Vector.prototype.times = function(k) {
-  return new pv.Vector(this.x * k, this.y * k);
+pv.Vector.prototype.times = function (k) {
+    return new pv.Vector(this.x * k, this.y * k);
 };
 
 /**
@@ -81,10 +81,10 @@ pv.Vector.prototype.times = function(k) {
  * @param {number} y the <i>y</i> coordinate to add.
  * @returns {pv.Vector} a new vector.
  */
-pv.Vector.prototype.plus = function(x, y) {
-  return (arguments.length == 1)
-      ? new pv.Vector(this.x + x.x, this.y + x.y)
-      : new pv.Vector(this.x + x, this.y + y);
+pv.Vector.prototype.plus = function (x, y) {
+    return (arguments.length == 1)
+        ? new pv.Vector(this.x + x.x, this.y + x.y)
+        : new pv.Vector(this.x + x, this.y + y);
 };
 
 /**
@@ -96,10 +96,10 @@ pv.Vector.prototype.plus = function(x, y) {
  * @param {number} y the <i>y</i> coordinate to subtract.
  * @returns {pv.Vector} a new vector.
  */
-pv.Vector.prototype.minus = function(x, y) {
-  return (arguments.length == 1)
-      ? new pv.Vector(this.x - x.x, this.y - x.y)
-      : new pv.Vector(this.x - x, this.y - y);
+pv.Vector.prototype.minus = function (x, y) {
+    return (arguments.length == 1)
+        ? new pv.Vector(this.x - x.x, this.y - x.y)
+        : new pv.Vector(this.x - x, this.y - y);
 };
 
 /**
@@ -111,8 +111,8 @@ pv.Vector.prototype.minus = function(x, y) {
  * @param {number} y the <i>y</i> coordinate to dot.
  * @returns {number} a dot product.
  */
-pv.Vector.prototype.dot = function(x, y) {
-  return (arguments.length == 1)
-      ? this.x * x.x + this.y * x.y
-      : this.x * x + this.y * y;
+pv.Vector.prototype.dot = function (x, y) {
+    return (arguments.length == 1)
+        ? this.x * x.x + this.y * x.y
+        : this.x * x + this.y * y;
 };

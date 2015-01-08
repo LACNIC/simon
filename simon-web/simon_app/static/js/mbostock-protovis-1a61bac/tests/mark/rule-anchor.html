@@ -1,11 +1,13 @@
 <html>
-  <head>
+<head>
     <title>Rule Anchor</title>
     <script type="text/javascript" src="../../protovis.js"></script>
-    <style type="text/css">span { display: block !important; }</style>
-  </head>
-  <body>
-    <script type="text/javascript+protovis">
+    <style type="text/css">span {
+        display: block !important;
+    }</style>
+</head>
+<body>
+<script type="text/javascript+protovis">
 
 var vis = new pv.Panel()
     .data(["left", "top", "right", "bottom", "center"])
@@ -24,6 +26,8 @@ rule.anchor(function(d, p) p).add(pv.Label)
 
 vis.render();
 
-    </script>
-  </body>
+
+
+</script>
+</body>
 </html>

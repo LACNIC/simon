@@ -32,37 +32,37 @@
  *
  * @extends pv.Bar
  */
-pv.Panel = function() {
-  pv.Bar.call(this);
+pv.Panel = function () {
+    pv.Bar.call(this);
 
-  /**
-   * The child marks; zero or more {@link pv.Mark}s in the order they were
-   * added.
-   *
-   * @see #add
-   * @type pv.Mark[]
-   */
-  this.children = [];
-  this.root = this;
+    /**
+     * The child marks; zero or more {@link pv.Mark}s in the order they were
+     * added.
+     *
+     * @see #add
+     * @type pv.Mark[]
+     */
+    this.children = [];
+    this.root = this;
 
-  /**
-   * The internal $dom field is set by the Protovis loader; see lang/init.js. It
-   * refers to the script element that contains the Protovis specification, so
-   * that the panel knows where in the DOM to insert the generated SVG element.
-   *
-   * @private
-   */
-  this.$dom = pv.$ && pv.$.s;
+    /**
+     * The internal $dom field is set by the Protovis loader; see lang/init.js. It
+     * refers to the script element that contains the Protovis specification, so
+     * that the panel knows where in the DOM to insert the generated SVG element.
+     *
+     * @private
+     */
+    this.$dom = pv.$ && pv.$.s;
 };
 
 pv.Panel.prototype = pv.extend(pv.Bar)
     .property("transform")
     .property("overflow", String)
-    .property("canvas", function(c) {
+    .property("canvas", function (c) {
         return (typeof c == "string")
             ? document.getElementById(c)
             : c; // assume that c is the passed-in element
-      });
+    });
 
 pv.Panel.prototype.type = "panel";
 
@@ -121,10 +121,10 @@ pv.Panel.prototype.defaults = new pv.Panel()
  * @param {string} name the anchor name; either a string or a property function.
  * @returns {pv.Anchor} the new anchor.
  */
-pv.Panel.prototype.anchor = function(name) {
-  var anchor = pv.Bar.prototype.anchor.call(this, name);
-  anchor.parent = this;
-  return anchor;
+pv.Panel.prototype.anchor = function (name) {
+    var anchor = pv.Bar.prototype.anchor.call(this, name);
+    anchor.parent = this;
+    return anchor;
 };
 
 /**
@@ -138,21 +138,21 @@ pv.Panel.prototype.anchor = function(name) {
  * @param {function} type the type of the new mark to add.
  * @returns {pv.Mark} the new mark.
  */
-pv.Panel.prototype.add = function(type) {
-  var child = new type();
-  child.parent = this;
-  child.root = this.root;
-  child.childIndex = this.children.length;
-  this.children.push(child);
-  return child;
+pv.Panel.prototype.add = function (type) {
+    var child = new type();
+    child.parent = this;
+    child.root = this.root;
+    child.childIndex = this.children.length;
+    this.children.push(child);
+    return child;
 };
 
 /** @private Bind this panel, then any child marks recursively. */
-pv.Panel.prototype.bind = function() {
-  pv.Mark.prototype.bind.call(this);
-  for (var i = 0; i < this.children.length; i++) {
-    this.children[i].bind();
-  }
+pv.Panel.prototype.bind = function () {
+    pv.Mark.prototype.bind.call(this);
+    for (var i = 0; i < this.children.length; i++) {
+        this.children[i].bind();
+    }
 };
 
 /**
@@ -163,47 +163,47 @@ pv.Panel.prototype.bind = function() {
  * @param s a node in the scene graph; the instance of the panel to build.
  * @see Mark#scene
  */
-pv.Panel.prototype.buildInstance = function(s) {
-  pv.Bar.prototype.buildInstance.call(this, s);
-  if (!s.visible) return;
-  if (!s.children) s.children = [];
+pv.Panel.prototype.buildInstance = function (s) {
+    pv.Bar.prototype.buildInstance.call(this, s);
+    if (!s.visible) return;
+    if (!s.children) s.children = [];
 
-  /*
-   * Multiply the current scale factor by this panel's transform. Also clear the
-   * default index as we recurse into child marks; it will be reset to the
-   * current index when the next panel instance is built.
-   */
-  var scale = this.scale * s.transform.k, child, n = this.children.length;
-  pv.Mark.prototype.index = -1;
+    /*
+     * Multiply the current scale factor by this panel's transform. Also clear the
+     * default index as we recurse into child marks; it will be reset to the
+     * current index when the next panel instance is built.
+     */
+    var scale = this.scale * s.transform.k, child, n = this.children.length;
+    pv.Mark.prototype.index = -1;
 
-  /*
-   * Build each child, passing in the parent (this panel) scene graph node. The
-   * child mark's scene is initialized from the corresponding entry in the
-   * existing scene graph, such that properties from the previous build can be
-   * reused; this is largely to facilitate the recycling of SVG elements.
-   */
-  for (var i = 0; i < n; i++) {
-    child = this.children[i];
-    child.scene = s.children[i]; // possibly undefined
-    child.scale = scale;
-    child.build();
-  }
+    /*
+     * Build each child, passing in the parent (this panel) scene graph node. The
+     * child mark's scene is initialized from the corresponding entry in the
+     * existing scene graph, such that properties from the previous build can be
+     * reused; this is largely to facilitate the recycling of SVG elements.
+     */
+    for (var i = 0; i < n; i++) {
+        child = this.children[i];
+        child.scene = s.children[i]; // possibly undefined
+        child.scale = scale;
+        child.build();
+    }
 
-  /*
-   * Once the child marks have been built, the new scene graph nodes are removed
-   * from the child marks and placed into the scene graph. The nodes cannot
-   * remain on the child nodes because this panel (or a parent panel) may be
-   * instantiated multiple times!
-   */
-  for (var i = 0; i < n; i++) {
-    child = this.children[i];
-    s.children[i] = child.scene;
-    delete child.scene;
-    delete child.scale;
-  }
+    /*
+     * Once the child marks have been built, the new scene graph nodes are removed
+     * from the child marks and placed into the scene graph. The nodes cannot
+     * remain on the child nodes because this panel (or a parent panel) may be
+     * instantiated multiple times!
+     */
+    for (var i = 0; i < n; i++) {
+        child = this.children[i];
+        s.children[i] = child.scene;
+        delete child.scene;
+        delete child.scale;
+    }
 
-  /* Delete any expired child scenes. */
-  s.children.length = n;
+    /* Delete any expired child scenes. */
+    s.children.length = n;
 };
 
 /**
@@ -232,42 +232,42 @@ pv.Panel.prototype.buildInstance = function(s) {
  *
  * @param s a node in the scene graph; the instance of the panel to build.
  */
-pv.Panel.prototype.buildImplied = function(s) {
-  if (!this.parent) {
-    var c = s.canvas;
-    if (c) {
-      /* Clear the container if it's not associated with this panel. */
-      if (c.$panel != this) {
-        c.$panel = this;
-        while (c.lastChild) c.removeChild(c.lastChild);
-      }
+pv.Panel.prototype.buildImplied = function (s) {
+    if (!this.parent) {
+        var c = s.canvas;
+        if (c) {
+            /* Clear the container if it's not associated with this panel. */
+            if (c.$panel != this) {
+                c.$panel = this;
+                while (c.lastChild) c.removeChild(c.lastChild);
+            }
 
-      /* If width and height weren't specified, inspect the container. */
-      var w, h;
-      if (s.width == null) {
-        w = parseFloat(pv.css(c, "width"));
-        s.width = w - s.left - s.right;
-      }
-      if (s.height == null) {
-        h = parseFloat(pv.css(c, "height"));
-        s.height = h - s.top - s.bottom;
-      }
-    } else {
-      var cache = this.$canvas || (this.$canvas = []);
-      if (!(c = cache[this.index])) {
-        c = cache[this.index] = document.createElement("span");
-        if (this.$dom) { // script element for text/javascript+protovis
-          this.$dom.parentNode.insertBefore(c, this.$dom);
-        } else { // find the last element in the body
-          var n = document.body;
-          while (n.lastChild && n.lastChild.tagName) n = n.lastChild;
-          if (n != document.body) n = n.parentNode;
-          n.appendChild(c);
+            /* If width and height weren't specified, inspect the container. */
+            var w, h;
+            if (s.width == null) {
+                w = parseFloat(pv.css(c, "width"));
+                s.width = w - s.left - s.right;
+            }
+            if (s.height == null) {
+                h = parseFloat(pv.css(c, "height"));
+                s.height = h - s.top - s.bottom;
+            }
+        } else {
+            var cache = this.$canvas || (this.$canvas = []);
+            if (!(c = cache[this.index])) {
+                c = cache[this.index] = document.createElement("span");
+                if (this.$dom) { // script element for text/javascript+protovis
+                    this.$dom.parentNode.insertBefore(c, this.$dom);
+                } else { // find the last element in the body
+                    var n = document.body;
+                    while (n.lastChild && n.lastChild.tagName) n = n.lastChild;
+                    if (n != document.body) n = n.parentNode;
+                    n.appendChild(c);
+                }
+            }
         }
-      }
+        s.canvas = c;
     }
-    s.canvas = c;
-  }
-  if (!s.transform) s.transform = pv.Transform.identity;
-  pv.Mark.prototype.buildImplied.call(this, s);
+    if (!s.transform) s.transform = pv.Transform.identity;
+    pv.Mark.prototype.buildImplied.call(this, s);
 };
