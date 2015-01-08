@@ -4,9 +4,6 @@
  */
 
 SIMON = {
-	
-	version : 2,
-	
 	params : {
 		percentage : 1.0,// 100%
 		amount : 5,// amount of points
@@ -18,13 +15,10 @@ SIMON = {
 	},
 
 	urls : {
-		home : "http://200.7.87.138/",
-		offline : "http://200.7.87.138/postxmlresult/offline",
-		post : "http://200.7.87.138/postxmlresult/latency",
-//		home : "http://simon.lacnic.net/simon/",
+		home : "http://simon.lacnic.net/simon/",
 		configs : "http://simon.lacnic.net/simon/web_configs/",
-//		offline : "http://simon.lacnic.net/simon/postxmlresult/offline",
-//		post : "http://simon.lacnic.net/simon/postxmlresult/latency",
+		offline : "http://simon.lacnic.net/simon/postxmlresult/offline",
+		post : "http://simon.lacnic.net/simon/postxmlresult/latency",
 		ipv6ResolveURL : "http://simon.v6.labs.lacnic.net/cemd/getip/jsonp/",
 		ipv4ResolveURL : "http://simon.v4.labs.lacnic.net/cemd/getip/jsonp/"
 	},
@@ -525,7 +519,7 @@ SIMON = {
 			}
 
 			xml = xml + "<tester>JavaScript</tester>";
-			xml = xml + "<tester_version>" + SIMON.version + "</tester_version>";
+			xml = xml + "<tester_version>1</tester_version>";
 			xml = xml + "<user_agent>" + navigator.userAgent + "</user_agent>";
 			xml = xml + "<url>" + window.location.hostname + "</url>";
 			xml = xml + "</simon>";
