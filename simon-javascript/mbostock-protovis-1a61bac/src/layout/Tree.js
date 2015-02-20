@@ -21,8 +21,8 @@
  *
  * @extends pv.Layout.Hierarchy
  */
-pv.Layout.Tree = function() {
-  pv.Layout.Hierarchy.call(this);
+pv.Layout.Tree = function () {
+    pv.Layout.Hierarchy.call(this);
 };
 
 pv.Layout.Tree.prototype = pv.extend(pv.Layout.Hierarchy)
@@ -46,199 +46,207 @@ pv.Layout.Tree.prototype.defaults = new pv.Layout.Tree()
     .orient("top");
 
 /** @private */
-pv.Layout.Tree.prototype.buildImplied = function(s) {
-  if (pv.Layout.Hierarchy.prototype.buildImplied.call(this, s)) return;
+pv.Layout.Tree.prototype.buildImplied = function (s) {
+    if (pv.Layout.Hierarchy.prototype.buildImplied.call(this, s)) return;
 
-  var nodes = s.nodes,
-      orient = s.orient,
-      depth = s.depth,
-      breadth = s.breadth,
-      group = s.group,
-      w = s.width,
-      h = s.height;
+    var nodes = s.nodes,
+        orient = s.orient,
+        depth = s.depth,
+        breadth = s.breadth,
+        group = s.group,
+        w = s.width,
+        h = s.height;
 
-  /** @private */
-  function firstWalk(v) {
-    var l, r, a;
-    if (!v.firstChild) {
-      if (l = v.previousSibling) {
-        v.prelim = l.prelim + distance(v.depth, true);
-      }
-    } else {
-      l = v.firstChild;
-      r = v.lastChild;
-      a = l; // default ancestor
-      for (var c = l; c; c = c.nextSibling) {
-        firstWalk(c);
-        a = apportion(c, a);
-      }
-      executeShifts(v);
-      var midpoint = .5 * (l.prelim + r.prelim);
-      if (l = v.previousSibling) {
-        v.prelim = l.prelim + distance(v.depth, true);
-        v.mod = v.prelim - midpoint;
-      } else {
-        v.prelim = midpoint;
-      }
-    }
-  }
-
-  /** @private */
-  function secondWalk(v, m, depth) {
-    v.breadth = v.prelim + m;
-    m += v.mod;
-    for (var c = v.firstChild; c; c = c.nextSibling) {
-      secondWalk(c, m, depth);
-    }
-  }
-
-  /** @private */
-  function apportion(v, a) {
-    var w = v.previousSibling;
-    if (w) {
-      var vip = v,
-          vop = v,
-          vim = w,
-          vom = v.parentNode.firstChild,
-          sip = vip.mod,
-          sop = vop.mod,
-          sim = vim.mod,
-          som = vom.mod,
-          nr = nextRight(vim),
-          nl = nextLeft(vip);
-      while (nr && nl) {
-        vim = nr;
-        vip = nl;
-        vom = nextLeft(vom);
-        vop = nextRight(vop);
-        vop.ancestor = v;
-        var shift = (vim.prelim + sim) - (vip.prelim + sip) + distance(vim.depth, false);
-        if (shift > 0) {
-          moveSubtree(ancestor(vim, v, a), v, shift);
-          sip += shift;
-          sop += shift;
+    /** @private */
+    function firstWalk(v) {
+        var l, r, a;
+        if (!v.firstChild) {
+            if (l = v.previousSibling) {
+                v.prelim = l.prelim + distance(v.depth, true);
+            }
+        } else {
+            l = v.firstChild;
+            r = v.lastChild;
+            a = l; // default ancestor
+            for (var c = l; c; c = c.nextSibling) {
+                firstWalk(c);
+                a = apportion(c, a);
+            }
+            executeShifts(v);
+            var midpoint = .5 * (l.prelim + r.prelim);
+            if (l = v.previousSibling) {
+                v.prelim = l.prelim + distance(v.depth, true);
+                v.mod = v.prelim - midpoint;
+            } else {
+                v.prelim = midpoint;
+            }
         }
-        sim += vim.mod;
-        sip += vip.mod;
-        som += vom.mod;
-        sop += vop.mod;
-        nr = nextRight(vim);
-        nl = nextLeft(vip);
-      }
-      if (nr && !nextRight(vop)) {
-        vop.thread = nr;
-        vop.mod += sim - sop;
-      }
-      if (nl && !nextLeft(vom)) {
-        vom.thread = nl;
-        vom.mod += sip - som;
-        a = v;
-      }
     }
-    return a;
-  }
 
-  /** @private */
-  function nextLeft(v) {
-    return v.firstChild || v.thread;
-  }
-
-  /** @private */
-  function nextRight(v) {
-    return v.lastChild || v.thread;
-  }
-
-  /** @private */
-  function moveSubtree(wm, wp, shift) {
-    var subtrees = wp.number - wm.number;
-    wp.change -= shift / subtrees;
-    wp.shift += shift;
-    wm.change += shift / subtrees;
-    wp.prelim += shift;
-    wp.mod += shift;
-  }
-
-  /** @private */
-  function executeShifts(v) {
-    var shift = 0, change = 0;
-    for (var c = v.lastChild; c; c = c.previousSibling) {
-      c.prelim += shift;
-      c.mod += shift;
-      change += c.change;
-      shift += c.shift + change;
+    /** @private */
+    function secondWalk(v, m, depth) {
+        v.breadth = v.prelim + m;
+        m += v.mod;
+        for (var c = v.firstChild; c; c = c.nextSibling) {
+            secondWalk(c, m, depth);
+        }
     }
-  }
 
-  /** @private */
-  function ancestor(vim, v, a) {
-    return (vim.ancestor.parentNode == v.parentNode) ? vim.ancestor : a;
-  }
+    /** @private */
+    function apportion(v, a) {
+        var w = v.previousSibling;
+        if (w) {
+            var vip = v,
+                vop = v,
+                vim = w,
+                vom = v.parentNode.firstChild,
+                sip = vip.mod,
+                sop = vop.mod,
+                sim = vim.mod,
+                som = vom.mod,
+                nr = nextRight(vim),
+                nl = nextLeft(vip);
+            while (nr && nl) {
+                vim = nr;
+                vip = nl;
+                vom = nextLeft(vom);
+                vop = nextRight(vop);
+                vop.ancestor = v;
+                var shift = (vim.prelim + sim) - (vip.prelim + sip) + distance(vim.depth, false);
+                if (shift > 0) {
+                    moveSubtree(ancestor(vim, v, a), v, shift);
+                    sip += shift;
+                    sop += shift;
+                }
+                sim += vim.mod;
+                sip += vip.mod;
+                som += vom.mod;
+                sop += vop.mod;
+                nr = nextRight(vim);
+                nl = nextLeft(vip);
+            }
+            if (nr && !nextRight(vop)) {
+                vop.thread = nr;
+                vop.mod += sim - sop;
+            }
+            if (nl && !nextLeft(vom)) {
+                vom.thread = nl;
+                vom.mod += sip - som;
+                a = v;
+            }
+        }
+        return a;
+    }
 
-  /** @private */
-  function distance(depth, siblings) {
-    return (siblings ? 1 : (group + 1)) / ((orient == "radial") ? depth : 1);
-  }
+    /** @private */
+    function nextLeft(v) {
+        return v.firstChild || v.thread;
+    }
 
-  /* Initialize temporary layout variables. TODO: store separately. */
-  var root = nodes[0];
-  root.visitAfter(function(v, i) {
-      v.ancestor = v;
-      v.prelim = 0;
-      v.mod = 0;
-      v.change = 0;
-      v.shift = 0;
-      v.number = v.previousSibling ? (v.previousSibling.number + 1) : 0;
-      v.depth = i;
+    /** @private */
+    function nextRight(v) {
+        return v.lastChild || v.thread;
+    }
+
+    /** @private */
+    function moveSubtree(wm, wp, shift) {
+        var subtrees = wp.number - wm.number;
+        wp.change -= shift / subtrees;
+        wp.shift += shift;
+        wm.change += shift / subtrees;
+        wp.prelim += shift;
+        wp.mod += shift;
+    }
+
+    /** @private */
+    function executeShifts(v) {
+        var shift = 0, change = 0;
+        for (var c = v.lastChild; c; c = c.previousSibling) {
+            c.prelim += shift;
+            c.mod += shift;
+            change += c.change;
+            shift += c.shift + change;
+        }
+    }
+
+    /** @private */
+    function ancestor(vim, v, a) {
+        return (vim.ancestor.parentNode == v.parentNode) ? vim.ancestor : a;
+    }
+
+    /** @private */
+    function distance(depth, siblings) {
+        return (siblings ? 1 : (group + 1)) / ((orient == "radial") ? depth : 1);
+    }
+
+    /* Initialize temporary layout variables. TODO: store separately. */
+    var root = nodes[0];
+    root.visitAfter(function (v, i) {
+        v.ancestor = v;
+        v.prelim = 0;
+        v.mod = 0;
+        v.change = 0;
+        v.shift = 0;
+        v.number = v.previousSibling ? (v.previousSibling.number + 1) : 0;
+        v.depth = i;
     });
 
-  /* Compute the layout using Buchheim et al.'s algorithm. */
-  firstWalk(root);
-  secondWalk(root, -root.prelim, 0);
+    /* Compute the layout using Buchheim et al.'s algorithm. */
+    firstWalk(root);
+    secondWalk(root, -root.prelim, 0);
 
-  /** @private Returns the angle of the given node. */
-  function midAngle(n) {
-    return (orient == "radial") ? n.breadth / depth : 0;
-  }
-
-  /** @private */
-  function x(n) {
-    switch (orient) {
-      case "left": return n.depth;
-      case "right": return w - n.depth;
-      case "top":
-      case "bottom": return n.breadth + w / 2;
-      case "radial": return w / 2 + n.depth * Math.cos(midAngle(n));
+    /** @private Returns the angle of the given node. */
+    function midAngle(n) {
+        return (orient == "radial") ? n.breadth / depth : 0;
     }
-  }
 
-  /** @private */
-  function y(n) {
-    switch (orient) {
-      case "left":
-      case "right": return n.breadth + h / 2;
-      case "top": return n.depth;
-      case "bottom": return h - n.depth;
-      case "radial": return h / 2 + n.depth * Math.sin(midAngle(n));
+    /** @private */
+    function x(n) {
+        switch (orient) {
+            case "left":
+                return n.depth;
+            case "right":
+                return w - n.depth;
+            case "top":
+            case "bottom":
+                return n.breadth + w / 2;
+            case "radial":
+                return w / 2 + n.depth * Math.cos(midAngle(n));
+        }
     }
-  }
 
-  /* Clear temporary layout variables; transform depth and breadth. */
-  root.visitAfter(function(v) {
-      v.breadth *= breadth;
-      v.depth *= depth;
-      v.midAngle = midAngle(v);
-      v.x = x(v);
-      v.y = y(v);
-      if (v.firstChild) v.midAngle += Math.PI;
-      delete v.breadth;
-      delete v.depth;
-      delete v.ancestor;
-      delete v.prelim;
-      delete v.mod;
-      delete v.change;
-      delete v.shift;
-      delete v.number;
-      delete v.thread;
+    /** @private */
+    function y(n) {
+        switch (orient) {
+            case "left":
+            case "right":
+                return n.breadth + h / 2;
+            case "top":
+                return n.depth;
+            case "bottom":
+                return h - n.depth;
+            case "radial":
+                return h / 2 + n.depth * Math.sin(midAngle(n));
+        }
+    }
+
+    /* Clear temporary layout variables; transform depth and breadth. */
+    root.visitAfter(function (v) {
+        v.breadth *= breadth;
+        v.depth *= depth;
+        v.midAngle = midAngle(v);
+        v.x = x(v);
+        v.y = y(v);
+        if (v.firstChild) v.midAngle += Math.PI;
+        delete v.breadth;
+        delete v.depth;
+        delete v.ancestor;
+        delete v.prelim;
+        delete v.mod;
+        delete v.change;
+        delete v.shift;
+        delete v.number;
+        delete v.thread;
     });
 };
 

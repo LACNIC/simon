@@ -1,11 +1,11 @@
 <html>
-  <head>
+<head>
     <title>Dot Stroke</title>
     <script type="text/javascript" src="../../protovis.js"></script>
     <link rel="stylesheet" type="text/css" href="../style.css"/>
-  </head>
-  <body>
-    <script type="text/javascript+protovis">
+</head>
+<body>
+<script type="text/javascript+protovis">
 
 var vis = new pv.Panel()
     .width(500)
@@ -33,11 +33,13 @@ vis.anchor("bottom").add(pv.Dot)
 
 vis.render();
 
-    </script><p>
 
-When paths have very thick stroke widths, the stroke path can self-intersect.
-This test checks that the stroke path is stroked using the nonzero rather than
-evenodd winding rule.
+</script>
+<p>
 
-  </body>
+    When paths have very thick stroke widths, the stroke path can self-intersect.
+    This test checks that the stroke path is stroked using the nonzero rather than
+    evenodd winding rule.
+
+</body>
 </html>

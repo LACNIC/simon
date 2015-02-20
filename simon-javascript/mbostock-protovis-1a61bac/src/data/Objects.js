@@ -6,12 +6,12 @@
  * @returns {string[]} an array of strings corresponding to the keys.
  * @see #entries
  */
-pv.keys = function(map) {
-  var array = [];
-  for (var key in map) {
-    array.push(key);
-  }
-  return array;
+pv.keys = function (map) {
+    var array = [];
+    for (var key in map) {
+        array.push(key);
+    }
+    return array;
 };
 
 /**
@@ -23,12 +23,12 @@ pv.keys = function(map) {
  * @param map an object.
  * @returns {array} an array of key-value pairs corresponding to the keys.
  */
-pv.entries = function(map) {
-  var array = [];
-  for (var key in map) {
-    array.push({ key: key, value: map[key] });
-  }
-  return array;
+pv.entries = function (map) {
+    var array = [];
+    for (var key in map) {
+        array.push({ key: key, value: map[key] });
+    }
+    return array;
 };
 
 /**
@@ -39,12 +39,12 @@ pv.entries = function(map) {
  * @returns {array} an array of objects corresponding to the values.
  * @see #entries
  */
-pv.values = function(map) {
-  var array = [];
-  for (var key in map) {
-    array.push(map[key]);
-  }
-  return array;
+pv.values = function (map) {
+    var array = [];
+    for (var key in map) {
+        array.push(map[key]);
+    }
+    return array;
 };
 
 /**
@@ -65,14 +65,14 @@ pv.values = function(map) {
  * @param {function} f a value function.
  * @returns a map from keys to values.
  */
-pv.dict = function(keys, f) {
-  var m = {}, o = {};
-  for (var i = 0; i < keys.length; i++) {
-    if (i in keys) {
-      var k = keys[i];
-      o.index = i;
-      m[k] = f.call(o, k);
+pv.dict = function (keys, f) {
+    var m = {}, o = {};
+    for (var i = 0; i < keys.length; i++) {
+        if (i in keys) {
+            var k = keys[i];
+            o.index = i;
+            m[k] = f.call(o, k);
+        }
     }
-  }
-  return m;
+    return m;
 };

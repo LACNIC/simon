@@ -55,46 +55,46 @@
  * @extends pv.Behavior
  * @see pv.Behavior.drag
  */
-pv.Behavior.select = function() {
-  var scene, // scene context
-      index, // scene context
-      r, // region being selected
-      m1; // initial mouse position
+pv.Behavior.select = function () {
+    var scene, // scene context
+        index, // scene context
+        r, // region being selected
+        m1; // initial mouse position
 
-  /** @private */
-  function mousedown(d) {
-    index = this.index;
-    scene = this.scene;
-    m1 = this.mouse();
-    r = d;
-    r.x = m1.x;
-    r.y = m1.y;
-    r.dx = r.dy = 0;
-    pv.Mark.dispatch("selectstart", scene, index);
-  }
+    /** @private */
+    function mousedown(d) {
+        index = this.index;
+        scene = this.scene;
+        m1 = this.mouse();
+        r = d;
+        r.x = m1.x;
+        r.y = m1.y;
+        r.dx = r.dy = 0;
+        pv.Mark.dispatch("selectstart", scene, index);
+    }
 
-  /** @private */
-  function mousemove() {
-    if (!scene) return;
-    scene.mark.context(scene, index, function() {
-        var m2 = this.mouse();
-        r.x = Math.max(0, Math.min(m1.x, m2.x));
-        r.y = Math.max(0, Math.min(m1.y, m2.y));
-        r.dx = Math.min(this.width(), Math.max(m2.x, m1.x)) - r.x;
-        r.dy = Math.min(this.height(), Math.max(m2.y, m1.y)) - r.y;
-        this.render();
-      });
-    pv.Mark.dispatch("select", scene, index);
-  }
+    /** @private */
+    function mousemove() {
+        if (!scene) return;
+        scene.mark.context(scene, index, function () {
+            var m2 = this.mouse();
+            r.x = Math.max(0, Math.min(m1.x, m2.x));
+            r.y = Math.max(0, Math.min(m1.y, m2.y));
+            r.dx = Math.min(this.width(), Math.max(m2.x, m1.x)) - r.x;
+            r.dy = Math.min(this.height(), Math.max(m2.y, m1.y)) - r.y;
+            this.render();
+        });
+        pv.Mark.dispatch("select", scene, index);
+    }
 
-  /** @private */
-  function mouseup() {
-    if (!scene) return;
-    pv.Mark.dispatch("selectend", scene, index);
-    scene = null;
-  }
+    /** @private */
+    function mouseup() {
+        if (!scene) return;
+        pv.Mark.dispatch("selectend", scene, index);
+        scene = null;
+    }
 
-  pv.listen(window, "mousemove", mousemove);
-  pv.listen(window, "mouseup", mouseup);
-  return mousedown;
+    pv.listen(window, "mousemove", mousemove);
+    pv.listen(window, "mouseup", mouseup);
+    return mousedown;
 };

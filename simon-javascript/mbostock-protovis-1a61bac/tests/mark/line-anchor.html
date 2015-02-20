@@ -1,11 +1,13 @@
 <html>
-  <head>
+<head>
     <title>Line Anchor</title>
     <script type="text/javascript" src="../../protovis.js"></script>
-    <style type="text/css">span { display: block !important; }</style>
-  </head>
-  <body>
-    <script type="text/javascript+protovis">
+    <style type="text/css">span {
+        display: block !important;
+    }</style>
+</head>
+<body>
+<script type="text/javascript+protovis">
 
 var data = pv.range(10).map(function(x) ({x: x, y: Math.sin(x) + 2})),
     w = 400,
@@ -37,6 +39,7 @@ line.anchor(function(d, p) p).add(pv.Label)
 
 vis.render();
 
-    </script>
-  </body>
+
+</script>
+</body>
 </html>

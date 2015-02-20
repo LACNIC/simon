@@ -1,20 +1,22 @@
 <html>
-  <head>
+<head>
     <title>Barley Yields</title>
     <link type="text/css" rel="stylesheet" href="../ex.css"/>
     <script type="text/javascript" src="../../protovis.js"></script>
     <script type="text/javascript" src="barley.js"></script>
     <style type="text/css">
 
-#fig {
-  width: 334px;
-  height: 833px;
-}
+        #fig {
+            width: 334px;
+            height: 833px;
+        }
 
     </style>
-  </head>
-  <body><div id="center"><div id="fig">
-    <script type="text/javascript+protovis">
+</head>
+<body>
+<div id="center">
+    <div id="fig">
+        <script type="text/javascript+protovis">
 
 /* Compute yield medians by site and by variety. */
 function median(data) pv.median(data, function(d) d.yield);
@@ -98,6 +100,9 @@ vis.add(pv.Dot)
 
 vis.render();
 
-    </script>
-  </div></div></body>
+
+        </script>
+    </div>
+</div>
+</body>
 </html>

@@ -35,28 +35,30 @@
  *
  * @extends pv.Layout.Network
  **/
-pv.Layout.Arc = function() {
-  pv.Layout.Network.call(this);
-  var interpolate, // cached interpolate
-      directed, // cached directed
-      reverse, // cached reverse
-      buildImplied = this.buildImplied;
+pv.Layout.Arc = function () {
+    pv.Layout.Network.call(this);
+    var interpolate, // cached interpolate
+        directed, // cached directed
+        reverse, // cached reverse
+        buildImplied = this.buildImplied;
 
-  /** @private Cache layout state to optimize properties. */
-  this.buildImplied = function(s) {
-    buildImplied.call(this, s);
-    directed = s.directed;
-    interpolate = s.orient == "radial" ? "linear" : "polar";
-    reverse = s.orient == "right" || s.orient == "top";
-  };
+    /** @private Cache layout state to optimize properties. */
+    this.buildImplied = function (s) {
+        buildImplied.call(this, s);
+        directed = s.directed;
+        interpolate = s.orient == "radial" ? "linear" : "polar";
+        reverse = s.orient == "right" || s.orient == "top";
+    };
 
-  /* Override link properties to handle directedness and orientation. */
-  this.link
-      .data(function(p) {
-          var s = p.sourceNode, t = p.targetNode;
-          return reverse != (directed || (s.breadth < t.breadth)) ? [s, t] : [t, s];
+    /* Override link properties to handle directedness and orientation. */
+    this.link
+        .data(function (p) {
+            var s = p.sourceNode, t = p.targetNode;
+            return reverse != (directed || (s.breadth < t.breadth)) ? [s, t] : [t, s];
         })
-      .interpolate(function() { return interpolate; });
+        .interpolate(function () {
+            return interpolate;
+        });
 };
 
 pv.Layout.Arc.prototype = pv.extend(pv.Layout.Network)
@@ -88,66 +90,81 @@ pv.Layout.Arc.prototype.defaults = new pv.Layout.Arc()
  * @param {function} f comparator function for nodes.
  * @returns {pv.Layout.Arc} this.
  */
-pv.Layout.Arc.prototype.sort = function(f) {
-  this.$sort = f;
-  return this;
+pv.Layout.Arc.prototype.sort = function (f) {
+    this.$sort = f;
+    return this;
 };
 
 /** @private Populates the x, y and angle attributes on the nodes. */
-pv.Layout.Arc.prototype.buildImplied = function(s) {
-  if (pv.Layout.Network.prototype.buildImplied.call(this, s)) return;
+pv.Layout.Arc.prototype.buildImplied = function (s) {
+    if (pv.Layout.Network.prototype.buildImplied.call(this, s)) return;
 
-  var nodes = s.nodes,
-      orient = s.orient,
-      sort = this.$sort,
-      index = pv.range(nodes.length),
-      w = s.width,
-      h = s.height,
-      r = Math.min(w, h) / 2;
+    var nodes = s.nodes,
+        orient = s.orient,
+        sort = this.$sort,
+        index = pv.range(nodes.length),
+        w = s.width,
+        h = s.height,
+        r = Math.min(w, h) / 2;
 
-  /* Sort the nodes. */
-  if (sort) index.sort(function(a, b) { return sort(nodes[a], nodes[b]); });
+    /* Sort the nodes. */
+    if (sort) index.sort(function (a, b) {
+        return sort(nodes[a], nodes[b]);
+    });
 
-  /** @private Returns the mid-angle, given the breadth. */
-  function midAngle(b) {
-    switch (orient) {
-      case "top": return -Math.PI / 2;
-      case "bottom": return Math.PI / 2;
-      case "left": return Math.PI;
-      case "right": return 0;
-      case "radial": return (b - .25) * 2 * Math.PI;
+    /** @private Returns the mid-angle, given the breadth. */
+    function midAngle(b) {
+        switch (orient) {
+            case "top":
+                return -Math.PI / 2;
+            case "bottom":
+                return Math.PI / 2;
+            case "left":
+                return Math.PI;
+            case "right":
+                return 0;
+            case "radial":
+                return (b - .25) * 2 * Math.PI;
+        }
     }
-  }
 
-  /** @private Returns the x-position, given the breadth. */
-  function x(b) {
-    switch (orient) {
-      case "top":
-      case "bottom": return b * w;
-      case "left": return 0;
-      case "right": return w;
-      case "radial": return w / 2 + r * Math.cos(midAngle(b));
+    /** @private Returns the x-position, given the breadth. */
+    function x(b) {
+        switch (orient) {
+            case "top":
+            case "bottom":
+                return b * w;
+            case "left":
+                return 0;
+            case "right":
+                return w;
+            case "radial":
+                return w / 2 + r * Math.cos(midAngle(b));
+        }
     }
-  }
 
-  /** @private Returns the y-position, given the breadth. */
-  function y(b) {
-    switch (orient) {
-      case "top": return 0;
-      case "bottom": return h;
-      case "left":
-      case "right": return b * h;
-      case "radial": return h / 2 + r * Math.sin(midAngle(b));
+    /** @private Returns the y-position, given the breadth. */
+    function y(b) {
+        switch (orient) {
+            case "top":
+                return 0;
+            case "bottom":
+                return h;
+            case "left":
+            case "right":
+                return b * h;
+            case "radial":
+                return h / 2 + r * Math.sin(midAngle(b));
+        }
     }
-  }
 
-  /* Populate the x, y and mid-angle attributes. */
-  for (var i = 0; i < nodes.length; i++) {
-    var n = nodes[index[i]], b = n.breadth = (i + .5) / nodes.length;
-    n.x = x(b);
-    n.y = y(b);
-    n.midAngle = midAngle(b);
-  }
+    /* Populate the x, y and mid-angle attributes. */
+    for (var i = 0; i < nodes.length; i++) {
+        var n = nodes[index[i]], b = n.breadth = (i + .5) / nodes.length;
+        n.x = x(b);
+        n.y = y(b);
+        n.midAngle = midAngle(b);
+    }
 };
 
 /**

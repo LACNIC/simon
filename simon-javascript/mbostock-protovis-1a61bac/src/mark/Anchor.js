@@ -34,10 +34,10 @@
  * @extends pv.Mark
  * @param {pv.Mark} target the anchor target.
  */
-pv.Anchor = function(target) {
-  pv.Mark.call(this);
-  this.target = target;
-  this.parent = target.parent;
+pv.Anchor = function (target) {
+    pv.Mark.call(this);
+    this.target = target;
+    this.parent = target.parent;
 };
 
 pv.Anchor.prototype = pv.extend(pv.Mark)
@@ -75,7 +75,7 @@ pv.Anchor.prototype = pv.extend(pv.Mark)
  * @returns {pv.Anchor} this anchor.
  * @see pv.Mark#add
  */
-pv.Anchor.prototype.extend = function(proto) {
-  this.proto = proto;
-  return this;
+pv.Anchor.prototype.extend = function (proto) {
+    this.proto = proto;
+    return this;
 };

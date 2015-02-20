@@ -6,8 +6,8 @@
  * @param map a map to flatten.
  * @returns {pv.Flatten} a flatten operator for the specified map.
  */
-pv.flatten = function(map) {
-  return new pv.Flatten(map);
+pv.flatten = function (map) {
+    return new pv.Flatten(map);
 };
 
 /**
@@ -58,9 +58,9 @@ pv.flatten = function(map) {
  *
  * @param map a map to flatten.
  */
-pv.Flatten = function(map) {
-  this.map = map;
-  this.keys = [];
+pv.Flatten = function (map) {
+    this.map = map;
+    this.keys = [];
 };
 
 /**
@@ -73,10 +73,10 @@ pv.Flatten = function(map) {
  * @param {function} [f] an optional value map function.
  * @returns {pv.Nest} this.
  */
-pv.Flatten.prototype.key = function(key, f) {
-  this.keys.push({name: key, value: f});
-  delete this.$leaf;
-  return this;
+pv.Flatten.prototype.key = function (key, f) {
+    this.keys.push({name: key, value: f});
+    delete this.$leaf;
+    return this;
 };
 
 /**
@@ -89,10 +89,10 @@ pv.Flatten.prototype.key = function(key, f) {
  * @param {function} f a leaf function.
  * @returns {pv.Nest} this.
  */
-pv.Flatten.prototype.leaf = function(f) {
-  this.keys.length = 0;
-  this.$leaf = f;
-  return this;
+pv.Flatten.prototype.leaf = function (f) {
+    this.keys.length = 0;
+    this.$leaf = f;
+    return this;
 };
 
 /**
@@ -101,46 +101,47 @@ pv.Flatten.prototype.leaf = function(f) {
  *
  * @returns an array of elements from the flattened map.
  */
-pv.Flatten.prototype.array = function() {
-  var entries = [], stack = [], keys = this.keys, leaf = this.$leaf;
+pv.Flatten.prototype.array = function () {
+    var entries = [], stack = [], keys = this.keys, leaf = this.$leaf;
 
-  /* Recursively visit using the leaf function. */
-  if (leaf) {
-    function recurse(value, i) {
-      if (leaf(value)) {
-        entries.push({keys: stack.slice(), value: value});
-      } else {
-        for (var key in value) {
-          stack.push(key);
-          recurse(value[key], i + 1);
-          stack.pop();
+    /* Recursively visit using the leaf function. */
+    if (leaf) {
+        function recurse(value, i) {
+            if (leaf(value)) {
+                entries.push({keys: stack.slice(), value: value});
+            } else {
+                for (var key in value) {
+                    stack.push(key);
+                    recurse(value[key], i + 1);
+                    stack.pop();
+                }
+            }
         }
-      }
-    }
-    recurse(this.map, 0);
-    return entries;
-  }
 
-  /* Recursively visits the specified value. */
-  function visit(value, i) {
-    if (i < keys.length - 1) {
-      for (var key in value) {
-        stack.push(key);
-        visit(value[key], i + 1);
-        stack.pop();
-      }
-    } else {
-      entries.push(stack.concat(value));
+        recurse(this.map, 0);
+        return entries;
     }
-  }
 
-  visit(this.map, 0);
-  return entries.map(function(stack) {
-      var m = {};
-      for (var i = 0; i < keys.length; i++) {
-        var k = keys[i], v = stack[i];
-        m[k.name] = k.value ? k.value.call(null, v) : v;
-      }
-      return m;
+    /* Recursively visits the specified value. */
+    function visit(value, i) {
+        if (i < keys.length - 1) {
+            for (var key in value) {
+                stack.push(key);
+                visit(value[key], i + 1);
+                stack.pop();
+            }
+        } else {
+            entries.push(stack.concat(value));
+        }
+    }
+
+    visit(this.map, 0);
+    return entries.map(function (stack) {
+        var m = {};
+        for (var i = 0; i < keys.length; i++) {
+            var k = keys[i], v = stack[i];
+            m[k.name] = k.value ? k.value.call(null, v) : v;
+        }
+        return m;
     });
 };

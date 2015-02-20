@@ -8,7 +8,7 @@
  * spring force between neighboring nodes, and a repulsive electrical charge
  * force between all nodes. An additional drag force improves stability of the
  * simulation. See {@link pv.Force.spring}, {@link pv.Force.drag} and {@link
- * pv.Force.charge} for more details; note that the n-body charge force is
+    * pv.Force.charge} for more details; note that the n-body charge force is
  * approximated using the Barnes-Hut algorithm.
  *
  * <p>This layout is implemented on top of {@link pv.Simulation}, which can be
@@ -43,12 +43,14 @@
  * >"Graph Drawing by Force-directed Placement"</a> by T. Fruchterman &amp;
  * E. Reingold, Software--Practice &amp; Experience, November 1991.
  */
-pv.Layout.Force = function() {
-  pv.Layout.Network.call(this);
+pv.Layout.Force = function () {
+    pv.Layout.Network.call(this);
 
-  /* Force-directed graphs can be messy, so reduce the link width. */
-  this.link.lineWidth(function(d, p) { return Math.sqrt(p.linkValue) * 1.5; });
-  this.label.textAlign("center");
+    /* Force-directed graphs can be messy, so reduce the link width. */
+    this.link.lineWidth(function (d, p) {
+        return Math.sqrt(p.linkValue) * 1.5;
+    });
+    this.label.textAlign("center");
 };
 
 pv.Layout.Force.prototype = pv.extend(pv.Layout.Network)
@@ -216,94 +218,94 @@ pv.Layout.Force.prototype.defaults = new pv.Layout.Force()
     .springLength(20);
 
 /** @private Initialize the physics simulation. */
-pv.Layout.Force.prototype.buildImplied = function(s) {
+pv.Layout.Force.prototype.buildImplied = function (s) {
 
-  /* Any cached interactive layouts need to be rebound for the timer. */
-  if (pv.Layout.Network.prototype.buildImplied.call(this, s)) {
-    var f = s.$force;
-    if (f) {
-      f.next = this.binds.$force;
-      this.binds.$force = f;
-    }
-    return;
-  }
-
-  var that = this,
-      nodes = s.nodes,
-      links = s.links,
-      k = s.iterations,
-      w = s.width,
-      h = s.height;
-
-  /* Initialize positions randomly near the center. */
-  for (var i = 0, n; i < nodes.length; i++) {
-    n = nodes[i];
-    if (isNaN(n.x)) n.x = w / 2 + 40 * Math.random() - 20;
-    if (isNaN(n.y)) n.y = h / 2 + 40 * Math.random() - 20;
-  }
-
-  /* Initialize the simulation. */
-  var sim = pv.simulation(nodes);
-
-  /* Drag force. */
-  sim.force(pv.Force.drag(s.dragConstant));
-
-  /* Charge (repelling) force. */
-  sim.force(pv.Force.charge(s.chargeConstant)
-      .domain(s.chargeMinDistance, s.chargeMaxDistance)
-      .theta(s.chargeTheta));
-
-  /* Spring (attracting) force. */
-  sim.force(pv.Force.spring(s.springConstant)
-      .damping(s.springDamping)
-      .length(s.springLength)
-      .links(links));
-
-  /* Position constraint (for interactive dragging). */
-  sim.constraint(pv.Constraint.position());
-
-  /* Optionally add bound constraint. TODO: better padding. */
-  if (s.bound) {
-    sim.constraint(pv.Constraint.bound().x(6, w - 6).y(6, h - 6));
-  }
-
-  /** @private Returns the speed of the given node, to determine cooling. */
-  function speed(n) {
-    return n.fix ? 1 : n.vx * n.vx + n.vy * n.vy;
-  }
-
-  /*
-   * If the iterations property is null (the default), the layout is
-   * interactive. The simulation is run until the fastest particle drops below
-   * an arbitrary minimum speed. Although the timer keeps firing, this speed
-   * calculation is fast so there is minimal CPU overhead. Note: if a particle
-   * is fixed for interactivity, treat this as a high speed and resume
-   * simulation.
-   */
-  if (k == null) {
-    sim.step(); // compute initial previous velocities
-    sim.step(); // compute initial velocities
-
-    /* Add the simulation state to the bound list. */
-    var force = s.$force = this.binds.$force = {
-      next: this.binds.$force,
-      nodes: nodes,
-      min: 1e-4 * (links.length + 1),
-      sim: sim
-    };
-
-    /* Start the timer, if not already started. */
-    if (!this.$timer) this.$timer = setInterval(function() {
-      var render = false;
-      for (var f = that.binds.$force; f; f = f.next) {
-        if (pv.max(f.nodes, speed) > f.min) {
-          f.sim.step();
-          render = true;
+    /* Any cached interactive layouts need to be rebound for the timer. */
+    if (pv.Layout.Network.prototype.buildImplied.call(this, s)) {
+        var f = s.$force;
+        if (f) {
+            f.next = this.binds.$force;
+            this.binds.$force = f;
         }
-      }
-      if (render) that.render();
-    }, 42);
-  } else for (var i = 0; i < k; i++) {
-    sim.step();
-  }
+        return;
+    }
+
+    var that = this,
+        nodes = s.nodes,
+        links = s.links,
+        k = s.iterations,
+        w = s.width,
+        h = s.height;
+
+    /* Initialize positions randomly near the center. */
+    for (var i = 0, n; i < nodes.length; i++) {
+        n = nodes[i];
+        if (isNaN(n.x)) n.x = w / 2 + 40 * Math.random() - 20;
+        if (isNaN(n.y)) n.y = h / 2 + 40 * Math.random() - 20;
+    }
+
+    /* Initialize the simulation. */
+    var sim = pv.simulation(nodes);
+
+    /* Drag force. */
+    sim.force(pv.Force.drag(s.dragConstant));
+
+    /* Charge (repelling) force. */
+    sim.force(pv.Force.charge(s.chargeConstant)
+        .domain(s.chargeMinDistance, s.chargeMaxDistance)
+        .theta(s.chargeTheta));
+
+    /* Spring (attracting) force. */
+    sim.force(pv.Force.spring(s.springConstant)
+        .damping(s.springDamping)
+        .length(s.springLength)
+        .links(links));
+
+    /* Position constraint (for interactive dragging). */
+    sim.constraint(pv.Constraint.position());
+
+    /* Optionally add bound constraint. TODO: better padding. */
+    if (s.bound) {
+        sim.constraint(pv.Constraint.bound().x(6, w - 6).y(6, h - 6));
+    }
+
+    /** @private Returns the speed of the given node, to determine cooling. */
+    function speed(n) {
+        return n.fix ? 1 : n.vx * n.vx + n.vy * n.vy;
+    }
+
+    /*
+     * If the iterations property is null (the default), the layout is
+     * interactive. The simulation is run until the fastest particle drops below
+     * an arbitrary minimum speed. Although the timer keeps firing, this speed
+     * calculation is fast so there is minimal CPU overhead. Note: if a particle
+     * is fixed for interactivity, treat this as a high speed and resume
+     * simulation.
+     */
+    if (k == null) {
+        sim.step(); // compute initial previous velocities
+        sim.step(); // compute initial velocities
+
+        /* Add the simulation state to the bound list. */
+        var force = s.$force = this.binds.$force = {
+            next: this.binds.$force,
+            nodes: nodes,
+            min: 1e-4 * (links.length + 1),
+            sim: sim
+        };
+
+        /* Start the timer, if not already started. */
+        if (!this.$timer) this.$timer = setInterval(function () {
+            var render = false;
+            for (var f = that.binds.$force; f; f = f.next) {
+                if (pv.max(f.nodes, speed) > f.min) {
+                    f.sim.step();
+                    render = true;
+                }
+            }
+            if (render) that.render();
+        }, 42);
+    } else for (var i = 0; i < k; i++) {
+        sim.step();
+    }
 };

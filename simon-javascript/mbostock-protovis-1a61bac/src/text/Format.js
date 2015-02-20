@@ -59,8 +59,8 @@ pv.Format = {};
  * @param {string} s a string to quote.
  * @returns {string} the quoted string.
  */
-pv.Format.re = function(s) {
-  return s.replace(/[\\\^\$\*\+\?\[\]\(\)\.\{\}]/g, "\\$&");
+pv.Format.re = function (s) {
+    return s.replace(/[\\\^\$\*\+\?\[\]\(\)\.\{\}]/g, "\\$&");
 };
 
 /**
@@ -72,7 +72,7 @@ pv.Format.re = function(s) {
  * @param {string} s the string to pad.
  * @returns {string} the padded string.
  */
-pv.Format.pad = function(c, n, s) {
-  var m = n - String(s).length;
-  return (m < 1) ? s : new Array(m + 1).join(c) + s;
+pv.Format.pad = function (c, n, s) {
+    var m = n - String(s).length;
+    return (m < 1) ? s : new Array(m + 1).join(c) + s;
 };

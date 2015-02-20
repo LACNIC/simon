@@ -1,44 +1,48 @@
 <html>
-  <head>
+<head>
     <title>Wheat &amp; Wages</title>
     <link type="text/css" rel="stylesheet" href="../ex.css"/>
     <script type="text/javascript" src="../../protovis.js"></script>
     <script type="text/javascript" src="wheat.js"></script>
     <style type="text/css">
 
-body {
-  font: oblique small baskerville;
-}
+        body {
+            font: oblique small baskerville;
+        }
 
-#fig {
-  width: 860px;
-  height: 465px;
-}
+        #fig {
+            width: 860px;
+            height: 465px;
+        }
 
-#title {
-  position: absolute;
-  top: 70px;
-  left: 200px;
-  padding: 10px;
-  background: white;
-}
+        #title {
+            position: absolute;
+            top: 70px;
+            left: 200px;
+            padding: 10px;
+            background: white;
+        }
 
-large {
-  font-size: medium;
-}
+        large {
+            font-size: medium;
+        }
 
     </style>
-  </head>
-  <body><div id="center"><div id="fig">
-    <center id="title">
-      <large><b>CHART</b>,<br>
-      Shewing at One View<br>
-      The Price of The Quarter of Wheat,</large><br> &amp;
-      Wages of Labour by the Week,<br>
-      from The Year 1565 to 1821,<br>
-      by WILLIAM PLAYFAIR
-    </center>
-    <script type="text/javascript+protovis">
+</head>
+<body>
+<div id="center">
+    <div id="fig">
+        <center id="title">
+            <large><b>CHART</b>,<br>
+                Shewing at One View<br>
+                The Price of The Quarter of Wheat,
+            </large>
+            <br> &amp;
+            Wages of Labour by the Week,<br>
+            from The Year 1565 to 1821,<br>
+            by WILLIAM PLAYFAIR
+        </center>
+        <script type="text/javascript+protovis">
 
 var w = 860 - 60,
     h = 465 - 20,
@@ -125,6 +129,9 @@ vis.add(pv.Bar)
 
 vis.render();
 
-    </script>
-  </div></div></body>
+
+        </script>
+    </div>
+</div>
+</body>
 </html>

@@ -1,11 +1,11 @@
 <html>
-  <head>
+<head>
     <title>Event Prototype</title>
     <script type="text/javascript" src="../../protovis.js"></script>
     <link rel="stylesheet" type="text/css" href="../style.css"/>
-  </head>
-  <body>
-    <script type="text/javascript+protovis">
+</head>
+<body>
+<script type="text/javascript+protovis">
 
 var vis = new pv.Panel()
     .width(285)
@@ -31,15 +31,17 @@ var label = panel.add(pv.Rule)
 
 vis.render();
 
-    </script><p>
 
-This test verifies that partial rendering correctly observes the current scale
-(the text size should not change); it verifies that the <tt>scale</tt> and
-<tt>index</tt> properties are set inside event handlers (on mouseover, the text
-labels should read "1&nbsp;/&nbsp;1" etc.); it verifies that partial rendering
-wires up the scene of preceding siblings, so as to allow property chaining (no
-crashes); lastly it verifies that when a panel triggers an event, its children
-have a <tt>scene</tt> attribute set, but no index.
+</script>
+<p>
 
-  </body>
+    This test verifies that partial rendering correctly observes the current scale
+    (the text size should not change); it verifies that the <tt>scale</tt> and
+    <tt>index</tt> properties are set inside event handlers (on mouseover, the text
+    labels should read "1&nbsp;/&nbsp;1" etc.); it verifies that partial rendering
+    wires up the scene of preceding siblings, so as to allow property chaining (no
+    crashes); lastly it verifies that when a panel triggers an event, its children
+    have a <tt>scene</tt> attribute set, but no index.
+
+</body>
 </html>

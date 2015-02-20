@@ -1,10 +1,10 @@
 <html>
-  <head>
+<head>
     <title>Area Chart - Cardinal</title>
     <script type="text/javascript" src="../../protovis.js"></script>
-  </head>
-  <body>
-    <script type="text/javascript+protovis">
+</head>
+<body>
+<script type="text/javascript+protovis">
 
 var data = pv.range(0, 10.1).map(function(x) {
         return {x: x, y: Math.sin(x) + Math.random() * .5 + 2};
@@ -52,6 +52,7 @@ vis.add(pv.Area)
 
 vis.render();
 
-    </script>
-  </body>
+
+</script>
+</body>
 </html>

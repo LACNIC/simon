@@ -1,0 +1,1432 @@
+--
+-- PostgreSQL database dump
+--
+
+SET statement_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = off;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET escape_string_warning = off;
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- Name: auth_group; Type: TABLE; Schema: public; Owner: simon; Tablespace: 
+--
+
+CREATE TABLE auth_group (
+    id integer NOT NULL,
+    name character varying(80) NOT NULL
+);
+
+
+ALTER TABLE public.auth_group OWNER TO simon;
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE; Schema: public; Owner: simon
+--
+
+CREATE SEQUENCE auth_group_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_group_id_seq OWNER TO simon;
+
+--
+-- Name: auth_group_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: simon
+--
+
+ALTER SEQUENCE auth_group_id_seq OWNED BY auth_group.id;
+
+
+--
+-- Name: auth_group_permissions; Type: TABLE; Schema: public; Owner: simon; Tablespace: 
+--
+
+CREATE TABLE auth_group_permissions (
+    id integer NOT NULL,
+    group_id integer NOT NULL,
+    permission_id integer NOT NULL
+);
+
+
+ALTER TABLE public.auth_group_permissions OWNER TO simon;
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: simon
+--
+
+CREATE SEQUENCE auth_group_permissions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_group_permissions_id_seq OWNER TO simon;
+
+--
+-- Name: auth_group_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: simon
+--
+
+ALTER SEQUENCE auth_group_permissions_id_seq OWNED BY auth_group_permissions.id;
+
+
+--
+-- Name: auth_permission; Type: TABLE; Schema: public; Owner: simon; Tablespace: 
+--
+
+CREATE TABLE auth_permission (
+    id integer NOT NULL,
+    name character varying(50) NOT NULL,
+    content_type_id integer NOT NULL,
+    codename character varying(100) NOT NULL
+);
+
+
+ALTER TABLE public.auth_permission OWNER TO simon;
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE; Schema: public; Owner: simon
+--
+
+CREATE SEQUENCE auth_permission_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_permission_id_seq OWNER TO simon;
+
+--
+-- Name: auth_permission_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: simon
+--
+
+ALTER SEQUENCE auth_permission_id_seq OWNED BY auth_permission.id;
+
+
+--
+-- Name: auth_user; Type: TABLE; Schema: public; Owner: simon; Tablespace: 
+--
+
+CREATE TABLE auth_user (
+    id integer NOT NULL,
+    username character varying(30) NOT NULL,
+    first_name character varying(30) NOT NULL,
+    last_name character varying(30) NOT NULL,
+    email character varying(75) NOT NULL,
+    password character varying(128) NOT NULL,
+    is_staff boolean NOT NULL,
+    is_active boolean NOT NULL,
+    is_superuser boolean NOT NULL,
+    last_login timestamp with time zone NOT NULL,
+    date_joined timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.auth_user OWNER TO simon;
+
+--
+-- Name: auth_user_groups; Type: TABLE; Schema: public; Owner: simon; Tablespace: 
+--
+
+CREATE TABLE auth_user_groups (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    group_id integer NOT NULL
+);
+
+
+ALTER TABLE public.auth_user_groups OWNER TO simon;
+
+--
+-- Name: auth_user_groups_id_seq; Type: SEQUENCE; Schema: public; Owner: simon
+--
+
+CREATE SEQUENCE auth_user_groups_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_user_groups_id_seq OWNER TO simon;
+
+--
+-- Name: auth_user_groups_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: simon
+--
+
+ALTER SEQUENCE auth_user_groups_id_seq OWNED BY auth_user_groups.id;
+
+
+--
+-- Name: auth_user_id_seq; Type: SEQUENCE; Schema: public; Owner: simon
+--
+
+CREATE SEQUENCE auth_user_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_user_id_seq OWNER TO simon;
+
+--
+-- Name: auth_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: simon
+--
+
+ALTER SEQUENCE auth_user_id_seq OWNED BY auth_user.id;
+
+
+--
+-- Name: auth_user_user_permissions; Type: TABLE; Schema: public; Owner: simon; Tablespace: 
+--
+
+CREATE TABLE auth_user_user_permissions (
+    id integer NOT NULL,
+    user_id integer NOT NULL,
+    permission_id integer NOT NULL
+);
+
+
+ALTER TABLE public.auth_user_user_permissions OWNER TO simon;
+
+--
+-- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE; Schema: public; Owner: simon
+--
+
+CREATE SEQUENCE auth_user_user_permissions_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.auth_user_user_permissions_id_seq OWNER TO simon;
+
+--
+-- Name: auth_user_user_permissions_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: simon
+--
+
+ALTER SEQUENCE auth_user_user_permissions_id_seq OWNED BY auth_user_user_permissions.id;
+
+
+--
+-- Name: django_admin_log; Type: TABLE; Schema: public; Owner: simon; Tablespace: 
+--
+
+CREATE TABLE django_admin_log (
+    id integer NOT NULL,
+    action_time timestamp with time zone NOT NULL,
+    user_id integer NOT NULL,
+    content_type_id integer,
+    object_id text,
+    object_repr character varying(200) NOT NULL,
+    action_flag smallint NOT NULL,
+    change_message text NOT NULL,
+    CONSTRAINT django_admin_log_action_flag_check CHECK ((action_flag >= 0))
+);
+
+
+ALTER TABLE public.django_admin_log OWNER TO simon;
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE; Schema: public; Owner: simon
+--
+
+CREATE SEQUENCE django_admin_log_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.django_admin_log_id_seq OWNER TO simon;
+
+--
+-- Name: django_admin_log_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: simon
+--
+
+ALTER SEQUENCE django_admin_log_id_seq OWNED BY django_admin_log.id;
+
+
+--
+-- Name: django_content_type; Type: TABLE; Schema: public; Owner: simon; Tablespace: 
+--
+
+CREATE TABLE django_content_type (
+    id integer NOT NULL,
+    name character varying(100) NOT NULL,
+    app_label character varying(100) NOT NULL,
+    model character varying(100) NOT NULL
+);
+
+
+ALTER TABLE public.django_content_type OWNER TO simon;
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE; Schema: public; Owner: simon
+--
+
+CREATE SEQUENCE django_content_type_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.django_content_type_id_seq OWNER TO simon;
+
+--
+-- Name: django_content_type_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: simon
+--
+
+ALTER SEQUENCE django_content_type_id_seq OWNED BY django_content_type.id;
+
+
+--
+-- Name: django_session; Type: TABLE; Schema: public; Owner: simon; Tablespace: 
+--
+
+CREATE TABLE django_session (
+    session_key character varying(40) NOT NULL,
+    session_data text NOT NULL,
+    expire_date timestamp with time zone NOT NULL
+);
+
+
+ALTER TABLE public.django_session OWNER TO simon;
+
+--
+-- Name: django_site; Type: TABLE; Schema: public; Owner: simon; Tablespace: 
+--
+
+CREATE TABLE django_site (
+    id integer NOT NULL,
+    domain character varying(100) NOT NULL,
+    name character varying(50) NOT NULL
+);
+
+
+ALTER TABLE public.django_site OWNER TO simon;
+
+--
+-- Name: django_site_id_seq; Type: SEQUENCE; Schema: public; Owner: simon
+--
+
+CREATE SEQUENCE django_site_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.django_site_id_seq OWNER TO simon;
+
+--
+-- Name: django_site_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: simon
+--
+
+ALTER SEQUENCE django_site_id_seq OWNED BY django_site.id;
+
+
+--
+-- Name: simon_app_activetokens; Type: TABLE; Schema: public; Owner: simon; Tablespace: 
+--
+
+CREATE TABLE simon_app_activetokens (
+    id integer NOT NULL,
+    token_value character varying(100) NOT NULL,
+    token_expiration timestamp with time zone NOT NULL,
+    testpoint_id integer NOT NULL
+);
+
+
+ALTER TABLE public.simon_app_activetokens OWNER TO simon;
+
+--
+-- Name: simon_app_activetokens_id_seq; Type: SEQUENCE; Schema: public; Owner: simon
+--
+
+CREATE SEQUENCE simon_app_activetokens_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.simon_app_activetokens_id_seq OWNER TO simon;
+
+--
+-- Name: simon_app_activetokens_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: simon
+--
+
+ALTER SEQUENCE simon_app_activetokens_id_seq OWNED BY simon_app_activetokens.id;
+
+
+--
+-- Name: simon_app_as; Type: TABLE; Schema: public; Owner: simon; Tablespace: 
+--
+
+CREATE TABLE simon_app_as (
+    id integer NOT NULL,
+    asn integer NOT NULL,
+    network text NOT NULL,
+    pfx_length integer NOT NULL
+);
+
+
+ALTER TABLE public.simon_app_as OWNER TO simon;
+
+--
+-- Name: simon_app_as_id_seq; Type: SEQUENCE; Schema: public; Owner: simon
+--
+
+CREATE SEQUENCE simon_app_as_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.simon_app_as_id_seq OWNER TO simon;
+
+--
+-- Name: simon_app_as_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: simon
+--
+
+ALTER SEQUENCE simon_app_as_id_seq OWNED BY simon_app_as.id;
+
+
+--
+-- Name: simon_app_configs; Type: TABLE; Schema: public; Owner: simon; Tablespace: 
+--
+
+CREATE TABLE simon_app_configs (
+    id integer NOT NULL,
+    config_name text NOT NULL,
+    config_value text NOT NULL,
+    config_description text NOT NULL
+);
+
+
+ALTER TABLE public.simon_app_configs OWNER TO simon;
+
+--
+-- Name: simon_app_configs_id_seq; Type: SEQUENCE; Schema: public; Owner: simon
+--
+
+CREATE SEQUENCE simon_app_configs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.simon_app_configs_id_seq OWNER TO simon;
+
+--
+-- Name: simon_app_configs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: simon
+--
+
+ALTER SEQUENCE simon_app_configs_id_seq OWNED BY simon_app_configs.id;
+
+
+--
+-- Name: simon_app_country; Type: TABLE; Schema: public; Owner: simon; Tablespace: 
+--
+
+CREATE TABLE simon_app_country (
+    id integer NOT NULL,
+    iso character varying(2) NOT NULL,
+    name character varying(80) NOT NULL,
+    printable_name character varying(80) NOT NULL,
+    iso3 character varying(3),
+    numcode integer,
+    region_id integer NOT NULL
+);
+
+
+ALTER TABLE public.simon_app_country OWNER TO simon;
+
+--
+-- Name: simon_app_country_id_seq; Type: SEQUENCE; Schema: public; Owner: simon
+--
+
+CREATE SEQUENCE simon_app_country_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.simon_app_country_id_seq OWNER TO simon;
+
+--
+-- Name: simon_app_country_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: simon
+--
+
+ALTER SEQUENCE simon_app_country_id_seq OWNED BY simon_app_country.id;
+
+
+--
+-- Name: simon_app_images; Type: TABLE; Schema: public; Owner: simon; Tablespace: 
+--
+
+CREATE TABLE simon_app_images (
+    id integer NOT NULL,
+    size integer,
+    width integer,
+    height integer,
+    type text NOT NULL,
+    timeout integer,
+    online boolean NOT NULL,
+    name character varying(30) NOT NULL
+);
+
+
+ALTER TABLE public.simon_app_images OWNER TO simon;
+
+--
+-- Name: simon_app_images_id_seq; Type: SEQUENCE; Schema: public; Owner: simon
+--
+
+CREATE SEQUENCE simon_app_images_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.simon_app_images_id_seq OWNER TO simon;
+
+--
+-- Name: simon_app_images_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: simon
+--
+
+ALTER SEQUENCE simon_app_images_id_seq OWNED BY simon_app_images.id;
+
+
+--
+-- Name: simon_app_images_in_testpoints; Type: TABLE; Schema: public; Owner: simon; Tablespace: 
+--
+
+CREATE TABLE simon_app_images_in_testpoints (
+    id integer NOT NULL,
+    "testPoint_id" integer NOT NULL,
+    image_id integer NOT NULL,
+    local_path text NOT NULL
+);
+
+
+ALTER TABLE public.simon_app_images_in_testpoints OWNER TO simon;
+
+--
+-- Name: simon_app_images_in_testpoints_id_seq; Type: SEQUENCE; Schema: public; Owner: simon
+--
+
+CREATE SEQUENCE simon_app_images_in_testpoints_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.simon_app_images_in_testpoints_id_seq OWNER TO simon;
+
+--
+-- Name: simon_app_images_in_testpoints_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: simon
+--
+
+ALTER SEQUENCE simon_app_images_in_testpoints_id_seq OWNED BY simon_app_images_in_testpoints.id;
+
+
+--
+-- Name: simon_app_offlinereport; Type: TABLE; Schema: public; Owner: simon; Tablespace: 
+--
+
+CREATE TABLE simon_app_offlinereport (
+    id integer NOT NULL,
+    ip_address inet NOT NULL,
+    date_reported timestamp with time zone NOT NULL,
+    report_count integer
+);
+
+
+ALTER TABLE public.simon_app_offlinereport OWNER TO simon;
+
+--
+-- Name: simon_app_offlinereport_id_seq; Type: SEQUENCE; Schema: public; Owner: simon
+--
+
+CREATE SEQUENCE simon_app_offlinereport_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.simon_app_offlinereport_id_seq OWNER TO simon;
+
+--
+-- Name: simon_app_offlinereport_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: simon
+--
+
+ALTER SEQUENCE simon_app_offlinereport_id_seq OWNED BY simon_app_offlinereport.id;
+
+
+--
+-- Name: simon_app_params; Type: TABLE; Schema: public; Owner: simon; Tablespace: 
+--
+
+CREATE TABLE simon_app_params (
+    id integer NOT NULL,
+    config_name text NOT NULL,
+    config_value text NOT NULL
+);
+
+
+ALTER TABLE public.simon_app_params OWNER TO simon;
+
+--
+-- Name: simon_app_params_id_seq; Type: SEQUENCE; Schema: public; Owner: simon
+--
+
+CREATE SEQUENCE simon_app_params_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.simon_app_params_id_seq OWNER TO simon;
+
+--
+-- Name: simon_app_params_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: simon
+--
+
+ALTER SEQUENCE simon_app_params_id_seq OWNED BY simon_app_params.id;
+
+
+--
+-- Name: simon_app_region; Type: TABLE; Schema: public; Owner: simon; Tablespace: 
+--
+
+CREATE TABLE simon_app_region (
+    id integer NOT NULL,
+    name character varying(80) NOT NULL,
+    numcode integer
+);
+
+
+ALTER TABLE public.simon_app_region OWNER TO simon;
+
+--
+-- Name: simon_app_region_id_seq; Type: SEQUENCE; Schema: public; Owner: simon
+--
+
+CREATE SEQUENCE simon_app_region_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.simon_app_region_id_seq OWNER TO simon;
+
+--
+-- Name: simon_app_region_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: simon
+--
+
+ALTER SEQUENCE simon_app_region_id_seq OWNED BY simon_app_region.id;
+
+
+--
+-- Name: simon_app_results; Type: TABLE; Schema: public; Owner: simon; Tablespace: 
+--
+
+CREATE TABLE simon_app_results (
+    id integer NOT NULL,
+    date_test timestamp with time zone NOT NULL,
+    version integer,
+    ip_origin inet NOT NULL,
+    ip_destination inet NOT NULL,
+    testype character varying(20) NOT NULL,
+    number_probes integer,
+    min_rtt integer,
+    max_rtt integer,
+    ave_rtt integer,
+    dev_rtt integer,
+    median_rtt integer,
+    packet_loss integer,
+    country_origin character varying(2) NOT NULL,
+    country_destination character varying(2) NOT NULL,
+    ip_version integer NOT NULL,
+    tester character varying(20) NOT NULL,
+    tester_version character varying(10) NOT NULL,
+    as_origin_id integer,
+    as_destination_id integer,
+    user_agent text,
+    url character varying
+);
+
+
+ALTER TABLE public.simon_app_results OWNER TO simon;
+
+--
+-- Name: simon_app_results_id_seq; Type: SEQUENCE; Schema: public; Owner: simon
+--
+
+CREATE SEQUENCE simon_app_results_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.simon_app_results_id_seq OWNER TO simon;
+
+--
+-- Name: simon_app_results_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: simon
+--
+
+ALTER SEQUENCE simon_app_results_id_seq OWNED BY simon_app_results.id;
+
+
+--
+-- Name: simon_app_testpoint; Type: TABLE; Schema: public; Owner: simon; Tablespace: 
+--
+
+CREATE TABLE simon_app_testpoint (
+    id integer NOT NULL,
+    description text NOT NULL,
+    testtype character varying(20) NOT NULL,
+    ip_address inet NOT NULL,
+    country character varying(2) NOT NULL,
+    enabled boolean NOT NULL,
+    date_created timestamp with time zone NOT NULL,
+    url text,
+    city character varying(100),
+    latitude double precision,
+    longitude double precision
+);
+
+
+ALTER TABLE public.simon_app_testpoint OWNER TO simon;
+
+--
+-- Name: simon_app_testpoint_id_seq; Type: SEQUENCE; Schema: public; Owner: simon
+--
+
+CREATE SEQUENCE simon_app_testpoint_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.simon_app_testpoint_id_seq OWNER TO simon;
+
+--
+-- Name: simon_app_testpoint_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: simon
+--
+
+ALTER SEQUENCE simon_app_testpoint_id_seq OWNED BY simon_app_testpoint.id;
+
+
+--
+-- Name: simon_app_throughputresults; Type: TABLE; Schema: public; Owner: simon; Tablespace: 
+--
+
+CREATE TABLE simon_app_throughputresults (
+    id integer NOT NULL,
+    date_test timestamp with time zone NOT NULL,
+    ip_origin inet NOT NULL,
+    ip_destination inet NOT NULL,
+    testype character varying(20) NOT NULL,
+    "time" integer,
+    size integer,
+    country_origin character varying(2) NOT NULL,
+    country_destination character varying(2) NOT NULL,
+    ip_version integer NOT NULL,
+    tester character varying(20) NOT NULL,
+    tester_version character varying(10) NOT NULL
+);
+
+
+ALTER TABLE public.simon_app_throughputresults OWNER TO simon;
+
+--
+-- Name: simon_app_throughputresults_id_seq; Type: SEQUENCE; Schema: public; Owner: simon
+--
+
+CREATE SEQUENCE simon_app_throughputresults_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MAXVALUE
+    NO MINVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.simon_app_throughputresults_id_seq OWNER TO simon;
+
+--
+-- Name: simon_app_throughputresults_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: simon
+--
+
+ALTER SEQUENCE simon_app_throughputresults_id_seq OWNED BY simon_app_throughputresults.id;
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: simon
+--
+
+ALTER TABLE ONLY auth_group ALTER COLUMN id SET DEFAULT nextval('auth_group_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: simon
+--
+
+ALTER TABLE ONLY auth_group_permissions ALTER COLUMN id SET DEFAULT nextval('auth_group_permissions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: simon
+--
+
+ALTER TABLE ONLY auth_permission ALTER COLUMN id SET DEFAULT nextval('auth_permission_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: simon
+--
+
+ALTER TABLE ONLY auth_user ALTER COLUMN id SET DEFAULT nextval('auth_user_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: simon
+--
+
+ALTER TABLE ONLY auth_user_groups ALTER COLUMN id SET DEFAULT nextval('auth_user_groups_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: simon
+--
+
+ALTER TABLE ONLY auth_user_user_permissions ALTER COLUMN id SET DEFAULT nextval('auth_user_user_permissions_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: simon
+--
+
+ALTER TABLE ONLY django_admin_log ALTER COLUMN id SET DEFAULT nextval('django_admin_log_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: simon
+--
+
+ALTER TABLE ONLY django_content_type ALTER COLUMN id SET DEFAULT nextval('django_content_type_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: simon
+--
+
+ALTER TABLE ONLY django_site ALTER COLUMN id SET DEFAULT nextval('django_site_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: simon
+--
+
+ALTER TABLE ONLY simon_app_activetokens ALTER COLUMN id SET DEFAULT nextval('simon_app_activetokens_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: simon
+--
+
+ALTER TABLE ONLY simon_app_as ALTER COLUMN id SET DEFAULT nextval('simon_app_as_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: simon
+--
+
+ALTER TABLE ONLY simon_app_configs ALTER COLUMN id SET DEFAULT nextval('simon_app_configs_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: simon
+--
+
+ALTER TABLE ONLY simon_app_country ALTER COLUMN id SET DEFAULT nextval('simon_app_country_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: simon
+--
+
+ALTER TABLE ONLY simon_app_images ALTER COLUMN id SET DEFAULT nextval('simon_app_images_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: simon
+--
+
+ALTER TABLE ONLY simon_app_images_in_testpoints ALTER COLUMN id SET DEFAULT nextval('simon_app_images_in_testpoints_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: simon
+--
+
+ALTER TABLE ONLY simon_app_offlinereport ALTER COLUMN id SET DEFAULT nextval('simon_app_offlinereport_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: simon
+--
+
+ALTER TABLE ONLY simon_app_params ALTER COLUMN id SET DEFAULT nextval('simon_app_params_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: simon
+--
+
+ALTER TABLE ONLY simon_app_region ALTER COLUMN id SET DEFAULT nextval('simon_app_region_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: simon
+--
+
+ALTER TABLE ONLY simon_app_results ALTER COLUMN id SET DEFAULT nextval('simon_app_results_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: simon
+--
+
+ALTER TABLE ONLY simon_app_testpoint ALTER COLUMN id SET DEFAULT nextval('simon_app_testpoint_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: simon
+--
+
+ALTER TABLE ONLY simon_app_throughputresults ALTER COLUMN id SET DEFAULT nextval('simon_app_throughputresults_id_seq'::regclass);
+
+
+--
+-- Name: auth_group_name_key; Type: CONSTRAINT; Schema: public; Owner: simon; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_group
+    ADD CONSTRAINT auth_group_name_key UNIQUE (name);
+
+
+--
+-- Name: auth_group_permissions_group_id_key; Type: CONSTRAINT; Schema: public; Owner: simon; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_group_id_key UNIQUE (group_id, permission_id);
+
+
+--
+-- Name: auth_group_permissions_group_id_permission_id_key; Type: CONSTRAINT; Schema: public; Owner: simon; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_group_id_permission_id_key UNIQUE (group_id, permission_id);
+
+
+--
+-- Name: auth_group_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: simon; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_group_pkey; Type: CONSTRAINT; Schema: public; Owner: simon; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_group
+    ADD CONSTRAINT auth_group_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_permission_content_type_id_codename_key; Type: CONSTRAINT; Schema: public; Owner: simon; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_permission
+    ADD CONSTRAINT auth_permission_content_type_id_codename_key UNIQUE (content_type_id, codename);
+
+
+--
+-- Name: auth_permission_content_type_id_key; Type: CONSTRAINT; Schema: public; Owner: simon; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_permission
+    ADD CONSTRAINT auth_permission_content_type_id_key UNIQUE (content_type_id, codename);
+
+
+--
+-- Name: auth_permission_pkey; Type: CONSTRAINT; Schema: public; Owner: simon; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_permission
+    ADD CONSTRAINT auth_permission_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_groups_pkey; Type: CONSTRAINT; Schema: public; Owner: simon; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_user_groups
+    ADD CONSTRAINT auth_user_groups_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_groups_user_id_group_id_key; Type: CONSTRAINT; Schema: public; Owner: simon; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_user_groups
+    ADD CONSTRAINT auth_user_groups_user_id_group_id_key UNIQUE (user_id, group_id);
+
+
+--
+-- Name: auth_user_groups_user_id_key; Type: CONSTRAINT; Schema: public; Owner: simon; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_user_groups
+    ADD CONSTRAINT auth_user_groups_user_id_key UNIQUE (user_id, group_id);
+
+
+--
+-- Name: auth_user_pkey; Type: CONSTRAINT; Schema: public; Owner: simon; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_user
+    ADD CONSTRAINT auth_user_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_user_permissions_pkey; Type: CONSTRAINT; Schema: public; Owner: simon; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permissions_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_user_user_permissions_user_id_key; Type: CONSTRAINT; Schema: public; Owner: simon; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permissions_user_id_key UNIQUE (user_id, permission_id);
+
+
+--
+-- Name: auth_user_user_permissions_user_id_permission_id_key; Type: CONSTRAINT; Schema: public; Owner: simon; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permissions_user_id_permission_id_key UNIQUE (user_id, permission_id);
+
+
+--
+-- Name: auth_user_username_key; Type: CONSTRAINT; Schema: public; Owner: simon; Tablespace: 
+--
+
+ALTER TABLE ONLY auth_user
+    ADD CONSTRAINT auth_user_username_key UNIQUE (username);
+
+
+--
+-- Name: django_admin_log_pkey; Type: CONSTRAINT; Schema: public; Owner: simon; Tablespace: 
+--
+
+ALTER TABLE ONLY django_admin_log
+    ADD CONSTRAINT django_admin_log_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_content_type_app_label_key; Type: CONSTRAINT; Schema: public; Owner: simon; Tablespace: 
+--
+
+ALTER TABLE ONLY django_content_type
+    ADD CONSTRAINT django_content_type_app_label_key UNIQUE (app_label, model);
+
+
+--
+-- Name: django_content_type_app_label_model_key; Type: CONSTRAINT; Schema: public; Owner: simon; Tablespace: 
+--
+
+ALTER TABLE ONLY django_content_type
+    ADD CONSTRAINT django_content_type_app_label_model_key UNIQUE (app_label, model);
+
+
+--
+-- Name: django_content_type_pkey; Type: CONSTRAINT; Schema: public; Owner: simon; Tablespace: 
+--
+
+ALTER TABLE ONLY django_content_type
+    ADD CONSTRAINT django_content_type_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: django_session_pkey; Type: CONSTRAINT; Schema: public; Owner: simon; Tablespace: 
+--
+
+ALTER TABLE ONLY django_session
+    ADD CONSTRAINT django_session_pkey PRIMARY KEY (session_key);
+
+
+--
+-- Name: django_site_pkey; Type: CONSTRAINT; Schema: public; Owner: simon; Tablespace: 
+--
+
+ALTER TABLE ONLY django_site
+    ADD CONSTRAINT django_site_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: simon_app_activetokens_pkey; Type: CONSTRAINT; Schema: public; Owner: simon; Tablespace: 
+--
+
+ALTER TABLE ONLY simon_app_activetokens
+    ADD CONSTRAINT simon_app_activetokens_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: simon_app_as_pkey; Type: CONSTRAINT; Schema: public; Owner: simon; Tablespace: 
+--
+
+ALTER TABLE ONLY simon_app_as
+    ADD CONSTRAINT simon_app_as_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: simon_app_configs_pkey; Type: CONSTRAINT; Schema: public; Owner: simon; Tablespace: 
+--
+
+ALTER TABLE ONLY simon_app_configs
+    ADD CONSTRAINT simon_app_configs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: simon_app_country_pkey; Type: CONSTRAINT; Schema: public; Owner: simon; Tablespace: 
+--
+
+ALTER TABLE ONLY simon_app_country
+    ADD CONSTRAINT simon_app_country_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: simon_app_images_in_testpoints_pkey; Type: CONSTRAINT; Schema: public; Owner: simon; Tablespace: 
+--
+
+ALTER TABLE ONLY simon_app_images_in_testpoints
+    ADD CONSTRAINT simon_app_images_in_testpoints_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: simon_app_images_pkey; Type: CONSTRAINT; Schema: public; Owner: simon; Tablespace: 
+--
+
+ALTER TABLE ONLY simon_app_images
+    ADD CONSTRAINT simon_app_images_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: simon_app_offlinereport_pkey; Type: CONSTRAINT; Schema: public; Owner: simon; Tablespace: 
+--
+
+ALTER TABLE ONLY simon_app_offlinereport
+    ADD CONSTRAINT simon_app_offlinereport_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: simon_app_params_pkey; Type: CONSTRAINT; Schema: public; Owner: simon; Tablespace: 
+--
+
+ALTER TABLE ONLY simon_app_params
+    ADD CONSTRAINT simon_app_params_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: simon_app_region_pkey; Type: CONSTRAINT; Schema: public; Owner: simon; Tablespace: 
+--
+
+ALTER TABLE ONLY simon_app_region
+    ADD CONSTRAINT simon_app_region_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: simon_app_results_pkey; Type: CONSTRAINT; Schema: public; Owner: simon; Tablespace: 
+--
+
+ALTER TABLE ONLY simon_app_results
+    ADD CONSTRAINT simon_app_results_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: simon_app_testpoint_pkey; Type: CONSTRAINT; Schema: public; Owner: simon; Tablespace: 
+--
+
+ALTER TABLE ONLY simon_app_testpoint
+    ADD CONSTRAINT simon_app_testpoint_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: simon_app_throughputresults_pkey; Type: CONSTRAINT; Schema: public; Owner: simon; Tablespace: 
+--
+
+ALTER TABLE ONLY simon_app_throughputresults
+    ADD CONSTRAINT simon_app_throughputresults_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: auth_group_permissions_group_id; Type: INDEX; Schema: public; Owner: simon; Tablespace: 
+--
+
+CREATE INDEX auth_group_permissions_group_id ON auth_group_permissions USING btree (group_id);
+
+
+--
+-- Name: auth_group_permissions_permission_id; Type: INDEX; Schema: public; Owner: simon; Tablespace: 
+--
+
+CREATE INDEX auth_group_permissions_permission_id ON auth_group_permissions USING btree (permission_id);
+
+
+--
+-- Name: auth_permission_content_type_id; Type: INDEX; Schema: public; Owner: simon; Tablespace: 
+--
+
+CREATE INDEX auth_permission_content_type_id ON auth_permission USING btree (content_type_id);
+
+
+--
+-- Name: auth_user_groups_group_id; Type: INDEX; Schema: public; Owner: simon; Tablespace: 
+--
+
+CREATE INDEX auth_user_groups_group_id ON auth_user_groups USING btree (group_id);
+
+
+--
+-- Name: auth_user_groups_user_id; Type: INDEX; Schema: public; Owner: simon; Tablespace: 
+--
+
+CREATE INDEX auth_user_groups_user_id ON auth_user_groups USING btree (user_id);
+
+
+--
+-- Name: auth_user_user_permissions_permission_id; Type: INDEX; Schema: public; Owner: simon; Tablespace: 
+--
+
+CREATE INDEX auth_user_user_permissions_permission_id ON auth_user_user_permissions USING btree (permission_id);
+
+
+--
+-- Name: auth_user_user_permissions_user_id; Type: INDEX; Schema: public; Owner: simon; Tablespace: 
+--
+
+CREATE INDEX auth_user_user_permissions_user_id ON auth_user_user_permissions USING btree (user_id);
+
+
+--
+-- Name: django_admin_log_content_type_id; Type: INDEX; Schema: public; Owner: simon; Tablespace: 
+--
+
+CREATE INDEX django_admin_log_content_type_id ON django_admin_log USING btree (content_type_id);
+
+
+--
+-- Name: django_admin_log_user_id; Type: INDEX; Schema: public; Owner: simon; Tablespace: 
+--
+
+CREATE INDEX django_admin_log_user_id ON django_admin_log USING btree (user_id);
+
+
+--
+-- Name: django_session_expire_date; Type: INDEX; Schema: public; Owner: simon; Tablespace: 
+--
+
+CREATE INDEX django_session_expire_date ON django_session USING btree (expire_date);
+
+
+--
+-- Name: auth_group_permissions_permission_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: simon
+--
+
+ALTER TABLE ONLY auth_group_permissions
+    ADD CONSTRAINT auth_group_permissions_permission_id_fkey FOREIGN KEY (permission_id) REFERENCES auth_permission(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_user_groups_group_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: simon
+--
+
+ALTER TABLE ONLY auth_user_groups
+    ADD CONSTRAINT auth_user_groups_group_id_fkey FOREIGN KEY (group_id) REFERENCES auth_group(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: auth_user_user_permissions_permission_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: simon
+--
+
+ALTER TABLE ONLY auth_user_user_permissions
+    ADD CONSTRAINT auth_user_user_permissions_permission_id_fkey FOREIGN KEY (permission_id) REFERENCES auth_permission(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: content_type_id_refs_id_728de91f; Type: FK CONSTRAINT; Schema: public; Owner: simon
+--
+
+ALTER TABLE ONLY auth_permission
+    ADD CONSTRAINT content_type_id_refs_id_728de91f FOREIGN KEY (content_type_id) REFERENCES django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: django_admin_log_content_type_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: simon
+--
+
+ALTER TABLE ONLY django_admin_log
+    ADD CONSTRAINT django_admin_log_content_type_id_fkey FOREIGN KEY (content_type_id) REFERENCES django_content_type(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: django_admin_log_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: simon
+--
+
+ALTER TABLE ONLY django_admin_log
+    ADD CONSTRAINT django_admin_log_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: group_id_refs_id_3cea63fe; Type: FK CONSTRAINT; Schema: public; Owner: simon
+--
+
+ALTER TABLE ONLY auth_group_permissions
+    ADD CONSTRAINT group_id_refs_id_3cea63fe FOREIGN KEY (group_id) REFERENCES auth_group(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: simon_app_activetokens_testpoint_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: simon
+--
+
+ALTER TABLE ONLY simon_app_activetokens
+    ADD CONSTRAINT simon_app_activetokens_testpoint_id_fkey FOREIGN KEY (testpoint_id) REFERENCES simon_app_testpoint(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: simon_app_country_region_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: simon
+--
+
+ALTER TABLE ONLY simon_app_country
+    ADD CONSTRAINT simon_app_country_region_id_fkey FOREIGN KEY (region_id) REFERENCES simon_app_region(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: simon_app_images_in_testpoints_image_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: simon
+--
+
+ALTER TABLE ONLY simon_app_images_in_testpoints
+    ADD CONSTRAINT simon_app_images_in_testpoints_image_id_fkey FOREIGN KEY (image_id) REFERENCES simon_app_images(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: simon_app_images_in_testpoints_testPoint_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: simon
+--
+
+ALTER TABLE ONLY simon_app_images_in_testpoints
+    ADD CONSTRAINT "simon_app_images_in_testpoints_testPoint_id_fkey" FOREIGN KEY ("testPoint_id") REFERENCES simon_app_testpoint(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: user_id_refs_id_7ceef80f; Type: FK CONSTRAINT; Schema: public; Owner: simon
+--
+
+ALTER TABLE ONLY auth_user_groups
+    ADD CONSTRAINT user_id_refs_id_7ceef80f FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: user_id_refs_id_831107f1; Type: FK CONSTRAINT; Schema: public; Owner: simon
+--
+
+ALTER TABLE ONLY auth_user_groups
+    ADD CONSTRAINT user_id_refs_id_831107f1 FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: user_id_refs_id_dfbab7d; Type: FK CONSTRAINT; Schema: public; Owner: simon
+--
+
+ALTER TABLE ONLY auth_user_user_permissions
+    ADD CONSTRAINT user_id_refs_id_dfbab7d FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: user_id_refs_id_f2045483; Type: FK CONSTRAINT; Schema: public; Owner: simon
+--
+
+ALTER TABLE ONLY auth_user_user_permissions
+    ADD CONSTRAINT user_id_refs_id_f2045483 FOREIGN KEY (user_id) REFERENCES auth_user(id) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+--
+-- PostgreSQL database dump complete
+--
+

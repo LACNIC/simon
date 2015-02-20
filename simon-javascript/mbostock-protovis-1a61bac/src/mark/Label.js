@@ -23,8 +23,8 @@
  *
  * @extends pv.Mark
  */
-pv.Label = function() {
-  pv.Mark.call(this);
+pv.Label = function () {
+    pv.Mark.call(this);
 };
 
 pv.Label.prototype = pv.extend(pv.Mark)

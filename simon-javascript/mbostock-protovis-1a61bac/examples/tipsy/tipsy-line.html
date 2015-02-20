@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>Tipsy Line</title>
     <script type="text/javascript" src="../../protovis.js"></script>
     <script src="../jquery-1.4.2.min.js" type="text/javascript"></script>
@@ -9,14 +9,14 @@
     <link href="tipsy.css" type="text/css" rel="stylesheet"/>
     <style type="text/css">
 
-body {
-  font: 10px sans-serif;
-}
+        body {
+            font: 10px sans-serif;
+        }
 
     </style>
-  </head>
-  <body>
-    <script type="text/javascript+protovis">
+</head>
+<body>
+<script type="text/javascript+protovis">
 
 var data = pv.range(0, 10, .1).map(function(x) {
         return {x: x, y: Math.sin(x) + Math.random() * .5 + 2};
@@ -62,6 +62,7 @@ vis.add(pv.Line)
 
 vis.render();
 
-    </script>
-  </body>
+
+</script>
+</body>
 </html>

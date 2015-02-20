@@ -1,11 +1,13 @@
 <html>
-  <head>
+<head>
     <title>Bar Anchor</title>
     <script type="text/javascript" src="../../protovis.js"></script>
-    <style type="text/css">span { display: block !important; }</style>
-  </head>
-  <body>
-    <script type="text/javascript+protovis">
+    <style type="text/css">span {
+        display: block !important;
+    }</style>
+</head>
+<body>
+<script type="text/javascript+protovis">
 
 var data = pv.range(0, 10, .5).map(function(x) ({
       x: x,
@@ -46,6 +48,7 @@ var bar3 = bar2.anchor("top").add(pv.Bar)
 
 vis.render();
 
-    </script>
-  </body>
+
+</script>
+</body>
 </html>

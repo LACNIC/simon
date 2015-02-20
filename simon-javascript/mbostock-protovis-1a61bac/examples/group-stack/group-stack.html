@@ -1,11 +1,11 @@
 <html>
-  <head>
+<head>
     <title>Group Stacked Bar Chart</title>
     <script type="text/javascript" src="../../protovis.js"></script>
     <script type="text/javascript" src="headcount.js"></script>
-  </head>
-  <body>
-    <script type="text/javascript+protovis">
+</head>
+<body>
+<script type="text/javascript+protovis">
 
 /* Extract the unique dates, departments and types. */
 var dates = pv.uniq(headcount, function(d) d.date),
@@ -74,6 +74,7 @@ vis.add(pv.Rule)
 
 vis.render();
 
-    </script>
-  </body>
+
+</script>
+</body>
 </html>

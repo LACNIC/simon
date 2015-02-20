@@ -36,36 +36,36 @@
  * generation.
  *
  * <p>For irregular grids using value-based spatial partitioning, see {@link
- * pv.Layout.Treemap}.
+    * pv.Layout.Treemap}.
  *
  * @extends pv.Layout
  */
-pv.Layout.Grid = function() {
-  pv.Layout.call(this);
-  var that = this;
+pv.Layout.Grid = function () {
+    pv.Layout.call(this);
+    var that = this;
 
-  /**
-   * The cell prototype. This prototype is intended to be used with a bar,
-   * panel, or layout (or subclass thereof) to render the grid cells.
-   *
-   * @type pv.Mark
-   * @name pv.Layout.Grid.prototype.cell
-   */
-  (this.cell = new pv.Mark()
-      .data(function() {
-          return that.scene[that.index].$grid;
+    /**
+     * The cell prototype. This prototype is intended to be used with a bar,
+     * panel, or layout (or subclass thereof) to render the grid cells.
+     *
+     * @type pv.Mark
+     * @name pv.Layout.Grid.prototype.cell
+     */
+    (this.cell = new pv.Mark()
+        .data(function () {
+            return that.scene[that.index].$grid;
         })
-      .width(function() {
-          return that.width() / that.cols();
+        .width(function () {
+            return that.width() / that.cols();
         })
-      .height(function() {
-          return that.height() / that.rows();
+        .height(function () {
+            return that.height() / that.rows();
         })
-      .left(function() {
-          return this.width() * (this.index % that.cols());
+        .left(function () {
+            return this.width() * (this.index % that.cols());
         })
-      .top(function() {
-          return this.height() * Math.floor(this.index / that.cols());
+        .top(function () {
+            return this.height() * Math.floor(this.index / that.cols());
         })).parent = this;
 };
 
@@ -85,17 +85,17 @@ pv.Layout.Grid.prototype.defaults = new pv.Layout.Grid()
     .cols(1);
 
 /** @private */
-pv.Layout.Grid.prototype.buildImplied = function(s) {
-  pv.Layout.prototype.buildImplied.call(this, s);
-  var r = s.rows, c = s.cols;
-  if (typeof c == "object") r = pv.transpose(c);
-  if (typeof r == "object") {
-    s.$grid = pv.blend(r);
-    s.rows = r.length;
-    s.cols = r[0] ? r[0].length : 0;
-  } else {
-    s.$grid = pv.repeat([s.data], r * c);
-  }
+pv.Layout.Grid.prototype.buildImplied = function (s) {
+    pv.Layout.prototype.buildImplied.call(this, s);
+    var r = s.rows, c = s.cols;
+    if (typeof c == "object") r = pv.transpose(c);
+    if (typeof r == "object") {
+        s.$grid = pv.blend(r);
+        s.rows = r.length;
+        s.cols = r[0] ? r[0].length : 0;
+    } else {
+        s.$grid = pv.repeat([s.data], r * c);
+    }
 };
 
 /**

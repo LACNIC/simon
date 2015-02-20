@@ -18,8 +18,8 @@
  *
  * @extends pv.Mark
  */
-pv.Line = function() {
-  pv.Mark.call(this);
+pv.Line = function () {
+    pv.Mark.call(this);
 };
 
 pv.Line.prototype = pv.extend(pv.Mark)
@@ -172,24 +172,30 @@ pv.Line.prototype.buildInstance = pv.Area.prototype.buildInstance;
  * @param {string} name the anchor name; either a string or a property function.
  * @returns {pv.Anchor}
  */
-pv.Line.prototype.anchor = function(name) {
-  return pv.Area.prototype.anchor.call(this, name)
-    .textAlign(function(d) {
-        switch (this.name()) {
-          case "left": return "right";
-          case "bottom":
-          case "top":
-          case "center": return "center";
-          case "right": return "left";
-        }
-      })
-    .textBaseline(function(d) {
-        switch (this.name()) {
-          case "right":
-          case "left":
-          case "center": return "middle";
-          case "top": return "bottom";
-          case "bottom": return "top";
-        }
-      });
+pv.Line.prototype.anchor = function (name) {
+    return pv.Area.prototype.anchor.call(this, name)
+        .textAlign(function (d) {
+            switch (this.name()) {
+                case "left":
+                    return "right";
+                case "bottom":
+                case "top":
+                case "center":
+                    return "center";
+                case "right":
+                    return "left";
+            }
+        })
+        .textBaseline(function (d) {
+            switch (this.name()) {
+                case "right":
+                case "left":
+                case "center":
+                    return "middle";
+                case "top":
+                    return "bottom";
+                case "bottom":
+                    return "top";
+            }
+        });
 };

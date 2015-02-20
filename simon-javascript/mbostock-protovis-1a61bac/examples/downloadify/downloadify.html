@@ -1,13 +1,13 @@
 <html>
-  <head>
+<head>
     <title>Downloadify</title>
     <script type="text/javascript" src="swfobject.js"></script>
     <script type="text/javascript" src="downloadify.min.js"></script>
     <script type="text/javascript" src="../../protovis.js"></script>
     <link type="text/css" href="../../tests/style.css" rel="stylesheet"/>
-  </head>
-  <body>
-    <script type="text/javascript+protovis">
+</head>
+<body>
+<script type="text/javascript+protovis">
 
 var data = pv.range(10).map(Math.random).sort(pv.reverseOrder),
     w = 400,
@@ -44,14 +44,15 @@ Downloadify.create("save", {
   data: "<svg xmlns=\"http://www.w3.org/2000/svg\"" + vis.canvas().innerHTML.substring(4)
 });
 
-    </script>
-    <p id="save">You must have Flash 10 installed to download this file.</p>
 
-    <p>This example demonstrates using <a
-    href="http://www.downloadify.info/">Downloadify</a> to save the contents of
+</script>
+<p id="save">You must have Flash 10 installed to download this file.</p>
+
+<p>This example demonstrates using <a
+        href="http://www.downloadify.info/">Downloadify</a> to save the contents of
     a Protovis canvas to a static SVG file. Note that because of security
     restrictions, this example only works when hosted on a server; it will not
     work when opened as a local file. Also note that Downloadify requires Flash
     10.
-  </body>
+</body>
 </html>

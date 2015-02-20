@@ -14,8 +14,8 @@
  *
  * @extends pv.Mark
  */
-pv.Dot = function() {
-  pv.Mark.call(this);
+pv.Dot = function () {
+    pv.Mark.call(this);
 };
 
 pv.Dot.prototype = pv.extend(pv.Mark)
@@ -144,59 +144,67 @@ pv.Dot.prototype.defaults = new pv.Dot()
  * @param {string} name the anchor name; either a string or a property function.
  * @returns {pv.Anchor}
  */
-pv.Dot.prototype.anchor = function(name) {
-  return pv.Mark.prototype.anchor.call(this, name)
-    .left(function() {
-        var s = this.scene.target[this.index];
-        switch (this.name()) {
-          case "bottom":
-          case "top":
-          case "center": return s.left;
-          case "left": return null;
-        }
-        return s.left + s.radius;
-      })
-    .right(function() {
-        var s = this.scene.target[this.index];
-        return this.name() == "left" ? s.right + s.radius : null;
-      })
-    .top(function() {
-        var s = this.scene.target[this.index];
-        switch (this.name()) {
-          case "left":
-          case "right":
-          case "center": return s.top;
-          case "top": return null;
-        }
-        return s.top + s.radius;
-      })
-    .bottom(function() {
-        var s = this.scene.target[this.index];
-        return this.name() == "top" ? s.bottom + s.radius : null;
-      })
-    .textAlign(function() {
-        switch (this.name()) {
-          case "left": return "right";
-          case "bottom":
-          case "top":
-          case "center": return "center";
-        }
-        return "left";
-      })
-    .textBaseline(function() {
-        switch (this.name()) {
-          case "right":
-          case "left":
-          case "center": return "middle";
-          case "bottom": return "top";
-        }
-        return "bottom";
-      });
+pv.Dot.prototype.anchor = function (name) {
+    return pv.Mark.prototype.anchor.call(this, name)
+        .left(function () {
+            var s = this.scene.target[this.index];
+            switch (this.name()) {
+                case "bottom":
+                case "top":
+                case "center":
+                    return s.left;
+                case "left":
+                    return null;
+            }
+            return s.left + s.radius;
+        })
+        .right(function () {
+            var s = this.scene.target[this.index];
+            return this.name() == "left" ? s.right + s.radius : null;
+        })
+        .top(function () {
+            var s = this.scene.target[this.index];
+            switch (this.name()) {
+                case "left":
+                case "right":
+                case "center":
+                    return s.top;
+                case "top":
+                    return null;
+            }
+            return s.top + s.radius;
+        })
+        .bottom(function () {
+            var s = this.scene.target[this.index];
+            return this.name() == "top" ? s.bottom + s.radius : null;
+        })
+        .textAlign(function () {
+            switch (this.name()) {
+                case "left":
+                    return "right";
+                case "bottom":
+                case "top":
+                case "center":
+                    return "center";
+            }
+            return "left";
+        })
+        .textBaseline(function () {
+            switch (this.name()) {
+                case "right":
+                case "left":
+                case "center":
+                    return "middle";
+                case "bottom":
+                    return "top";
+            }
+            return "bottom";
+        });
 };
 
 /** @private Sets radius based on size or vice versa. */
-pv.Dot.prototype.buildImplied = function(s) {
-  if (s.radius == null) s.radius = Math.sqrt(s.size);
-  else if (s.size == null) s.size = s.radius * s.radius;
-  pv.Mark.prototype.buildImplied.call(this, s);
+pv.Dot.prototype.buildImplied = function (s) {
+    if (s.radius == null) s.radius = Math.sqrt(s.size);
+    else if (s.size == null) s.size = s.radius * s.radius;
+    pv.Mark.prototype.buildImplied.call(this, s);
 };

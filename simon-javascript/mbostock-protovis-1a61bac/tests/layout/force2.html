@@ -1,12 +1,12 @@
 <html>
-  <head>
+<head>
     <title>Diamond Force</title>
     <script type="text/javascript" src="../../protovis.js"></script>
     <script type="text/javascript" src="../diamond.js"></script>
     <link type="text/css" href="../style.css" rel="stylesheet"/>
-  </head>
-  <body>
-    <script type="text/javascript+protovis">
+</head>
+<body>
+<script type="text/javascript+protovis">
 
 function activate(d, value) {
   d.active = value;
@@ -42,17 +42,21 @@ vis.add(pv.Label)
 
 vis.render();
 
-    </script><p>
 
-      This example demonstrates computing a static force-directed layout that is
-      bounded by the containing panel, as well as dynamic properties for nodes
-      and links. The data set is the diamond tree used in other examples, with
-      links between parents and their children. The layout is computed using
-      1,000 iterations.<p>
+</script>
+<p>
 
-      Although the layout is static, this example is interactive. Using the
-      point and unpoint events, we can highlight the active node and its tree
-      ancestors.
+    This example demonstrates computing a static force-directed layout that is
+    bounded by the containing panel, as well as dynamic properties for nodes
+    and links. The data set is the diamond tree used in other examples, with
+    links between parents and their children. The layout is computed using
+    1,000 iterations.
 
-  </body>
+<p>
+
+    Although the layout is static, this example is interactive. Using the
+    point and unpoint events, we can highlight the active node and its tree
+    ancestors.
+
+</body>
 </html>

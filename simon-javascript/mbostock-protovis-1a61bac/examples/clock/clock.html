@@ -1,35 +1,37 @@
 <html>
-  <head>
+<head>
     <title>PolarClock</title>
     <link type="text/css" rel="stylesheet" href="../ex.css"/>
     <script type="text/javascript" src="../../protovis.js"></script>
     <style type="text/css">
 
-body {
-  background: #222;
-}
+        body {
+            background: #222;
+        }
 
-#fig {
-  width: 768px;
-  height: 768px;
-}
+        #fig {
+            width: 768px;
+            height: 768px;
+        }
 
-#label {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  font: 10px sans-serif;
-  color: #999;
-}
+        #label {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            font: 10px sans-serif;
+            color: #999;
+        }
 
-#label a {
-  color: #ccc;
-}
+        #label a {
+            color: #ccc;
+        }
 
     </style>
-  </head>
-  <body><div id="center"><div id="fig">
-    <script type="text/javascript+protovis">
+</head>
+<body>
+<div id="center">
+    <div id="fig">
+        <script type="text/javascript+protovis">
 
 var radius = 768 / 2;
 
@@ -82,10 +84,12 @@ vis.add(pv.Wedge)
 
 setInterval(function() vis.render(), 50);
 
-    </script>
-  </div></div>
-  <div id="label">
+
+        </script>
+    </div>
+</div>
+<div id="label">
     Inspired by <a href="http://blog.pixelbreaker.com/polarclock/">pixelbreaker</a>.
-  </div>
-  </body>
+</div>
+</body>
 </html>

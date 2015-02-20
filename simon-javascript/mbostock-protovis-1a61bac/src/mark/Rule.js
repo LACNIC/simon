@@ -42,8 +42,8 @@
  * @see pv.Line
  * @extends pv.Mark
  */
-pv.Rule = function() {
-  pv.Mark.call(this);
+pv.Rule = function () {
+    pv.Mark.call(this);
 };
 
 pv.Rule.prototype = pv.extend(pv.Mark)
@@ -127,17 +127,17 @@ pv.Rule.prototype.defaults = new pv.Rule()
 pv.Rule.prototype.anchor = pv.Line.prototype.anchor;
 
 /** @private Sets width or height based on orientation. */
-pv.Rule.prototype.buildImplied = function(s) {
-  var l = s.left, r = s.right, t = s.top, b = s.bottom;
+pv.Rule.prototype.buildImplied = function (s) {
+    var l = s.left, r = s.right, t = s.top, b = s.bottom;
 
-  /* Determine horizontal or vertical orientation. */
-  if ((s.width != null)
-      || ((l == null) && (r == null))
-      || ((r != null) && (l != null))) {
-    s.height = 0;
-  } else {
-    s.width = 0;
-  }
+    /* Determine horizontal or vertical orientation. */
+    if ((s.width != null)
+        || ((l == null) && (r == null))
+        || ((r != null) && (l != null))) {
+        s.height = 0;
+    } else {
+        s.width = 0;
+    }
 
-  pv.Mark.prototype.buildImplied.call(this, s);
+    pv.Mark.prototype.buildImplied.call(this, s);
 };

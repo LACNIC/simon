@@ -17,57 +17,69 @@
  * href="http://javascript.crockford.com/prototypal.html">prototypal
  * inheritance</a>.
  */
-pv.extend = function(f) {
-  function g() {}
-  g.prototype = f.prototype || f;
-  return new g();
+pv.extend = function (f) {
+    function g() {
+    }
+
+    g.prototype = f.prototype || f;
+    return new g();
 };
 
 try {
-  eval("pv.parse = function(x) x;"); // native support
+    eval("pv.parse = function(x) x;"); // native support
 } catch (e) {
 
-/**
- * @private Parses a Protovis specification, which may use JavaScript 1.8
- * function expresses, replacing those function expressions with proper
- * functions such that the code can be run by a JavaScript 1.6 interpreter. This
- * hack only supports function expressions (using clumsy regular expressions, no
- * less), and not other JavaScript 1.8 features such as let expressions.
- *
- * @param {string} s a Protovis specification (i.e., a string of JavaScript 1.8
- * source code).
- * @returns {string} a conformant JavaScript 1.6 source code.
- */
-  pv.parse = function(js) { // hacky regex support
-    var re = new RegExp("function\\s*(\\b\\w+)?\\s*\\([^)]*\\)\\s*", "mg"), m, d, i = 0, s = "";
-    while (m = re.exec(js)) {
-      var j = m.index + m[0].length;
-      if (js.charAt(j) != '{') {
-        s += js.substring(i, j) + "{return ";
-        i = j;
-        for (var p = 0; p >= 0 && j < js.length; j++) {
-          var c = js.charAt(j);
-          switch (c) {
-            case '"': case '\'': {
-              while (++j < js.length && (d = js.charAt(j)) != c) {
-                if (d == '\\') j++;
-              }
-              break;
+    /**
+     * @private Parses a Protovis specification, which may use JavaScript 1.8
+     * function expresses, replacing those function expressions with proper
+     * functions such that the code can be run by a JavaScript 1.6 interpreter. This
+     * hack only supports function expressions (using clumsy regular expressions, no
+     * less), and not other JavaScript 1.8 features such as let expressions.
+     *
+     * @param {string} s a Protovis specification (i.e., a string of JavaScript 1.8
+     * source code).
+     * @returns {string} a conformant JavaScript 1.6 source code.
+     */
+    pv.parse = function (js) { // hacky regex support
+        var re = new RegExp("function\\s*(\\b\\w+)?\\s*\\([^)]*\\)\\s*", "mg"), m, d, i = 0, s = "";
+        while (m = re.exec(js)) {
+            var j = m.index + m[0].length;
+            if (js.charAt(j) != '{') {
+                s += js.substring(i, j) + "{return ";
+                i = j;
+                for (var p = 0; p >= 0 && j < js.length; j++) {
+                    var c = js.charAt(j);
+                    switch (c) {
+                        case '"':
+                        case '\'':
+                        {
+                            while (++j < js.length && (d = js.charAt(j)) != c) {
+                                if (d == '\\') j++;
+                            }
+                            break;
+                        }
+                        case '[':
+                        case '(':
+                            p++;
+                            break;
+                        case ']':
+                        case ')':
+                            p--;
+                            break;
+                        case ';':
+                        case ',':
+                            if (p == 0) p--;
+                            break;
+                    }
+                }
+                s += pv.parse(js.substring(i, --j)) + ";}";
+                i = j;
             }
-            case '[': case '(': p++; break;
-            case ']': case ')': p--; break;
-            case ';':
-            case ',': if (p == 0) p--; break;
-          }
+            re.lastIndex = j;
         }
-        s += pv.parse(js.substring(i, --j)) + ";}";
-        i = j;
-      }
-      re.lastIndex = j;
-    }
-    s += js.substring(i);
-    return s;
-  };
+        s += js.substring(i);
+        return s;
+    };
 }
 
 /**
@@ -77,10 +89,10 @@ try {
  * @param {string} p the name of the CSS property.
  * @param e the element on which to compute the CSS property.
  */
-pv.css = function(e, p) {
-  return window.getComputedStyle
-      ? window.getComputedStyle(e, null).getPropertyValue(p)
-      : e.currentStyle[p];
+pv.css = function (e, p) {
+    return window.getComputedStyle
+        ? window.getComputedStyle(e, null).getPropertyValue(p)
+        : e.currentStyle[p];
 };
 
 /**
@@ -90,8 +102,8 @@ pv.css = function(e, p) {
  *
  * @param e the exception that triggered the error.
  */
-pv.error = function(e) {
-  (typeof console == "undefined") ? alert(e) : console.error(e);
+pv.error = function (e) {
+    (typeof console == "undefined") ? alert(e) : console.error(e);
 };
 
 /**
@@ -103,11 +115,11 @@ pv.error = function(e) {
  * @param {string} type the type of event, such as "click".
  * @param {function} the event handler callback.
  */
-pv.listen = function(target, type, listener) {
-  listener = pv.listener(listener);
-  return target.addEventListener
-      ? target.addEventListener(type, listener, false)
-      : target.attachEvent("on" + type, listener);
+pv.listen = function (target, type, listener) {
+    listener = pv.listener(listener);
+    return target.addEventListener
+        ? target.addEventListener(type, listener, false)
+        : target.attachEvent("on" + type, listener);
 };
 
 /**
@@ -119,14 +131,14 @@ pv.listen = function(target, type, listener) {
  * @param {function} f an event handler.
  * @returns {function} the wrapped event handler.
  */
-pv.listener = function(f) {
-  return f.$listener || (f.$listener = function(e) {
-      try {
-        pv.event = e;
-        return f.call(this, e);
-      } finally {
-        delete pv.event;
-      }
+pv.listener = function (f) {
+    return f.$listener || (f.$listener = function (e) {
+        try {
+            pv.event = e;
+            return f.call(this, e);
+        } finally {
+            delete pv.event;
+        }
     });
 };
 
@@ -135,20 +147,25 @@ pv.listener = function(f) {
  * for ignoring mouseout and mouseover events that are contained within the
  * target element.
  */
-pv.ancestor = function(a, e) {
-  while (e) {
-    if (e == a) return true;
-    e = e.parentNode;
-  }
-  return false;
+pv.ancestor = function (a, e) {
+    while (e) {
+        if (e == a) return true;
+        e = e.parentNode;
+    }
+    return false;
 };
 
 /** @private Returns a locally-unique positive id. */
-pv.id = function() {
-  var id = 1; return function() { return id++; };
+pv.id = function () {
+    var id = 1;
+    return function () {
+        return id++;
+    };
 }();
 
 /** @private Returns a function wrapping the specified constant. */
-pv.functor = function(v) {
-  return typeof v == "function" ? v : function() { return v; };
+pv.functor = function (v) {
+    return typeof v == "function" ? v : function () {
+        return v;
+    };
 };
