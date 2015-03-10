@@ -47,7 +47,7 @@ def web_points(request, amount, ip_version):
     elif int(ip_version) == 4:
         points = TestPoint.objects.get_ipv4()
     
-    country = Country.objects.get_with_points()#.order_by('?')[0]
+    country = Country.objects.get_countries_with_testpoints().order_by('?')[0]
 #     points = points.filter(testtype='tcp_web', country=country.iso, enabled=True).order_by('?')[:int(amount)]
     points = points.filter(testtype='tcp_web', enabled=True).order_by('?')[:int(amount)]
     
@@ -837,21 +837,33 @@ def throughput_tables(request, country_iso, ip_version, year, month, tester, tes
     
     return json, ip_version, country_name, date, now, tester, tester_version
 
+import geoip2.database
+
 @csrf_exempt
 def getCountry(request):
-    
+
+    def getResponse(callback, cc):
+        if callback is None:
+            httpResponse = cc
+        else:
+            httpResponse = '%s({ cc : "%s"});' % (callback, cc)
+
+        return HttpResponse(httpResponse)
+
     if (request.method != 'GET'):
         return HttpResponse("Invalid method: %s" % request.method)
-    
-    callback = request.GET.get('callback')
-    
-    whoIsresponse = whoIs(request.META['REMOTE_ADDR']) #whois response
-    
-    if whoIsresponse is not None:
-        if callback is not None:
-            httpResponse = '%s({ cc : "%s"});' % (callback, whoIsresponse['country'])
-        else:
-            httpResponse = whoIsresponse['country']
-        return HttpResponse(httpResponse)
-    else:
-        return HttpResponse('XX')
+
+    error = "XX"
+
+    try:
+        callback = request.GET.get('callback')
+
+        reader = geoip2.database.Reader("%s/%s" % (settings.STATIC_ROOT, "geolocation/GeoLite2-City.mmdb"))
+        cc = error
+        cc = reader.city(request.META['REMOTE_ADDR']).country.iso_code
+
+        return getResponse(callback, cc)
+
+    except Exception as e:
+        print e
+        return getResponse(callback, cc)

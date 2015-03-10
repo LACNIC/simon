@@ -80,7 +80,7 @@ public class NtpTester extends Tester {
 			socket.setSoTimeout(2000); // wait (max) two seconds for a response
 			// Transmits
 			DatagramPacket packet = new DatagramPacket(buf, buf.length, address, 123);
-			NtpMessage.encodeTimestamp(packet.getData(), 40, (System.nanoTime()/1000000000.0) + 2208988800.0);	
+			NtpMessage.encodeTimestamp(packet.getData(), 40, (System.nanoTime()/1000000000.0) + 2208988800.0);
 			long ti=System.currentTimeMillis();
 			socket.send(packet);
 			// Get response

@@ -15,12 +15,12 @@ SIMON = {
 	},
 
 	urls : {
-		home : "http://simon.lacnic.net/simon/",
-		configs : "http://simon.lacnic.net/simon/web_configs/",
-		offline : "http://simon.lacnic.net/simon/postxmlresult/offline",
-		post : "http://simon.lacnic.net/simon/postxmlresult/latency",
-		ipv6ResolveURL : "http://simon.v6.labs.lacnic.net/cemd/getip/jsonp/",
-		ipv4ResolveURL : "http://simon.v4.labs.lacnic.net/cemd/getip/jsonp/"
+		home : "http://localhost:8000/", // "http://simon.lacnic.net/simon/",
+		configs : "http://localhost:8000/web_configs/", // "http://simon.lacnic.net/simon/web_configs/",
+		offline : "http://localhost:8000/postxmlresult/offline", // "http://simon.lacnic.net/simon/postxmlresult/offline",
+		post : "http://localhost:8000/postxmlresult/latency", // "http://simon.lacnic.net/simon/postxmlresult/latency",
+		ipv6ResolveURL : "http://192.168.0.104:8888/getip/jsonp", // "http://simon.v6.labs.lacnic.net/cemd/getip/jsonp/",
+		ipv4ResolveURL : "http://192.168.0.104:8888/getip/jsonp" // "http://simon.v4.labs.lacnic.net/cemd/getip/jsonp/"
 	},
 
 	workflow : {

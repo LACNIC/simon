@@ -848,14 +848,14 @@ def applet_run(request):
 
 def javascript_run(request):
     # Get address to pre-select the dropdown menu
-    ip = request.META.get('REMOTE_ADDR', None)
+    # ip = request.META.get('REMOTE_ADDR', None)
+    #
+    # try:
+    #     # cc = whoIs(ip)['operator']['country']
+    #     cc = whoIs(ip)['country']
+    #     countries = CountryForm(initial={'countries': cc})
+    # except (TypeError, HTTPError):
+    #     # IP is probably a local address
+    #     countries = CountryForm()
         
-    try:
-        # cc = whoIs(ip)['operator']['country']
-        cc = whoIs(ip)['country']
-        countries = CountryForm(initial={'countries': cc})
-    except (TypeError, HTTPError):
-        # IP is probably a local address
-        countries = CountryForm()
-        
-    return render_to_response('javascript_run.html', {'countries' : countries}, getContext(request))
+    return render_to_response('javascript_run.html', {'countries' : CountryForm()}, getContext(request))

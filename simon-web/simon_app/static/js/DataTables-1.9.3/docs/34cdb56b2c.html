@@ -75,487 +75,487 @@
 
 
 <div class="doc_summary">
-<a name="summary"></a>
+    <a name="summary"></a>
 
-<h2>Summary</h2>
+    <h2>Summary</h2>
 
-<div class="doc_group"><a name="summary_properties"></a>
+    <div class="doc_group"><a name="summary_properties"></a>
 
-    <h3 class="subsection-title">Properties</h3>
+        <h3 class="subsection-title">Properties</h3>
 
-    <dl>
-        <dt class="  even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-                class="type-name"><a href="#_fnJsonString">_fnJsonString</a></span><span class="type-sig"><span
-                class="type-signature"></span></span></dt>
-        <dd class="  even">JSON stringify. If JSON.stringify it provided by the browser, json2.js or any other
-            library, then we use that as it is fast, safe and accurate. If the function isn't
-            available then we need to built it ourselves - the inspiration for this function comes
-            from Craig Buckler ( http://www.sitepoint.com/javascript-json-serialization/ ). It is
-            not perfect and absolutely should not be used as a replacement to json2.js - but it does
-            do what we need, without requiring a dependency for DataTables.
-        </dd>
-    </dl>
-</div>
-<div class="doc_group"><a name="summary_methods"></a>
+        <dl>
+            <dt class="  even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnJsonString">_fnJsonString</a></span><span class="type-sig"><span
+                    class="type-signature"></span></span></dt>
+            <dd class="  even">JSON stringify. If JSON.stringify it provided by the browser, json2.js or any other
+                library, then we use that as it is fast, safe and accurate. If the function isn't
+                available then we need to built it ourselves - the inspiration for this function comes
+                from Craig Buckler ( http://www.sitepoint.com/javascript-json-serialization/ ). It is
+                not perfect and absolutely should not be used as a replacement to json2.js - but it does
+                do what we need, without requiring a dependency for DataTables.
+            </dd>
+        </dl>
+    </div>
+    <div class="doc_group"><a name="summary_methods"></a>
 
-<h3 class="subsection-title">Methods</h3>
+        <h3 class="subsection-title">Methods</h3>
 
-<dl>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnAddColumn">_fnAddColumn</a></span><span class="type-sig"><span
-        class="signature">(oSettings, nTh)</span><span class="type-signature"></span></span></dt>
-<dd class=" even">Add a column to the list used for the table with default values</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnAddData">_fnAddData</a></span><span class="type-sig"><span
-        class="signature">(oSettings, aData)</span><span class="type-signature"> &rarr; {int}</span></span>
-</dt>
-<dd class=" odd">Add a data array to the table, creating DOM node etc. This is the parallel to
-    _fnGatherData, but for adding rows from a Javascript source, rather than a
-    DOM source.
-</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnAddOptionsHtml">_fnAddOptionsHtml</a></span><span
-        class="type-sig"><span class="signature">(oSettings)</span><span
-        class="type-signature"></span></span></dt>
-<dd class=" even">Add the options to the page HTML for the table</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnAdjustColumnSizing">_fnAdjustColumnSizing</a></span><span
-        class="type-sig"><span class="signature">(oSettings)</span><span
-        class="type-signature"></span></span></dt>
-<dd class=" odd">Adjust the table column widths for new data. Note: you would probably want to
-    do a redraw after calling this function!
-</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnAjaxParameters">_fnAjaxParameters</a></span><span
-        class="type-sig"><span class="signature">(oSettings)</span><span class="type-signature"> &rarr;
-    {bool}</span></span></dt>
-<dd class=" even">Build up the parameters in an object needed for a server-side processing request</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnAjaxUpdate">_fnAjaxUpdate</a></span><span class="type-sig"><span
-        class="signature">(oSettings)</span><span class="type-signature"> &rarr; {boolean}</span></span>
-</dt>
-<dd class=" odd">Update the table using an Ajax call</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnAjaxUpdateDraw">_fnAjaxUpdateDraw</a></span><span
-        class="type-sig"><span class="signature">(oSettings, json)</span><span
-        class="type-signature"></span></span></dt>
-<dd class=" even">Data the data from the server (nuking the old) and redraw the table</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnApplyColumnDefs">_fnApplyColumnDefs</a></span><span class="type-sig"><span
-        class="signature">(oSettings, aoColDefs, aoCols, fn)</span><span
-        class="type-signature"></span></span></dt>
-<dd class=" odd">Take the column definitions and static columns arrays and calculate how
-    they relate to column indexes. The callback function will then apply the
-    definition found for a column to a suitable configuration object.
-</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnApplyToChildren">_fnApplyToChildren</a></span><span class="type-sig"><span
-        class="signature">(fn, array, array)</span><span class="type-signature"></span></span></dt>
-<dd class=" even">Apply a given function to the display child nodes of an element array (typically
-    TD children of TR rows
-</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnBindAction">_fnBindAction</a></span><span class="type-sig"><span
-        class="signature">(n, oData, fn)</span><span class="type-signature"></span></span></dt>
-<dd class=" odd">Bind an event handers to allow a click or return key to activate the callback.
-    This is good for accessibility since a return on the keyboard will have the
-    same effect as a click, if the element has focus.
-</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnBrowserDetect">_fnBrowserDetect</a></span><span
-        class="type-sig"><span class="signature">(oSettings)</span><span
-        class="type-signature"></span></span></dt>
-<dd class=" even">From some browsers (specifically IE6/7) we need special handling to work around browser
-    bugs - this function is used to detect when these workarounds are needed.
-</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnBuildHead">_fnBuildHead</a></span><span class="type-sig"><span
-        class="signature">(oSettings)</span><span class="type-signature"></span></span></dt>
-<dd class=" odd">Create the HTML header for the table</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnBuildSearchArray">_fnBuildSearchArray</a></span><span
-        class="type-sig"><span class="signature">(oSettings, iMaster)</span><span
-        class="type-signature"></span></span></dt>
-<dd class=" even">Create an array which can be quickly search through</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnBuildSearchRow">_fnBuildSearchRow</a></span><span
-        class="type-sig"><span class="signature">(oSettings, aData)</span><span
-        class="type-signature"></span></span></dt>
-<dd class=" odd">Create a searchable string from a single data row</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnCalculateColumnWidths">_fnCalculateColumnWidths</a></span><span
-        class="type-sig"><span class="signature">(oSettings)</span><span
-        class="type-signature"></span></span></dt>
-<dd class=" even">Calculate the width of columns for the table</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnCalculateEnd">_fnCalculateEnd</a></span><span class="type-sig"><span
-        class="signature">(oSettings)</span><span class="type-signature"></span></span></dt>
-<dd class=" odd">Recalculate the end point based on the start point</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnCallbackFire">_fnCallbackFire</a></span><span class="type-sig"><span
-        class="signature">(oSettings, sStore, sTrigger, aArgs)</span><span
-        class="type-signature"></span></span></dt>
-<dd class=" even">Fire callback functions and trigger events. Note that the loop over the callback
-    array store is done backwards! Further note that you do not want to fire off triggers
-    in time sensitive applications (for example cell creation) as its slow.
-</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnCallbackReg">_fnCallbackReg</a></span><span class="type-sig"><span
-        class="signature">(oSettings, sStore, fn, sName)</span><span class="type-signature"></span></span>
-</dt>
-<dd class=" odd">Register a callback function. Easily allows a callback function to be added to
-    an array store of callback functions that can then all be called together.
-</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnClearTable">_fnClearTable</a></span><span class="type-sig"><span
-        class="signature">(oSettings)</span><span class="type-signature"></span></span></dt>
-<dd class=" even">Nuke the table</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnColumnIndexToVisible">_fnColumnIndexToVisible</a></span><span
-        class="type-sig"><span class="signature">(iMatch, oSettings)</span><span class="type-signature"> &rarr;
-    {int}</span></span></dt>
-<dd class=" odd">Covert the index of an index in the data array and convert it to the visible
-    column index (take account of hidden columns)
-</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnColumnOptions">_fnColumnOptions</a></span><span
-        class="type-sig"><span class="signature">(oSettings, iCol, oOptions)</span><span
-        class="type-signature"></span></span></dt>
-<dd class=" even">Apply options for a column</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnColumnOrdering">_fnColumnOrdering</a></span><span
-        class="type-sig"><span class="signature">(oSettings)</span><span class="type-signature"> &rarr;
-    {string}</span></span></dt>
-<dd class=" odd">Get the column ordering that DataTables expects</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnConvertToWidth">_fnConvertToWidth</a></span><span
-        class="type-sig"><span class="signature">(sWidth, nParent)</span><span class="type-signature"> &rarr;
-    {int}</span></span></dt>
-<dd class=" even">Convert a CSS unit width to pixels (e.g. 2em)</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnCreateCookie">_fnCreateCookie</a></span><span class="type-sig"><span
-        class="signature">(sName, sValue, iSecs, sBaseName, fnCallback)</span><span
-        class="type-signature"></span></span></dt>
-<dd class=" odd">Create a new cookie with a value to store the state of a table</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnCreateTr">_fnCreateTr</a></span><span class="type-sig"><span
-        class="signature">(oSettings, iRow)</span><span class="type-signature"></span></span></dt>
-<dd class=" even">Create a new TR element (and it's TD children) for a row</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnDataToSearch">_fnDataToSearch</a></span><span class="type-sig"><span
-        class="signature">(sData, sType)</span><span class="type-signature"> &rarr; {string}</span></span>
-</dt>
-<dd class=" odd">Convert raw data into something that the user can search on</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnDeleteIndex">_fnDeleteIndex</a></span><span class="type-sig"><span
-        class="signature">(a, iTarget)</span><span class="type-signature"></span></span></dt>
-<dd class=" even">Take an array of integers (index array) and remove a target integer (value - not
-    the key!)
-</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnDetectHeader">_fnDetectHeader</a></span><span class="type-sig"><span
-        class="signature">(array, nThead)</span><span class="type-signature"></span></span></dt>
-<dd class=" odd">Use the DOM source to create up an array of header cells. The idea here is to
-    create a layout grid (array) of rows x columns, which contains a reference
-    to the cell that that point in the grid (regardless of col/rowspan), such that
-    any column / row could be removed and the new grid constructed
-</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnDetectType">_fnDetectType</a></span><span class="type-sig"><span
-        class="signature">(sData)</span><span class="type-signature"> &rarr; {string}</span></span></dt>
-<dd class=" even">Get the sort type based on an input string</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnDraw">_fnDraw</a></span><span class="type-sig"><span
-        class="signature">(oSettings)</span><span class="type-signature"></span></span></dt>
-<dd class=" odd">Insert the required TR nodes into the table for display</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnDrawHead">_fnDrawHead</a></span><span class="type-sig"><span
-        class="signature">(oSettings, array, <span class="optional">bIncludeHidden</span>)</span><span
-        class="type-signature"></span></span></dt>
-<dd class=" even">Draw the header (or footer) element based on the column visibility states. The
-    methodology here is to use the layout array from _fnDetectHeader, modified for
-    the instantaneous column visibility, to construct the new layout. The grid is
-    traversed over cell at a time in a rows x columns grid fashion, although each
-    cell insert can cover multiple elements in the grid - which is tracks using the
-    aApplied array. Cell inserts in the grid will only occur where there isn't
-    already a cell in that position.
-</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnEscapeRegex">_fnEscapeRegex</a></span><span class="type-sig"><span
-        class="signature">(sVal)</span><span class="type-signature"> &rarr; {string}</span></span></dt>
-<dd class=" odd">scape a string such that it can be used in a regular expression</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnExtend">_fnExtend</a></span><span class="type-sig"><span
-        class="signature">(oOut, oExtender)</span><span class="type-signature"> &rarr;
-    {object}</span></span></dt>
-<dd class=" even">Extend objects - very similar to jQuery.extend, but deep copy objects, and shallow
-    copy arrays. The reason we need to do this, is that we don't want to deep copy array
-    init values (such as aaSorting) since the dev wouldn't be able to override them, but
-    we do want to deep copy arrays.
-</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnExternApiFunc">_fnExternApiFunc</a></span><span
-        class="type-sig"><span class="signature">(sFunc)</span><span class="type-signature"> &rarr;
-    {function}</span></span></dt>
-<dd class=" odd">Create a wrapper function for exporting an internal functions to an external API.</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnFeatureHtmlFilter">_fnFeatureHtmlFilter</a></span><span
-        class="type-sig"><span class="signature">(oSettings)</span><span class="type-signature"> &rarr;
-    {node}</span></span></dt>
-<dd class=" even">Generate the node required for filtering text</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnFeatureHtmlInfo">_fnFeatureHtmlInfo</a></span><span class="type-sig"><span
-        class="signature">(oSettings)</span><span class="type-signature"> &rarr; {node}</span></span></dt>
-<dd class=" odd">Generate the node required for the info display</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnFeatureHtmlLength">_fnFeatureHtmlLength</a></span><span
-        class="type-sig"><span class="signature">(oSettings)</span><span class="type-signature"> &rarr;
-    {node}</span></span></dt>
-<dd class=" even">Generate the node required for user display length changing</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnFeatureHtmlPaginate">_fnFeatureHtmlPaginate</a></span><span
-        class="type-sig"><span class="signature">(oSettings)</span><span class="type-signature"> &rarr;
-    {node}</span></span></dt>
-<dd class=" odd">Generate the node required for default pagination</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnFeatureHtmlProcessing">_fnFeatureHtmlProcessing</a></span><span
-        class="type-sig"><span class="signature">(oSettings)</span><span class="type-signature"> &rarr;
-    {node}</span></span></dt>
-<dd class=" even">Generate the node required for the processing node</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnFeatureHtmlTable">_fnFeatureHtmlTable</a></span><span
-        class="type-sig"><span class="signature">(oSettings)</span><span class="type-signature"> &rarr;
-    {node}</span></span></dt>
-<dd class=" odd">Add any control elements for the table - specifically scrolling</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnFilter">_fnFilter</a></span><span class="type-sig"><span
-        class="signature">(oSettings, sInput, iForce, bRegex, bSmart, bCaseInsensitive)</span><span
-        class="type-signature"></span></span></dt>
-<dd class=" even">Filter the data table based on user input and draw the table</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnFilterColumn">_fnFilterColumn</a></span><span class="type-sig"><span
-        class="signature">(oSettings, sInput, iColumn, bRegex, bSmart, bCaseInsensitive)</span><span
-        class="type-signature"></span></span></dt>
-<dd class=" odd">Filter the table on a per-column basis</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnFilterComplete">_fnFilterComplete</a></span><span
-        class="type-sig"><span class="signature">(oSettings, oSearch, <span class="optional">iForce</span>)</span><span
-        class="type-signature"></span></span></dt>
-<dd class=" even">Filter the table using both the global filter and column based filtering</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnFilterCreateSearch">_fnFilterCreateSearch</a></span><span
-        class="type-sig"><span class="signature">(sSearch, bRegex, bSmart, bCaseInsensitive)</span><span
-        class="type-signature"> &rarr; {RegExp}</span></span></dt>
-<dd class=" odd">Build a regular expression object suitable for searching a table</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnFilterCustom">_fnFilterCustom</a></span><span class="type-sig"><span
-        class="signature">(oSettings)</span><span class="type-signature"></span></span></dt>
-<dd class=" even">Apply custom filtering functions</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnGatherData">_fnGatherData</a></span><span class="type-sig"><span
-        class="signature">(oSettings)</span><span class="type-signature"></span></span></dt>
-<dd class=" odd">Read in the data from the target table from the DOM</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnGetCellData">_fnGetCellData</a></span><span class="type-sig"><span
-        class="signature">(oSettings, iRow, iCol, sSpecific)</span><span class="type-signature"> &rarr;
-    {*}</span></span></dt>
-<dd class=" even">Get the data for a given cell from the internal cache, taking into account data mapping
-</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnGetColumns">_fnGetColumns</a></span><span class="type-sig"><span
-        class="signature">(oSettings, sParam)</span><span class="type-signature"> &rarr;
-    {array}</span></span></dt>
-<dd class=" odd">Get an array of column indexes that match a given property</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnGetDataMaster">_fnGetDataMaster</a></span><span
-        class="type-sig"><span class="signature">(oSettings)</span><span
-        class="type-signature"></span></span></dt>
-<dd class=" even">Return an array with the full table data</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnGetMaxLenString">_fnGetMaxLenString</a></span><span class="type-sig"><span
-        class="signature">(oSettings, iCol)</span><span class="type-signature"> &rarr;
-    {string}</span></span></dt>
-<dd class=" odd">Get the maximum strlen for each data column</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnGetObjectDataFn">_fnGetObjectDataFn</a></span><span class="type-sig"><span
-        class="signature">(mSource)</span><span class="type-signature"> &rarr; {function}</span></span></dt>
-<dd class=" even">Return a function that can be used to get data from a source object, taking
-    into account the ability to use nested objects as a source
-</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnGetRowData">_fnGetRowData</a></span><span class="type-sig"><span
-        class="signature">(oSettings, iRow, sSpecific, aiColumns)</span><span class="type-signature"> &rarr;
-    {array}</span></span></dt>
-<dd class=" odd">Get an array of data for a given row from the internal data cache</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnGetTdNodes">_fnGetTdNodes</a></span><span class="type-sig"><span
-        class="signature">(oSettings, <span class="optional">iIndividualRow</span>)</span><span
-        class="type-signature"> &rarr; {array}</span></span></dt>
-<dd class=" even">Return an flat array with all TD nodes for the table, or row</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnGetTrNodes">_fnGetTrNodes</a></span><span class="type-sig"><span
-        class="signature">(oSettings)</span><span class="type-signature"> &rarr; {array}</span></span></dt>
-<dd class=" odd">Return an array with the TR nodes for the table</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnGetUniqueThs">_fnGetUniqueThs</a></span><span class="type-sig"><span
-        class="signature">(oSettings, nHeader, aLayout)</span><span class="type-signature"></span></span>
-</dt>
-<dd class=" even">Get an array of unique th elements, one for each column</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnGetWidestNode">_fnGetWidestNode</a></span><span
-        class="type-sig"><span class="signature">(oSettings, iCol)</span><span class="type-signature"> &rarr;
-    {string}</span></span></dt>
-<dd class=" odd">Get the widest node</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnInitComplete">_fnInitComplete</a></span><span class="type-sig"><span
-        class="signature">(oSettings, <span class="optional">json</span>)</span><span
-        class="type-signature"></span></span></dt>
-<dd class=" even">Draw the table for the first time, adding all required features</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnInitialise">_fnInitialise</a></span><span class="type-sig"><span
-        class="signature">(oSettings)</span><span class="type-signature"></span></span></dt>
-<dd class=" odd">Draw the table for the first time, adding all required features</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnLanguageCompat">_fnLanguageCompat</a></span><span
-        class="type-sig"><span class="signature">(oSettings)</span><span
-        class="type-signature"></span></span></dt>
-<dd class=" even">Language compatibility - when certain options are given, and others aren't, we
-    need to duplicate the values over, in order to provide backwards compatibility
-    with older language files.
-</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnLoadState">_fnLoadState</a></span><span class="type-sig"><span
-        class="signature">(oSettings, oInit)</span><span class="type-signature"></span></span></dt>
-<dd class=" odd">Attempt to load a saved table state from a cookie</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnLog">_fnLog</a></span><span class="type-sig"><span class="signature">(oSettings, iLevel, sMesg)</span><span
-        class="type-signature"></span></span></dt>
-<dd class=" even">Log an error message</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnMap">_fnMap</a></span><span class="type-sig"><span class="signature">(oRet, oSrc, sName, <span
-        class="optional">sMappedName</span>)</span><span class="type-signature"></span></span></dt>
-<dd class=" odd">See if a property is defined on one object, if so assign it to the other object</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnNodeToColumnIndex">_fnNodeToColumnIndex</a></span><span
-        class="type-sig"><span class="signature">(oSettings, iRow, n)</span><span class="type-signature"> &rarr;
-    {int}</span></span></dt>
-<dd class=" even">Take a TD element and convert it into a column data index (not the visible index)</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnNodeToDataIndex">_fnNodeToDataIndex</a></span><span class="type-sig"><span
-        class="signature">(oSettings, n)</span><span class="type-signature"> &rarr; {int}</span></span></dt>
-<dd class=" odd">Take a TR element and convert it to an index in aoData</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnPageChange">_fnPageChange</a></span><span class="type-sig"><span
-        class="signature">(oSettings, mAction)</span><span class="type-signature"> &rarr;
-    {bool}</span></span></dt>
-<dd class=" even">Alter the display settings to change the page</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnProcessingDisplay">_fnProcessingDisplay</a></span><span
-        class="type-sig"><span class="signature">(oSettings, bShow)</span><span
-        class="type-signature"></span></span></dt>
-<dd class=" odd">Display or hide the processing indicator</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnReadCookie">_fnReadCookie</a></span><span class="type-sig"><span
-        class="signature">(sName)</span><span class="type-signature"> &rarr; {string}</span></span></dt>
-<dd class=" even">Read an old cookie to get a cookie with an old table state</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnReDraw">_fnReDraw</a></span><span class="type-sig"><span
-        class="signature">(oSettings)</span><span class="type-signature"></span></span></dt>
-<dd class=" odd">Redraw the table - taking account of the various features which are enabled</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnRender">_fnRender</a></span><span class="type-sig"><span
-        class="signature">(oSettings, iRow, iCol)</span><span class="type-signature"> &rarr;
-    {*}</span></span></dt>
-<dd class=" even">Call the developer defined fnRender function for a given cell (row/column) with
-    the required parameters and return the result.
-</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnReOrderIndex">_fnReOrderIndex</a></span><span class="type-sig"><span
-        class="signature">(oSettings)</span><span class="type-signature"></span></span></dt>
-<dd class=" odd">Figure out how to reorder a display list</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnSaveState">_fnSaveState</a></span><span class="type-sig"><span
-        class="signature">(oSettings)</span><span class="type-signature"></span></span></dt>
-<dd class=" even">Save the state of a table in a cookie such that the page can be reloaded</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnScrollBarWidth">_fnScrollBarWidth</a></span><span
-        class="type-sig"><span class="signature">()</span><span class="type-signature"> &rarr; {int}</span></span>
-</dt>
-<dd class=" odd">Get the width of a scroll bar in this browser being used</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnScrollDraw">_fnScrollDraw</a></span><span class="type-sig"><span
-        class="signature">(o)</span><span class="type-signature"> &rarr; {node}</span></span></dt>
-<dd class=" even">Update the various tables for resizing. It's a bit of a pig this function, but
-    basically the idea to:
-    1. Re-create the table inside the scrolling div
-    2. Take live measurements from the DOM
-    3. Apply the measurements
-    4. Clean up
-</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnScrollingWidthAdjust">_fnScrollingWidthAdjust</a></span><span
-        class="type-sig"><span class="signature">(oSettings, n)</span><span
-        class="type-signature"></span></span></dt>
-<dd class=" odd">Adjust a table's width to take account of scrolling</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnServerParams">_fnServerParams</a></span><span class="type-sig"><span
-        class="signature">(oSettings, array)</span><span class="type-signature"></span></span></dt>
-<dd class=" even">Add Ajax parameters from plug-ins</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnSetCellData">_fnSetCellData</a></span><span class="type-sig"><span
-        class="signature">(oSettings, iRow, iCol, val)</span><span class="type-signature"></span></span>
-</dt>
-<dd class=" odd">Set the value for a specific cell, into the internal data cache</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnSetObjectDataFn">_fnSetObjectDataFn</a></span><span class="type-sig"><span
-        class="signature">(mSource)</span><span class="type-signature"> &rarr; {function}</span></span></dt>
-<dd class=" even">Return a function that can be used to set data from a source object, taking
-    into account the ability to use nested objects as a source
-</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnSettingsFromNode">_fnSettingsFromNode</a></span><span
-        class="type-sig"><span class="signature">(nTable)</span><span class="type-signature"> &rarr;
-    {object}</span></span></dt>
-<dd class=" odd">Return the settings object for a particular table</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnSort">_fnSort</a></span><span class="type-sig"><span
-        class="signature">(oSettings, bApplyClasses)</span><span class="type-signature"></span></span></dt>
-<dd class=" even">Change the order of the table</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnSortAttachListener">_fnSortAttachListener</a></span><span
-        class="type-sig"><span class="signature">(oSettings, nNode, iDataIndex, <span class="optional">fnCallback</span>)</span><span
-        class="type-signature"></span></span></dt>
-<dd class=" odd">Attach a sort handler (click) to a node</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnSortingClasses">_fnSortingClasses</a></span><span
-        class="type-sig"><span class="signature">(oSettings)</span><span
-        class="type-signature"></span></span></dt>
-<dd class=" even">Set the sorting classes on the header, Note: it is safe to call this function
-    when bSort and bSortClasses are false
-</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnStringToCss">_fnStringToCss</a></span><span class="type-sig"><span
-        class="signature">(aArray1, aArray2)</span><span class="type-signature"> &rarr; {int}</span></span>
-</dt>
-<dd class=" odd">Append a CSS unit (only if required) to a string</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnUpdateInfo">_fnUpdateInfo</a></span><span class="type-sig"><span
-        class="signature">(oSettings)</span><span class="type-signature"></span></span></dt>
-<dd class=" even">Update the information elements in the display</dd>
-<dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnVisbleColumns">_fnVisbleColumns</a></span><span
-        class="type-sig"><span class="signature">(oSettings)</span><span class="type-signature"> &rarr;
-    {int}</span></span></dt>
-<dd class=" odd">Get the number of visible columns</dd>
-<dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#_fnVisibleToColumnIndex">_fnVisibleToColumnIndex</a></span><span
-        class="type-sig"><span class="signature">(oSettings, iMatch)</span><span class="type-signature"> &rarr;
-    {int}</span></span></dt>
-<dd class=" even">Covert the index of a visible column to the index in the data array (take account
-    of hidden columns)
-</dd>
-</dl>
-</div>
+        <dl>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnAddColumn">_fnAddColumn</a></span><span class="type-sig"><span
+                    class="signature">(oSettings, nTh)</span><span class="type-signature"></span></span></dt>
+            <dd class=" even">Add a column to the list used for the table with default values</dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnAddData">_fnAddData</a></span><span class="type-sig"><span
+                    class="signature">(oSettings, aData)</span><span class="type-signature"> &rarr; {int}</span></span>
+            </dt>
+            <dd class=" odd">Add a data array to the table, creating DOM node etc. This is the parallel to
+                _fnGatherData, but for adding rows from a Javascript source, rather than a
+                DOM source.
+            </dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnAddOptionsHtml">_fnAddOptionsHtml</a></span><span
+                    class="type-sig"><span class="signature">(oSettings)</span><span
+                    class="type-signature"></span></span></dt>
+            <dd class=" even">Add the options to the page HTML for the table</dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnAdjustColumnSizing">_fnAdjustColumnSizing</a></span><span
+                    class="type-sig"><span class="signature">(oSettings)</span><span
+                    class="type-signature"></span></span></dt>
+            <dd class=" odd">Adjust the table column widths for new data. Note: you would probably want to
+                do a redraw after calling this function!
+            </dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnAjaxParameters">_fnAjaxParameters</a></span><span
+                    class="type-sig"><span class="signature">(oSettings)</span><span class="type-signature"> &rarr;
+                {bool}</span></span></dt>
+            <dd class=" even">Build up the parameters in an object needed for a server-side processing request</dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnAjaxUpdate">_fnAjaxUpdate</a></span><span class="type-sig"><span
+                    class="signature">(oSettings)</span><span class="type-signature"> &rarr; {boolean}</span></span>
+            </dt>
+            <dd class=" odd">Update the table using an Ajax call</dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnAjaxUpdateDraw">_fnAjaxUpdateDraw</a></span><span
+                    class="type-sig"><span class="signature">(oSettings, json)</span><span
+                    class="type-signature"></span></span></dt>
+            <dd class=" even">Data the data from the server (nuking the old) and redraw the table</dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnApplyColumnDefs">_fnApplyColumnDefs</a></span><span class="type-sig"><span
+                    class="signature">(oSettings, aoColDefs, aoCols, fn)</span><span
+                    class="type-signature"></span></span></dt>
+            <dd class=" odd">Take the column definitions and static columns arrays and calculate how
+                they relate to column indexes. The callback function will then apply the
+                definition found for a column to a suitable configuration object.
+            </dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnApplyToChildren">_fnApplyToChildren</a></span><span class="type-sig"><span
+                    class="signature">(fn, array, array)</span><span class="type-signature"></span></span></dt>
+            <dd class=" even">Apply a given function to the display child nodes of an element array (typically
+                TD children of TR rows
+            </dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnBindAction">_fnBindAction</a></span><span class="type-sig"><span
+                    class="signature">(n, oData, fn)</span><span class="type-signature"></span></span></dt>
+            <dd class=" odd">Bind an event handers to allow a click or return key to activate the callback.
+                This is good for accessibility since a return on the keyboard will have the
+                same effect as a click, if the element has focus.
+            </dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnBrowserDetect">_fnBrowserDetect</a></span><span
+                    class="type-sig"><span class="signature">(oSettings)</span><span
+                    class="type-signature"></span></span></dt>
+            <dd class=" even">From some browsers (specifically IE6/7) we need special handling to work around browser
+                bugs - this function is used to detect when these workarounds are needed.
+            </dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnBuildHead">_fnBuildHead</a></span><span class="type-sig"><span
+                    class="signature">(oSettings)</span><span class="type-signature"></span></span></dt>
+            <dd class=" odd">Create the HTML header for the table</dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnBuildSearchArray">_fnBuildSearchArray</a></span><span
+                    class="type-sig"><span class="signature">(oSettings, iMaster)</span><span
+                    class="type-signature"></span></span></dt>
+            <dd class=" even">Create an array which can be quickly search through</dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnBuildSearchRow">_fnBuildSearchRow</a></span><span
+                    class="type-sig"><span class="signature">(oSettings, aData)</span><span
+                    class="type-signature"></span></span></dt>
+            <dd class=" odd">Create a searchable string from a single data row</dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnCalculateColumnWidths">_fnCalculateColumnWidths</a></span><span
+                    class="type-sig"><span class="signature">(oSettings)</span><span
+                    class="type-signature"></span></span></dt>
+            <dd class=" even">Calculate the width of columns for the table</dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnCalculateEnd">_fnCalculateEnd</a></span><span class="type-sig"><span
+                    class="signature">(oSettings)</span><span class="type-signature"></span></span></dt>
+            <dd class=" odd">Recalculate the end point based on the start point</dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnCallbackFire">_fnCallbackFire</a></span><span class="type-sig"><span
+                    class="signature">(oSettings, sStore, sTrigger, aArgs)</span><span
+                    class="type-signature"></span></span></dt>
+            <dd class=" even">Fire callback functions and trigger events. Note that the loop over the callback
+                array store is done backwards! Further note that you do not want to fire off triggers
+                in time sensitive applications (for example cell creation) as its slow.
+            </dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnCallbackReg">_fnCallbackReg</a></span><span class="type-sig"><span
+                    class="signature">(oSettings, sStore, fn, sName)</span><span class="type-signature"></span></span>
+            </dt>
+            <dd class=" odd">Register a callback function. Easily allows a callback function to be added to
+                an array store of callback functions that can then all be called together.
+            </dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnClearTable">_fnClearTable</a></span><span class="type-sig"><span
+                    class="signature">(oSettings)</span><span class="type-signature"></span></span></dt>
+            <dd class=" even">Nuke the table</dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnColumnIndexToVisible">_fnColumnIndexToVisible</a></span><span
+                    class="type-sig"><span class="signature">(iMatch, oSettings)</span><span class="type-signature"> &rarr;
+                {int}</span></span></dt>
+            <dd class=" odd">Covert the index of an index in the data array and convert it to the visible
+                column index (take account of hidden columns)
+            </dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnColumnOptions">_fnColumnOptions</a></span><span
+                    class="type-sig"><span class="signature">(oSettings, iCol, oOptions)</span><span
+                    class="type-signature"></span></span></dt>
+            <dd class=" even">Apply options for a column</dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnColumnOrdering">_fnColumnOrdering</a></span><span
+                    class="type-sig"><span class="signature">(oSettings)</span><span class="type-signature"> &rarr;
+                {string}</span></span></dt>
+            <dd class=" odd">Get the column ordering that DataTables expects</dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnConvertToWidth">_fnConvertToWidth</a></span><span
+                    class="type-sig"><span class="signature">(sWidth, nParent)</span><span class="type-signature"> &rarr;
+                {int}</span></span></dt>
+            <dd class=" even">Convert a CSS unit width to pixels (e.g. 2em)</dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnCreateCookie">_fnCreateCookie</a></span><span class="type-sig"><span
+                    class="signature">(sName, sValue, iSecs, sBaseName, fnCallback)</span><span
+                    class="type-signature"></span></span></dt>
+            <dd class=" odd">Create a new cookie with a value to store the state of a table</dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnCreateTr">_fnCreateTr</a></span><span class="type-sig"><span
+                    class="signature">(oSettings, iRow)</span><span class="type-signature"></span></span></dt>
+            <dd class=" even">Create a new TR element (and it's TD children) for a row</dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnDataToSearch">_fnDataToSearch</a></span><span class="type-sig"><span
+                    class="signature">(sData, sType)</span><span class="type-signature"> &rarr; {string}</span></span>
+            </dt>
+            <dd class=" odd">Convert raw data into something that the user can search on</dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnDeleteIndex">_fnDeleteIndex</a></span><span class="type-sig"><span
+                    class="signature">(a, iTarget)</span><span class="type-signature"></span></span></dt>
+            <dd class=" even">Take an array of integers (index array) and remove a target integer (value - not
+                the key!)
+            </dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnDetectHeader">_fnDetectHeader</a></span><span class="type-sig"><span
+                    class="signature">(array, nThead)</span><span class="type-signature"></span></span></dt>
+            <dd class=" odd">Use the DOM source to create up an array of header cells. The idea here is to
+                create a layout grid (array) of rows x columns, which contains a reference
+                to the cell that that point in the grid (regardless of col/rowspan), such that
+                any column / row could be removed and the new grid constructed
+            </dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnDetectType">_fnDetectType</a></span><span class="type-sig"><span
+                    class="signature">(sData)</span><span class="type-signature"> &rarr; {string}</span></span></dt>
+            <dd class=" even">Get the sort type based on an input string</dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnDraw">_fnDraw</a></span><span class="type-sig"><span
+                    class="signature">(oSettings)</span><span class="type-signature"></span></span></dt>
+            <dd class=" odd">Insert the required TR nodes into the table for display</dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnDrawHead">_fnDrawHead</a></span><span class="type-sig"><span
+                    class="signature">(oSettings, array, <span class="optional">bIncludeHidden</span>)</span><span
+                    class="type-signature"></span></span></dt>
+            <dd class=" even">Draw the header (or footer) element based on the column visibility states. The
+                methodology here is to use the layout array from _fnDetectHeader, modified for
+                the instantaneous column visibility, to construct the new layout. The grid is
+                traversed over cell at a time in a rows x columns grid fashion, although each
+                cell insert can cover multiple elements in the grid - which is tracks using the
+                aApplied array. Cell inserts in the grid will only occur where there isn't
+                already a cell in that position.
+            </dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnEscapeRegex">_fnEscapeRegex</a></span><span class="type-sig"><span
+                    class="signature">(sVal)</span><span class="type-signature"> &rarr; {string}</span></span></dt>
+            <dd class=" odd">scape a string such that it can be used in a regular expression</dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnExtend">_fnExtend</a></span><span class="type-sig"><span
+                    class="signature">(oOut, oExtender)</span><span class="type-signature"> &rarr;
+                {object}</span></span></dt>
+            <dd class=" even">Extend objects - very similar to jQuery.extend, but deep copy objects, and shallow
+                copy arrays. The reason we need to do this, is that we don't want to deep copy array
+                init values (such as aaSorting) since the dev wouldn't be able to override them, but
+                we do want to deep copy arrays.
+            </dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnExternApiFunc">_fnExternApiFunc</a></span><span
+                    class="type-sig"><span class="signature">(sFunc)</span><span class="type-signature"> &rarr;
+                {function}</span></span></dt>
+            <dd class=" odd">Create a wrapper function for exporting an internal functions to an external API.</dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnFeatureHtmlFilter">_fnFeatureHtmlFilter</a></span><span
+                    class="type-sig"><span class="signature">(oSettings)</span><span class="type-signature"> &rarr;
+                {node}</span></span></dt>
+            <dd class=" even">Generate the node required for filtering text</dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnFeatureHtmlInfo">_fnFeatureHtmlInfo</a></span><span class="type-sig"><span
+                    class="signature">(oSettings)</span><span class="type-signature"> &rarr; {node}</span></span></dt>
+            <dd class=" odd">Generate the node required for the info display</dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnFeatureHtmlLength">_fnFeatureHtmlLength</a></span><span
+                    class="type-sig"><span class="signature">(oSettings)</span><span class="type-signature"> &rarr;
+                {node}</span></span></dt>
+            <dd class=" even">Generate the node required for user display length changing</dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnFeatureHtmlPaginate">_fnFeatureHtmlPaginate</a></span><span
+                    class="type-sig"><span class="signature">(oSettings)</span><span class="type-signature"> &rarr;
+                {node}</span></span></dt>
+            <dd class=" odd">Generate the node required for default pagination</dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnFeatureHtmlProcessing">_fnFeatureHtmlProcessing</a></span><span
+                    class="type-sig"><span class="signature">(oSettings)</span><span class="type-signature"> &rarr;
+                {node}</span></span></dt>
+            <dd class=" even">Generate the node required for the processing node</dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnFeatureHtmlTable">_fnFeatureHtmlTable</a></span><span
+                    class="type-sig"><span class="signature">(oSettings)</span><span class="type-signature"> &rarr;
+                {node}</span></span></dt>
+            <dd class=" odd">Add any control elements for the table - specifically scrolling</dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnFilter">_fnFilter</a></span><span class="type-sig"><span
+                    class="signature">(oSettings, sInput, iForce, bRegex, bSmart, bCaseInsensitive)</span><span
+                    class="type-signature"></span></span></dt>
+            <dd class=" even">Filter the data table based on user input and draw the table</dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnFilterColumn">_fnFilterColumn</a></span><span class="type-sig"><span
+                    class="signature">(oSettings, sInput, iColumn, bRegex, bSmart, bCaseInsensitive)</span><span
+                    class="type-signature"></span></span></dt>
+            <dd class=" odd">Filter the table on a per-column basis</dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnFilterComplete">_fnFilterComplete</a></span><span
+                    class="type-sig"><span class="signature">(oSettings, oSearch, <span class="optional">iForce</span>)</span><span
+                    class="type-signature"></span></span></dt>
+            <dd class=" even">Filter the table using both the global filter and column based filtering</dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnFilterCreateSearch">_fnFilterCreateSearch</a></span><span
+                    class="type-sig"><span class="signature">(sSearch, bRegex, bSmart, bCaseInsensitive)</span><span
+                    class="type-signature"> &rarr; {RegExp}</span></span></dt>
+            <dd class=" odd">Build a regular expression object suitable for searching a table</dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnFilterCustom">_fnFilterCustom</a></span><span class="type-sig"><span
+                    class="signature">(oSettings)</span><span class="type-signature"></span></span></dt>
+            <dd class=" even">Apply custom filtering functions</dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnGatherData">_fnGatherData</a></span><span class="type-sig"><span
+                    class="signature">(oSettings)</span><span class="type-signature"></span></span></dt>
+            <dd class=" odd">Read in the data from the target table from the DOM</dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnGetCellData">_fnGetCellData</a></span><span class="type-sig"><span
+                    class="signature">(oSettings, iRow, iCol, sSpecific)</span><span class="type-signature"> &rarr;
+                {*}</span></span></dt>
+            <dd class=" even">Get the data for a given cell from the internal cache, taking into account data mapping
+            </dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnGetColumns">_fnGetColumns</a></span><span class="type-sig"><span
+                    class="signature">(oSettings, sParam)</span><span class="type-signature"> &rarr;
+                {array}</span></span></dt>
+            <dd class=" odd">Get an array of column indexes that match a given property</dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnGetDataMaster">_fnGetDataMaster</a></span><span
+                    class="type-sig"><span class="signature">(oSettings)</span><span
+                    class="type-signature"></span></span></dt>
+            <dd class=" even">Return an array with the full table data</dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnGetMaxLenString">_fnGetMaxLenString</a></span><span class="type-sig"><span
+                    class="signature">(oSettings, iCol)</span><span class="type-signature"> &rarr;
+                {string}</span></span></dt>
+            <dd class=" odd">Get the maximum strlen for each data column</dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnGetObjectDataFn">_fnGetObjectDataFn</a></span><span class="type-sig"><span
+                    class="signature">(mSource)</span><span class="type-signature"> &rarr; {function}</span></span></dt>
+            <dd class=" even">Return a function that can be used to get data from a source object, taking
+                into account the ability to use nested objects as a source
+            </dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnGetRowData">_fnGetRowData</a></span><span class="type-sig"><span
+                    class="signature">(oSettings, iRow, sSpecific, aiColumns)</span><span class="type-signature"> &rarr;
+                {array}</span></span></dt>
+            <dd class=" odd">Get an array of data for a given row from the internal data cache</dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnGetTdNodes">_fnGetTdNodes</a></span><span class="type-sig"><span
+                    class="signature">(oSettings, <span class="optional">iIndividualRow</span>)</span><span
+                    class="type-signature"> &rarr; {array}</span></span></dt>
+            <dd class=" even">Return an flat array with all TD nodes for the table, or row</dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnGetTrNodes">_fnGetTrNodes</a></span><span class="type-sig"><span
+                    class="signature">(oSettings)</span><span class="type-signature"> &rarr; {array}</span></span></dt>
+            <dd class=" odd">Return an array with the TR nodes for the table</dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnGetUniqueThs">_fnGetUniqueThs</a></span><span class="type-sig"><span
+                    class="signature">(oSettings, nHeader, aLayout)</span><span class="type-signature"></span></span>
+            </dt>
+            <dd class=" even">Get an array of unique th elements, one for each column</dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnGetWidestNode">_fnGetWidestNode</a></span><span
+                    class="type-sig"><span class="signature">(oSettings, iCol)</span><span class="type-signature"> &rarr;
+                {string}</span></span></dt>
+            <dd class=" odd">Get the widest node</dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnInitComplete">_fnInitComplete</a></span><span class="type-sig"><span
+                    class="signature">(oSettings, <span class="optional">json</span>)</span><span
+                    class="type-signature"></span></span></dt>
+            <dd class=" even">Draw the table for the first time, adding all required features</dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnInitialise">_fnInitialise</a></span><span class="type-sig"><span
+                    class="signature">(oSettings)</span><span class="type-signature"></span></span></dt>
+            <dd class=" odd">Draw the table for the first time, adding all required features</dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnLanguageCompat">_fnLanguageCompat</a></span><span
+                    class="type-sig"><span class="signature">(oSettings)</span><span
+                    class="type-signature"></span></span></dt>
+            <dd class=" even">Language compatibility - when certain options are given, and others aren't, we
+                need to duplicate the values over, in order to provide backwards compatibility
+                with older language files.
+            </dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnLoadState">_fnLoadState</a></span><span class="type-sig"><span
+                    class="signature">(oSettings, oInit)</span><span class="type-signature"></span></span></dt>
+            <dd class=" odd">Attempt to load a saved table state from a cookie</dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnLog">_fnLog</a></span><span class="type-sig"><span class="signature">(oSettings, iLevel, sMesg)</span><span
+                    class="type-signature"></span></span></dt>
+            <dd class=" even">Log an error message</dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnMap">_fnMap</a></span><span class="type-sig"><span class="signature">(oRet, oSrc, sName, <span
+                    class="optional">sMappedName</span>)</span><span class="type-signature"></span></span></dt>
+            <dd class=" odd">See if a property is defined on one object, if so assign it to the other object</dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnNodeToColumnIndex">_fnNodeToColumnIndex</a></span><span
+                    class="type-sig"><span class="signature">(oSettings, iRow, n)</span><span class="type-signature"> &rarr;
+                {int}</span></span></dt>
+            <dd class=" even">Take a TD element and convert it into a column data index (not the visible index)</dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnNodeToDataIndex">_fnNodeToDataIndex</a></span><span class="type-sig"><span
+                    class="signature">(oSettings, n)</span><span class="type-signature"> &rarr; {int}</span></span></dt>
+            <dd class=" odd">Take a TR element and convert it to an index in aoData</dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnPageChange">_fnPageChange</a></span><span class="type-sig"><span
+                    class="signature">(oSettings, mAction)</span><span class="type-signature"> &rarr;
+                {bool}</span></span></dt>
+            <dd class=" even">Alter the display settings to change the page</dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnProcessingDisplay">_fnProcessingDisplay</a></span><span
+                    class="type-sig"><span class="signature">(oSettings, bShow)</span><span
+                    class="type-signature"></span></span></dt>
+            <dd class=" odd">Display or hide the processing indicator</dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnReadCookie">_fnReadCookie</a></span><span class="type-sig"><span
+                    class="signature">(sName)</span><span class="type-signature"> &rarr; {string}</span></span></dt>
+            <dd class=" even">Read an old cookie to get a cookie with an old table state</dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnReDraw">_fnReDraw</a></span><span class="type-sig"><span
+                    class="signature">(oSettings)</span><span class="type-signature"></span></span></dt>
+            <dd class=" odd">Redraw the table - taking account of the various features which are enabled</dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnRender">_fnRender</a></span><span class="type-sig"><span
+                    class="signature">(oSettings, iRow, iCol)</span><span class="type-signature"> &rarr;
+                {*}</span></span></dt>
+            <dd class=" even">Call the developer defined fnRender function for a given cell (row/column) with
+                the required parameters and return the result.
+            </dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnReOrderIndex">_fnReOrderIndex</a></span><span class="type-sig"><span
+                    class="signature">(oSettings)</span><span class="type-signature"></span></span></dt>
+            <dd class=" odd">Figure out how to reorder a display list</dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnSaveState">_fnSaveState</a></span><span class="type-sig"><span
+                    class="signature">(oSettings)</span><span class="type-signature"></span></span></dt>
+            <dd class=" even">Save the state of a table in a cookie such that the page can be reloaded</dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnScrollBarWidth">_fnScrollBarWidth</a></span><span
+                    class="type-sig"><span class="signature">()</span><span class="type-signature"> &rarr; {int}</span></span>
+            </dt>
+            <dd class=" odd">Get the width of a scroll bar in this browser being used</dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnScrollDraw">_fnScrollDraw</a></span><span class="type-sig"><span
+                    class="signature">(o)</span><span class="type-signature"> &rarr; {node}</span></span></dt>
+            <dd class=" even">Update the various tables for resizing. It's a bit of a pig this function, but
+                basically the idea to:
+                1. Re-create the table inside the scrolling div
+                2. Take live measurements from the DOM
+                3. Apply the measurements
+                4. Clean up
+            </dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnScrollingWidthAdjust">_fnScrollingWidthAdjust</a></span><span
+                    class="type-sig"><span class="signature">(oSettings, n)</span><span
+                    class="type-signature"></span></span></dt>
+            <dd class=" odd">Adjust a table's width to take account of scrolling</dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnServerParams">_fnServerParams</a></span><span class="type-sig"><span
+                    class="signature">(oSettings, array)</span><span class="type-signature"></span></span></dt>
+            <dd class=" even">Add Ajax parameters from plug-ins</dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnSetCellData">_fnSetCellData</a></span><span class="type-sig"><span
+                    class="signature">(oSettings, iRow, iCol, val)</span><span class="type-signature"></span></span>
+            </dt>
+            <dd class=" odd">Set the value for a specific cell, into the internal data cache</dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnSetObjectDataFn">_fnSetObjectDataFn</a></span><span class="type-sig"><span
+                    class="signature">(mSource)</span><span class="type-signature"> &rarr; {function}</span></span></dt>
+            <dd class=" even">Return a function that can be used to set data from a source object, taking
+                into account the ability to use nested objects as a source
+            </dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnSettingsFromNode">_fnSettingsFromNode</a></span><span
+                    class="type-sig"><span class="signature">(nTable)</span><span class="type-signature"> &rarr;
+                {object}</span></span></dt>
+            <dd class=" odd">Return the settings object for a particular table</dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnSort">_fnSort</a></span><span class="type-sig"><span
+                    class="signature">(oSettings, bApplyClasses)</span><span class="type-signature"></span></span></dt>
+            <dd class=" even">Change the order of the table</dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnSortAttachListener">_fnSortAttachListener</a></span><span
+                    class="type-sig"><span class="signature">(oSettings, nNode, iDataIndex, <span class="optional">fnCallback</span>)</span><span
+                    class="type-signature"></span></span></dt>
+            <dd class=" odd">Attach a sort handler (click) to a node</dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnSortingClasses">_fnSortingClasses</a></span><span
+                    class="type-sig"><span class="signature">(oSettings)</span><span
+                    class="type-signature"></span></span></dt>
+            <dd class=" even">Set the sorting classes on the header, Note: it is safe to call this function
+                when bSort and bSortClasses are false
+            </dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnStringToCss">_fnStringToCss</a></span><span class="type-sig"><span
+                    class="signature">(aArray1, aArray2)</span><span class="type-signature"> &rarr; {int}</span></span>
+            </dt>
+            <dd class=" odd">Append a CSS unit (only if required) to a string</dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnUpdateInfo">_fnUpdateInfo</a></span><span class="type-sig"><span
+                    class="signature">(oSettings)</span><span class="type-signature"></span></span></dt>
+            <dd class=" even">Update the information elements in the display</dd>
+            <dt class=" odd"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnVisbleColumns">_fnVisbleColumns</a></span><span
+                    class="type-sig"><span class="signature">(oSettings)</span><span class="type-signature"> &rarr;
+                {int}</span></span></dt>
+            <dd class=" odd">Get the number of visible columns</dd>
+            <dt class=" even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                    class="type-name"><a href="#_fnVisibleToColumnIndex">_fnVisibleToColumnIndex</a></span><span
+                    class="type-sig"><span class="signature">(oSettings, iMatch)</span><span class="type-signature"> &rarr;
+                {int}</span></span></dt>
+            <dd class=" even">Covert the index of a visible column to the index in the data array (take account
+                of hidden columns)
+            </dd>
+        </dl>
+    </div>
 </div>
 
 

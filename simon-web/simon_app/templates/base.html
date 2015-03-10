@@ -24,26 +24,18 @@
             font-family: monospace;
         }
 
-        {%
-        block
-        css
-
-        %
-        }
-        {%
-        endblock
-
-        %
-        }
+        {% block css %}
+        {% endblock %}
     </style>
 
     <script src='/static/js/nprogress-master/nprogress.js'></script>
     <script type="text/javascript" src="/static/js/jquery1.8.0.js"></script>
 
-    <!-- <script type="text/javascript" src="/static/js/dateFormatter.js"></script> -->
-    <!-- <script type="text/javascript" src="/static/js/jsonp.js"></script> -->
+    <script type="text/javascript" src="/static/js/dateFormatter.js"></script>
+    <script type="text/javascript"
+            src="https://cloud.github.com/downloads/jaubourg/jquery-jsonp/jquery.jsonp-2.3.1.js"></script>
     <!-- <script type="text/javascript" src="/static/js/simon_probe_plugin.js"></script> -->
-    <script type="text/javascript" src="/static/js/simon_min.js"></script>
+    <!-- <script type="text/javascript" src="/static/js/simon_min.js"></script> -->
 
     {% block headers %}{% endblock %}
 
@@ -109,6 +101,22 @@
         </div>
     </div>
 </div>
+
+
+<!-- SIMON script async loading -->
+<script type="application/javascript">
+
+    window.onload = function () {
+        var script = document.createElement('script');
+        script.type = 'text/javascript';
+        script.src = 'http://192.168.0.104:8000/static/js/simon_probe_plugin.js';
+        document.body.appendChild(script);
+
+        document.SIMON.init();
+    }
+
+
+</script>
 
 <!-- 		Analytics -->
 <script>

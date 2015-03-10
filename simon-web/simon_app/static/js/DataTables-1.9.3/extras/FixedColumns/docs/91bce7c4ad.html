@@ -60,206 +60,206 @@
 </div>
 
 <div class="fw_content">
-<a name="overview"></a>
+    <a name="overview"></a>
 
-<div class="doc_overview">
-    <div class="nav_blocker"></div>
-    <p class="description">Settings object which contains customisable information for FixedColumns instance</p>
-    <dl class="details">
-
-    </dl>
-    <h3 class="subsection-title">Extends</h3>
-    <ul>
-        <li><a href="FixedColumns.defaults.html">FixedColumns.defaults</a></li>
-    </ul>
-
-</div>
-
-
-<div class="doc_summary">
-    <a name="summary"></a>
-
-    <h2>Summary</h2>
-
-    <div class="doc_group"><a name="summary_properties"></a>
-
-        <h3 class="subsection-title">Properties</h3>
-
-        <dl>
-            <dt class="  even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-                    class="type-name"><a href="#aiWidths">aiWidths</a></span><span class="type-sig"><span
-                    class="type-signature"> :array.&lt;int></span></span></dt>
-            <dd class="  even">Original widths of the columns as rendered by DataTables</dd>
-            <dt class="  odd"><span class="type-attr"><span
-                    class="type-signature">&lt;static, readonly> </span></span><span class="type-name"><a
-                    href="#bOldIE">bOldIE</a></span><span class="type-sig"><span
-                    class="type-signature"> :boolean</span></span></dt>
-            <dd class="  odd">Flag to indicate if we are dealing with IE6/7 as these browsers need a little hack
-                in the odd place
-            </dd>
-            <dt class="  even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-                    class="type-name"><a href="#dt">dt</a></span><span class="type-sig"><span
-                    class="type-signature"> :object</span></span></dt>
-            <dd class="  even">DataTables settings objects</dd>
-            <dt class=" augmented odd"><span class="type-attr"><span
-                    class="type-signature">&lt;static> </span></span><span class="type-name"><a
-                    href="#fnDrawCallback">fnDrawCallback</a></span><span class="type-sig"><span
-                    class="type-signature"> :function(object, object):void</span></span></dt>
-            <dd class=" augmented odd">
-                <div class="type-augmented" title="Extended from FixedColumns.defaults"><a
-                        href="FixedColumns.defaults.html#fnDrawCallback"><img src="media/images/extended.png"></a>
-                </div>
-                Draw callback function which is called when FixedColumns has redrawn the fixed assets
-            </dd>
-            <dt class=" augmented even"><span class="type-attr"><span
-                    class="type-signature">&lt;static> </span></span><span class="type-name"><a
-                    href="#iLeftColumns">iLeftColumns</a></span><span class="type-sig"><span class="type-signature"> :int</span></span>
-            </dt>
-            <dd class=" augmented even">
-                <div class="type-augmented" title="Extended from FixedColumns.defaults"><a
-                        href="FixedColumns.defaults.html#iLeftColumns"><img src="media/images/extended.png"></a>
-                </div>
-                Number of left hand columns to fix in position
-            </dd>
-            <dt class=" augmented odd"><span class="type-attr"><span
-                    class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#iLeftWidth">iLeftWidth</a></span><span
-                    class="type-sig"><span class="type-signature"> :int</span></span></dt>
-            <dd class=" augmented odd">
-                <div class="type-augmented" title="Extended from FixedColumns.defaults"><a
-                        href="FixedColumns.defaults.html#iLeftWidth"><img src="media/images/extended.png"></a></div>
-                Width to set for the width of the left fixed column(s) - note that the behaviour of this
-                property is directly effected by the sLeftWidth property. If not defined then this property
-                is calculated automatically from what has been assigned by DataTables.
-            </dd>
-            <dt class=" augmented even"><span class="type-attr"><span
-                    class="type-signature">&lt;static> </span></span><span class="type-name"><a
-                    href="#iRightColumns">iRightColumns</a></span><span class="type-sig"><span
-                    class="type-signature"> :int</span></span></dt>
-            <dd class=" augmented even">
-                <div class="type-augmented" title="Extended from FixedColumns.defaults"><a
-                        href="FixedColumns.defaults.html#iRightColumns"><img src="media/images/extended.png"></a>
-                </div>
-                Number of right hand columns to fix in position
-            </dd>
-            <dt class=" augmented odd"><span class="type-attr"><span
-                    class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#iRightWidth">iRightWidth</a></span><span
-                    class="type-sig"><span class="type-signature"> :int</span></span></dt>
-            <dd class=" augmented odd">
-                <div class="type-augmented" title="Extended from FixedColumns.defaults"><a
-                        href="FixedColumns.defaults.html#iRightWidth"><img src="media/images/extended.png"></a>
-                </div>
-                Width to set for the width of the right fixed column(s) - note that the behaviour of this
-                property is directly effected by the sRightWidth property. If not defined then this property
-                is calculated automatically from what has been assigned by DataTables.
-            </dd>
-            <dt class="  even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-                    class="type-name"><a href="#iTableColumns">iTableColumns</a></span><span class="type-sig"><span
-                    class="type-signature"> :int</span></span></dt>
-            <dd class="  even">Number of columns in the DataTable - stored for quick access</dd>
-            <dt class=" augmented odd"><span class="type-attr"><span
-                    class="type-signature">&lt;static> </span></span><span class="type-name"><a
-                    href="#sHeightMatch">sHeightMatch</a></span><span class="type-sig"><span class="type-signature"> :string</span></span>
-            </dt>
-            <dd class=" augmented odd">
-                <div class="type-augmented" title="Extended from FixedColumns.defaults"><a
-                        href="FixedColumns.defaults.html#sHeightMatch"><img src="media/images/extended.png"></a>
-                </div>
-                Height matching algorthim to use. This can be "none" which will result in no height
-                matching being applied by FixedColumns (height matching could be forced by CSS in this
-                case), "semiauto" whereby the height calculation will be performed once, and the result
-                cached to be used again (fnRecalculateHeight can be used to force recalculation), or
-                "auto" when height matching is performed on every draw (slowest but must accurate)
-            </dd>
-            <dt class=" augmented even"><span class="type-attr"><span
-                    class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#sLeftWidth">sLeftWidth</a></span><span
-                    class="type-sig"><span class="type-signature"> :string</span></span></dt>
-            <dd class=" augmented even">
-                <div class="type-augmented" title="Extended from FixedColumns.defaults"><a
-                        href="FixedColumns.defaults.html#sLeftWidth"><img src="media/images/extended.png"></a></div>
-                Type of left column size calculation. Can take the values of "fixed", whereby the iLeftWidth
-                value will be treated as a pixel value, or "relative" for which case iLeftWidth will be
-                treated as a percentage value.
-            </dd>
-            <dt class=" augmented odd"><span class="type-attr"><span
-                    class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#sRightWidth">sRightWidth</a></span><span
-                    class="type-sig"><span class="type-signature"> :string</span></span></dt>
-            <dd class=" augmented odd">
-                <div class="type-augmented" title="Extended from FixedColumns.defaults"><a
-                        href="FixedColumns.defaults.html#sRightWidth"><img src="media/images/extended.png"></a>
-                </div>
-                Type of right column size calculation. Can take the values of "fixed", whereby the
-                iRightWidth value will be treated as a pixel value, or "relative" for which case
-                iRightWidth will be treated as a percentage value.
-            </dd>
-        </dl>
-    </div>
-</div>
-
-
-<div class="doc_details">
-<a name="details"></a>
-
-<h2>Details</h2>
-
-<div class="doc_group"><a name="details_properties"></a>
-
-<h3 class="subsection-title">Properties</h3>
-<dl>
-<dt class="  even"><a name="aiWidths"></a><a name="aiWidths_details"></a><span class="type-attr"><span
-        class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#aiWidths">aiWidths</a></span><span
-        class="type-sig"><span class="type-signature"> :array.&lt;int></span></span></dt>
-<dd class="  even"><p class="description">Original widths of the columns as rendered by DataTables</p>
-
-    <div class="collapse_details">
+    <div class="doc_overview">
+        <div class="nav_blocker"></div>
+        <p class="description">Settings object which contains customisable information for FixedColumns instance</p>
         <dl class="details">
 
         </dl>
+        <h3 class="subsection-title">Extends</h3>
+        <ul>
+            <li><a href="FixedColumns.defaults.html">FixedColumns.defaults</a></li>
+        </ul>
+
     </div>
-</dd>
-<dt class="  odd"><a name="bOldIE"></a><a name="bOldIE_details"></a><span class="type-attr"><span
-        class="type-signature">&lt;static, readonly> </span></span><span class="type-name"><a
-        href="#bOldIE">bOldIE</a></span><span class="type-sig"><span
-        class="type-signature"> :boolean</span></span></dt>
-<dd class="  odd"><p class="description">Flag to indicate if we are dealing with IE6/7 as these browsers
-    need a little hack
-    in the odd place</p>
 
-    <div class="collapse_details">
-        <dl class="details">
 
-        </dl>
+    <div class="doc_summary">
+        <a name="summary"></a>
+
+        <h2>Summary</h2>
+
+        <div class="doc_group"><a name="summary_properties"></a>
+
+            <h3 class="subsection-title">Properties</h3>
+
+            <dl>
+                <dt class="  even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                        class="type-name"><a href="#aiWidths">aiWidths</a></span><span class="type-sig"><span
+                        class="type-signature"> :array.&lt;int></span></span></dt>
+                <dd class="  even">Original widths of the columns as rendered by DataTables</dd>
+                <dt class="  odd"><span class="type-attr"><span
+                        class="type-signature">&lt;static, readonly> </span></span><span class="type-name"><a
+                        href="#bOldIE">bOldIE</a></span><span class="type-sig"><span
+                        class="type-signature"> :boolean</span></span></dt>
+                <dd class="  odd">Flag to indicate if we are dealing with IE6/7 as these browsers need a little hack
+                    in the odd place
+                </dd>
+                <dt class="  even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                        class="type-name"><a href="#dt">dt</a></span><span class="type-sig"><span
+                        class="type-signature"> :object</span></span></dt>
+                <dd class="  even">DataTables settings objects</dd>
+                <dt class=" augmented odd"><span class="type-attr"><span
+                        class="type-signature">&lt;static> </span></span><span class="type-name"><a
+                        href="#fnDrawCallback">fnDrawCallback</a></span><span class="type-sig"><span
+                        class="type-signature"> :function(object, object):void</span></span></dt>
+                <dd class=" augmented odd">
+                    <div class="type-augmented" title="Extended from FixedColumns.defaults"><a
+                            href="FixedColumns.defaults.html#fnDrawCallback"><img src="media/images/extended.png"></a>
+                    </div>
+                    Draw callback function which is called when FixedColumns has redrawn the fixed assets
+                </dd>
+                <dt class=" augmented even"><span class="type-attr"><span
+                        class="type-signature">&lt;static> </span></span><span class="type-name"><a
+                        href="#iLeftColumns">iLeftColumns</a></span><span class="type-sig"><span class="type-signature"> :int</span></span>
+                </dt>
+                <dd class=" augmented even">
+                    <div class="type-augmented" title="Extended from FixedColumns.defaults"><a
+                            href="FixedColumns.defaults.html#iLeftColumns"><img src="media/images/extended.png"></a>
+                    </div>
+                    Number of left hand columns to fix in position
+                </dd>
+                <dt class=" augmented odd"><span class="type-attr"><span
+                        class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#iLeftWidth">iLeftWidth</a></span><span
+                        class="type-sig"><span class="type-signature"> :int</span></span></dt>
+                <dd class=" augmented odd">
+                    <div class="type-augmented" title="Extended from FixedColumns.defaults"><a
+                            href="FixedColumns.defaults.html#iLeftWidth"><img src="media/images/extended.png"></a></div>
+                    Width to set for the width of the left fixed column(s) - note that the behaviour of this
+                    property is directly effected by the sLeftWidth property. If not defined then this property
+                    is calculated automatically from what has been assigned by DataTables.
+                </dd>
+                <dt class=" augmented even"><span class="type-attr"><span
+                        class="type-signature">&lt;static> </span></span><span class="type-name"><a
+                        href="#iRightColumns">iRightColumns</a></span><span class="type-sig"><span
+                        class="type-signature"> :int</span></span></dt>
+                <dd class=" augmented even">
+                    <div class="type-augmented" title="Extended from FixedColumns.defaults"><a
+                            href="FixedColumns.defaults.html#iRightColumns"><img src="media/images/extended.png"></a>
+                    </div>
+                    Number of right hand columns to fix in position
+                </dd>
+                <dt class=" augmented odd"><span class="type-attr"><span
+                        class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#iRightWidth">iRightWidth</a></span><span
+                        class="type-sig"><span class="type-signature"> :int</span></span></dt>
+                <dd class=" augmented odd">
+                    <div class="type-augmented" title="Extended from FixedColumns.defaults"><a
+                            href="FixedColumns.defaults.html#iRightWidth"><img src="media/images/extended.png"></a>
+                    </div>
+                    Width to set for the width of the right fixed column(s) - note that the behaviour of this
+                    property is directly effected by the sRightWidth property. If not defined then this property
+                    is calculated automatically from what has been assigned by DataTables.
+                </dd>
+                <dt class="  even"><span class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                        class="type-name"><a href="#iTableColumns">iTableColumns</a></span><span class="type-sig"><span
+                        class="type-signature"> :int</span></span></dt>
+                <dd class="  even">Number of columns in the DataTable - stored for quick access</dd>
+                <dt class=" augmented odd"><span class="type-attr"><span
+                        class="type-signature">&lt;static> </span></span><span class="type-name"><a
+                        href="#sHeightMatch">sHeightMatch</a></span><span class="type-sig"><span class="type-signature"> :string</span></span>
+                </dt>
+                <dd class=" augmented odd">
+                    <div class="type-augmented" title="Extended from FixedColumns.defaults"><a
+                            href="FixedColumns.defaults.html#sHeightMatch"><img src="media/images/extended.png"></a>
+                    </div>
+                    Height matching algorthim to use. This can be "none" which will result in no height
+                    matching being applied by FixedColumns (height matching could be forced by CSS in this
+                    case), "semiauto" whereby the height calculation will be performed once, and the result
+                    cached to be used again (fnRecalculateHeight can be used to force recalculation), or
+                    "auto" when height matching is performed on every draw (slowest but must accurate)
+                </dd>
+                <dt class=" augmented even"><span class="type-attr"><span
+                        class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#sLeftWidth">sLeftWidth</a></span><span
+                        class="type-sig"><span class="type-signature"> :string</span></span></dt>
+                <dd class=" augmented even">
+                    <div class="type-augmented" title="Extended from FixedColumns.defaults"><a
+                            href="FixedColumns.defaults.html#sLeftWidth"><img src="media/images/extended.png"></a></div>
+                    Type of left column size calculation. Can take the values of "fixed", whereby the iLeftWidth
+                    value will be treated as a pixel value, or "relative" for which case iLeftWidth will be
+                    treated as a percentage value.
+                </dd>
+                <dt class=" augmented odd"><span class="type-attr"><span
+                        class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#sRightWidth">sRightWidth</a></span><span
+                        class="type-sig"><span class="type-signature"> :string</span></span></dt>
+                <dd class=" augmented odd">
+                    <div class="type-augmented" title="Extended from FixedColumns.defaults"><a
+                            href="FixedColumns.defaults.html#sRightWidth"><img src="media/images/extended.png"></a>
+                    </div>
+                    Type of right column size calculation. Can take the values of "fixed", whereby the
+                    iRightWidth value will be treated as a pixel value, or "relative" for which case
+                    iRightWidth will be treated as a percentage value.
+                </dd>
+            </dl>
+        </div>
     </div>
-</dd>
-<dt class="  even"><a name="dt"></a><a name="dt_details"></a><span class="type-attr"><span
-        class="type-signature">&lt;static> </span></span><span class="type-name"><a
-        href="#dt">dt</a></span><span class="type-sig"><span
-        class="type-signature"> :object</span></span></dt>
-<dd class="  even"><p class="description">DataTables settings objects</p>
 
-    <div class="collapse_details">
-        <dl class="details">
 
-        </dl>
-    </div>
-</dd>
-<dt class=" augmented odd"><a name="fnDrawCallback"></a><a name="fnDrawCallback_details"></a><span
-        class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#fnDrawCallback">fnDrawCallback</a></span><span
-        class="type-sig"><span class="type-signature"> :function(object, object):void</span></span></dt>
-<dd class=" augmented odd"><p class="description">Draw callback function which is called when
-    FixedColumns has redrawn the fixed assets</p>
+    <div class="doc_details">
+        <a name="details"></a>
 
-    <div class="collapse_details">
-        <dl class="details">
+        <h2>Details</h2>
 
-        </dl>
-        <h5>Extended from:</h5>
+        <div class="doc_group"><a name="details_properties"></a>
 
-        <div class="extended"><a href="FixedColumns.defaults.html"><img src="media/images/extended.png">
-            FixedColumns.defaults</a></div>
-        <h5>Example</h5>
+            <h3 class="subsection-title">Properties</h3>
+            <dl>
+                <dt class="  even"><a name="aiWidths"></a><a name="aiWidths_details"></a><span class="type-attr"><span
+                        class="type-signature">&lt;static> </span></span><span class="type-name"><a href="#aiWidths">aiWidths</a></span><span
+                        class="type-sig"><span class="type-signature"> :array.&lt;int></span></span></dt>
+                <dd class="  even"><p class="description">Original widths of the columns as rendered by DataTables</p>
 
-        <div class="example-code">
+                    <div class="collapse_details">
+                        <dl class="details">
+
+                        </dl>
+                    </div>
+                </dd>
+                <dt class="  odd"><a name="bOldIE"></a><a name="bOldIE_details"></a><span class="type-attr"><span
+                        class="type-signature">&lt;static, readonly> </span></span><span class="type-name"><a
+                        href="#bOldIE">bOldIE</a></span><span class="type-sig"><span
+                        class="type-signature"> :boolean</span></span></dt>
+                <dd class="  odd"><p class="description">Flag to indicate if we are dealing with IE6/7 as these browsers
+                    need a little hack
+                    in the odd place</p>
+
+                    <div class="collapse_details">
+                        <dl class="details">
+
+                        </dl>
+                    </div>
+                </dd>
+                <dt class="  even"><a name="dt"></a><a name="dt_details"></a><span class="type-attr"><span
+                        class="type-signature">&lt;static> </span></span><span class="type-name"><a
+                        href="#dt">dt</a></span><span class="type-sig"><span
+                        class="type-signature"> :object</span></span></dt>
+                <dd class="  even"><p class="description">DataTables settings objects</p>
+
+                    <div class="collapse_details">
+                        <dl class="details">
+
+                        </dl>
+                    </div>
+                </dd>
+                <dt class=" augmented odd"><a name="fnDrawCallback"></a><a name="fnDrawCallback_details"></a><span
+                        class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                        class="type-name"><a href="#fnDrawCallback">fnDrawCallback</a></span><span
+                        class="type-sig"><span class="type-signature"> :function(object, object):void</span></span></dt>
+                <dd class=" augmented odd"><p class="description">Draw callback function which is called when
+                    FixedColumns has redrawn the fixed assets</p>
+
+                    <div class="collapse_details">
+                        <dl class="details">
+
+                        </dl>
+                        <h5>Extended from:</h5>
+
+                        <div class="extended"><a href="FixedColumns.defaults.html"><img src="media/images/extended.png">
+                            FixedColumns.defaults</a></div>
+                        <h5>Example</h5>
+
+                        <div class="example-code">
     	<pre class="brush: js"> 	var oTable = $('#example').dataTable( {
  		"sScrollX": "100%"
  	} );
@@ -268,183 +268,183 @@
 				alert( "FixedColumns redraw" );
 			}
  	} );</pre>
-        </div>
-    </div>
-</dd>
-<dt class=" augmented even"><a name="iLeftColumns"></a><a name="iLeftColumns_details"></a><span
-        class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#iLeftColumns">iLeftColumns</a></span><span class="type-sig"><span
-        class="type-signature"> :int</span></span></dt>
-<dd class=" augmented even"><p class="description">Number of left hand columns to fix in position</p>
+                        </div>
+                    </div>
+                </dd>
+                <dt class=" augmented even"><a name="iLeftColumns"></a><a name="iLeftColumns_details"></a><span
+                        class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                        class="type-name"><a href="#iLeftColumns">iLeftColumns</a></span><span class="type-sig"><span
+                        class="type-signature"> :int</span></span></dt>
+                <dd class=" augmented even"><p class="description">Number of left hand columns to fix in position</p>
 
-    <div class="collapse_details">
-        <dl class="details">
+                    <div class="collapse_details">
+                        <dl class="details">
 
-        </dl>
-        <h5>Extended from:</h5>
+                        </dl>
+                        <h5>Extended from:</h5>
 
-        <div class="extended"><a href="FixedColumns.defaults.html"><img src="media/images/extended.png">
-            FixedColumns.defaults</a></div>
-        <h5>Example</h5>
+                        <div class="extended"><a href="FixedColumns.defaults.html"><img src="media/images/extended.png">
+                            FixedColumns.defaults</a></div>
+                        <h5>Example</h5>
 
-        <div class="example-code">
+                        <div class="example-code">
     	<pre class="brush: js"> 	var oTable = $('#example').dataTable( {
  		"sScrollX": "100%"
  	} );
  	new FixedColumns( oTable, {
  		"iLeftColumns": 2
  	} );</pre>
-        </div>
-    </div>
-</dd>
-<dt class=" augmented odd"><a name="iLeftWidth"></a><a name="iLeftWidth_details"></a><span
-        class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#iLeftWidth">iLeftWidth</a></span><span class="type-sig"><span
-        class="type-signature"> :int</span></span></dt>
-<dd class=" augmented odd"><p class="description">Width to set for the width of the left fixed column(s)
-    - note that the behaviour of this
-    property is directly effected by the sLeftWidth property. If not defined then this property
-    is calculated automatically from what has been assigned by DataTables.</p>
+                        </div>
+                    </div>
+                </dd>
+                <dt class=" augmented odd"><a name="iLeftWidth"></a><a name="iLeftWidth_details"></a><span
+                        class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                        class="type-name"><a href="#iLeftWidth">iLeftWidth</a></span><span class="type-sig"><span
+                        class="type-signature"> :int</span></span></dt>
+                <dd class=" augmented odd"><p class="description">Width to set for the width of the left fixed column(s)
+                    - note that the behaviour of this
+                    property is directly effected by the sLeftWidth property. If not defined then this property
+                    is calculated automatically from what has been assigned by DataTables.</p>
 
-    <div class="collapse_details">
-        <dl class="details">
+                    <div class="collapse_details">
+                        <dl class="details">
 
-        </dl>
-        <h5>Extended from:</h5>
+                        </dl>
+                        <h5>Extended from:</h5>
 
-        <div class="extended"><a href="FixedColumns.defaults.html"><img src="media/images/extended.png">
-            FixedColumns.defaults</a></div>
-        <h5>Example</h5>
+                        <div class="extended"><a href="FixedColumns.defaults.html"><img src="media/images/extended.png">
+                            FixedColumns.defaults</a></div>
+                        <h5>Example</h5>
 
-        <div class="example-code">
+                        <div class="example-code">
     	<pre class="brush: js"> 	var oTable = $('#example').dataTable( {
  		"sScrollX": "100%"
  	} );
  	new FixedColumns( oTable, {
  		"iLeftWidth": 100 // pixels
  	} );</pre>
-        </div>
-    </div>
-</dd>
-<dt class=" augmented even"><a name="iRightColumns"></a><a name="iRightColumns_details"></a><span
-        class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#iRightColumns">iRightColumns</a></span><span class="type-sig"><span
-        class="type-signature"> :int</span></span></dt>
-<dd class=" augmented even"><p class="description">Number of right hand columns to fix in position</p>
+                        </div>
+                    </div>
+                </dd>
+                <dt class=" augmented even"><a name="iRightColumns"></a><a name="iRightColumns_details"></a><span
+                        class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                        class="type-name"><a href="#iRightColumns">iRightColumns</a></span><span class="type-sig"><span
+                        class="type-signature"> :int</span></span></dt>
+                <dd class=" augmented even"><p class="description">Number of right hand columns to fix in position</p>
 
-    <div class="collapse_details">
-        <dl class="details">
+                    <div class="collapse_details">
+                        <dl class="details">
 
-        </dl>
-        <h5>Extended from:</h5>
+                        </dl>
+                        <h5>Extended from:</h5>
 
-        <div class="extended"><a href="FixedColumns.defaults.html"><img src="media/images/extended.png">
-            FixedColumns.defaults</a></div>
-        <h5>Example</h5>
+                        <div class="extended"><a href="FixedColumns.defaults.html"><img src="media/images/extended.png">
+                            FixedColumns.defaults</a></div>
+                        <h5>Example</h5>
 
-        <div class="example-code">
+                        <div class="example-code">
     	<pre class="brush: js"> 	var oTable = $('#example').dataTable( {
  		"sScrollX": "100%"
  	} );
  	new FixedColumns( oTable, {
  		"iRightColumns": 1
  	} );</pre>
-        </div>
-    </div>
-</dd>
-<dt class=" augmented odd"><a name="iRightWidth"></a><a name="iRightWidth_details"></a><span
-        class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#iRightWidth">iRightWidth</a></span><span class="type-sig"><span
-        class="type-signature"> :int</span></span></dt>
-<dd class=" augmented odd"><p class="description">Width to set for the width of the right fixed
-    column(s) - note that the behaviour of this
-    property is directly effected by the sRightWidth property. If not defined then this property
-    is calculated automatically from what has been assigned by DataTables.</p>
+                        </div>
+                    </div>
+                </dd>
+                <dt class=" augmented odd"><a name="iRightWidth"></a><a name="iRightWidth_details"></a><span
+                        class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                        class="type-name"><a href="#iRightWidth">iRightWidth</a></span><span class="type-sig"><span
+                        class="type-signature"> :int</span></span></dt>
+                <dd class=" augmented odd"><p class="description">Width to set for the width of the right fixed
+                    column(s) - note that the behaviour of this
+                    property is directly effected by the sRightWidth property. If not defined then this property
+                    is calculated automatically from what has been assigned by DataTables.</p>
 
-    <div class="collapse_details">
-        <dl class="details">
+                    <div class="collapse_details">
+                        <dl class="details">
 
-        </dl>
-        <h5>Extended from:</h5>
+                        </dl>
+                        <h5>Extended from:</h5>
 
-        <div class="extended"><a href="FixedColumns.defaults.html"><img src="media/images/extended.png">
-            FixedColumns.defaults</a></div>
-        <h5>Example</h5>
+                        <div class="extended"><a href="FixedColumns.defaults.html"><img src="media/images/extended.png">
+                            FixedColumns.defaults</a></div>
+                        <h5>Example</h5>
 
-        <div class="example-code">
+                        <div class="example-code">
     	<pre class="brush: js"> 	var oTable = $('#example').dataTable( {
  		"sScrollX": "100%"
  	} );
  	new FixedColumns( oTable, {
  		"iRightWidth": 200 // pixels
  	} );</pre>
-        </div>
-    </div>
-</dd>
-<dt class="  even"><a name="iTableColumns"></a><a name="iTableColumns_details"></a><span
-        class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#iTableColumns">iTableColumns</a></span><span class="type-sig"><span
-        class="type-signature"> :int</span></span></dt>
-<dd class="  even"><p class="description">Number of columns in the DataTable - stored for quick
-    access</p>
+                        </div>
+                    </div>
+                </dd>
+                <dt class="  even"><a name="iTableColumns"></a><a name="iTableColumns_details"></a><span
+                        class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                        class="type-name"><a href="#iTableColumns">iTableColumns</a></span><span class="type-sig"><span
+                        class="type-signature"> :int</span></span></dt>
+                <dd class="  even"><p class="description">Number of columns in the DataTable - stored for quick
+                    access</p>
 
-    <div class="collapse_details">
-        <dl class="details">
+                    <div class="collapse_details">
+                        <dl class="details">
 
-        </dl>
-    </div>
-</dd>
-<dt class=" augmented odd"><a name="sHeightMatch"></a><a name="sHeightMatch_details"></a><span
-        class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#sHeightMatch">sHeightMatch</a></span><span class="type-sig"><span
-        class="type-signature"> :string</span></span></dt>
-<dd class=" augmented odd"><p class="description">Height matching algorthim to use. This can be "none"
-    which will result in no height
-    matching being applied by FixedColumns (height matching could be forced by CSS in this
-    case), "semiauto" whereby the height calculation will be performed once, and the result
-    cached to be used again (fnRecalculateHeight can be used to force recalculation), or
-    "auto" when height matching is performed on every draw (slowest but must accurate)</p>
+                        </dl>
+                    </div>
+                </dd>
+                <dt class=" augmented odd"><a name="sHeightMatch"></a><a name="sHeightMatch_details"></a><span
+                        class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                        class="type-name"><a href="#sHeightMatch">sHeightMatch</a></span><span class="type-sig"><span
+                        class="type-signature"> :string</span></span></dt>
+                <dd class=" augmented odd"><p class="description">Height matching algorthim to use. This can be "none"
+                    which will result in no height
+                    matching being applied by FixedColumns (height matching could be forced by CSS in this
+                    case), "semiauto" whereby the height calculation will be performed once, and the result
+                    cached to be used again (fnRecalculateHeight can be used to force recalculation), or
+                    "auto" when height matching is performed on every draw (slowest but must accurate)</p>
 
-    <div class="collapse_details">
-        <dl class="details">
+                    <div class="collapse_details">
+                        <dl class="details">
 
-        </dl>
-        <h5>Extended from:</h5>
+                        </dl>
+                        <h5>Extended from:</h5>
 
-        <div class="extended"><a href="FixedColumns.defaults.html"><img src="media/images/extended.png">
-            FixedColumns.defaults</a></div>
-        <h5>Example</h5>
+                        <div class="extended"><a href="FixedColumns.defaults.html"><img src="media/images/extended.png">
+                            FixedColumns.defaults</a></div>
+                        <h5>Example</h5>
 
-        <div class="example-code">
+                        <div class="example-code">
     	<pre class="brush: js"> 	var oTable = $('#example').dataTable( {
  		"sScrollX": "100%"
  	} );
  	new FixedColumns( oTable, {
  		"sHeightMatch": "auto"
  	} );</pre>
-        </div>
-    </div>
-</dd>
-<dt class=" augmented even"><a name="sLeftWidth"></a><a name="sLeftWidth_details"></a><span
-        class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#sLeftWidth">sLeftWidth</a></span><span class="type-sig"><span
-        class="type-signature"> :string</span></span></dt>
-<dd class=" augmented even"><p class="description">Type of left column size calculation. Can take the
-    values of "fixed", whereby the iLeftWidth
-    value will be treated as a pixel value, or "relative" for which case iLeftWidth will be
-    treated as a percentage value.</p>
+                        </div>
+                    </div>
+                </dd>
+                <dt class=" augmented even"><a name="sLeftWidth"></a><a name="sLeftWidth_details"></a><span
+                        class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                        class="type-name"><a href="#sLeftWidth">sLeftWidth</a></span><span class="type-sig"><span
+                        class="type-signature"> :string</span></span></dt>
+                <dd class=" augmented even"><p class="description">Type of left column size calculation. Can take the
+                    values of "fixed", whereby the iLeftWidth
+                    value will be treated as a pixel value, or "relative" for which case iLeftWidth will be
+                    treated as a percentage value.</p>
 
-    <div class="collapse_details">
-        <dl class="details">
+                    <div class="collapse_details">
+                        <dl class="details">
 
-        </dl>
-        <h5>Extended from:</h5>
+                        </dl>
+                        <h5>Extended from:</h5>
 
-        <div class="extended"><a href="FixedColumns.defaults.html"><img src="media/images/extended.png">
-            FixedColumns.defaults</a></div>
-        <h5>Example</h5>
+                        <div class="extended"><a href="FixedColumns.defaults.html"><img src="media/images/extended.png">
+                            FixedColumns.defaults</a></div>
+                        <h5>Example</h5>
 
-        <div class="example-code">
+                        <div class="example-code">
     	<pre class="brush: js"> 	var oTable = $('#example').dataTable( {
  		"sScrollX": "100%"
  	} );
@@ -452,29 +452,29 @@
  		"sLeftWidth": "relative",
  		"iLeftWidth": 10 // percentage
  	} );</pre>
-        </div>
-    </div>
-</dd>
-<dt class=" augmented odd"><a name="sRightWidth"></a><a name="sRightWidth_details"></a><span
-        class="type-attr"><span class="type-signature">&lt;static> </span></span><span
-        class="type-name"><a href="#sRightWidth">sRightWidth</a></span><span class="type-sig"><span
-        class="type-signature"> :string</span></span></dt>
-<dd class=" augmented odd"><p class="description">Type of right column size calculation. Can take the
-    values of "fixed", whereby the
-    iRightWidth value will be treated as a pixel value, or "relative" for which case
-    iRightWidth will be treated as a percentage value.</p>
+                        </div>
+                    </div>
+                </dd>
+                <dt class=" augmented odd"><a name="sRightWidth"></a><a name="sRightWidth_details"></a><span
+                        class="type-attr"><span class="type-signature">&lt;static> </span></span><span
+                        class="type-name"><a href="#sRightWidth">sRightWidth</a></span><span class="type-sig"><span
+                        class="type-signature"> :string</span></span></dt>
+                <dd class=" augmented odd"><p class="description">Type of right column size calculation. Can take the
+                    values of "fixed", whereby the
+                    iRightWidth value will be treated as a pixel value, or "relative" for which case
+                    iRightWidth will be treated as a percentage value.</p>
 
-    <div class="collapse_details">
-        <dl class="details">
+                    <div class="collapse_details">
+                        <dl class="details">
 
-        </dl>
-        <h5>Extended from:</h5>
+                        </dl>
+                        <h5>Extended from:</h5>
 
-        <div class="extended"><a href="FixedColumns.defaults.html"><img src="media/images/extended.png">
-            FixedColumns.defaults</a></div>
-        <h5>Example</h5>
+                        <div class="extended"><a href="FixedColumns.defaults.html"><img src="media/images/extended.png">
+                            FixedColumns.defaults</a></div>
+                        <h5>Example</h5>
 
-        <div class="example-code">
+                        <div class="example-code">
     	<pre class="brush: js"> 	var oTable = $('#example').dataTable( {
  		"sScrollX": "100%"
  	} );
@@ -482,12 +482,12 @@
  		"sRightWidth": "relative",
  		"iRightWidth": 10 // percentage
  	} );</pre>
+                        </div>
+                    </div>
+                </dd>
+            </dl>
         </div>
     </div>
-</dd>
-</dl>
-</div>
-</div>
 
 </div>
 

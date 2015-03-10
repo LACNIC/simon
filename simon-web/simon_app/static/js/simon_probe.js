@@ -4,11 +4,11 @@
  */
 
 if (typeof simonURL === "undefined")
-    simonURL = "http://simon.labs.lacnic.net/simon/"
+    simonURL = "http://127.0.0.1:8000/" // simonURL = "http://simon.labs.lacnic.net/simon/"
 if (typeof ipv6ResolveURL === "undefined")
-    ipv6ResolveURL = "http://simon.labs.lacnic.net/simon/"
+    simonURL = "http://127.0.0.1:8000/" // ipv6ResolveURL = "http://simon.labs.lacnic.net/simon/"
 if (typeof ipv4ResolveURL === "undefined")
-    ipv4ResolveURL = "http://simon.labs.lacnic.net/simon/"
+    simonURL = "http://127.0.0.1:8000/" // ipv4ResolveURL = "http://simon.labs.lacnic.net/simon/"
 var pointsURL = simonURL + "web_points/getPointsCallback/";
 
 var params = {
