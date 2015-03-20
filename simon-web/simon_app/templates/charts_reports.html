@@ -1,19 +1,19 @@
 {% extends 'base.html' %}
 
-{% block javascript %}
-    <!-- J Query -->
-    <script type="text/javascript"
-            src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
+<!-- J Query -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 
-    <!-- Spinner -->
-    <script type="text/javascript" src="/static/js/spin.js"></script>
+<!-- Spinner -->
+<script type="text/javascript" src="/static/js/spin.js"></script>
 
-    <!-- Google Charts -->
-    <script type='text/javascript' src='https://www.google.com/jsapi'></script>
+<!-- Google Charts -->
+<script type='text/javascript' src='https://www.google.com/jsapi'></script>
 
-    <!-- Google Maps -->
-    <script
-            src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+<!-- Google Maps -->
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+
+
+
 
     <script type='text/javascript'>
         /*
@@ -561,7 +561,11 @@
         });
     });
     </script>
-{% endblock %} {% block css %}
+{% block javascript %}
+
+{% endblock %}
+
+{% block css %}
     <style>
         #map-canvas {
             height: 350px;

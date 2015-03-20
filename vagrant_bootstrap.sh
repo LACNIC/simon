@@ -16,9 +16,10 @@ postgresql-client-common
 
 # wget https://bootstrap.pypa.io/get-pip.py && python get-pip.py && rm get-pip.py
 
-pip install django==1.6
+pip install django==1.7
 pip install lxml
 pip install netaddr
 pip install virtualenv
+pip install geoip2
 
 echo "Finalizó la instalación de las dependencias de la VM..."
