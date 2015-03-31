@@ -2,9 +2,11 @@
  * JavaScript probe that is hosted in different sites and harvests data as users visit that site.
  * LACNIC Labs - 2014
  */
-
+SIMON = {};
+SIMON.debug = false;
 SIMON = {
-	params : {
+
+    params : {
 		percentage : 1.0,// 100%
 		amount : 5,// amount of points
 		numTests : 10,// amount of tests per point. Greater numTests --> less
@@ -15,16 +17,16 @@ SIMON = {
 	},
 
 	urls : {
-		home : "http://simon.lacnic.net/simon//", // "http://simon.lacnic.net/simon/",
-		configs : "http://simon.lacnic.net/simon/web_configs/", // "http://simon.lacnic.net/simon/web_configs/",
-		offline : "http://simon.lacnic.net/simon/postxmlresult/offline/", // "http://simon.lacnic.net/simon/postxmlresult/offline",
-		post : "http://simon.lacnic.net/simon/postxmlresult/latency/", // "http://simon.lacnic.net/simon/postxmlresult/latency",
-		ipv6ResolveURL : "http://simon.v6.labs.lacnic.net/cemd/getip/jsonp/",
-		ipv4ResolveURL : "http://simon.v4.labs.lacnic.net/cemd/getip/jsonp/"
+        home: SIMON.debug && "http://127.0.0.1:8000/" || "http://simon.lacnic.net/simon/",
+        configs: SIMON.debug && "http://127.0.0.1:8000/web_configs/" || "http://simon.lacnic.net/simon/web_configs/",
+        offline: SIMON.debug && "http://127.0.0.1:8000/postxmlresult/offline/" || "http://simon.lacnic.net/simon/postxmlresult/offline/",
+        post: SIMON.debug && "http://127.0.0.1:8000/postxmlresult/latency/" || "http://simon.lacnic.net/simon/postxmlresult/latency/",
+        ipv6ResolveURL: SIMON.debug && "http://200.7.87.96:8001/getip/jsonp/" || "http://simon.v6.labs.lacnic.net/cemd/getip/jsonp/",
+        ipv4ResolveURL: SIMON.debug && "http://200.7.87.96:8001/getip/jsonp/" || "http://simon.v4.labs.lacnic.net/cemd/getip/jsonp/"
 	},
 
 	workflow : {
-		latency : false,
+        latency: false,// TODO
 		throughput : false
 	},
 

@@ -34,10 +34,10 @@ urlpatterns = patterns('',
     url(r'^runjavascript/$', 'simon_app.views.javascript_run'),
     
     # url(r'^postxmlresult/(?P<type>\blatency\b|\bthroughput\b)', 'simon_app.views.post_xml_result', name='postxmlresult'),
-    url(r'^postxmlresult$', 'simon_app.views.post_xml_result', name='postxmlresult'),  # Applet
-    url(r'^postxmlresult/latency$', 'simon_app.views.post_xml_result', name='postxmlresult'),
-    url(r'^postxmlresult/throughput$', 'simon_app.views.post_xml_throughput_result'),
-    url(r'^postxmlresult/offline$', 'simon_app.views.post_offline_testpoints'),
+    url(r'^postxmlresult/$', 'simon_app.views.post_xml_result', name='postxmlresult'),  # Applet
+    url(r'^postxmlresult/latency/$', 'simon_app.views.post_xml_result', name='postxmlresult'),
+    url(r'^postxmlresult/throughput/$', 'simon_app.views.post_xml_throughput_result'),
+    url(r'^postxmlresult/offline/$', 'simon_app.views.post_offline_testpoints'),
     
     url(r'^web_points/$', 'simon_app.views.web_points', {'amount': 0}),  # JSONP callback
     url(r'^web_points/(?P<amount>\d+)/$', 'simon_app.views.web_points', {'ip_version': 4}),
