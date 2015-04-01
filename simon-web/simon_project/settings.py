@@ -16,6 +16,8 @@ ADMINS = (
 #           ('Carlos Martinez', 'carlos@lacnic.net'),
 )
 
+ALLOWED_HOSTS = ['ec2-54-94-179-9.sa-east-1.compute.amazonaws.com', 'localhost', '127.0.0.1', '*']
+
 MANAGERS = ADMINS
 
 # application version
@@ -25,6 +27,7 @@ DATE_UPDATED = "Tue Jul 29 12:35:34 UYT 2014"
 PROJECT_ROOT = os.path.abspath(os.path.pardir)
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
+URL_PFX = '/simon'
 SIMON_URL = ''
 v6_URL = ''
 v4_URL = ''
@@ -95,7 +98,7 @@ STATIC_ROOT = '%s/simon_app/static' % (PROJECT_ROOT)
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-STATIC_URL = '/static/'
+STATIC_URL = URL_PFX + '/static/'
 
 # Path to the geolocation files
 GEOIP_PATH = '%s/geolocation' % (STATIC_ROOT)
@@ -105,7 +108,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    ('js', '%s/../simon-javascript' % (PROJECT_ROOT)),
+    ('simon_app/js', '%s/../simon-javascript' % (PROJECT_ROOT)),
     ('.', '%s/../simon-applet/jar' % (PROJECT_ROOT))
 )
 
@@ -214,7 +217,6 @@ DATABASES = {
     }
 
 HOSTNAME = socket.gethostname()
-URL_PFX = '/simon'
 if HOSTNAME == 'simon':
     DEBUG = False
     ADMINS = (
@@ -223,5 +225,6 @@ if HOSTNAME == 'simon':
 else:
     # Developer mode
     DEBUG = True
+DEBUG = True
 
 TEMPLATE_DEBUG = DEBUG

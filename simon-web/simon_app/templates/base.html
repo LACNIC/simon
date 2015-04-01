@@ -1,3 +1,5 @@
+{% load staticfiles %}
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
         "http://www.w3.org/TR/html4/strict.dtd">
 <html>
@@ -6,14 +8,12 @@
     <title>{% block title %}Inicio{% endblock %} - Proyecto Simón</title>
     <meta http-equiv="content-type" content="text/html;charset=utf-8">
 
-    <link rel="stylesheet" type="text/css" href="/static/css/estilo.css">
-    <!-- <link rel="stylesheet" type="text/css" href="/static/css/style.css"> -->
-    <link rel="stylesheet" type="text/css" href="/static/css/simon.css">
-    <link rel='stylesheet' href='/static/js/nprogress-master/nprogress.css'/>
-    <link type="image/x-icon" href="/static/imgs/logos/favicon.png"
-          rel="shortcut icon">
-    <link rel="apple-touch-icon"
-          href="/static/imgs/logos/apple-touch-icon.png">
+    <link rel="stylesheet" type="text/css" href="{% static 'simon_app/css/estilo.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'simon_app/css/simon.css' %}">
+    <link rel='stylesheet' href="{% static 'simon_app/js/nprogress-master/nprogress.css' %}"/>
+    <link type="image/x-icon" href="{% static 'simon_app/imgs/logos/favicon.png' %}" rel="shortcut icon">
+    <link rel="apple-touch-icon" href="{% static 'simon_app/imgs/logos/apple-touch-icon.png' %}">
+    {#    "/simon/static/imgs/logos/apple-touch-icon.png">#}
 
     <style>
         #console {
@@ -28,12 +28,11 @@
         {% endblock %}
     </style>
 
-    <script src='/static/js/nprogress-master/nprogress.js'></script>
-    <script type="text/javascript" src="/static/js/jquery1.8.0.js"></script>
+    <script src="{% static 'simon_app/js/nprogress-master/nprogress.js' %}"></script>
+    <script type="text/javascript" src="{% static 'simon_app/js/jquery1.8.0.js' %}"></script>
 
-    <script type="text/javascript" src="/static/js/dateFormatter.js"></script>
-    <script type="text/javascript"
-            src="https://cloud.github.com/downloads/jaubourg/jquery-jsonp/jquery.jsonp-2.3.1.js"></script>
+    <script type="text/javascript" src="{% static 'simon_app/js/dateFormatter.js' %}"></script>
+    <script type="text/javascript" src="https://cloud.github.com/downloads/jaubourg/jquery-jsonp/jquery.jsonp-2.3.1.js"></script>
 
     {% block headers %}{% endblock %}
 
@@ -66,12 +65,12 @@
         <th></th>
         <tr>
             <td><a href="http://www.labs.lacnic.net" title="LACNIC labs">
-                <img src="/static/imgs/logos/logo_labs.png" width="229"
+                <img src="{% static 'simon_app/imgs/logos/logo_labs.png' %}" width="229"
                      height="86" border="0"/>
             </a></td>
             <td><a href="{{ URL_PFX }}/"><img
                     style="float: right; margin: 10px 25px;"
-                    src="/static/imgs/simon-icon.png" height="75px"></a></td>
+                    src="{% static 'simon_app/imgs/simon-icon.png' %}" height="75px"></a></td>
         </tr>
     </table>
 
@@ -87,9 +86,8 @@
 <div class="Footer">
     <div class="foot_content">
         <div class="foot_labs">
-            <a href="http://www.labs.lacnic.net/"> <img
-                    src="/static/imgs/logos/logo_labs_foot.png" width="170"
-                    height="64" border="0" title="LACNIC labs"/>
+            <a href="http://www.labs.lacnic.net/">
+                <img src="{% static 'simon_app/imgs/logos/logo_labs_foot.png' %}" width="170" height="64" border="0" title="LACNIC labs"/>
             </a>
         </div>
 
@@ -108,7 +106,7 @@
         var js = d.createElement(s),
                 sc = d.getElementsByTagName(s)[0];
 
-        js.src = "http://127.0.0.1:8000/static/js/simon_probe_plugin.js";
+        js.src = "http://127.0.0.1:8000/simon/static/simon_app/js/simon_probe_plugin.js";
         js.type = "text/javascript";
         sc.parentNode.insertBefore(js, sc);
 

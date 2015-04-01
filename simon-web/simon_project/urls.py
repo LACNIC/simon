@@ -1,4 +1,5 @@
 from django.conf.urls import patterns, include, url
+from django.conf.urls.static import static
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -80,4 +81,4 @@ urls = patterns('',
 # The /simon tree root
 urlpatterns = patterns('',
                        url(r'^simon/', include(urls)),
-)
+) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

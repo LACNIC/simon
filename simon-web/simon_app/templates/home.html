@@ -1,17 +1,11 @@
 {% extends 'base.html' %}
+{% load staticfiles %}
 
 {% block javascript %}
 
     <!-- Twitter Widget -->
     !function(d,s,id){var
     js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
-
-    /*
-
-    $(document).ready(function() {
-    SIMON.init();
-    });
-    */
 
 {% endblock %}
 
@@ -36,10 +30,11 @@
         mediciones NTP, y un script en Javascript que las realiza mediciones
         TCP (a través de HTTP).</p>
 
+
     <a href="{{ URL_PFX }}/objectives">
 
         <div class="homeBox">
-            <img class="logo" src="/static/imgs/logos/objectives.png" width="70px">
+            <img class="logo" src="{% static 'simon_app/imgs/logos/objectives.png' %}" width="70px">
 
             <h1>Objetivos</h1>
 
@@ -51,8 +46,7 @@
 
     <a href="{{ URL_PFX }}/participate">
         <div id="graph-01-container" class="homeBox">
-            <img class="logo" src="/static/imgs/logos/participate.png"
-                 width="70px">
+            <img class="logo" src="{% static 'simon_app/imgs/logos/participate.png' %}" width="70px">
 
             <h1>¿Cómo Participar?</h1>
 
@@ -63,8 +57,8 @@
 
     <a href="{{ URL_PFX }}/reports">
         <div class="homeBox">
-            <img class="logo" src="/static/imgs/logos/reports.png" width="70px">
-            <img class="banner" src="/static/imgs/logos/updates.png" width="70px">
+            <img class="logo" src="{% static 'simon_app/imgs/logos/reports.png' %}" width="70px">
+            <img class="banner" src="{% static 'simon_app/imgs/logos/updates.png' %}" width="70px">
 
             <h1>Reportes por país</h1>
 
@@ -75,8 +69,6 @@
     </a>
 
     <div class="homeBox" style="box-shadow: 0 0 0 0; height: 330px; margin-bottom: -160px; margin-top: 10px">
-        <!-- 	<img class="logo" src="/static/imgs/logos/twitter-logo.png" width="70px" style="position: absolute;"> -->
-        <!-- 	<img src="/static/imgs/logos/twitter.png" style="margin: -15px; margin-top: -30px"> -->
         <a class="twitter-timeline" href="https://twitter.com/proyectosimon" data-widget-id="507899035131199488" data-chrome="nofooter noheader">
             Tweets por @proyectosimon
         </a>
@@ -84,8 +76,8 @@
 
     <a href="{{ URL_PFX }}/charts">
         <div class="homeBox">
-            <img class="logo" src="/static/imgs/logos/charts.png" width="70px">
-            <img class="banner" src="/static/imgs/logos/updates.png" width="70px">
+            <img class="logo" src="{% static 'simon_app/imgs/logos/charts.png' %}" width="70px">
+            <img class="banner" src="{% static 'simon_app/imgs/logos/updates.png' %}" width="70px">
 
             <h1>Gráficas de la región</h1>
 
@@ -99,7 +91,7 @@
 
     <a href="{{ URL_PFX }}/api">
         <div class="homeBox">
-            <img class="logo" src="/static/imgs/logos/api.png" width="70px">
+            <img class="logo" src="{% static 'simon_app/imgs/logos/api.png' %}" width="70px">
 
             <h1>API</h1>
 
@@ -110,7 +102,7 @@
 
     <a href="{{ URL_PFX }}/traceroute">
         <div class="homeBox">
-            <img class="logo" src="/static/imgs/logos/traceroute.png" width="70px">
+            <img class="logo" src="{% static 'simon_app/imgs/logos/traceroute.png' %}" width="70px">
 
             <h1>Traceroute</h1>
 
@@ -122,8 +114,8 @@
 
     <a href="{{ URL_PFX }}/articles">
         <div class="homeBox">
-            <img class="logo" src="/static/imgs/logos/articles.png" width="70px">
-            <img class="banner" src="/static/imgs/logos/new.png" width="70px">
+            <img class="logo" src="{% static 'simon_app/imgs/logos/articles.png' %}" width="70px">
+            <img class="banner" src="{% static 'simon_app/imgs/logos/new.png' %}" width="70px">
 
             <h1>Artículos</h1>
 
@@ -135,7 +127,7 @@
 
     <a href="{{ URL_PFX }}/lab">
         <div class="homeBox">
-            <img class="logo" src="/static/imgs/logos/lab.png" width="70px">
+            <img class="logo" src="{% static 'simon_app/imgs/logos/lab.png' %}" width="70px">
 
             <h1>Latency Lab</h1>
 
