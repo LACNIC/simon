@@ -15,7 +15,7 @@ framework.
 """
 import os, sys
 
-sys.path.append('/opt/django/simon_prod')
+sys.path.append('/opt/django/simon/simon-web')
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "simon_project.settings")
 
@@ -23,6 +23,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "simon_project.settings")
 # file. This includes Django's development server, if the WSGI_APPLICATION
 # setting points here.
 from django.core.wsgi import get_wsgi_application
+
 application = get_wsgi_application()
 
 # Apply WSGI middleware here.

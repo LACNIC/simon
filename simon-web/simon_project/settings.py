@@ -214,23 +214,14 @@ DATABASES = {
     }
 
 HOSTNAME = socket.gethostname()
-if HOSTNAME == 'mvuy3-labs':
+URL_PFX = '/simon'
+if HOSTNAME == 'simon':
     DEBUG = False
-    URL_PFX = '/simon'
-    UNSUBSCRIBE_TESTPOINT_URL = '%s/removetestpoint' % SIMON_URL
     ADMINS = (
               ('Agustin Formoso', 'agustin@lacnic.net')
     )
-    SIMON_URL = 'http://simon.labs.lacnic.net%s' % URL_PFX
-    v4_URL = 'http://simon.v4.labs.lacnic.net/cemd/getip/jsonp'
-    v6_URL = 'http://simon.v6.labs.lacnic.net/cemd/getip/jsonp'
 else:
     # Developer mode
     DEBUG = True
-    URL_PFX = ''
-    UNSUBSCRIBE_TESTPOINT_URL = '/removetestpoint'
-#     MEDIA_ROOT = '/Users/agustin/Desktop'
-    SIMON_URL = 'http://127.0.0.1:8000/'
-    v4_URL = 'http://simon.v4.labs.lacnic.net/cemd/getip/jsonp'
-    v6_URL = 'http://simon.v6.labs.lacnic.net/cemd/getip/jsonp'
+
 TEMPLATE_DEBUG = DEBUG

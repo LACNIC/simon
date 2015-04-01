@@ -5,11 +5,10 @@ Created on 12/11/2012
 '''
 # -*- encoding: utf-8 -*-
 from __future__ import division
-from django.contrib.gis.geoip import GeoIP
 from django.db.models import Q
 from django.http import HttpResponse
 from simon_app.functions import bps2KMG, whoIs
-from simon_app.models import Country, Results, TestPoint, ThroughputResults, Configs, Images_in_TestPoints, Images, Region
+from simon_app.models import *
 import datetime
 import gviz_api
 import json
@@ -18,7 +17,6 @@ import psycopg2
 import random
 import re
 import simon_project.settings as settings
-from django.core.context_processors import request
 from django.views.decorators.csrf import csrf_exempt
 
 def ntp_points(request):

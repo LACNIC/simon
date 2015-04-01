@@ -3,15 +3,10 @@ from django.template import RequestContext
 
 #
 def simon_processor(request):
-    #perfil = get_object_or_404(Perfil, pk=request.user.id)
     return {
         'APP_VERSION': settings.APP_VERSION,
         'DATE_UPDATED': settings.DATE_UPDATED,
-        'URL_PFX': settings.URL_PFX,
-        'SIMON_URL' : settings.SIMON_URL,
-        'v4_URL' : settings.v4_URL,
-        'v6_URL' : settings.v6_URL,
-#        'IP_ADDRESS': request.META['REMOTE_ADDR']
+        'URL_PFX': settings.URL_PFX
     }
 #
 
