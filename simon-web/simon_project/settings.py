@@ -13,7 +13,7 @@ DBHOST = os.environ.get("SIMON_%s" % 'DBHOST', passwords.DBHOST)
 DBPORT = os.environ.get("SIMON_%s" % 'DBPORT', passwords.DBPORT)
 
 ADMINS = (
-#           ('Carlos Martinez', 'carlos@lacnic.net'),
+    ('Agustin Formoso', 'agustin@lacnic.net')
 )
 
 ALLOWED_HOSTS = ['ec2-54-94-179-9.sa-east-1.compute.amazonaws.com', 'localhost', '127.0.0.1', '*']
@@ -219,9 +219,6 @@ DATABASES = {
 HOSTNAME = socket.gethostname()
 if HOSTNAME == 'simon':
     DEBUG = False
-    ADMINS = (
-              ('Agustin Formoso', 'agustin@lacnic.net')
-    )
 else:
     # Developer mode
     DEBUG = True

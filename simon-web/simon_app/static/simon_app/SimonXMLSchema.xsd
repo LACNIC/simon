@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" elementFormDefault="unqualified">
+
+    <xsd:annotation>
+        <xsd:documentation>
+            XML Schema Simon Project Client-Server Interface.
+            Roque Gagliano April 2009
+            LACNIC 2012
+        </xsd:documentation>
+    </xsd:annotation>
+
+    <xsd:simpleType name="IP4OR6">
+        <xsd:restriction base="xsd:string">
+
+            <xsd:pattern
+                    value="([0-9A-Fa-f]{1,4}:([0-9A-Fa-f]{1,4}:([0-9A-Fa-f]{1,4}:([0-9A-Fa-f]{1,4}:([0-9A-Fa-f]{1,4}:[0-9A-Fa-f]{0,4}|:[0-9A-Fa-f]{1,4})?|(:[0-9A-Fa-f]{1,4}){0,2})|(:[0-9A-Fa-f]{1,4}){0,3})|(:[0-9A-Fa-f]{1,4}){0,4})|:(:[0-9A-Fa-f]{1,4}){0,5})((:[0-9A-Fa-f]{1,4}){2}|:(25[0-5]|(2[0-4]|1[0-9]|[1-9])?[0-9])(\.(25[0-5]|(2[0-4]|1[0-9]|[1-9])?[0-9])){3})|(([0-9A-Fa-f]{1,4}:){1,6}|:):[0-9A-Fa-f]{0,4}|([0-9A-Fa-f]{1,4}:){7}:"/>
+            <xsd:pattern value="(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="CC">
+        <xsd:restriction base="xsd:string">
+            <xsd:pattern value="[A-Z]{2}"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="SimonType">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="tcp_connection"/>
+            <xsd:enumeration value="tcp_web"/>
+            <xsd:enumeration value="tcp_dns"/>
+            <xsd:enumeration value="icmp_echo"/>
+            <xsd:enumeration value="ntp"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:complexType name="Result">
+        <xsd:sequence>
+            <xsd:element name="destination_ip" type="IP4OR6"/>
+            <xsd:element name="origin_ip" type="IP4OR6"/>
+            <xsd:element name="testtype" type="SimonType"/>
+            <xsd:element name="number_probes" type="xsd:positiveInteger"/>
+            <xsd:element name="min_rtt" type="xsd:nonNegativeInteger"/>
+            <xsd:element name="max_rtt" type="xsd:nonNegativeInteger"/>
+            <xsd:element name="ave_rtt" type="xsd:nonNegativeInteger"/>
+            <xsd:element name="dev_rtt" type="xsd:nonNegativeInteger"/>
+            <xsd:element name="median_rtt" type="xsd:nonNegativeInteger"/>
+            <xsd:element name="packet_loss" type="xsd:nonNegativeInteger"/>
+            <xsd:element name="ip_version" type="xsd:nonNegativeInteger"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="ProyectoSimon">
+        <xsd:sequence>
+            <xsd:element name="version" type="xsd:positiveInteger"/>
+            <xsd:element name="date" type="xsd:date"/>
+            <xsd:element name="time" type="xsd:time"/>
+            <xsd:element name="local_country" type="CC"/>
+            <xsd:element name="test" type="Result" minOccurs="0" maxOccurs="unbounded"/>
+            <xsd:element name="tester" type="xsd:string"/>
+            <xsd:element name="tester_version" type="xsd:positiveInteger"/>
+            <xsd:element name="user_agent" type="xsd:string"/>
+            <xsd:element name="url" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:element name="simon" type="ProyectoSimon"/>
+
+</xsd:schema>

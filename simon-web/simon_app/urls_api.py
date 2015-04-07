@@ -53,5 +53,5 @@ throughput_urls = patterns(throughput_view,
 urlpatterns = patterns('',
                        url(r'^$', 'simon_app.views.api'),
                        url(r'^latency/', include(latency_urls)),
-                       url(r'^throughput/', include(throughput_urls))
+                       # url(r'^throughput/', include(throughput_urls))
 )
