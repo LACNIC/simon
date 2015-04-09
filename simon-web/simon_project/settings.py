@@ -16,7 +16,8 @@ ADMINS = (
     ('Agustin Formoso', 'agustin@lacnic.net')
 )
 
-ALLOWED_HOSTS = ['ec2-54-94-179-9.sa-east-1.compute.amazonaws.com', 'localhost', '127.0.0.1', '*']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.lacnic.net', '*']
+CORS_ORIGIN_ALLOW_ALL = True
 
 MANAGERS = ADMINS
 
@@ -66,7 +67,7 @@ TIME_ZONE = 'America/Montevideo'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'es-uy'#'en-us'
+LANGUAGE_CODE = 'es-uy'  # 'en-us'
 
 SITE_ID = 1
 
@@ -117,7 +118,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    # 'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -127,11 +128,12 @@ SECRET_KEY = '4dpg)uw43y9qt!0d28adewe%zfkc))k)e35=4rirn*+xe##z9z'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+    # 'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -150,7 +152,7 @@ TEMPLATE_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     # "/home/agustinf/Escritorio/simon_project/simon_app/templates"
-#     ("simon_app/templates")
+    # ("simon_app/templates")
 )
 
 INSTALLED_APPS = (
@@ -165,6 +167,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'simon_app',
+    'corsheaders'
 )
 
 # A sample logging configuration. The only tangible logging
@@ -175,11 +178,11 @@ INSTALLED_APPS = (
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-#    'filters': {
-#        'require_debug_false': {
-#            '()': 'django.utils.log.RequireDebugFalse'
-#        }
-#    },
+    # 'filters': {
+    #        'require_debug_false': {
+    #            '()': 'django.utils.log.RequireDebugFalse'
+    #        }
+    #    },
     'handlers': {
         'mail_admins': {
             'level': 'ERROR',
@@ -206,15 +209,15 @@ LOGGING = {
 }
 
 DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-            'NAME': DBNAME,  # Or path to database file if using sqlite3.
-            'USER': DBUSER,  # Not used with sqlite3.
-            'PASSWORD': DBPASSWORD,  # Not used with sqlite3.
-            'HOST': DBHOST,  # Set to empty string for localhost. Not used with sqlite3.
-            'PORT': DBPORT,  # Set to empty string for default. Not used with sqlite3.
-        }
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': DBNAME,  # Or path to database file if using sqlite3.
+        'USER': DBUSER,  # Not used with sqlite3.
+        'PASSWORD': DBPASSWORD,  # Not used with sqlite3.
+        'HOST': DBHOST,  # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': DBPORT,  # Set to empty string for default. Not used with sqlite3.
     }
+}
 
 HOSTNAME = socket.gethostname()
 if HOSTNAME == 'simon':
@@ -222,6 +225,5 @@ if HOSTNAME == 'simon':
 else:
     # Developer mode
     DEBUG = True
-DEBUG = True
 
 TEMPLATE_DEBUG = DEBUG

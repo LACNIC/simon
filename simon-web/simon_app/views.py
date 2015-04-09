@@ -30,8 +30,7 @@ from simon_app.api_views import \
     throughput_by_country_chart as throughput_by_country_chart_api, getCountry
 from simon_app.functions import KMG2bps, inLACNICResources, whoIs, bps2KMG
 from simon_app.javascript_latency import CountryForm
-from simon_app.models import Country, Results, TestPoint, ThroughputResults, \
-    OfflineReport, Images_in_TestPoints, Images, ActiveTokens, Params, AS
+from simon_app.models import *
 from simon_app.reportes import ResultsForm, AddNewWebPointForm, AddNewNtpPointForm, GMTUY, CountryDropdownForm, ReportForm
 import simon_project.settings as settings
 from _socket import timeout
@@ -282,6 +281,27 @@ def post_xml_result(request):
             print e
         except Exception as e:
             print e
+
+    return HttpResponse("END")
+
+
+@csrf_exempt
+def post_traceroute(request):
+    """
+    View que recibe los datos de traceroute
+    """
+
+    if (request.method != 'POST'):  # and request.method != 'GET'
+        return HttpResponse("invalid method: %s" % request.method)
+
+    try:
+        output = request.POST['output']
+    except Exception as e:
+        return HttpResponse("ERROR")
+
+    tracerouteResult = TracerouteResult()
+    tracerouteResult.output = output
+    tracerouteResult.save()
 
     return HttpResponse("END")
 

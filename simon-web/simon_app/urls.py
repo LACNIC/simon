@@ -2,6 +2,8 @@ __author__ = 'agustin'
 
 from django.conf.urls import patterns, include, url
 import simon_project.settings as settings
+from django.contrib import admin
+from django.conf.urls.static import static
 
 urlpatterns = patterns('',
 
@@ -25,6 +27,7 @@ urlpatterns = patterns('',
 
                        # url(r'^postxmlresult/(?P<type>\blatency\b|\bthroughput\b)', 'simon_app.views.post_xml_result', name='postxmlresult'),
                        url(r'^postxmlresult/$', 'simon_app.views.post_xml_result', name='postxmlresult'),  # Applet
+                       url(r'^post/traceroute/$', 'simon_app.views.post_traceroute', name='post_traceroute'),  # Traceroute Donation Program
                        url(r'^postxmlresult/latency/$', 'simon_app.views.post_xml_result', name='postxmlresult'),
                        url(r'^postxmlresult/offline/$', 'simon_app.views.post_offline_testpoints'),
 
@@ -58,4 +61,6 @@ urlpatterns = patterns('',
 
                        # Articles
                        url(r'^articles/$', 'simon_app.views.articles')
-)
+) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+admin.autodiscover()

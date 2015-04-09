@@ -3,6 +3,7 @@ from django.db import models, connection
 from django.db.models.fields import CharField
 from django.db.models.fields.related import ForeignKey
 from datetime import datetime, timedelta
+import trparse
 
 
 class Region(models.Model):
@@ -185,12 +186,11 @@ class ResultsManager(models.Manager):
 
 
 class Results(models.Model):
-    #id is automatically inserted as Django identifier
-    date_test = models.DateTimeField('test date')
-    version = models.IntegerField(null=True)
-    ip_origin = models.GenericIPAddressField()
-    ip_destination = models.GenericIPAddressField()
-    testype = models.CharField(max_length=20)
+    date_test = models.DateTimeField('test date', default=datetime.now())
+    version = models.IntegerField(null=True, default=0)
+    ip_origin = models.GenericIPAddressField(default='127.0.0.1')
+    ip_destination = models.GenericIPAddressField(default='127.0.0.1')
+    testype = models.CharField(max_length=20, default='N/A')
     number_probes = models.IntegerField(null=True)
     min_rtt = models.IntegerField(null=True)
     max_rtt = models.IntegerField(null=True)
@@ -200,7 +200,7 @@ class Results(models.Model):
     packet_loss = models.IntegerField(null=True)
     country_origin = models.CharField(max_length=2)
     country_destination = models.CharField(max_length=2)
-    ip_version = models.IntegerField()
+    ip_version = models.IntegerField(default=0)
     tester = models.CharField(max_length=20)
     tester_version = models.CharField(max_length=10)
     as_origin = models.ForeignKey(AS, related_name='as_origin', default=0)
@@ -258,6 +258,16 @@ class Results(models.Model):
         if (tag == 'tester_version'):
             self.tester_version = text
 
+
+class TracerouteResult(Results):
+    output = models.TextField(max_length=2000, default='')
+
+    def parse(self):
+        return trparse.loads(self.output)
+
+
+# class WebResult(Results):
+# url = models.CharField(max_length=2000, default='')
 
 class TestPointManager(models.Manager):
     def get_ipv4(self):

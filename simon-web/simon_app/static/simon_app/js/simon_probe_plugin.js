@@ -3,7 +3,7 @@
  * LACNIC Labs - 2014
  */
 SIMON = {};
-SIMON.debug = false;
+SIMON.debug = true;
 SIMON = {
 
     params: {
