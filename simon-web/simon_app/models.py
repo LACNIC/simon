@@ -4,6 +4,7 @@ from django.db.models.fields import CharField
 from django.db.models.fields.related import ForeignKey
 from datetime import datetime, timedelta
 import trparse
+import simon_project.settings as settings
 
 
 class Region(models.Model):
@@ -261,6 +262,32 @@ class Results(models.Model):
 
 class TracerouteResult(Results):
     output = models.TextField(max_length=2000, default='')
+
+    def pretty_print(self):
+        import geoip2
+
+        reader = geoip2.database.Reader("%s/%s" % (settings.STATIC_ROOT, "geolocation/GeoLite2-City.mmdb"))
+
+        tr = self.parse()
+        res = str(reader.city(self.ip_origin).country.iso_code)
+        for h in tr.hops:
+            rtts = []
+            ip = ""
+            for p in h.probes:
+                if p.rtt is None: continue
+                if p.ip is None: continue
+                ip = p.ip
+                rtts.append(float(p.rtt))
+
+            if ip is None:
+                cc = "? "
+            else:
+                cc = reader.city(ip).country.iso_code
+
+            flecha = " --%.1f--> " % (sum(rtts) / len(rtts))
+            res = "%s%s%s" % (res, flecha, cc)
+
+        return res
 
     def parse(self):
         return trparse.loads(self.output)

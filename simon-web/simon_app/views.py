@@ -75,7 +75,9 @@ def traceroute(request):
         form = UploadFileForm()
     form.title = "Formulario"
 
-    return render(request, 'traceroute.html', {'form': form})
+    traceroutes = TracerouteResult.objects.all().order_by('date_test')[:5]
+
+    return render(request, 'traceroute.html', {'form': form, 'traceroutes': traceroutes})
 
 
 def saveTracerouteResults(request, fileName):
@@ -288,19 +290,22 @@ def post_xml_result(request):
 @csrf_exempt
 def post_traceroute(request):
     """
-    View que recibe los datos de traceroute
+    View que recibe los datos de traceroute.
+    Asume que la interfaz que postea los resultados es la misma que originó los tracroutes
     """
 
-    if (request.method != 'POST'):  # and request.method != 'GET'
+    if (request.method != 'POST'):
         return HttpResponse("invalid method: %s" % request.method)
 
     try:
         output = request.POST['output']
+        ip = request.META['REMOTE_ADDR']
     except Exception as e:
         return HttpResponse("ERROR")
 
     tracerouteResult = TracerouteResult()
     tracerouteResult.output = output
+    tracerouteResult.ip_origin = ip
     tracerouteResult.save()
 
     return HttpResponse("END")

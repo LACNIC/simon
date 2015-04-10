@@ -177,3 +177,23 @@ p {
     float: left;
     margin: -20px 0px 0px 190px;
 }
+
+#console {
+    background-color: black;
+    overflow: auto;
+    color: ghostwhite;
+    font-size: 12;
+    font-family: monospace;
+}
+
+#tracerouteConsole {
+    padding: 3em 1em 3em 1em;
+    background-color: black;
+    overflow: auto;
+    color: ghostwhite;
+    font-size: 24;
+    font-family: monospace;
+    border: 1px solid;
+    border-radius: 5px;
+    border-color: #E6E6E6;
+}

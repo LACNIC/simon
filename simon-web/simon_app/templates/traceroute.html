@@ -2,21 +2,37 @@
 
 {% block content %}
 
-<h1>Traceroute</h1>
+    <h1>Colabora con tu traceroute!</h1>
 
-<p>Una forma muy útil de monitorear el trayecto de los paquetes en
-	la red es el programa traceroute. Esta página recopila archivos con
-	logs de traceroute.</p>
-	
-<p>Para generar un archivo de traceroute, ejecutelo con la opción -n, de forma de desplegar únicamente direcciones IP y no nombres de host, de la siguente forma:.</p>
+    <p>Una forma muy útil de monitorear el trayecto de los paquetes en
+        la red es el programa traceroute. Esta página recopila archivos con
+        logs de traceroute. Colabora de forma sencilla con tu traceroute copiando y pegando el siguiente comando en tu consola:</p>
 
-<p><b>traceroute -n [destino] > [archivo]<b/></p>
+    <div id="tracerouteConsole" class="" style="width: 910px; font-size: 1.4em">
 
-<form method="post" enctype="multipart/form-data">
-	{% csrf_token %}
-	{{ form.as_p }}
-	<input type="submit" value="Enviar" id="submit" />
-</form>
+        curl -fsSL http://simon.lacnic.net/simon/static/simon_app/traceroute.sh | bash
 
-				
+    </div>
+
+    <h1>Últimos traceroutes recibidos</h1>
+    <table>
+        {% for t in  traceroutes %}
+
+            <tr>
+                <td>
+                    {{ t.pretty_print }}
+                </td>
+            </tr>
+
+        {% endfor %}
+    </table>
+
+    {#    <h1>Traceroute viejos? También sirven</h1>#}
+    {##}
+    {#<form method="post" enctype="multipart/form-data">#}
+    {#	{% csrf_token %}#}
+    {#	{{ form.as_p }}#}
+    {#	<input type="submit" value="Enviar" id="submit" />#}
+    {#</form>#}
+
 {% endblock %}
