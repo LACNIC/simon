@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 HOST=199.7.83.42
-postEndpoint=http://127.0.0.1:8000/post/traceroute/
+postEndpoint=http://simon.lacnic.net/simon/post/traceroute/
 
 measure() {
     protocol=$2
