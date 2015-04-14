@@ -5,7 +5,7 @@ from django.db.models.fields.related import ForeignKey
 from datetime import datetime, timedelta
 import trparse
 import simon_project.settings as settings
-
+import geoip2
 
 class Region(models.Model):
     name = models.CharField(max_length=80)
@@ -260,41 +260,62 @@ class Results(models.Model):
             self.tester_version = text
 
 
+class TracerouteResultManager(models.Manager):
+    def clean(self):
+        return TracerouteResult.objects.all().exclude(output__isnull=True).exclude(output__exact='')
+
+
 class TracerouteResult(Results):
     output = models.TextField(max_length=2000, default='')
+    objects = TracerouteResultManager()
+
+    def save(self, *args, **kwargs):
+        from geoip2.errors import AddressNotFoundError
+
+        reader = geoip2.database.Reader(settings.GEOIP_DATABASE)
+        try:
+            if self.ip_origin is not None:
+                self.country_origin = reader.city(self.ip_origin).country.iso_code  # TODO llevar a Result
+            if self.ip_destination is not None:
+                self.country_destination = reader.city(self.ip_destination).country.iso_code  # TODO llevar a Result
+        except AddressNotFoundError as e:
+            pass
+
+        super(TracerouteResult, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.pretty_print()
 
     def pretty_print(self):
-        import geoip2
+        from geoip2.errors import AddressNotFoundError
 
-        reader = geoip2.database.Reader("%s/%s" % (settings.STATIC_ROOT, "geolocation/GeoLite2-City.mmdb"))
+        reader = geoip2.database.Reader(settings.GEOIP_DATABASE)
 
         tr = self.parse()
-        res = str(reader.city(self.ip_origin).country.iso_code)
-        for h in tr.hops:
-            rtts = []
-            ip = ""
-            for p in h.probes:
-                if p.rtt is None: continue
-                if p.ip is None: continue
-                ip = p.ip
-                rtts.append(float(p.rtt))
+        if tr is None:
+            return ""
 
-            if ip is None:
-                cc = "? "
-            else:
-                cc = reader.city(ip).country.iso_code
+        try:
+            destination = str(reader.city(tr.dest_ip).country.iso_code)
+        except AddressNotFoundError as e:
+            destination = '?'
+        try:
+            origin = str(reader.city(self.ip_origin).country.iso_code)
+        except AddressNotFoundError as e:
+            origin = '?'
 
-            flecha = " --%.1f--> " % (sum(rtts) / len(rtts))
-            res = "%s%s%s" % (res, flecha, cc)
+        n = len(tr.hops)
 
-        return res
+        return "%s --> %s (%s ms, %s hops) %s" % (origin, destination, 5, n, self.date_test.strftime("%d/%m/%Y"))
 
     def parse(self):
-        return trparse.loads(self.output)
+        try:
+            if self.output is not "":
+                return trparse.loads(self.output)
+            return None
+        except Exception:
+            return None
 
-
-# class WebResult(Results):
-# url = models.CharField(max_length=2000, default='')
 
 class TestPointManager(models.Manager):
     def get_ipv4(self):

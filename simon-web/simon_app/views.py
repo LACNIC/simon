@@ -62,7 +62,6 @@ def traceroute(request):
         View donde son posteados los archivos de traceroute
     """
     if request.method == 'POST':
-        form = UploadFileForm(request.POST, request.FILES)
         fileName = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
         with open("%s/data/traceroute/%s" % (settings.STATIC_ROOT, fileName), 'w') as destination:
             for chunk in request.FILES['file'].chunks():
@@ -72,12 +71,10 @@ def traceroute(request):
             saveTracerouteResults(request, "%s/data/traceroute/%s" % (settings.STATIC_ROOT, fileName))
         return redirect("simon_app.views.thanks")
     else:
-        form = UploadFileForm()
-    form.title = "Formulario"
+        traceroutes = TracerouteResult.objects.clean().order_by('-date_test')[:5]
+        print traceroutes
 
-    traceroutes = TracerouteResult.objects.all().order_by('date_test')[:5]
-
-    return render(request, 'traceroute.html', {'form': form, 'traceroutes': traceroutes})
+        return render(request, 'traceroute.html', {'form': form, 'traceroutes': traceroutes})
 
 
 def saveTracerouteResults(request, fileName):
@@ -299,27 +296,27 @@ def post_traceroute(request):
 
     try:
         output = request.POST['output']
-        ip = request.META['REMOTE_ADDR']
+        ip_origin = request.META['REMOTE_ADDR']
     except Exception as e:
         return HttpResponse("ERROR")
 
     tracerouteResult = TracerouteResult()
     tracerouteResult.output = output
-    tracerouteResult.ip_origin = ip
+    tracerouteResult.ip_origin = ip_origin
+    # tracerouteResult.ip_destination = tracerouteResult.parse().dest_ip
+
     tracerouteResult.save()
 
-    return HttpResponse("END")
+    return HttpResponse("Thanks!\n")
 
 
 @csrf_exempt
 def post_xml_throughput_result(request):
-    if (request.method != 'POST'):  # and request.method != 'GET'
+    if (request.method != 'POST'):
         return HttpResponse("invalid method: %s" % request.method)
 
-    # source_file = '/home/dario/LACNIC/simon/ExampleXML2.xml'
     schema_file = '%s/SimonXMLSchemaThroughput.xsd' % settings.STATIC_ROOT
 
-    # IMPORTANTE ARREGLAR EL SCHEMA DEL PAIS!!
     with open(schema_file) as f_schema:
         schema_doc = etree.parse(f_schema)
         schema = etree.XMLSchema(schema_doc)

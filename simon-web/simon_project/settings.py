@@ -103,6 +103,7 @@ STATIC_URL = URL_PFX + '/static/'
 
 # Path to the geolocation files
 GEOIP_PATH = '%s/geolocation' % (STATIC_ROOT)
+GEOIP_DATABASE = '%s/%s' % (GEOIP_PATH, "GeoLite2-City.mmdb")
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -179,7 +180,7 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     # 'filters': {
-    #        'require_debug_false': {
+    # 'require_debug_false': {
     #            '()': 'django.utils.log.RequireDebugFalse'
     #        }
     #    },
@@ -222,8 +223,10 @@ DATABASES = {
 HOSTNAME = socket.gethostname()
 if HOSTNAME == 'simon':
     DEBUG = False
+    URL_PFX = "/simon"
 else:
     # Developer mode
     DEBUG = True
+    URL_PFX = ""
 
 TEMPLATE_DEBUG = DEBUG
