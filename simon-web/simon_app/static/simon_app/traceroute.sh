@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-HOST=199.7.83.42
+HOST4=199.7.83.42
+HOST6=2001:500:3::42
 postEndpoint=http://simon.lacnic.net/simon/post/traceroute/
 
 measure() {
@@ -33,9 +34,9 @@ measure() {
     echo "Running $protocol v$ipversion tests..."
     if (( $ipversion == "4" ))
     then
-        output=$(traceroute -P $protocol -q 10 $HOST)
+        output=$(traceroute -P $protocol -q 10 $HOST4)
     else
-        output=$(traceroute6 -q 10 -a $HOST)
+        output=$(traceroute6 -q 10 $HOST6)
      fi
 
     echo "Posting results..."
