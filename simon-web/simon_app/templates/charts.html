@@ -1,0 +1,195 @@
+{% extends 'bootstrap.html' %}
+{% block headers %}
+
+    {#    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>#}
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+    <!-- Google Charts -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+    <script src="https://www.google.com/jsapi" type="text/javascript"></script>
+
+    <script>
+        google.load("visualization", "1", {packages: ["geochart"]});
+        google.setOnLoadCallback(drawRegionsMap);
+
+        function drawRegionsMap() {
+
+            var data = google.visualization.arrayToDataTable([
+                ['Country', 'Points count'],
+                {{ countries|safe }}
+            ]);
+
+            var options = {
+                region: '019',
+                colorAxis: {
+                    colors: ['white', 'orange'],
+                    maxValue: 50
+                },
+                backgroundColor: {
+                    fill: '#FFF5E6'
+                }
+            };
+
+            var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
+
+            chart.draw(data, options);
+        }
+    </script>
+{% endblock %}
+
+{% block content %}
+
+    <div class="col-lg-12">
+        <h1 class="page-header">Gráficas de los resultados de las mediciones</h1>
+
+        <p>Las siguientes gráficas hacen más accesible procesar toda la
+            información obtenida de las mediciones. Es el resultado de la
+            colaboración de la comunidad que impulsa al Proyecto Simón, tanto con
+            el aporte de puntos de testing como de la realización de los tests.</p>
+    </div>
+
+    <div class="col-lg-12">
+        <div>
+            <h3 class="page-header">Ubicación de los puntos de medición que forman parte del
+                proyecto Simón</h3>
+
+            <p>El mapa de la izquierda muestra la ubicación de los servidores
+                donde se realizan las mediciones de latencia. Existen varios tipos de
+                servidores, incluyendo NTP, setvidores Speedtest, y servdores CAIDA
+                Ark. En un futuro próximo se incluirán puntos de testing de RIPE
+                ATLAS.</p>
+
+            <p>
+                Gracias a la naturaleza del medidor Javascript, que realiza mediciones
+                de latencia a servidores web, existen potencialmente una inmensa
+                cantidad de servidores disponibles para incorporar a los puntos de
+                muestreo de Simón. Colaborar con un punto de muestreo es muy sencillo!
+                Visita la sección de <a href="{% url 'simon_app.views.participate' %}">registro de un nuevo
+                punto de muestreo</a> e ingresá tu servidor web o NTP. Desde ya muchas
+                gracias!
+            </p>
+
+            <div id="regions_div"></div>
+        </div>
+    </div>
+
+    <div class="col-lg-12">
+        <h3 class="page-header">Distribución de latencia</h3>
+
+        <p>Uno de los principales estudios que Simón realiza sobre los
+            datos recabados es el estudio de histogramas de latencia. Estos
+            histogrmas pueden reflejar problemas vinculados a enrutamiento
+            subóptimo, malas políticas de enrutamiento, o falta de peering entre
+            proveedores de serivcio. A través de anomalías en los histogramas se
+            pueden identificar problemas, o proponer mejoras en la infraestructura
+            o topología de redes de LAC, y dar pasos icrementales hacia una
+            Internet regional de mejor calidad. Una de estas anomalías es cuando
+            un histograma presenta varios 'picos', es decir cuando no existe una
+            única gran media que represente a los datos muestreados, sino que los
+            datos se agrupan en subconjuntos, teniendo cada subconjunto su propia
+            media. Lo ideal es ver la conexión entre dos países y analizando los
+            histogramas ver si existe alguna relación entre cada subconjunto y
+            alguna causa en particular.</p>
+
+        <p>Las gráficas a continuación representan la distribución de
+            latencia en la región, desde 2009. En este caso, cuanto más estrecha
+            sea la curva, menor varianza, y por ende mayor equidad en la calidad
+            de Internet. Cuanto más a la izquierda se encuentre el máximo de la
+            curva, menor será la latencia, y mejor será la calidad de Internet. En
+            caso de haber múltiples picos en el histograma, se puede decir que la
+            latencia a nivel regional se agrupa en múltiples subconjuntos.</p>
+
+        <h4 class="page-header">Medidor: Applet</h4>
+        <script type="text/javascript">
+            {{ latency_histogram_applet | safe }}
+        </script>
+        <div id="latency_histogram_applet"></div>
+
+
+        <h4 class="page-header">Medidor: Javascript</h4>
+        <script type="text/javascript">
+            {{ latency_histogram_js | safe }}
+        </script>
+        <div id="latency_histogram_js"></div>
+
+
+{#        <div id="late-header">Latencia interna</h4>#}
+{#        <script type="text/javascript">#}
+{#            {{ latency_histogram_inner | safe }}#}
+{#        </script>#}
+{#        <div id="latency_histogram_inner"></div>#}
+
+        <p>
+            Para obtener más información acerca de la calidad de Internet en tu
+            país, ver la sección de <a href="{% url 'simon_app.views.reports' %}">Reportes por país</a>. Allí
+            se pueden apreciar las anomalías en algunos histogramas. Ese tipo de
+            información es útil para que operadores de red puedan tener
+            conocimiento de cómo su red es vista desde otras redes de LAC en
+            términos de latencia.
+        </p>
+
+
+{#        <h4 class="page-header">Latencia por lugar desglosada en años</h4>#}
+
+{#        <a href="/static/histograms/region/Region%20latency%20histogram,%202009-2014.png"#}
+{#           title="Histograma de distribución de latencia, año 2009"><img#}
+{#                alt="Histograma de distribución de latencia, año 2009"#}
+{#                src="/static/histograms/region/Region%20latency%20histogram,%202009-2014.png" style="width: 250px"#}
+{#                class="hover"/></a>#}
+
+{#        <form id="country_form" method="post">#}
+{#            {% csrf_token %}#}
+{#            {{ countries_dropdown.as_p }}#}
+{#        </form>#}
+
+{#        <p>Idem al gráfico anterior, pero se puede ver la evolución de los#}
+{#            retardos en la red. Las curvas que tienen un máximo sobre la izquierda#}
+{#            muestran una buena interconexión (rápida), las que lo tienen a la#}
+{#            derecha una mala interconexión (lenta), y las que lo tienen en la zona#}
+{#            media una interconexión media (posiblemente la diferencia entre los#}
+{#            caminos de ida y vuelta de los paquetes causa que un enlace sea rápido#}
+{#            y otro lento).</p>#}
+
+        <div align="center" id="distribution_history_div"
+             class="barchart border"></div>
+
+        <div class="chartdiv">
+            <h3 class="page-header">Latencia desde un país hacia él mismo</h3>
+
+            <p>La gráfica a continuación representa la latencia interna de un
+                país. Cuanto mayor la latencia, peor la calidad de la red. Si la
+                latencia resulta ser excesivamente alta, entonces se puede suponer que
+                el tráfico interno en un país está siendo enrutado hacia afuera, y
+                luego hacia adentro. Una causa de esto es la falta de IXP regionales y
+                locales. Para países pequeños, este valor debería ser menor que para
+                países grandes.</p>
+
+            <div align="center" id="column_chart_div" class="barchart border"></div>
+        </div>
+
+{#        <div id="center" class="chartdiv">#}
+{#            <h3 class="page-header">Matriz con latencias</h3>#}
+{##}
+{#            <p>#}
+{#                La gráfica a continuación representa la latencia promedio en la#}
+{#                región. Las filas representan los paises de origen de los tests, y las#}
+{#                columnas los de destino. Es decir, si se quieren ver todos los tests#}
+{#                con origen Guatemala, basta ver la fila Guatemala; si se quieren ver#}
+{#                los que tienen destino Guatemala, entonces habrá que recorrer la#}
+{#                columna Guatemala. <br/> Las latencias más altas se corresponden con#}
+{#                las tonalidaades más oscuras. Se puede ver que la diagonal principal#}
+{#                tiene, lógicamente, menor latencia que el promedio, ya que se#}
+{#                corresponde con la latencia interna de los países.#}
+{#            </p>#}
+{##}
+{#            <div class="border">#}
+{#                <div id="heatmap"#}
+{#                     style="width: 600px; height: 600px; margin: 3em 0 0 100px"></div>#}
+{##}
+{#                <div id="heatmap_asns"#}
+{#                     style="width: 600px; height: 600px; margin: 3em 0 0 100px"></div>#}
+{##}
+{#            </div>#}
+{#        </div>#}
+    </div>
+{% endblock %}

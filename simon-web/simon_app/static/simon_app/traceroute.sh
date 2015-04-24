@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
+# TODO obtener dirección por la cual hace el traceroute efectivamente
+
 HOST4=199.7.83.42
 HOST6=2001:500:3::42
-postEndpoint=http://simon.lacnic.net/simon/post/traceroute/
+postEndpoint=http://127.0.0.1:8000/post/traceroute/
 
 measure() {
     protocol=$2
@@ -34,9 +36,9 @@ measure() {
     echo "Running $protocol v$ipversion tests..."
     if (( $ipversion == "4" ))
     then
-        output=$(traceroute -P $protocol -q 10 $HOST4)
+        output=$(traceroute -P $protocol -q 3 $HOST4)
     else
-        output=$(traceroute6 -q 10 $HOST6)
+        output=$(traceroute6 -q 3 $HOST6)
      fi
 
     echo "Posting results..."

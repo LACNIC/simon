@@ -29,7 +29,6 @@ PROJECT_ROOT = os.path.abspath(os.path.pardir)
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
 URL_PFX = '/simon'
-SIMON_URL = ''
 v6_URL = ''
 v4_URL = ''
 # LACNIC's resources
@@ -157,6 +156,7 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
+    'django_admin_bootstrapped',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -224,9 +224,13 @@ HOSTNAME = socket.gethostname()
 if HOSTNAME == 'simon':
     DEBUG = False
     URL_PFX = "/simon"
+    SIMON_URL = 'http://simon.lacnic.net'
+    CHARTS_URL = "http://charts.simon.labs.lacnic.net/charts/hist/code"
 else:
     # Developer mode
     DEBUG = True
     URL_PFX = ""
+    SIMON_URL = 'http://127.0.0.1:8000'
+    CHARTS_URL = "http://127.0.0.1:8001/charts/hist/code"
 
 TEMPLATE_DEBUG = DEBUG

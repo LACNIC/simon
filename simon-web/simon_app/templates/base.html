@@ -26,10 +26,10 @@
     <script type="text/javascript" src="{% static 'simon_app/js/dateFormatter.js' %}"></script>
     <script type="text/javascript" src="https://cloud.github.com/downloads/jaubourg/jquery-jsonp/jquery.jsonp-2.3.1.js"></script>
 
-    {% block headers %}{% endblock %}
+    {% block headers %}
+    {% endblock %}
 
     <script type="text/javascript">
-
         {% block javascript %}
         {% endblock %}
     </script>
@@ -38,7 +38,7 @@
 </head>
 
 <body>
-<div class="Header"
+<div class="header clearfix"
      style="background-color: #FF9900; border-bottom: blue; border-width: 5px">
 
     <div class="ipver"
@@ -60,7 +60,7 @@
                 <img src="{% static 'simon_app/imgs/logos/logo_labs.png' %}" width="229"
                      height="86" border="0"/>
             </a></td>
-            <td><a href="{{ URL_PFX }}/"><img
+            <td><a href="{{ URL_PFX }}{% url 'simon_app.views.home' %}"><img
                     style="float: right; margin: 10px 25px;"
                     src="{% static 'simon_app/imgs/simon-icon.png' %}" height="75px"></a></td>
         </tr>
@@ -68,14 +68,12 @@
 
 
 </div>
-<div class="Container">
-
-
+{#<div class="jumbotron">#}
     <div class="contenido">{% block content %}{% endblock %}</div>
+{#</div>#}
 
 
-</div>
-<div class="Footer">
+<div class="footer">
     <div class="foot_content">
         <div class="foot_labs">
             <a href="http://www.labs.lacnic.net/">
@@ -83,8 +81,7 @@
             </a>
         </div>
 
-        <div class="foot_app_detail"
-             style="font-size: 9px; text-align: right;">
+        <div class="foot_app_detail" style="font-size: 9px; text-align: right;">
             Application Version: {{ APP_VERSION }}<br/> Last Updated {{ DATE_UPDATED }}
         </div>
     </div>

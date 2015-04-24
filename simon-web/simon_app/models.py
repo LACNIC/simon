@@ -6,6 +6,8 @@ from datetime import datetime, timedelta
 import trparse
 import simon_project.settings as settings
 import geoip2
+import json, requests
+
 
 class Region(models.Model):
     name = models.CharField(max_length=80)
@@ -39,8 +41,8 @@ class CountryManager(models.Manager):
         # First check those countries without any tests in the last 'days' days
         # cc_all = Country.objects.get_region_countries().values_list('iso', flat=True)
         # cc_with =  Results.objects.filter(date_test__gte=datetime.now() - timedelta(days), testype = test_type).values_list('country_destination', flat=True)
-        # 		cc_without_testpoints = Country.objects.get_countries_with_no_testpoints().values_list('iso', flat=True)
-        # 		cc_without = list(set(cc_all) - set(set(cc_without_testpoints)) - set(cc_with))
+        # cc_without_testpoints = Country.objects.get_countries_with_no_testpoints().values_list('iso', flat=True)
+        # cc_without = list(set(cc_all) - set(set(cc_without_testpoints)) - set(cc_with))
         # 		n  = len(cc_without)
 
         # in case i'm asking for more than i can
@@ -102,8 +104,8 @@ class ThroughputResults(models.Model):
     def set_data_test(self, tag, text):
         # if(tag == 'version'):
         # self.version = text
-        #if(tag == 'local_country'):
-        #    self.country_origin = text
+        # if(tag == 'local_country'):
+        # self.country_origin = text
         if (tag == 'destination_ip'):
             self.ip_destination = text
         if (tag == 'testtype'):
@@ -133,7 +135,7 @@ class ASManager(models.Manager):
 
 # for autsys in AS.objects.order_by('-pfx_length'):
 # if IPAddress(ip_address) in IPNetwork(autsys.network):
-# 				return autsys
+# return autsys
 
 class AS(models.Model):
     asn = models.IntegerField()
@@ -145,10 +147,27 @@ class AS(models.Model):
         return "ASN %s" % (self.asn)
 
 
-from itertools import chain
-
-
 class ResultsManager(models.Manager):
+    def clean(self):
+        return Results.objects.filter(ave_rtt__lte=800).filter(ave_rtt__gt=0)
+
+    def applet(self):
+        return Results.objects.clean().filter(tester='Applet')
+
+    def javascript(self):
+        return Results.objects.clean().filter(tester='JavaScript')
+
+    def inner(self):
+        objects_raw = Results.objects.raw("SELECT id, ave_rtt FROM simon_app_results WHERE country_origin = country_destination")
+        print objects_raw
+        return objects_raw
+
+    def ipv4(self):
+        return Results.objects.clean().filter(ip_version='4')
+
+    def ipv6(self):
+        return Results.objects.clean().filter(ip_version='6')
+
     def get_weekly_results(self):
         return Results.objects.filter(date_test__gt=datetime.now() - timedelta(7))
 
@@ -156,7 +175,7 @@ class ResultsManager(models.Manager):
         return Results.objects.filter(date_test__gt=datetime.now() - timedelta(1))
 
     def get_hourly_results(self):
-        return Results.objects.filter(date_test__gt=datetime.now() - timedelta(1.0 / 24))
+        return Results.objects.filter(date_test__gt=datetime.now() - timedelta(hours=1))
 
     def get_results_by_as_origin(self, as_number):
         res = []
@@ -171,7 +190,7 @@ class ResultsManager(models.Manager):
         return res
 
     def get_results_by_as_origin_and_destination(self, asn_origin, asn_destination):
-        # 		return Results.objects.filter(Q(as_destination__asn=asn_origin) & Q(as_origin__asn=asn_destination))
+        # return Results.objects.filter(Q(as_destination__asn=asn_origin) & Q(as_origin__asn=asn_destination))
 
         res = []
         for as_origin in AS.objects.filter(asn=asn_origin):  # asns list
@@ -183,6 +202,8 @@ class ResultsManager(models.Manager):
         return res
 
     def get_results_by_as(self, as_number):
+        from itertools import chain
+
         return list(chain(self.get_results_by_as_origin(as_number), self.get_results_by_as_destination(as_number)))
 
 
@@ -210,7 +231,6 @@ class Results(models.Model):
     url = models.CharField(max_length=2000, default='')
     objects = ResultsManager()
 
-
     def __unicode__(self):
         return "%s -> %s | %s/%s/%s/%s | %s | %s v.%s" % (
             self.country_origin, self.country_destination, self.min_rtt, self.ave_rtt, self.max_rtt, self.dev_rtt,
@@ -226,7 +246,7 @@ class Results(models.Model):
         return AS.object.get_as_by_ip(self.ip_destination)
 
     def set_data_test(self, tag, text):
-        #if(tag == 'version'):
+        # if(tag == 'version'):
         #    self.version = text
         #if(tag == 'local_country'):
         #    self.country_origin = text
@@ -304,9 +324,17 @@ class TracerouteResult(Results):
         except AddressNotFoundError as e:
             origin = '?'
 
+        hops = []
         n = len(tr.hops)
-
-        return "%s --> %s (%s ms, %s hops) %s" % (origin, destination, 5, n, self.date_test.strftime("%d/%m/%Y"))
+        for h in tr.hops:
+            rtts = []
+            [rtts.append(p.rtt) for p in h.probes if p.rtt is not None]
+            m = len(rtts)
+            if m > 0:
+                hops.append("%.2f" % (sum(rtts) / m))
+            else:
+                hops.append("%.2f" % (0.0))
+        return self.output  # "%s --> %s (%s %s hops) %s" % (self.ip_origin, tr.dest_ip, hops, n, self.date_test.strftime("%d/%m/%Y"))
 
     def parse(self):
         try:
@@ -328,7 +356,7 @@ class TestPointManager(models.Manager):
 
 
 class TestPoint(models.Model):
-    #testpointid is automatically inserted as Django identifier
+    # testpointid is automatically inserted as Django identifier
     description = models.TextField()
     testtype = models.CharField(max_length=20)
     ip_address = models.GenericIPAddressField()
@@ -397,3 +425,62 @@ class ActiveTokens(models.Model):
     token_value = CharField(max_length=100)
     token_expiration = models.DateTimeField('expiration daytime')
     testpoint = models.ForeignKey(TestPoint)
+
+
+class Notification(models.Model):
+    title = models.TextField(default='')
+    text = models.TextField(default='')
+    date_created = models.DateTimeField(default=datetime.now())
+
+    def expiration_date(self):
+        return self.date_created + datetime.timedelta(days=7)
+
+
+class Alert(Notification):
+    # Yellow
+    pass
+
+
+class Success(Notification):
+    # Green
+    pass
+
+
+class Error(Notification):
+    # Red
+    pass
+
+
+class ChartManager(models.Manager):
+    url = settings.CHARTS_URL
+
+    def javascriptChart(self, cc, year, divId):
+        rtts = self.filterQuerySet(Results.objects.javascript(), cc=cc, year=year)
+
+        data = dict(data=json.dumps([list(rtts)]),
+                    divId=divId,
+                    labels=json.dumps(['%s latency' % cc]),
+                    colors=json.dumps(['orange']))
+        return requests.post(self.url, data=data).text
+
+    def appletChart(self, cc, year, divId):
+        rtts = self.filterQuerySet(Results.objects.applet(), cc=cc, year=year)
+
+        data = dict(data=json.dumps([list(rtts)]),
+                    divId=divId,
+                    labels=json.dumps(['%s latency' % cc]),
+                    colors=json.dumps(['orange']))
+        return requests.post(self.url, data=data).text
+
+    def filterQuerySet(self, queryset, cc, year):
+        enero = datetime(year=year, day=1, month=1)
+        diciembre = datetime(year=year, day=31, month=12)
+
+        return queryset.filter(
+            Q(country_origin=cc) | Q(country_destination=cc)) \
+            .filter(Q(date_test__gte=enero) & Q(date_test__lte=diciembre)) \
+            .values_list('ave_rtt', flat=True)
+
+class Chart(models.Model):
+    objects = ChartManager()
+    pass

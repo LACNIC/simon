@@ -1,0 +1,55 @@
+#
+#
+#
+
+HOST={{ l_root }}
+postEndpoint={{ domain }}{% url 'simon_app.views.post_traceroute' %}
+
+measure() {
+    protocol=$2
+    ipversion=$1
+
+    case $ipversion in
+        "4")
+            case $protocol in
+                "icmp")
+                ;;
+    #            "tcp")
+    #            ;;
+    #            "udp")
+    #            ;;
+                *)
+                    exit 1
+                ;;
+            esac
+        ;;
+        "6")
+        ;;
+        *)
+            exit 1
+        ;;
+    esac
+
+
+
+    echo "Running $protocol v$ipversion tests..."
+    if (( $ipversion == "4" ))
+    then
+        output=$(traceroute -P $protocol -q 3 $HOST)
+    else
+        output=$(traceroute6 -q 3 $HOST)
+     fi
+
+    echo "Posting results..."
+    curl --data "output=$output" $postEndpoint
+#    exit 0
+}
+
+(( {{ run4 }} )) && ( type traceroute >/dev/null 2>&1 || (echo "Traceroute not installed. Aborting." && exit 1))
+(( {{ run4 }} )) && ( measure "4" "icmp")
+
+
+(( {{ run6 }} )) && ( type traceroute6 >/dev/null 2>&1 || (echo "Traceroute 6 not installed. Aborting." && exit 0))
+(( {{ run6 }} )) ( && measure "6")
+
+exit 0

@@ -1,6 +1,8 @@
-{% extends 'base.html' %} {% block content %}
-    <div>
-        <h1>¿Cómo Participar?</h1>
+{% extends 'bootstrap.html' %}
+
+{% block content %}
+    <div class="col-lg-12">
+        <h1 class="page-header">¿Cómo Participar?</h1>
 
         <p>
             Existen varias maneras de participar de Simon! La forma más fácil de
@@ -11,20 +13,62 @@
                 href="mailto:proyectosimon@lacnic.net?Subject=Nuevo Servidor - Proyecto Simón&body=Nombre de la Organización:%0D%0A Correo de contacto:%0D%0A Nombre de la Organización:%0D%0A Dirección IP o URL: %0D%0ATipo: <NTP %7C Web> %0D%0A País donde se encuentra el servidor: ">proyectosimon@lacnic.net</a>
         </p>
 
-        <h2>Medidores de Latencia</h2>
+        <h2 class="page-header">Alojando el medidor <code>javascript</code> en tu sitio</h2>
 
-        <p>Existen dos tipos de medidores:</p>
+        <p>Basta agregar la siguientes líneas de código en alguna página
+            de tu sitio para que los visitantes comiencen a disparar mediciones de
+            latencia en la región LAC. Este mecanismo permite generar mediciones
+            de forma "mesh", es decir desde muchos orígenes hacia muchos destinos.
+        </p>
+
+        <pre class="prettyprint linenums">
+/*
+ * Include the libraries (jQuery needed)
+ */
+
+/*
+ * Include the script in an asyn way.
+ */
+&#60script type="text/javascript"&#62
+(function (d, s) {
+        var js = d.createElement(s),
+                sc = d.getElementsByTagName(s)[0];
+
+        js.src = "http://simon.lacnic.net/simon/static/simon_app/js/simon_probe_plugin.js";
+        js.type = "text/javascript";
+        sc.parentNode.insertBefore(js, sc);
+
+        js.onload = js.onreadystatechange = function () {
+                // Whenever you wish to start the tests, call SIMON.init()
+            SIMON.init();
+        };
+
+    }(document, "script"));
+&#60/script&#62</pre>
+        {#        <script style="width: 80%; font-size: 9"#}
+        {#                src="https://gist.github.com/aguformoso/5b96955beea091492fde.js"></script>#}
+
+        <p>Este tester depende de las librerías <a href="http://code.jquery.com/jquery-1.11.0.min.js">jQuery</a>. Si no
+            se encuentran disponibles en la página donde resida el script de Simón, puedes incluirlas a través de una
+            línea.</p>
+
+        <pre class="prettyprint">&#60script src="http://code.jquery.com/jquery-1.11.0.min.js"&#62&#60/script&#62</pre>
+
+        <h4 class="page-header">Algunas notas:</h4>
+
         <ul>
-            <li><a href="{{ URL_PFX }}/applet">Java Applet</a> para medir
-                latencia NTP a múltiples puntos (esperar a que las pruebas finalicen)
+            <li>El medidor es transparente al usuario y no interfiere con su
+                navegación normal en el sitio.
             </li>
-
-            <li><a href="{{ URL_PFX }}/runjavascript">Javascript</a> para medir
-                latencia TCP a múltiples puntos de prueba
+            <li>Es posible ajustar la cantidad de usuarios que generan
+                mediciones. Por ejemplo, se puede configurar para que el 10% del
+                tráfico en tu sitio genere mediciones de Simón. Esta función es
+                conveniente si quieres ir aumentando gradualmente tu colaboración con
+                el proyecto.
             </li>
         </ul>
 
-        <h2>Servidores de Prueba</h2>
+        <h2 class="page-header">Colaborando con tu servidor de pruebas</h2>
 
         <p>
             Es de suma importancia disponer de la mayor cantidad de servidores
@@ -36,39 +80,26 @@
             América o el Caribe.
         </p>
 
-        <h3>Servidor Web</h3>
-
-        <p>Basta agregar la siguientes líneas de código en alguna página
-            de tu sitio para que los visitantes comiencen a disparar mediciones de
-            latencia en la región LAC. Este mecanismo permite generar mediciones
-            de forma "mesh", es decir desde muchos orígenes hacia muchos destinos.
-        </p>
-
-        <script style="width: 80%; font-size: 9"
-                src="https://gist.github.com/aguformoso/5b96955beea091492fde.js"></script>
-
-        <p>Este tester depende de las librerías <a href="http://code.jquery.com/jquery-1.11.0.min.js">jQuery</a>. Si no
-            se encuentran disponibles en la página donde resida el script de Simón, puedes incluirlas a través de una
-            línea.</p>
-        <script src="https://gist.github.com/aguformoso/be3cdc0faf2877ee702b.js"></script>
-
-        <h4>Algunas notas:</h4>
-        <ul>
-            <li>El medidor es transparente al usuairo y no interfiere con su
-                navegación normal en el sitio.
-            </li>
-            <li>Es posible ajustar la cantidad de usuarios que generan
-                mediciones. Por ejemplo, se puede configurar para que el 10% del
-                tráfico en tu sitio genere mediciones de Simón. Esta función es
-                conveniente si quieres ir aumentando gradualmente tu colaboración con
-                el proyecto.
-            </li>
-        </ul>
-
-        <h3>Servidor NTP</h3>
+        <h3 class="page-header">Servidor NTP</h3>
         <ul>
             <li>Por favor, completa los datos del siguiente <a
                     href="{{ URL_PFX }}/addnewntppointform">formulario</a>.
+            </li>
+        </ul>
+
+        <h2 class="page-header">Realizando pruebas tú mismo</h2>
+
+        <p>Existen dos tipos de medidores donde realizar pruebas:</p>
+        <ul>
+            <li><a href="{{ URL_PFX }}{% url 'simon_app.views.applet_run' %}">Java Applet</a> para medir
+                latencia NTP a múltiples puntos (esperar a que las pruebas finalicen)
+            </li>
+
+            <li><a href="{{ URL_PFX }}{% url 'simon_app.views.lab' %}">Javascript</a> para medir
+                latencia HTTP a múltiples puntos de prueba
+            </li>
+
+            <li><a href="{{ URL_PFX }}{% url 'simon_app.views.traceroute' %}">Traceroute</a> para medir el camino que siguen los paquetes entre puntos de la región LAC. Utiliza el comando <code>traceroute</code> sobre <code>icmp</code> por el momento.
             </li>
         </ul>
 

@@ -1,55 +1,65 @@
-{% extends 'base.html' %}
+{% extends 'bootstrap.html' %}
 
 {% block content %}
 
-<h1>Objetivos</h1>
-<p>Hace años que las limitaciones de infraestructura en las
-	comunicaciones de Latino América son notorias, específicamente en la
-	conectividad entre los países. La aparición de muchos puntos de
-	intercambio de trafico (IXPs) han ayudado para mejorar esta situación,
-	aunque el real estado de la conectividad entre los países y redes es un
-	gran misterio.</p>
-<p>Dentro de la región LAC, e inclusive dentro de un mismo país, se
-	pueden registrar latencias por encima de los 100ms. El principal motivo
-	de estas latencias tan elevadas es la falta de interconexión local
-	entre los distintos proveedores de backbone, o simplemente la falta de
-	infraestructura entre los países. Esto obliga a que el trafico entre
-	países cercanos, muchas veces sea intercambiado en puntos de
-	intercambio lejanos, muchas veces en los Estados Unidos.</p>
-<p>
-	El Proyecto Simón busca generar información para las empresas que están
-	en condiciones de invertir en la región, puedan sustentar planes de
-	negocio para desarrollar la internet regional.<br> Creemos que
-	midiendo los niveles de latencia entre los países y estimando los
-	volúmenes de trafico que están sujetos a las latencias, se podría:
-</p>
-<ul>
-	<li>Motivar a los proveedores de backbone, a realizar
-		interconexiones locales (a costo muy bajo)</li>
-	<li>Proveer informaciones para estudios de inversión de empresas
-		de telecomunicaciones que deseen desarrollar negocios de trasporte de
-		trafico regional.</li>
-</ul>
-<p>Como un esfuerzo conjunto, colaborativo y abierto a toda la
-	comunidad, se establece el Proyecto Simon, buscando organizar los
-	esfuerzos de conocer la situación actual de la internet regional y
-	apoyar a las empresas que deseen ayudar a su resolución.</p>
+    <div class="col-lg-12">
 
-<h3>Cual es el problema?</h3>
-<p>En la medida que los países están fragmentados, se introducen una
-	serie de limitaciones que afectan el desarrollo de la Internet
-	Regional:</p>
-<ul>
-	<li>Hay poco intercambio de trafico local.</li>
-	<li>Se desfavorece la implementación de aplicaciones altamente
-		interactivas en la región.</li>
-	<li>No existen incentivos para construcción de infraestructura
-		regional.</li>
-	<li>Las aplicaciones P2P consumen mucho ancho de banda en el
-		"long-haul", en lugar de hacerlo localmente a un costo menor.</li>
-	<li>Se desfavorece los acuerdos de intercambio de trafico local.</li>
-</ul>
+        <h2 class="page-header">Objetivos</h2>
+
+        <p>Hace años que las limitaciones de infraestructura en las
+            comunicaciones de Latino América son notorias, específicamente en la
+            conectividad entre los países. La aparición de muchos puntos de
+            intercambio de trafico (IXPs) han ayudado para mejorar esta situación,
+            aunque el real estado de la conectividad entre los países y redes es un
+            gran misterio.</p>
+
+        <p>Dentro de la región LAC, e inclusive dentro de un mismo país, se
+            pueden registrar latencias por encima de los 100ms. El principal motivo
+            de estas latencias tan elevadas es la falta de interconexión local
+            entre los distintos proveedores de backbone, o simplemente la falta de
+            infraestructura entre los países. Esto obliga a que el trafico entre
+            países cercanos, muchas veces sea intercambiado en puntos de
+            intercambio lejanos, muchas veces en los Estados Unidos.</p>
+
+        <p>
+            El Proyecto Simón busca generar información para las empresas que están
+            en condiciones de invertir en la región, puedan sustentar planes de
+            negocio para desarrollar la internet regional.<br> Creemos que
+            midiendo los niveles de latencia entre los países y estimando los
+            volúmenes de trafico que están sujetos a las latencias, se podría:
+        </p>
+        <ul>
+            <li>Motivar a los proveedores de backbone, a realizar
+                interconexiones locales (a costo muy bajo)
+            </li>
+            <li>Proveer informaciones para estudios de inversión de empresas
+                de telecomunicaciones que deseen desarrollar negocios de trasporte de
+                trafico regional.
+            </li>
+        </ul>
+        <p>Como un esfuerzo conjunto, colaborativo y abierto a toda la
+            comunidad, se establece el Proyecto Simon, buscando organizar los
+            esfuerzos de conocer la situación actual de la internet regional y
+            apoyar a las empresas que deseen ayudar a su resolución.</p>
+
+        <h3 class="page-header">Cuál es el problema?</h3>
+
+        <p>En la medida que los países están fragmentados, se introducen una
+            serie de limitaciones que afectan el desarrollo de la Internet
+            Regional:</p>
+        <ul>
+            <li>Hay poco intercambio de trafico local.</li>
+            <li>Se desfavorece la implementación de aplicaciones altamente
+                interactivas en la región.
+            </li>
+            <li>No existen incentivos para construcción de infraestructura
+                regional.
+            </li>
+            <li>Las aplicaciones P2P consumen mucho ancho de banda en el
+                "long-haul", en lugar de hacerlo localmente a un costo menor.
+            </li>
+            <li>Se desfavorece los acuerdos de intercambio de trafico local.</li>
+        </ul>
+    </div>
 
 {% endblock %}
-
-{% include 'footer.htm

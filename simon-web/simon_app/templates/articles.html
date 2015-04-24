@@ -1,20 +1,25 @@
-{% extends 'base.html' %}
+{% extends 'bootstrap.html' %}
 
 {% block content %}
 
-<h3>Artículos</h3>
-<p>Esta sección contiene los artículos que consideramos son de
-	utilidad para el proyecto. Los artículos pueden abatcar diferentes
-	áreas dek proyecto, como las metodologías de recabamiento de datos, las
-	técnicas para procesar dichos datos y sacar conclusiones, etc.</p>
+    <div class="col-lg-12">
 
-<ul>
+        <h1 class="page-header">Artículos</h1>
+        
+        <p>Esta sección contiene los artículos que consideramos son de
+            utilidad para el proyecto. Los artículos pueden abatcar diferentes
+            áreas dek proyecto, como las metodologías de recabamiento de datos, las
+            técnicas para procesar dichos datos y sacar conclusiones, etc.</p>
 
-	<li><a
-		href="/static/articles/PositionPaper-Alternativestotraditionallatencymeasurementtechniques%20(1).pdf">
-			Alternatives to traditional latency measurement techniques</a> (PDF)</li>
-	<li>Measuring LAC region connectivity (en progreso)</li>
-	<li>Determining TCP latency from different browsers and operating systems (en progreso)</li>
+        <ul>
 
-</ul>
+            <li><a
+                    href="/static/articles/PositionPaper-Alternativestotraditionallatencymeasurementtechniques%20(1).pdf">
+                Alternatives to traditional latency measurement techniques</a> (PDF)
+            </li>
+            <li>Measuring LAC region connectivity (en progreso)</li>
+            <li>Determining TCP latency from different browsers and operating systems (en progreso)</li>
+
+        </ul>
+    </div>
 {% endblock %}

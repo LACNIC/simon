@@ -1,9 +1,14 @@
-{% extends 'base.html' %}
+{% extends 'bootstrap.html' %}
+
+{% block headers %}
+    <!-- Google Charts -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+    <script src="https://www.google.com/jsapi" type="text/javascript"></script>
+{% endblock %}
 
 {% block content %}
-
-    <div>
-        <h1>Reportes</h1>
+    <div class="col-lg-12">
+        <h1 class="page-header">Reportes</h1>
 
         <p>En esta sección se muestran los datos de latencia por país y
             año. Los histogramas pueden presentar uno o varios picos. Para
@@ -18,36 +23,28 @@
             Internet y en el usuario final</p>
 
         <p>
-            Las muestras consideradas en estos reportes fueron obtenidas por <a href="{{ URL_PFX }}/participate">la
+            Las muestras consideradas en estos reportes fueron obtenidas por <a href="{% url 'simon_app.views.participate' %}">la
             contribución de cientos de usuarios</a> en cada uno de los países.
         </p>
-    </div>
 
-    <div>
 
-        <form id="country_form" action="{{ URL_PFX }}/reports/" method="post">
-            {% csrf_token %} {{ form.as_p }} <input type="submit" value="Submit"
-                                                    id="submit"/>
+        <h2 class="page-header">Medidor: Javascript</h2>
+        <script type="text/javascript">
+            {{ latency_histogram_js | safe }}
+        </script>
+        <div id="latency_histogram_js"></div>
+
+
+        <h2 class="page-header">Medidor: Applet</h2>
+        <script type="text/javascript">
+            {{ latency_histogram_applet | safe }}
+        </script>
+        <div id="latency_histogram_applet"></div>
+
+
+        <form class="navbar-form" id="country_form" action="{% url 'simon_app.views.reports' %}" method="post">
+            {% csrf_token %} {{ form.as_p }} <input type="submit" value="Submit" id="submit" class="btn btn-default navbar-btn"/>
         </form>
-
-        {% for image in images %}
-            <figure style="float: left;" class="chart">
-
-                <a href="/static/histograms/countries/{{ image.name }}"
-                   title="Histograma de latencia entre {{ image.origin }} y {{ image.destination }}, {{ image.year }}">
-                    <img
-                            alt="Histograma de latencia entre {{ image.origin }} y {{ image.destination }}, {{ image.year }}"
-                            src="/static/histograms/countries/{{ image.name }}"
-                            style="width: 200px" class=""/>
-                </a>
-
-                <figcaption class="caption" style="text-align: center;">Latencia entre {{ image.origin }}
-                    y {{ image.destination }}, {{ image.year }}.
-                </figcaption>
-
-            </figure>
-        {% endfor %}
-
 
     </div>
 

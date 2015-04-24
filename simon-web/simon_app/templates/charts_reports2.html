@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block javascript %}
+{% block headers %}
     <!-- J Query -->
     <script type="text/javascript"
             src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
@@ -491,7 +491,9 @@
             });
         });
     </script>
-{% endblock %} {% block css %}
+{% endblock %}
+
+{% block css %}
     <style>
         #map-canvas {
             height: 350px;
@@ -524,7 +526,11 @@
             stroke-width: 0;
         }
     </style>
-{% endblock %} {% block title %} Gráficas {% endblock %} {% block content %}
+{% endblock %}
+
+{% block title %} Gráficas {% endblock %}
+
+{% block content %}
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 

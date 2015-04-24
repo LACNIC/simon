@@ -1,32 +1,40 @@
-{% extends 'base.html' %}
+{% extends 'bootstrap.html' %}
 
 {% block content %}
 
-    <h1>Colabora con tu traceroute!</h1>
-    <p>Una forma muy útil de monitorear el trayecto de los paquetes en
-        la red es el programa traceroute. Esta página recopila archivos con
-        logs de traceroute. Colabora de forma sencilla con tu traceroute copiando y pegando el siguiente comando en tu consola:</p>
-    <div id="tracerouteConsole" class="" style="width: 910px; font-size: 1.4em">
-        curl -fsSL http://simon.lacnic.net/simon/static/simon_app/traceroute.sh | bash
-    </div>
+    <div class="col-lg-12">
 
-    <h1>Agendar crontab</h1>
-    <p>Para agendar mediciones a cada hora, a trvés de crontab, copia y pega el siguiente script en tu consola:</p>
-    <div id="tracerouteConsole" class="" style="width: 910px; font-size: 1.4em">
-        (crontab -l ; echo "0 * * * * curl -fsSL http://simon.lacnic.net/simon/static/simon_app/traceroute.sh") | crontab -
-    </div>
+        <h1 class="page-header">Colabora con tu traceroute!</h1>
 
-    <h1>Últimos traceroutes recibidos</h1>
-    <div id="tracerouteList">
-        <table>
-            {% for t in  traceroutes %}
-                <tr>
-                    <td>
-                        {{ t.pretty_print }}
-                    </td>
-                </tr>
-            {% endfor %}
-        </table>
+        <p>Una forma muy útil de monitorear el trayecto de los paquetes en
+            la red es el programa traceroute. Esta página recopila archivos con
+            logs de traceroute. Colabora de forma sencilla con tu traceroute copiando y pegando el siguiente comando en tu consola:</p>
+
+        <div id="" class="console" style="font-size: 1.4em; padding-top: 3em">
+            curl -fsSL http://simon.lacnic.net/simon/static/simon_app/traceroute.sh | bash
+        </div>
+
+        <h2 class="page-header">Agendar crontab</h2>
+
+        <p>Para agendar mediciones a cada hora, a trvés de crontab, copia y pega el siguiente script en tu consola:</p>
+
+        <div id="" class="console" style="font-size: 1.4em; padding-top: 3em">
+            (crontab -l ; echo "0 * * * * curl -fsSL http://simon.lacnic.net/simon/static/simon_app/traceroute.sh") | crontab -
+        </div>
+
+        <h1>Últimos traceroutes recibidos</h1>
+
+        <div id="tracerouteList">
+            <table>
+                {% for t in  traceroutes %}
+                    <tr>
+                        <td>
+                            {{ t.pretty_print }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
     </div>
 
     {#    <h1>Traceroute viejos? También sirven</h1>#}

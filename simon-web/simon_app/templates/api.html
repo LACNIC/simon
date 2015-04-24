@@ -1,88 +1,173 @@
-{% extends 'base.html' %}
+{% extends 'bootstrap.html' %}
 
 {% block content %}
 
-<h1>API</h1>
-<p>La siguiente APi puede ser accedidida para consultar los datos
-	recabados. El Proyecto simón tiene por cometido brindar los datos de
-	forma abierta y en los formatos más utilizados, por lo que la interfaz
-	será ampliada con el tiempo. Agradecemos cualquier sugerencia que pueda
-	realizar.</p>
+    <div class="col-lg-12">
+
+        <h1 class="page-header">API</h1>
+
+        <p>La siguiente APi puede ser accedidida para consultar los datos
+            recabados. El Proyecto simón tiene por cometido brindar los datos de
+            forma abierta y en los formatos más utilizados, por lo que la interfaz
+            será ampliada con el tiempo. Agradecemos cualquier sugerencia que pueda
+            realizar.</p>
 
 
-<h3>Resultados de latencia por país</h3>
-<h3>/api/latency/&#60;Country Code&#62;/&#60;Versión de IP&#62;/&#60;Año&#62;/&#60;Mes&#62;</h3>
+        <h2 class="page-header">Resultados de latencia por país</h2>
 
-<h4>Parámetros opcionales</h4>
-<ul>
-	<li>Country Code es el código ISO del país (2 dígitos), según la <a
-		href="http://en.wikipedia.org/wiki/ISO_3166-1">ISO 3166-1</a>. Se retornarán todos los tests con origen o destino ese país. Por defecto: todos los países.</li>
-	<li>Versión de IP. Puede tomar el valor 4 o 6. Por defecto: versión 4.</li>
-	<li>Año (YYYY). Por defecto: 01.</li>
-	<li>Mes (MM o M). Por defecto: Enero.</li>
-</ul>
+        <code>/api/latency/&#60;Country Code&#62;/&#60;Versión de IP&#62;/&#60;Año&#62;/&#60;Mes&#62;</code>
 
-<h4>Resultado</h4>
-<p>
-El resultado es un array conteniendo tests, devuelto en formato JSON con los siguientes atributos:
-<ul>
-	<li><strong>country_destination (CC)</strong> - Código ISO (2 dígitos) del país de destino de ese test.</li>
-	<li><strong>country_origin (CC)</strong> - Código ISO (2 dígitos) del país de origen de ese test.</li>
-	<li><strong>max_rtt (ms)</strong> - Máximo RTT del conjunto de muestras tomadas en ese test.</li>
-	<li><strong>date_test (datetime with time zone)</strong> - Fecha con <a href="http://es.wikipedia.org/wiki/Huso_horario">Zona Horaria</a> en que se realizó el test.</li>
-	<li><strong>median_rtt (ms)</strong> - Mediana (valor que tiene una mitad de las muestras por encima y la otra mitad por debajo) del conjunto de muestras tomadas en ese test.</li>
-	<li><strong>min_rtt (ms)</strong> - Mínimo RTT del conjunto de muestras tomadas en ese test.</li>
-	<li><strong>ave_rtt (ms)</strong> - RTT promedio del conjunto de muestras tomadas en ese test.</li>
-	<li><strong>dev_rtt (ms)</strong> - Desvaición estándar del conjunto de muestras tomadas en ese test.</li>
-</ul>
-</p>
+        <h3>Parámetros opcionales</h3>
+        <table class="table table-hover table-bordered table-condensed">
+            <tr>
+                <th>Parámetro</th>
+                <th>Descripción</th>
+                <th>Valor por defecto</th>
+            </tr>
+            <tr>
+                <td>Country Code</td>
+                <td>Código ISO del país (2 dígitos), según la <a
+                        href="http://en.wikipedia.org/wiki/ISO_3166-1">ISO 3166-1</a>. Se retornarán todos los tests con origen o destino ese país. Por defecto: todos los países.
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Versión de IP</td>
+                <td>Puede tomar el valor 4 o 6.</td>
+                <td>4</td>
+            </tr>
+            <tr>
+                <td>Año (YYYY)</td>
+                <td>Año en formato largo.</td>
+                <td>2001</td>
+            </tr>
+            <tr>
+                <td>Mes (MM o M)</td>
+                <td>Mes en formato numérico.</td>
+                <td>01</td>
+            </tr>
+        </table>
 
-<h4>Ejemplo</h4>
-<p class="code">
-[{<br>
-&nbsp;&nbsp;&nbsp;&nbsp;"country_destination": "CL",<br>
-&nbsp;&nbsp;&nbsp;&nbsp;"country_origin": "UY",<br>
-&nbsp;&nbsp;&nbsp;&nbsp;"max_rtt": 445,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;"date_test": "2012-11-05 19:40:19+00:00",<br>
-&nbsp;&nbsp;&nbsp;&nbsp;"median_rtt": 411,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;"min_rtt": 403,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;"ave_rtt": 415,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;"dev_rtt": 10<br>
-}]
-</p>
+        <h3>Resultado</h3>
 
-<h3>Resultados de latencia por Sistema Autónomo</h3>
-<h3>api/latency/autnum/&#60;AS Origin&#62;/&#60;AS Destination&#62;</h3>
+        <p>
+            El resultado es un array conteniendo tests, devuelto en formato JSON con los siguientes atributos:
+        </p>
 
-<p>Todos los parámetros son obligatorios</p>
-<h4>Resultado</h4>
-<p>
+        <table class="table table-hover table-bordered table-condensed">
+            <tr>
+                <td><strong>country_destination (CC)</strong></td>
+                <td>Código ISO (2 dígitos) del país de destino de ese test.</td>
+            </tr>
+            <tr>
+                <td><strong>country_origin (CC)</strong></td>
+                <td>Código ISO (2 dígitos) del país de origen de ese test.</td>
+            </tr>
+            <tr>
+                <td><strong>date_test (datetime with time zone)</strong></td>
+                <td>Fecha con <a href="http://es.wikipedia.org/wiki/Huso_horario">Zona Horaria</a> en que se realizó el test.</td>
+            </tr>
+            <tr>
+                <td><strong>max_rtt (ms)</strong></td>
+                <td>Máximo RTT del conjunto de muestras tomadas en ese test.</td>
+            </tr>
+            <tr>
+                <td><strong>median_rtt (ms)</strong></td>
+                <td>Mediana (valor que tiene una mitad de las muestras por encima y la otra mitad por debajo) del conjunto de muestras tomadas en ese test.</td>
+            </tr>
+            <tr>
+                <td><strong>min_rtt (ms)</strong></td>
+                <td>Mínimo RTT del conjunto de muestras tomadas en ese test.</td>
+            </tr>
+            <tr>
+                <td><strong>ave_rtt (ms)</strong></td>
+                <td>RTT promedio del conjunto de muestras tomadas en ese test.</td>
+            </tr>
+            <tr>
+                <td><strong>dev_rtt (ms)</strong></td>
+                <td>Desvición estándar del conjunto de muestras tomadas en ese test.</td>
+            </tr>
+        </table>
 
-El resultado es un array conteniendo tests, devuelto en formato JSON con los siguientes atributos:
-<ul>
-	<li><strong>as_destination (ASN)</strong> - Número de Sistema Autónomo que originó la medición.</li>
-	<li><strong>as_origin (ASN)</strong> - Número de Sistema Autónomo de destino de la medición.</li>
-	<li><strong>max_rtt (ms)</strong> - Máximo RTT del conjunto de muestras tomadas en ese test.</li>
-	<li><strong>date_test (datetime with time zone)</strong> - Fecha con <a href="http://es.wikipedia.org/wiki/Huso_horario">Zona Horaria</a> en que se realizó el test.</li>
-	<li><strong>median_rtt (ms)</strong> - Mediana (valor que tiene una mitad de las muestras por encima y la otra mitad por debajo) del conjunto de muestras tomadas en ese test.</li>
-	<li><strong>min_rtt (ms)</strong> - Mínimo RTT del conjunto de muestras tomadas en ese test.</li>
-	<li><strong>ave_rtt (ms)</strong> - RTT promedio del conjunto de muestras tomadas en ese test.</li>
-	<li><strong>dev_rtt (ms)</strong> - Desvaición estándar del conjunto de muestras tomadas en ese test.</li>
-</ul>
-</p>
+        <h4>Ejemplo</h4>
 
-<h4>Ejemplo</h4>
-<p class="code">
-[{<br>
-	&nbsp;&nbsp;&nbsp;&nbsp;"as_origin": 42708,<br>
-	&nbsp;&nbsp;&nbsp;&nbsp;"as_destination": 42708,<br>
-	&nbsp;&nbsp;&nbsp;&nbsp;"max_rtt": 445,<br>
-	&nbsp;&nbsp;&nbsp;&nbsp;"date_test": "2012-11-05 19:40:19+00:00",<br>
-	&nbsp;&nbsp;&nbsp;&nbsp;"median_rtt": 411,<br>
-	&nbsp;&nbsp;&nbsp;&nbsp;"min_rtt": 403,<br>
-	&nbsp;&nbsp;&nbsp;&nbsp;"ave_rtt": 415,<br>
-	&nbsp;&nbsp;&nbsp;&nbsp;"dev_rtt": 10<br>
-}]
-</p>
+        <pre>
+[{
+    "country_destination": "CL",
+    "country_origin": "UY",
+    "max_rtt": 445,
+    "date_test": "2012-11-05 19:40:19+00:00",
+    "median_rtt": 411,
+    "min_rtt": 403,
+    "ave_rtt": 415,
+    "dev_rtt": 10
+}]</pre>
+
+        <h2 class="page-header">Resultados de latencia por Sistema Autónomo</h2>
+
+        <code>
+            api/latency/autnum/&#60;AS Origin&#62;/&#60;AS Destination&#62;
+        </code>
+
+        <div class="alert alert-info">
+            Todos los parámetros son obligatorios
+        </div>
+
+        <h4>Resultado</h4>
+
+        <p>
+
+            El resultado es un array conteniendo tests, devuelto en formato JSON con los siguientes atributos:
+        </p>
+
+        <table class="table table-hover table-bordered table-condensed">
+            <tr>
+                <td><strong>as_destination (ASN)</strong></td>
+                <td>Número de Sistema Autónomo de destino de la medición.</td>
+            </tr>
+            <tr>
+                <td><strong>as_origin (ASN)</strong></td>
+                <td>Número de Sistema Autónomo que originó la medición.</td>
+            </tr>
+            <tr>
+                <td><strong>date_test (datetime with time zone)</strong></td>
+                <td>Fecha con <a href="http://es.wikipedia.org/wiki/Huso_horario">Zona Horaria</a> en que se realizó el test.</td>
+            </tr>
+            <tr>
+                <td><strong>max_rtt (ms)</strong></td>
+                <td>Máximo RTT del conjunto de muestras tomadas en ese test.</td>
+            </tr>
+            <tr>
+                <td><strong>median_rtt (ms)</strong></td>
+                <td>Mediana (valor que tiene una mitad de las muestras por encima y la otra mitad por debajo) del conjunto de muestras tomadas en ese test.</td>
+            </tr>
+            <tr>
+                <td><strong>min_rtt (ms)</strong></td>
+                <td>Mínimo RTT del conjunto de muestras tomadas en ese test.</td>
+            </tr>
+            <tr>
+                <td><strong>ave_rtt (ms)</strong></td>
+                <td>RTT promedio del conjunto de muestras tomadas en ese test.</td>
+            </tr>
+            <tr>
+                <td><strong>dev_rtt (ms)</strong></td>
+                <td>Desvición estándar del conjunto de muestras tomadas en ese test.</td>
+            </tr>
+        </table>
+
+        <h4>Ejemplo</h4>
+
+        <pre>
+[
+    "as_origin": 42708,
+    "as_destination": 42708,
+    "max_rtt": 445,
+    "date_test": "2012-11-05 19:40:19+00:00",
+    "median_rtt": 411,
+    "min_rtt": 403,
+    "ave_rtt": 415,
+    "dev_rtt": 10
+}]</pre>
+    </div>
 
 {% endblock %}

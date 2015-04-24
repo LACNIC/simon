@@ -1,0 +1,49 @@
+.console {
+    background-color: black;
+    color: ghostwhite;
+    font-family: monospace;
+    height: 10em;
+    padding-left: 1em;
+    border-radius: 5px;
+}
+
+.homeBox {
+    background-color: #ffffff;
+    padding: 1em;
+    border: 1px solid;
+    border-radius: 5px;
+    border-color: #E6E6E6;
+    margin-bottom: 2em;
+}
+
+.homeBox a {
+    color: black;
+}
+
+.homeBox a:link {
+    text-decoration: none;
+}
+
+#tracerouteConsole {
+    padding: 3em 1em 3em 1em;
+    background-color: black;
+    overflow: auto;
+    color: ghostwhite;
+    font-size: 24;
+    font-family: monospace;
+    border: 1px solid;
+    border-radius: 5px;
+    border-color: #E6E6E6;
+}
+
+#tracerouteList {
+    padding: 3em 1em 3em 1em;
+    background-color: ivory;
+    overflow: auto;
+    color: dimgray;
+    font-size: 24;
+    font-family: monospace;
+    border: 1px solid;
+    border-radius: 5px;
+    border-color: #E6E6E6;
+}

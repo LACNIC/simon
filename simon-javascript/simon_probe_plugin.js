@@ -3,7 +3,7 @@
  * LACNIC Labs - 2014
  */
 SIMON = {};
-SIMON.debug = false;
+SIMON.debug = true;
 SIMON = {
 
     params : {
@@ -21,7 +21,8 @@ SIMON = {
         configs: SIMON.debug && "http://127.0.0.1:8000/simon/web_configs/" || "http://simon.lacnic.net/simon/web_configs/",
         offline: SIMON.debug && "http://127.0.0.1:8000/simon/postxmlresult/offline/" || "http://simon.lacnic.net/simon/postxmlresult/offline/",
         post: SIMON.debug && "http://127.0.0.1:8000/simon/postxmlresult/latency/" || "http://simon.lacnic.net/simon/postxmlresult/latency/",
-        ipv6ResolveURL: "http://simon.v4.labs.lacnic.net/cemd/getip/jsonp/", // TODO llevar a v6 "http://simon.v6.labs.lacnic.net/cemd/getip/jsonp/"
+        country: "http://simon.lacnic.net/simon/getCountry/",
+        ipv6ResolveURL: "http://simon.v6.labs.lacnic.net/cemd/getip/jsonp/",
         ipv4ResolveURL: "http://simon.v4.labs.lacnic.net/cemd/getip/jsonp/"
 	},
 
@@ -84,7 +85,7 @@ SIMON = {
 
 		$.ajax({
 			type : 'GET',
-			url : SIMON.urls.home + "getCountry",
+			url : SIMON.urls.country, //.home + "getCountry",
 			contentType : "text/javascript",
 			dataType : 'jsonp',
 			crossDomain : true,
@@ -101,7 +102,7 @@ SIMON = {
 		/*
 		 * get the test configs from the server
 		 */
-		SIMON.printr("Fetching tests configurations...");
+		SIMON.log("Fetching tests configurations...");
 
 		$.ajax({
 			url : SIMON.urls.configs,
@@ -308,8 +309,6 @@ SIMON = {
 					 */
 					rtt = (+new Date - ts);
 					testPoint.results.push(rtt);
-					SIMON.printr("Measuring latency to " + testPoint.ip + " - "
-							+ rtt + " ms");
 					SIMON.after_each(rtt);
 				}
 
@@ -466,7 +465,8 @@ SIMON = {
 
 	buildXML : function(testPoints, origin_ip) {
 
-		SIMON.printr("Building data...");
+        console.log("Building XML");
+//		SIMON.printr("Building data...");
 
 		if (testPoints instanceof Array && testPoints.length > 0) {
 			var date = new Date();
@@ -527,7 +527,9 @@ SIMON = {
 			xml = xml + "</simon>";
 
 			return xml;
-		}
+		} else {
+            console.log("Trying to build Results XML with 0 points or points is not an array instance");
+        }
 	},
 
 	getPrintOffset : function(date) {
@@ -783,8 +785,28 @@ SIMON = {
 		}
 	},
 
+    log : function(text) {
+        var HEADING = "[INFO] [" + new Date() + "] ";
+        return console.log(HEADING + text);
+    },
+
+    warn : function(text) {
+        var HEADING = "[WARN] [" + new Date() + "] ";
+        return console.warn(HEADING + text);
+    },
+
+    error : function(text) {
+        var HEADING = "[ERROR] [" + new Date() + "] ";
+        return console.error(HEADING + text);
+    },
+
 	summary : function(dataSet) {
 		return 'min=' + Math.floor(SIMON.getMin(dataSet)) + ' ms max=' + Math.floor(SIMON.getMax(dataSet)) + ' ms mean='
 				+ Math.floor(SIMON.getMean(dataSet)) + ' ms std. dev.=' + Math.floor(SIMON.getStdDev(dataSet)) + ' ms';
 	}
 };
+
+(function(d){function H(){}function I(a){t=[a]}function e(a,d,e,f){try{f=a&&a.apply(d.context||d,e)}catch(h){f=!1}return f}function k(a){function k(b){m++||(n(),p&&(w[c]={s:[b]}),y&&(b=y.apply(a,[b])),e(f,a,[b,"success"]),e(z,a,[a,"success"]))}function u(b){m++||(n(),p&&"timeout"!=b&&(w[c]=b),e(v,a,[a,b]),e(z,a,[a,b]))}a=d.extend({},A,a);var f=a.success,v=a.error,z=a.complete,y=a.dataFilter,q=a.callbackParameter,B=a.callback,J=a.cache,p=a.pageCache,C=a.charset,c=a.url,g=a.data,D=a.timeout,r,m=0,n=
+H,b,l,x;E&&E(function(a){a.done(f).fail(v);f=a.resolve;v=a.reject}).promise(a);a.abort=function(){!m++&&n()};if(!1===e(a.beforeSend,a,[a])||m)return a;c=c||"";g=g?"string"==typeof g?g:d.param(g,a.traditional):"";c+=g?(/\?/.test(c)?"&":"?")+g:"";q&&(c+=(/\?/.test(c)?"&":"?")+encodeURIComponent(q)+"=?");J||p||(c+=(/\?/.test(c)?"&":"?")+"_"+(new Date).getTime()+"=");c=c.replace(/=\?(&|$)/,"="+B+"$1");p&&(r=w[c])?r.s?k(r.s[0]):u(r):(F[B]=I,b=d("<script>")[0],b.id="_jqjsp"+K++,C&&(b.charset=C),G&&11.6>
+G.version()?(l=d("<script>")[0]).text="document.getElementById('"+b.id+"').onerror()":b.async="async","onreadystatechange"in b&&(b.htmlFor=b.id,b.event="onclick"),b.onload=b.onerror=b.onreadystatechange=function(a){if(!b.readyState||!/i/.test(b.readyState)){try{b.onclick&&b.onclick()}catch(c){}a=t;t=0;a?k(a[0]):u("error")}},b.src=c,n=function(a){x&&clearTimeout(x);b.onreadystatechange=b.onload=b.onerror=null;h.removeChild(b);l&&h.removeChild(l)},h.insertBefore(b,q=h.firstChild),l&&h.insertBefore(l,
+q),x=0<D&&setTimeout(function(){u("timeout")},D));return a}var F=window,E=d.Deferred,h=d("head")[0]||document.documentElement,w={},K=0,t,A={callback:"_jqjsp",url:location.href},G=F.opera;k.setup=function(a){d.extend(A,a)};d.jsonp=k})(jQuery);

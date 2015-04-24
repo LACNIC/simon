@@ -146,7 +146,7 @@ def heatmap(start, end):
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
-        asn_heatmap()
+        # asn_heatmap()
         year = 2009#[2009, 2010, 2011, 2012, 2013]
         start = datetime.strptime("Jan 1 %s" % (year), '%b %d %Y').replace(tzinfo=GMTUY())
         end = datetime.now(GMTUY())#start + timedelta(365)#
