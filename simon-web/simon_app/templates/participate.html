@@ -21,7 +21,7 @@
             de forma "mesh", es decir desde muchos orígenes hacia muchos destinos.
         </p>
 
-        <pre class="prettyprint linenums">
+        <pre class="prettyprint">
 /*
  * Include the libraries (jQuery needed)
  */
@@ -91,7 +91,7 @@
 
         <p>Existen dos tipos de medidores donde realizar pruebas:</p>
         <ul>
-            <li><a href="{{ URL_PFX }}{% url 'simon_app.views.applet_run' %}">Java Applet</a> para medir
+            <li><a href="{{ URL_PFX }}{% url 'simon_app.views.applet' %}">Java Applet</a> para medir
                 latencia NTP a múltiples puntos (esperar a que las pruebas finalicen)
             </li>
 
@@ -99,7 +99,8 @@
                 latencia HTTP a múltiples puntos de prueba
             </li>
 
-            <li><a href="{{ URL_PFX }}{% url 'simon_app.views.traceroute' %}">Traceroute</a> para medir el camino que siguen los paquetes entre puntos de la región LAC. Utiliza el comando <code>traceroute</code> sobre <code>icmp</code> por el momento.
+            <li><a href="{{ URL_PFX }}{% url 'simon_app.views.traceroute' %}">Traceroute</a> para medir el camino que siguen los paquetes entre puntos de la región LAC. Utiliza el comando <code>traceroute</code> sobre <code>icmp</code> por
+                el momento.
             </li>
         </ul>
 

@@ -457,6 +457,10 @@ def home(request):
     return render_to_response('home.html', getContext(request))
 
 
+def prueba(request):
+    return render_to_response('prueba.html', getContext(request))
+
+
 def objectives(request):
     return render_to_response('objectives.html', getContext(request))
 
@@ -466,21 +470,40 @@ def participate(request):
 
 
 def reports(request):
-    import json, requests
-    ip = request.META.get('REMOTE_ADDR', None)
+    # ip = request.META.get('REMOTE_ADDR', None)
     latency_histogram_applet = latency_histogram_js = ""
 
-    if request.method == 'POST':
-
-        id = request.POST['country']
-        year = int(request.POST['year'])
-        cc = Country.objects.get(id=id).iso
-
-        latency_histogram_js = Chart.objects.javascriptChart(cc=cc, year=year, divId='latency_histogram_js')
-
-        latency_histogram_applet = Chart.objects.appletChart(cc=cc, year=year, divId='latency_histogram_applet')
+    if request.method == "POST":
 
         form = ReportForm(request.POST)
+        if not form.is_valid():
+            return render_to_response('reports.html', {'form': form})
+
+        data = form  # .clean_data
+
+        if data['bidirectional'] == '2':
+            bidirectional = True
+        else:
+            bidirectional = False
+
+        date_from = datetime.strptime(form['date_from'].value(), "%d/%m/%Y")
+        date_to = form['date_to'].value()
+        if date_to != '':
+            date_to = datetime.strptime(date_to, "%d/%m/%Y")
+        else:
+            date_to = datetime.now()
+
+        country1 = data['country1'].value()
+        country2 = data['country2'].value()
+        cc1 = Country.objects.get(id=country1).iso
+        if country2 == "" or country2 is None:
+            cc2 = None
+        else:
+            cc2 = Country.objects.get(id=country2).iso
+
+        latency_histogram_js = Chart.objects.javascriptChart(cc1=cc1, cc2=cc2, date_from=date_from, date_to=date_to, divId='latency_histogram_js', bidirectional=bidirectional)
+
+        latency_histogram_applet = Chart.objects.appletChart(cc1=cc1, cc2=cc2, date_from=date_from, date_to=date_to, divId='latency_histogram_applet', bidirectional=bidirectional)
 
     else:
         form = ReportForm()
@@ -492,6 +515,12 @@ def reports(request):
 
 
 def charts_reports(request):
+    """
+        Regional Charts page.
+
+    :param request:
+    :return:
+    """
     import datetime
     import json
     # ###########
@@ -560,8 +589,50 @@ def charts_reports(request):
     a_year_ago = now - datetime.timedelta(days=365)
     rtts_applet = Results.objects.applet().values_list('ave_rtt', flat=True)
     rtts_js = Results.objects.javascript().filter(date_test__gte=a_year_ago).values_list('ave_rtt', flat=True)
-    url = "http://127.0.0.1:8001/charts/hist/code"
 
+    # #########################
+    # IPv6 penetration chart #
+    ##########################
+
+    days = range(1, 365)
+    datetimes = [(now - datetime.timedelta(days=d)) for d in days]  # .strftime("%d/%m/%Y")
+    rsy = Results.objects.get_yearly_results()
+    rs_all = rsy
+    rs_6 = rs_all.filter(ip_version='6')
+    ipv6_penetration_rates = []
+    for d in datetimes:
+        day__count = rs_6.filter(date_test__year=d.year, date_test__month=d.month, date_test__day=d.day).count()
+        if day__count > 0:
+
+            rate = day__count / rs_all.filter(date_test__year=d.year, date_test__month=d.month, date_test__day=d.day).count()
+            if rate < 0.060:
+                ipv6_penetration_rates.append(rate)
+            else:
+                ipv6_penetration_rates.append(0)
+        else:
+            ipv6_penetration_rates.append(0)
+
+    #######################
+    # Inner Latency Chart #
+    #######################
+
+    inners = Results.objects.inner()
+    inner_isos = []
+    inner_lats = []
+    for i in inners:
+        if i[1] is None: continue
+
+        iso = str(i[0])
+        lat = float(i[1])
+        inner_isos.append(iso)
+        inner_lats.append(lat)
+
+
+    ###################
+    # Charts Services #
+    ###################
+
+    url = settings.CHARTS_URL + "/hist/code"
     data = dict(data=json.dumps([list(rtts_applet)]),
                 divId='latency_histogram_applet',
                 labels=json.dumps(['Regional latency']),
@@ -574,11 +645,22 @@ def charts_reports(request):
                 colors=json.dumps(['orange']))
     latency_histogram_js = requests.post(url, data=data).text
 
-    # data = dict(data=json.dumps([list(rtts_inner)]),
-    #             divId='latency_histogram_inner',
-    #             labels=json.dumps(['Regional latency']),
-    #             colors=json.dumps(['orange']))
-    # latency_histogram_inner = requests.post(url, data=data).text
+    url = settings.CHARTS_URL + "/code"
+    data = dict(data=json.dumps([list((d.strftime("%d/%m/%Y") for d in datetimes)), list(ipv6_penetration_rates)]),
+                divId='ipv6_penetration',
+                labels=json.dumps(['Regional IPv6 Penetration']),
+                colors=json.dumps(['orange']),
+                kind='LineChart',
+                xAxis='date')
+    ipv6_penetration = requests.post(url, data=data).text
+
+    data = dict(data=json.dumps([list(inner_isos), list(inner_lats)]),
+                divId='inner_latency',
+                labels=json.dumps(['Inner latency']),
+                colors=json.dumps(['orange']),
+                kind='BarChart',
+                xAxis='string')
+    inner_latency = requests.post(url, data=data).text
 
     ############
     # RESPONSE #        
@@ -594,7 +676,9 @@ def charts_reports(request):
         'years': years,
 
         'latency_histogram_applet': latency_histogram_applet,
-        'latency_histogram_js': latency_histogram_js
+        'latency_histogram_js': latency_histogram_js,
+        'ipv6_penetration': ipv6_penetration,
+        'inner_latency': inner_latency
         # 'latency_histogram_inner' : latency_histogram_inner
     }, getContext(request))
 

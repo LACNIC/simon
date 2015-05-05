@@ -1,17 +1,11 @@
 {% extends 'bootstrap.html' %}
 
 {% block headers %}
-
     <script src="http://code.highcharts.com/highcharts.js"></script>
-
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 {% endblock %}
 
-{% block css %}
-
-{% endblock %}
-
-{% block javascript %}
-
+<script type="application/javascript">
     var CATEGORIES = 30;
     var MIN = 0;
     var MAX = 900;
@@ -19,97 +13,98 @@
     var ip = "";
 
     function updateChart(rtt) {
-    var i = Math.floor((rtt - MIN) / (MAX / CATEGORIES));
-    var viejo = $('#container').highcharts().series[0].data[i]['y'];
-    $('#container').highcharts().series[0].data[i].update(++viejo);
+        var i = Math.floor((rtt - MIN) / (MAX / CATEGORIES));
+        var viejo = $('#container').highcharts().series[0].data[i]['y'];
+        $('#container').highcharts().series[0].data[i].update(++viejo);
 
-    $('#container').highcharts().setTitle({text:
-    SIMON.summary(SIMON.quartiles.filter(SIMON.getNumericalValues(SIMON.points[0].results)))});
+        $('#container').highcharts().setTitle({text: SIMON.summary(SIMON.quartiles.filter(SIMON.getNumericalValues(SIMON.points[0].results)))});
     }
 
-    $(document).ready(function() {
-    SIMON.params = {
-    percentage : 1.0,
-    amount : 1,
-    numTests : 900,
-    post : true,
-    print : true,
-    console : 'console'
-    };
+    $(document).ready(function () {
+        SIMON.params = {
+            numTests: 100,
+            post: true,
+            print: true,
+            console: 'console'
+        };
 
-    SIMON.before_start = function() {
-    ip = $("#textfield").val();
-    };
+        SIMON.before_start = function () {
+            ip = $("#textfield").val();
+        };
 
-    SIMON.after_each = function(rtt) {
-    updateChart(rtt);
-    data.push(rtt);
-    };
+        SIMON.after_each = function (rtt) {
+            updateChart(rtt);
+            data.push(rtt);
+        };
 
-    SIMON.after_points = function() {
-    var testPoint = {
-    "ip" : ip,
-    "url" : "",
-    "country" : "",
-    "countryName" : "",
-    "city" : "",
-    "region" : "",
-    "results" : [],
-    "throughputResults" : [],
-    "online" : false,
-    "onlineFinished" : false
-    };
-    SIMON.points[0] = testPoint;
-    };
+        SIMON.after_points = function () {
+            var testPoint = {
+                "ip": $("#textfield").val(),
+                "url": "",
+                "country": "",
+                "countryName": "",
+                "city": "",
+                "region": "",
+                "results": [],
+                "throughputResults": [],
+                "online": false,
+                "onlineFinished": false
+            };
+            SIMON.points = [testPoint];
+        };
 
 
+        /*
+         Generate data and categories arrays first
+         */
+        var categories = [];
+        var radio = (MAX - MIN) / (2 * CATEGORIES);
+        for (var i = MIN; i < MAX; i = i + 2 * radio) {
+            categories.push('~' + (i + radio));// + '±' + (radio));
+            data.push(0);
+        }
 
-    /*
-    Generate data and categories arrays first
-    */
-    var categories = [];
-    var radio = (MAX - MIN) / (2 * CATEGORIES);
-    for (var i = MIN; i < MAX; i = i + 2 * radio) {
-    categories.push('~' + (i + radio));// + '±' + (radio));
-    data.push(0);
-    }
-
-    $('#container').highcharts(
-    {
-    chart : {
-    type : 'column',
-    backgroundColor : 'rgba(255, 255, 255, 0.1)',
-    animation : false
-    },
-    plotOptions : {
-    column : {
-    shadow : false,
-    borderWidth : .5,
-    borderColor : '#666',
-    pointPadding : 0,
-    groupPadding : 0,
-    color : 'rgba(204,204,204,.85)'
-    }
-    },
-    title : {
-    text : 'Distribución'
-    },
-    xAxis : {
-    categories : categories
-    },
-    yAxis : {
-    title : {
-    text : 'Densidad'
-    }
-    },
-    series : [{
-    name : 'Latencia ' + '(categorías de '
-    + ((MAX - MIN) / CATEGORIES) + ' ms)',
-    data : data
-    }]
+        var chart = new Highcharts.Chart(
+                {#        $('#container').highcharts(#}
+                {
+                    chart: {
+                        renderTo: 'container',
+                        type: 'column',
+                        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                        animation: false
+                    },
+                    plotOptions: {
+                        column: {
+                            shadow: false,
+                            borderWidth: .5,
+                            borderColor: '#666',
+                            pointPadding: 0,
+                            groupPadding: 0,
+                            color: 'rgba(204,204,204,.85)'
+                        }
+                    },
+                    title: {
+                        text: 'Distribución'
+                    },
+                    xAxis: {
+                        categories: categories
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Densidad'
+                        }
+                    },
+                    series: [
+                        {
+                            name: 'Latencia ' + '(categorías de '
+                                    + ((MAX - MIN) / CATEGORIES) + ' ms)',
+                            data: data
+                        }
+                    ]
+                });
     });
-    });
-{% endblock %}
+</script>
+
 
 {% block content %}
 
@@ -139,7 +134,7 @@
 
 
         <div id="container" style="margin-top: 1em;"></div>
-        <div id="" class="console" style="margin-bottom: 1em;"></div>
+        {#        <div id="" class="console" style="margin-bottom: 1em;"></div>#}
     </div>
 
 {% endblock %}

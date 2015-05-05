@@ -18,10 +18,10 @@ urls = patterns('',
 
 # The /simon tree root in Apache
 urlpatterns = patterns('',
-                       url(r'^simon/', include(urls)),
+                       url(r'', include(urls)),
 
                        # Uncomment the next line to enable the admin:
-                       url(r'^simon/admin/', include(admin.site.urls)),
+                       url(r'admin/', include(admin.site.urls)),
                        # url(r'^simon/browserstack/$', 'simon_app.views.browserstack', name='browserstack'),
 
 )

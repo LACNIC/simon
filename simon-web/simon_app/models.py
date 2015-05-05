@@ -43,14 +43,14 @@ class CountryManager(models.Manager):
         # cc_with =  Results.objects.filter(date_test__gte=datetime.now() - timedelta(days), testype = test_type).values_list('country_destination', flat=True)
         # cc_without_testpoints = Country.objects.get_countries_with_no_testpoints().values_list('iso', flat=True)
         # cc_without = list(set(cc_all) - set(set(cc_without_testpoints)) - set(cc_with))
-        # 		n  = len(cc_without)
+        # n  = len(cc_without)
 
         # in case i'm asking for more than i can
-        # 		if amount > n:
-        # 			amount = n
+        # if amount > n:
+        # amount = n
 
-        # 		if n > 0:
-        # 			print 'without'
+        # if n > 0:
+        # print 'without'
         # 			return cc_without[:amount]
 
         # If all countries have tests in the last 'days' days, then check the one which has least amount of tests
@@ -110,8 +110,8 @@ class ThroughputResults(models.Model):
             self.ip_destination = text
         if (tag == 'testtype'):
             self.testype = text
-        #		if(tag == 'number_probes'):
-        #			self.number_probes = text
+        # if(tag == 'number_probes'):
+        # self.number_probes = text
         if (tag == 'size'):
             self.size = text
         if (tag == 'time'):
@@ -158,9 +158,11 @@ class ResultsManager(models.Manager):
         return Results.objects.clean().filter(tester='JavaScript')
 
     def inner(self):
-        objects_raw = Results.objects.raw("SELECT id, ave_rtt FROM simon_app_results WHERE country_origin = country_destination")
-        print objects_raw
-        return objects_raw
+        from django.db import connection
+
+        cursor = connection.cursor()
+        cursor.execute("SELECT country_destination, AVG(ave_rtt) FROM simon_app_results WHERE country_origin = country_destination GROUP BY country_destination")
+        return cursor.fetchall()
 
     def ipv4(self):
         return Results.objects.clean().filter(ip_version='4')
@@ -168,14 +170,17 @@ class ResultsManager(models.Manager):
     def ipv6(self):
         return Results.objects.clean().filter(ip_version='6')
 
+    def get_yearly_results(self):
+        return Results.objects.javascript().filter(date_test__gt=datetime.now() - timedelta(365))
+
     def get_weekly_results(self):
-        return Results.objects.filter(date_test__gt=datetime.now() - timedelta(7))
+        return Results.objects.javascript().filter(date_test__gt=datetime.now() - timedelta(7))
 
     def get_daily_results(self):
-        return Results.objects.filter(date_test__gt=datetime.now() - timedelta(1))
+        return Results.objects.javascript().filter(date_test__gt=datetime.now() - timedelta(1))
 
     def get_hourly_results(self):
-        return Results.objects.filter(date_test__gt=datetime.now() - timedelta(hours=1))
+        return Results.objects.javascript().filter(date_test__gt=datetime.now() - timedelta(hours=1))
 
     def get_results_by_as_origin(self, as_number):
         res = []
@@ -247,9 +252,9 @@ class Results(models.Model):
 
     def set_data_test(self, tag, text):
         # if(tag == 'version'):
-        #    self.version = text
-        #if(tag == 'local_country'):
-        #    self.country_origin = text
+        # self.version = text
+        # if(tag == 'local_country'):
+        # self.country_origin = text
         if (tag == 'destination_ip'):
             self.ip_destination = text
         if (tag == 'origin_ip'):
@@ -357,16 +362,16 @@ class TestPointManager(models.Manager):
 
 class TestPoint(models.Model):
     # testpointid is automatically inserted as Django identifier
-    description = models.TextField()
+    description = models.TextField(default='')
     testtype = models.CharField(max_length=20)
     ip_address = models.GenericIPAddressField()
     country = models.CharField(max_length=2)
     enabled = models.BooleanField(default=False)
-    date_created = models.DateTimeField('test date')
+    date_created = models.DateTimeField('test date', default=datetime.now(), null=True)
     url = models.TextField(null=True)
     city = models.CharField(max_length=100)
-    latitude = models.FloatField()
-    longitude = models.FloatField()
+    latitude = models.FloatField(default=0.0)
+    longitude = models.FloatField(default=0.0)
     objects = TestPointManager()
 
     def __unicode__(self):
@@ -452,33 +457,52 @@ class Error(Notification):
 
 
 class ChartManager(models.Manager):
-    url = settings.CHARTS_URL
+    url = settings.CHARTS_URL + "/hist/code"
 
-    def javascriptChart(self, cc, year, divId):
-        rtts = self.filterQuerySet(Results.objects.javascript(), cc=cc, year=year)
-
-        data = dict(data=json.dumps([list(rtts)]),
-                    divId=divId,
-                    labels=json.dumps(['%s latency' % cc]),
-                    colors=json.dumps(['orange']))
-        return requests.post(self.url, data=data).text
-
-    def appletChart(self, cc, year, divId):
-        rtts = self.filterQuerySet(Results.objects.applet(), cc=cc, year=year)
+    def javascriptChart(self, cc1, divId, date_from, date_to, cc2=None, bidirectional=True):
+        rtts = self.filterQuerySet(Results.objects.javascript(), cc1=cc1, cc2=cc2, date_from=date_from, date_to=date_to, bidirectional=bidirectional)
 
         data = dict(data=json.dumps([list(rtts)]),
                     divId=divId,
-                    labels=json.dumps(['%s latency' % cc]),
+                    labels=json.dumps(['%s latency' % cc1]),
                     colors=json.dumps(['orange']))
         return requests.post(self.url, data=data).text
 
-    def filterQuerySet(self, queryset, cc, year):
-        enero = datetime(year=year, day=1, month=1)
-        diciembre = datetime(year=year, day=31, month=12)
+    def appletChart(self, cc1, divId, date_from, date_to, cc2=None, bidirectional=True):
+        rtts = self.filterQuerySet(Results.objects.applet(), cc1=cc1, cc2=cc2, date_from=date_from, date_to=date_to, bidirectional=bidirectional)
 
-        return queryset.filter(
-            Q(country_origin=cc) | Q(country_destination=cc)) \
-            .filter(Q(date_test__gte=enero) & Q(date_test__lte=diciembre)) \
+        data = dict(data=json.dumps([list(rtts)]),
+                    divId=divId,
+                    labels=json.dumps(['%s latency' % cc1]),
+                    colors=json.dumps(['orange']))
+        return requests.post(self.url, data=data).text
+
+    def filterQuerySet(self, queryset, cc1, date_from, date_to, cc2=None, bidirectional=True):
+        """
+        :param queryset:
+        :param cc1:
+        :param cc2:
+        :param year:
+        :return:
+        """
+
+        if cc2 is None:
+            # one country
+            queryset = queryset.filter(
+                Q(country_origin=cc1) | Q(country_destination=cc1)
+            )
+        else:
+            # two countries
+            if bidirectional:
+                queryset = queryset.filter(
+                    Q(country_origin=cc1) & Q(country_destination=cc2) \
+                    | Q(country_origin=cc2) & Q(country_destination=cc1)
+                )
+            else:
+                queryset = queryset.filter(
+                    Q(country_origin=cc1) & Q(country_destination=cc2))
+
+        return queryset.filter(Q(date_test__gte=date_from) & Q(date_test__lte=date_to)) \
             .values_list('ave_rtt', flat=True)
 
 class Chart(models.Model):

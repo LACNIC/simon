@@ -1,10 +1,12 @@
-{% extends 'base.html' %}
+{% extends 'bootstrap.html' %}
+{% load staticfiles %}
 
 {% block content %}
 
 
-    <div class="">
-        <h1>Prueba la Latencia desde tu país</h1>
+    <div class="col-lg-12">
+
+        <h1 class="page-header"><code>Applet</code> para realizar pruebas de latencia</h1>
 
         <p>El proyecto Simon es un esfuerzo colaborativo para recopilar información desde toda la región, que nos
             permita construir un mapa de la Internet Regional.</p>
@@ -12,16 +14,22 @@
         <p>Para ello, nos apoyamos en los usuarios finales y/o proveedores de Internet que deseen colaborar probando la
             latencia desde sus países.</p>
 
-        <p><b>Para iniciar la prueba, haz click <a href="{{ URL_PFX }}/runapplet">aquí</a></b>.</p>
-
-        <center><img class="chart" src="/static/files/certappletsimon.png"/ style="padding: 30px"></center>
-
-        <div class="chart" style="background-color: #FFFFB8; margin: 20px 0 0 0">
-            <h3>Nota</h3>
+        <!-- Nota -->
+        <div class="alert alert-warning">
+            <h4>Nota</h4>
 
             <p>Aún no tenemos un certificado digital para el applet, lo que hace que el Applet pida una confirmación
                 para poder ejecutarla. Cuando le sea solicitado, presione [Run], [Ejecutar] o [Trust].</p>
         </div>
+
+
+        <!-- Applet -->
+        <div class="chart" style="width: 680px; height: 540px; padding: 20px 20px; margin: auto auto">
+            <APPLET code="simon.client.latency.Applet.class" archive="{% static 'simon_app/simon-applet.jar' %}" width="640" height="500">
+                Este browser no soporta Java 1.6
+            </APPLET>
+        </div>
+
     </div>
 
 {% endblock %}

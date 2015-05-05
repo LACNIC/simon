@@ -181,7 +181,7 @@ LOGGING = {
     'disable_existing_loggers': False,
     # 'filters': {
     # 'require_debug_false': {
-    #            '()': 'django.utils.log.RequireDebugFalse'
+    # '()': 'django.utils.log.RequireDebugFalse'
     #        }
     #    },
     'handlers': {
@@ -223,14 +223,14 @@ DATABASES = {
 HOSTNAME = socket.gethostname()
 if HOSTNAME == 'simon':
     DEBUG = False
-    URL_PFX = "/simon"
+    URL_PFX = ""
     SIMON_URL = 'http://simon.lacnic.net'
-    CHARTS_URL = "http://charts.simon.labs.lacnic.net/charts/hist/code"
+    CHARTS_URL = "http://simon.lacnic.net/charts/hist/code"  # "http://charts.simon.labs.lacnic.net/charts/hist/code"
 else:
     # Developer mode
     DEBUG = True
     URL_PFX = ""
     SIMON_URL = 'http://127.0.0.1:8000'
-    CHARTS_URL = "http://127.0.0.1:8001/charts/hist/code"
+    CHARTS_URL = "http://127.0.0.1:8001/charts"
 
 TEMPLATE_DEBUG = DEBUG

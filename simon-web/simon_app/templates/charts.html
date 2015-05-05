@@ -8,6 +8,10 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
     <script src="https://www.google.com/jsapi" type="text/javascript"></script>
 
+    <!-- Google IPv6 stats -->
+    <script src="http://www.google.com/intl/en_ALL/ipv6/statistics/data/adoption.js"></script>
+
+
     <script>
         google.load("visualization", "1", {packages: ["geochart"]});
         google.setOnLoadCallback(drawRegionsMap);
@@ -26,7 +30,7 @@
                     maxValue: 50
                 },
                 backgroundColor: {
-                    fill: '#FFF5E6'
+                    fill: '#FFFAF2'
                 }
             };
 
@@ -69,7 +73,7 @@
                 gracias!
             </p>
 
-            <div id="regions_div"></div>
+            <div id="regions_div" style="width: 60%; margin-left: auto; margin-right: auto;"></div>
         </div>
     </div>
 
@@ -113,11 +117,22 @@
         <div id="latency_histogram_js"></div>
 
 
-{#        <div id="late-header">Latencia interna</h4>#}
-{#        <script type="text/javascript">#}
-{#            {{ latency_histogram_inner | safe }}#}
-{#        </script>#}
-{#        <div id="latency_histogram_inner"></div>#}
+        <h3 class="page-header">Porcentaje de mediciones por IPv6</h3>
+
+        <p>
+            La siguiente gráfica muestra la proporción de pruebas de Simón realizadas por IPv6 en los últimos 12 meses.
+        </p>
+        <script type="text/javascript">
+            {{ ipv6_penetration | safe }}
+        </script>
+        <div id="ipv6_penetration"></div>
+
+
+        {#        <div id="late-header">Latencia interna</h4>#}
+        {#        <script type="text/javascript">#}
+        {#            {{ latency_histogram_inner | safe }}#}
+        {#        </script>#}
+        {#        <div id="latency_histogram_inner"></div>#}
 
         <p>
             Para obtener más información acerca de la calidad de Internet en tu
@@ -129,26 +144,26 @@
         </p>
 
 
-{#        <h4 class="page-header">Latencia por lugar desglosada en años</h4>#}
+        {#        <h4 class="page-header">Latencia por lugar desglosada en años</h4>#}
 
-{#        <a href="/static/histograms/region/Region%20latency%20histogram,%202009-2014.png"#}
-{#           title="Histograma de distribución de latencia, año 2009"><img#}
-{#                alt="Histograma de distribución de latencia, año 2009"#}
-{#                src="/static/histograms/region/Region%20latency%20histogram,%202009-2014.png" style="width: 250px"#}
-{#                class="hover"/></a>#}
+        {#        <a href="/static/histograms/region/Region%20latency%20histogram,%202009-2014.png"#}
+        {#           title="Histograma de distribución de latencia, año 2009"><img#}
+        {#                alt="Histograma de distribución de latencia, año 2009"#}
+        {#                src="/static/histograms/region/Region%20latency%20histogram,%202009-2014.png" style="width: 250px"#}
+        {#                class="hover"/></a>#}
 
-{#        <form id="country_form" method="post">#}
-{#            {% csrf_token %}#}
-{#            {{ countries_dropdown.as_p }}#}
-{#        </form>#}
+        {#        <form id="country_form" method="post">#}
+        {#            {% csrf_token %}#}
+        {#            {{ countries_dropdown.as_p }}#}
+        {#        </form>#}
 
-{#        <p>Idem al gráfico anterior, pero se puede ver la evolución de los#}
-{#            retardos en la red. Las curvas que tienen un máximo sobre la izquierda#}
-{#            muestran una buena interconexión (rápida), las que lo tienen a la#}
-{#            derecha una mala interconexión (lenta), y las que lo tienen en la zona#}
-{#            media una interconexión media (posiblemente la diferencia entre los#}
-{#            caminos de ida y vuelta de los paquetes causa que un enlace sea rápido#}
-{#            y otro lento).</p>#}
+        {#        <p>Idem al gráfico anterior, pero se puede ver la evolución de los#}
+        {#            retardos en la red. Las curvas que tienen un máximo sobre la izquierda#}
+        {#            muestran una buena interconexión (rápida), las que lo tienen a la#}
+        {#            derecha una mala interconexión (lenta), y las que lo tienen en la zona#}
+        {#            media una interconexión media (posiblemente la diferencia entre los#}
+        {#            caminos de ida y vuelta de los paquetes causa que un enlace sea rápido#}
+        {#            y otro lento).</p>#}
 
         <div align="center" id="distribution_history_div"
              class="barchart border"></div>
@@ -164,32 +179,37 @@
                 locales. Para países pequeños, este valor debería ser menor que para
                 países grandes.</p>
 
-            <div align="center" id="column_chart_div" class="barchart border"></div>
+            <script type="text/javascript">
+                {{ inner_latency | safe }}
+            </script>
+            <div id="inner_latency" style="min-height: 25em;"></div>
+
+            {#            <div align="center" id="column_chart_div" class="barchart border"></div>#}
         </div>
 
-{#        <div id="center" class="chartdiv">#}
-{#            <h3 class="page-header">Matriz con latencias</h3>#}
-{##}
-{#            <p>#}
-{#                La gráfica a continuación representa la latencia promedio en la#}
-{#                región. Las filas representan los paises de origen de los tests, y las#}
-{#                columnas los de destino. Es decir, si se quieren ver todos los tests#}
-{#                con origen Guatemala, basta ver la fila Guatemala; si se quieren ver#}
-{#                los que tienen destino Guatemala, entonces habrá que recorrer la#}
-{#                columna Guatemala. <br/> Las latencias más altas se corresponden con#}
-{#                las tonalidaades más oscuras. Se puede ver que la diagonal principal#}
-{#                tiene, lógicamente, menor latencia que el promedio, ya que se#}
-{#                corresponde con la latencia interna de los países.#}
-{#            </p>#}
-{##}
-{#            <div class="border">#}
-{#                <div id="heatmap"#}
-{#                     style="width: 600px; height: 600px; margin: 3em 0 0 100px"></div>#}
-{##}
-{#                <div id="heatmap_asns"#}
-{#                     style="width: 600px; height: 600px; margin: 3em 0 0 100px"></div>#}
-{##}
-{#            </div>#}
-{#        </div>#}
+        {#        <div id="center" class="chartdiv">#}
+        {#            <h3 class="page-header">Matriz con latencias</h3>#}
+        {##}
+        {#            <p>#}
+        {#                La gráfica a continuación representa la latencia promedio en la#}
+        {#                región. Las filas representan los paises de origen de los tests, y las#}
+        {#                columnas los de destino. Es decir, si se quieren ver todos los tests#}
+        {#                con origen Guatemala, basta ver la fila Guatemala; si se quieren ver#}
+        {#                los que tienen destino Guatemala, entonces habrá que recorrer la#}
+        {#                columna Guatemala. <br/> Las latencias más altas se corresponden con#}
+        {#                las tonalidaades más oscuras. Se puede ver que la diagonal principal#}
+        {#                tiene, lógicamente, menor latencia que el promedio, ya que se#}
+        {#                corresponde con la latencia interna de los países.#}
+        {#            </p>#}
+        {##}
+        {#            <div class="border">#}
+        {#                <div id="heatmap"#}
+        {#                     style="width: 600px; height: 600px; margin: 3em 0 0 100px"></div>#}
+        {##}
+        {#                <div id="heatmap_asns"#}
+        {#                     style="width: 600px; height: 600px; margin: 3em 0 0 100px"></div>#}
+        {##}
+        {#            </div>#}
+        {#        </div>#}
     </div>
 {% endblock %}

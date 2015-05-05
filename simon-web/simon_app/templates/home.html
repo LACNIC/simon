@@ -16,8 +16,14 @@
     }
 {% endblock %}
 
+{% block headers %}
+
+
+
+{% endblock %}
+
 {% block header %}
-    <div class="jumbotron" style="background-color: #fffdf8; margin-top: 1em;">
+    <div class="jumbotron" style="background-color: #FFFDFA; margin-top: 1em;">
         <h1 style="font-family: 'Lato'">
             <font color="orange">Proyecto</font> Simón
         </h1>
@@ -72,7 +78,7 @@
                 usuarios, desde distintos puntos de la region.</p>
         </div>
 
-        <div>
+        <div class="hidden-xs hidden-sm">
             <a class="twitter-timeline" href="https://twitter.com/proyectosimon" data-widget-id="507899035131199488" data-chrome="nofooter noheader">
                 Tweets por @proyectosimon
             </a>
@@ -141,5 +147,15 @@
             histograma en tiempo real acerca de las mediciones realizadas.
         </p>
     </div>
+
+    <script type="application/javascript">
+        /*
+         Trigger the SIMON object by adding an event listener
+
+         */
+        window.addEventListener("load", function () {
+            SIMON.init()
+        });
+    </script>
 
 {% endblock %}

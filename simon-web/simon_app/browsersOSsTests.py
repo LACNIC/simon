@@ -1,34 +1,64 @@
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from time import sleep
+from simon_app.models import *
 
-selenium = '/Users/agustin/Desktop/'
+credentials = 'http://desarrolloenlacn:4y2eYr1zgpHmH9mzq7Vp@hub.browserstack.com:80/wd/hub'
+url = 'http://localhost:8000/prueba/'
 
-desired_cap = {'browser': 'Chrome', 'browser_version': '32.0', 'os': 'Windows', 'os_version': 'XP', 'resolution': '1024x768'}
+# Browsers
+chrome = dict(
+    browser='Chrome',
+    browser_version='39'
+)
 
-desired_cap['browserstack.tunnel'] = True
-desired_cap['browserstack.debug'] = True
+firefox = dict(
+    browser='Firefox',
+    browser_version='35'
+)
 
-driver = webdriver.Remote(command_executor='http://desarrolloenlacn:4y2eYr1zgpHmH9mzq7Vp@hub.browserstack.com:80/wd/hub', desired_capabilities=desired_cap)
+ie = dict(
+    browser='IE',
+    browser_version='11'
+)
+
+browsers = [chrome, firefox, ie]
+
+# Windows 7
+windows7 = dict(
+    os='Windows',
+    os_version='7'
+)
+
+# Load configs
+configs = []
+print browsers
+for b in browsers:
+    windows7.update(b)
+    print windows7
+    configs.append(windows7)
+
+# Delete previous Results
+rs = Results.objects.filter(ip_destination='200.3.14.147')
+for r in rs:
+    r.delete()
 
 try:
-    driver.get('http://localhost:8000/')
-    cuerpo = driver.find_element_by_id('body')
+    for config in configs:
+        config['browserstack.tunnel'] = True
+        config['browserstack.debug'] = True
+
+        driver = webdriver.Remote(command_executor=credentials,
+                                  desired_capabilities=config)
+        driver.get(url)
+
+        for time in [50, 50, 50]:
+            driver.find_element_by_tag_name("body")
+            sleep(time)  # 100 samples + connection time = 150 sec
 except:
-    driver.quit()
+    pass
+finally:
+    driver.close()
 
-# for i in range(150):
-#     cuerpo = driver.find_element_by_id('console')
-    # data = cuerpo.get_attribute("innerHTML")
-    #
-    # filename = '%s%s%s%s%s.txt' % (selenium, desired_cap['os'], desired_cap['os_version'], desired_cap['browser'], desired_cap['browser_version'])
-    # f = open(filename, 'w')
-    # data = str(data).replace('<BR>', '\n')
-    # data = str(data).replace('<br>', '\n')
-    # f.write(data)
-    
-    # print '%.2f' % (100 * i / 150.0)
-    # sleep(80)
+# At his moment, results are stored in the database
 
-driver.quit()
+print Results.objects.filter(ip_destination='200.3.14.147')

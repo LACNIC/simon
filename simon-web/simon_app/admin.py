@@ -1,11 +1,17 @@
 from simon_app.models import *
-from simon_app.models_notifications import *
 from django.contrib import admin
 
 
 class ResultsAdmin(admin.ModelAdmin):
     fields = ()
     readonly_fields = ('as_origin', 'as_destination')
+
+    class Media:
+        js = (
+            # '//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js',
+            # 'http://code.jquery.com/jquery-migrate-1.2.1.js',
+            # 'simon_app/admin/js/jquery-adapt.js'
+        )
 
 
 admin.site.register(Country)

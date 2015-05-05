@@ -7,17 +7,15 @@ import doctest
 # import django_tables as tables
 from django import forms
 from simon_app.models import Country, Results, ThroughputResults, Images
-#date picker
-from django.contrib.admin import widgets
 from django.forms.fields import ChoiceField
 from datetime import tzinfo, timedelta
 from django.db.models import Q
 
 
 # class ResultsTable(tables.MemoryTable):
-# 	#date_test = tables.Column(verbose_name="Test date")
-# 	#version = tables.Column(verbose_name="Version")
-# 	#ip_origin = tables.Column(verbose_name="Origin IP")
+# #date_test = tables.Column(verbose_name="Test date")
+# #version = tables.Column(verbose_name="Version")
+# #ip_origin = tables.Column(verbose_name="Origin IP")
 # 	#ip_destination = tables.Column(verbose_name="Destination IP")
 # 	#testype = tablesao.Column(verbose_name="Test type")
 # 	#Number of probes to a specific country
@@ -187,7 +185,8 @@ class AddNewNtpPointForm(forms.Form):
 
 class CountryDropdownForm(forms.Form):
     default_country = None
-    country = MyCountryModelChoiceField(queryset=Country.objects.filter(Q(region_id=1) | Q(region_id=2) | Q(region_id=3)).order_by('printable_name'), widget=forms.Select(), label='País que desea inspeccionar la latencia', empty_label=default_country)
+    country = MyCountryModelChoiceField(queryset=Country.objects.filter(Q(region_id=1) | Q(region_id=2) | Q(region_id=3)).order_by('printable_name'), widget=forms.Select(), label='País que desea inspeccionar la latencia',
+                                        empty_label=default_country)
 
 
 class GMTUY(tzinfo):
@@ -211,9 +210,32 @@ class YearField(forms.ChoiceField):
 
 class ReportForm(forms.Form):
     default_country = None
-    country = MyCountryModelChoiceField(queryset=Country.objects.filter(Q(region_id=1) | Q(region_id=2) | Q(region_id=3)).order_by('printable_name'),
-                                        widget=forms.Select(),
-                                        label='País que desea inspeccionar la latencia',
-                                        empty_label=default_country)
-    years = range(2009, datetime.datetime.now().year + 1)
-    year = forms.ChoiceField(choices=zip(years, years))
+
+    country1 = MyCountryModelChoiceField(queryset=Country.objects.get_region_countries().order_by('printable_name'),
+                                         widget=forms.Select(attrs={'class': 'form-control'}),
+                                         label="País de origen de las mediciones"
+    )
+
+    country2 = MyCountryModelChoiceField(queryset=Country.objects.get_region_countries().order_by('printable_name'),
+                                         widget=forms.Select(attrs={'class': 'form-control'}),
+                                         label="País de destino de las mediciones",
+                                         required=False
+    )
+
+    bidirectional = forms.NullBooleanField(
+        required=False,
+        initial=True,
+        label="Bidireccional",
+        help_text="Desmarcar esta opción si se desea filtrar mediciones en el sentido país origen --> país destino únicamente"
+    )
+
+    date_from = forms.DateField(
+        widget=forms.DateInput(attrs={'class': 'form-control'}),
+        label="Fecha desde"
+    )
+
+    date_to = forms.DateField(
+        widget=forms.DateInput(attrs={'class': 'form-control'}),
+        label="Fecha hasta",
+        required=False
+    )

@@ -1,10 +1,14 @@
 {% extends 'bootstrap.html' %}
+{% load staticfiles %}
 
 {% block headers %}
     <!-- Google Charts -->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+    {#    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>#}
     <script src="https://www.google.com/jsapi" type="text/javascript"></script>
+    <script src="{% static 'bootstrap-datepicker/js/bootstrap-datepicker.js' %}" type="text/javascript"></script>
+    <link rel="stylesheet" href="{% static 'bootstrap-datepicker/css/bootstrap-datepicker.css' %}">
 {% endblock %}
+
 
 {% block content %}
     <div class="col-lg-12">
@@ -28,6 +32,50 @@
         </p>
 
 
+        <form class="navbar-form" id="country_form" action="{% url 'simon_app.views.reports' %}" method="post">
+            {% csrf_token %}
+            {#            {{ form.as_ul }}#}
+            {% for field in form %}
+
+                <div class="row">
+
+
+                    <div class="col-md-4">
+                        <div style="margin-top: 0.1em;">
+                            <label for="{{ field.label }}">
+                                {{ field.label_tag }}
+                                {% if field.field.required %}
+                                    <span style="font-size: 2em">*</span>
+                                {% endif %}
+                            </label>
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        {{ field }}
+                    </div>
+
+                    <div class="col-md-4">
+
+                        {% for error in field.errors %}
+                            <div class="alert alert-danger" role="alert">
+                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                                {#                                <span class="sr-only">Error:</span>#}
+                                {{ error }}
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    {#                    <div class="col-md-4" style="color: dimgray">#}
+                    {#                        {{ field.help_text }}#}
+                    {#                    </div>#}
+                </div>
+            {% endfor %}
+            <input type="submit" value="Submit" id="submit" class="btn btn-default navbar-btn"/>
+        </form>
+
+
         <h2 class="page-header">Medidor: Javascript</h2>
         <script type="text/javascript">
             {{ latency_histogram_js | safe }}
@@ -42,10 +90,21 @@
         <div id="latency_histogram_applet"></div>
 
 
-        <form class="navbar-form" id="country_form" action="{% url 'simon_app.views.reports' %}" method="post">
-            {% csrf_token %} {{ form.as_p }} <input type="submit" value="Submit" id="submit" class="btn btn-default navbar-btn"/>
-        </form>
-
     </div>
+
+
+    <script type="application/javascript">
+        $("#id_date_from").datepicker({
+            format: "dd/mm/yyyy",
+            startView: 1,
+            language: "es"
+        });
+
+        $("#id_date_to").datepicker({
+            format: "dd/mm/yyyy",
+            startView: 1,
+            language: "es"
+        });
+    </script>
 
 {% endblock %}

@@ -13,6 +13,8 @@ urlpatterns = patterns('',
 
                        url(r'^$', 'simon_app.views.home', name='home'),
 
+                       url(r'^prueba/$', 'simon_app.views.prueba'),
+
                        url(r'^objectives/$', 'simon_app.views.objectives'),
                        url(r'^participate/$', 'simon_app.views.participate'),
                        url(r'^thanks/$', 'simon_app.views.thanks'),
@@ -25,7 +27,6 @@ urlpatterns = patterns('',
                        # /(\bntp\b|\bicmp_echo\b|\btcp_web\b|\btco_connection\b)
                        url(r'^results/tables/$', 'simon_app.views.tables'),
                        url(r'^applet/$', 'simon_app.views.applet'),
-                       url(r'^runapplet/$', 'simon_app.views.applet_run'),
                        # url(r'^runjavascript/$', 'simon_app.views.javascript_run'),
 
                        # url(r'^postxmlresult/(?P<type>\blatency\b|\bthroughput\b)', 'simon_app.views.post_xml_result', name='postxmlresult'),
