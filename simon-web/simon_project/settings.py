@@ -13,7 +13,8 @@ DBHOST = os.environ.get("SIMON_%s" % 'DBHOST', passwords.DBHOST)
 DBPORT = os.environ.get("SIMON_%s" % 'DBPORT', passwords.DBPORT)
 
 ADMINS = (
-    ('Agustin Formoso', 'agustin@lacnic.net')
+    ('Agustin Formoso', 'agustin@lacnic.net'),
+    ('Desarrollo', 'agustin@lacnic.net')
 )
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.lacnic.net', '*']
@@ -156,7 +157,7 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
-    'django_admin_bootstrapped',
+    # 'django_admin_bootstrapped',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -225,7 +226,7 @@ if HOSTNAME == 'simon':
     DEBUG = False
     URL_PFX = ""
     SIMON_URL = 'http://simon.lacnic.net'
-    CHARTS_URL = "http://simon.lacnic.net/charts/hist/code"  # "http://charts.simon.labs.lacnic.net/charts/hist/code"
+    CHARTS_URL = "http://simon.lacnic.net/charts"  # "http://charts.simon.labs.lacnic.net/charts/hist/code"
 else:
     # Developer mode
     DEBUG = True

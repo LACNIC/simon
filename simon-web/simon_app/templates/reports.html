@@ -34,11 +34,8 @@
 
         <form class="navbar-form" id="country_form" action="{% url 'simon_app.views.reports' %}" method="post">
             {% csrf_token %}
-            {#            {{ form.as_ul }}#}
             {% for field in form %}
-
                 <div class="row">
-
 
                     <div class="col-md-4">
                         <div style="margin-top: 0.1em;">

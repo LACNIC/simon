@@ -21,6 +21,9 @@ class CountryManager(models.Manager):
     def get_region_countries(self):
         return Country.objects.filter(Q(region_id=1) | Q(region_id=2) | Q(region_id=3))
 
+    def get_region_countrycodes(self):
+        return self.get_region_countries().values_list('iso', flat=True)
+
     def get_countries_with_no_testpoints(self):
         return self.get_region_countries().exclude(iso__in=TestPoint.objects.values_list('country', flat=True))
 
@@ -51,7 +54,7 @@ class CountryManager(models.Manager):
 
         # if n > 0:
         # print 'without'
-        # 			return cc_without[:amount]
+        # return cc_without[:amount]
 
         # If all countries have tests in the last 'days' days, then check the one which has least amount of tests
         if country_origin != '':
@@ -350,6 +353,51 @@ class TracerouteResult(Results):
             return None
 
 
+class RipeAtlasResult(Results):
+    probe_id = models.IntegerField(null=False)
+    measurement_id = models.IntegerField(null=False)
+    type = CharField(max_length=100)
+    oneoff = models.BooleanField(default=False)
+
+
+class RipeAtlasPingResult(RipeAtlasResult):
+    def is_valid(self):
+
+        if self.min_rtt > 0 and self.max_rtt > 0 and self.ave_rtt > 0:
+            pass
+        else:
+            return False
+
+        ccs = Country.objects.get_region_countrycodes()
+        return self.country_origin in ccs and self.country_destination in ccs
+
+    def merge(self, ripeAtlasPingResult):
+        """
+        Used for merging multiple results, Useful if we don't want to crwod our database
+        :param ripeAtlasPingResult:
+        :return:
+        """
+        res = RipeAtlasPingResult(
+            min_rtt=min(self.rtt_min, self.rtt_min),
+            max_rtt=max(self.rtt_max, self.rtt_max),
+            ave_rtt=(self.rtt_average + self.rtt_average) / 2.0,
+            median_rtt=0,  # it's not possible to combine (unless we merge the samples...) #TODO store the result samples
+            number_probes=self.packets_sent + self.packet_loss,
+            packet_loss=self.packet_loss + self.packet_loss
+        )
+        return res
+
+
+class RipeAtlasTracerouteResult(RipeAtlasResult):
+    pass
+
+
+class RipeAtlasMeasurement(models.Model):
+    measurement_id = models.IntegerField(null=False)
+    running = models.BooleanField(default=True)
+    type = CharField(max_length=100)
+
+
 class TestPointManager(models.Manager):
     def get_ipv4(self):
         cursor = connection.cursor()
@@ -504,6 +552,7 @@ class ChartManager(models.Manager):
 
         return queryset.filter(Q(date_test__gte=date_from) & Q(date_test__lte=date_to)) \
             .values_list('ave_rtt', flat=True)
+
 
 class Chart(models.Model):
     objects = ChartManager()

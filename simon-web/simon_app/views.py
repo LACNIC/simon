@@ -28,6 +28,7 @@ from simon_app.api_views import \
     ntp_points as ntp_points_api, throughput_tables as throughput_tables_api, \
     latency as latency_api, throughput as throughput_api, \
     throughput_by_country_chart as throughput_by_country_chart_api, getCountry
+from simon_app.forms import FeedbackForm
 from simon_app.functions import KMG2bps, inLACNICResources, whoIs, bps2KMG
 from simon_app.javascript_latency import CountryForm
 from simon_app.models import *
@@ -686,6 +687,34 @@ def charts_reports(request):
 def charts_reports_bandwidth(request):
     return render_to_response('charts_reports_bandwidth.html', getContext(request))
 
+def feedbackForm(request):
+    """
+    View in charge of precessing the feedback form
+    :param request:
+    :return:
+    """
+    if request.method != 'POST':
+        return HttpResponse("Invalid Method")
+
+    from django.core.mail import send_mail
+
+    print request.META['HTTP_REFERER']
+
+    form = FeedbackForm(request.POST)
+    mensaje = form.data['mensaje']
+    remitente = form.data['remitente']
+
+    subject = 'Feedback desde Simón'
+    mssg = "%s dice:\n%s" % (remitente, mensaje)
+    from_ = 'agustin@lacnic.net'
+
+    to = []
+    for admin in settings.ADMINS:
+        to.append(admin[1])
+    send_mail(subject, mssg, from_, to, fail_silently=False)
+
+    # request.method = 'GET'
+    return redirect('simon_app.views.home')
 
 def form(request):
     # Processes the form and redirects to the table

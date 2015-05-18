@@ -5,6 +5,7 @@
     height: 10em;
     padding-left: 1em;
     border-radius: 5px;
+    overflow: hidden;
 }
 
 .homeBox {

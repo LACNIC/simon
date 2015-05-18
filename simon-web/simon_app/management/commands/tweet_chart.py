@@ -3,13 +3,19 @@ from django.core.management.base import BaseCommand
 from simon_app.models import *
 from scipy.stats import gaussian_kde
 import numpy as np
-from matplotlib import pyplot as plt
+
 
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
         import twitter, random
         from simon_project import passwords as passwords
+
+        import matplotlib
+        # Force matplotlib to not use any Xwindows backend.
+        matplotlib.use('Agg')
+
+        from matplotlib import pyplot as plt
 
         week = Results.objects.get_weekly_results().exclude(country_origin="", country_destination="")
         origin = random.choice(week).country_origin
@@ -21,14 +27,13 @@ class Command(BaseCommand):
             exit(1)
 
         kde = gaussian_kde(rs)
-        xs = np.arange(0, 500, .1)
+        xs = np.arange(0, 800, .1)
         kde.covariance_factor = lambda: .25
         kde._compute_covariance()
         ys = kde(xs)
 
         fig = plt.figure()
         ax = fig.add_subplot(111)
-        # ax.legend(["hola"])
 
 
         plt.xlabel("RTT latency (ms)")

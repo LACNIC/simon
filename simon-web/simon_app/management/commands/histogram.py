@@ -94,7 +94,7 @@ class Command(BaseCommand):
         pyplot.text(1.0, -0.05, now, verticalalignment='top', horizontalalignment='right', transform=pyplot.axes().transAxes, color='gray', fontsize=9)
         pyplot.savefig("%s/histograms/%s" % (settings.STATIC_ROOT, filename), transparent=True)
         pyplot.clf()
-#         pyplot.show()
+        pyplot.show()
     
     def histogram_region(self, DESDE, HASTA, start, end, title):
         

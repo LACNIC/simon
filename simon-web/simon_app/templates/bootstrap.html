@@ -55,7 +55,8 @@
 </head>
 <body style="background-color: #FFF5E6">
 
-<div class="navbar" style="background-color: #FF9900">
+{#Barra anaranjada#}
+<div class="navbar" style="background-color: #FF9900; border-radius: 0; margin: 0">
 
     <a href="http://www.labs.lacnic.net" title="LACNIC labs" class="pull-left">
         <img src="{% static 'simon_app/imgs/logos/logo_labs.png' %}" border="0" class="hidden-xs hidden-sm"/>
@@ -72,6 +73,20 @@
             </span>
         </h2>
     </a>
+</div>
+
+{#Segunda barra#}
+<div class="navbar visible-md visible-lg visible-xl" style="background-color: #FFC285; border-radius: 0; margin: 0; text-align: right; padding-right: 1em;">
+
+    <h4 style="color: #ffffff; font-family: 'Lato'">
+        Última hora: {{ HOURLY }}
+    </h4>
+    <h4 style="color: #ffffff; font-family: 'Lato'">
+        Último día: {{ DAILY }}
+    </h4>
+    <h4 style="color: #ffffff; font-family: 'Lato'">
+        Última semana: {{ WEEKLY }}
+    </h4>
 </div>
 
 <div class="container" style="background-color: #FFFAF2;">
@@ -91,7 +106,7 @@
 
 </div>
 
-<footer class="row" style="background-color: rgba(152, 152, 152, 0.50); padding: 1em;">
+<footer class="row" style="background-color: #D4CAC1 ; padding: 1em;">
 
     <div class="col-lg-4">
         <a href="http://www.labs.lacnic.net/">
@@ -116,7 +131,53 @@
         </p>
     </div>
 
+</footer>
+<footer style="background-color: #A18276; font-family: 'Lato'; color: #d3d3d3">
+    <div class="row">
 
+        <div class="col-md-6" style="padding-left: 3em;">
+            <h1>
+                Agradecemos tu feedback!
+            </h1>
+
+            <p>
+                Gracias a tu feedback podremos realizar más mediciones, involucrar a más personas, y ofrecer mejores datos y conclusiones. Tu opinión nos importa!
+            </p>
+        </div>
+
+        <div class="col-md-6">
+            <form class="navbar-form" action="{% url 'simon_app.views.feedbackForm' %}" method="post">
+                {% csrf_token %}
+                <div class="col-md-6">
+
+                    {% for field in feedbackform %}
+                        <div class="row">
+                            <h4>
+                                <label for="{{ field.label }}">
+                                    {{ field.label_tag }}
+                                    {% if field.field.required %}
+                                        <span>*</span>
+                                    {% endif %}
+                                </label>
+                            </h4>
+
+                            <p>
+                                {{ field }}
+                            </p>
+                        </div>
+                    {% endfor %}
+
+                    <input type="submit" value="Enviar comentarios" id="submit" class="btn btn-default navbar-btn" style="background: #715B53; text-shadow: none; color: #ffffff; font-size: 1.3em;"/>
+                </div>
+
+                {#                {{ feedbackform.as_p }}#}
+
+
+            </form>
+        </div>
+
+
+    </div>
 </footer>
 
 

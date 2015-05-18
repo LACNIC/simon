@@ -23,6 +23,8 @@ urlpatterns = patterns('',
                        url(r'^results/$', 'simon_app.views.home'),
                        url(r'^results/form$', 'simon_app.views.form'),
 
+                       url(r'^feedback$', 'simon_app.views.feedbackForm'),
+
                        url(r'^results/([A-Z]{2})/([46])/([0-9]{4})/([0-9]{1,2})/(Applet|JavaScript)/([0-9]{1})$', 'simon_app.views.tables'),  # /(\bntp\b|\bicmp_echo\b|\btcp_web\b|\btco_connection\b)
                        # /(\bntp\b|\bicmp_echo\b|\btcp_web\b|\btco_connection\b)
                        url(r'^results/tables/$', 'simon_app.views.tables'),

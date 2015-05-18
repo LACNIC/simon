@@ -42,3 +42,5 @@ class Command(BaseCommand):
                                   tester_version=1\
                                   )
                     res.save()
+
+                    from django.core.management.base import BaseCommand

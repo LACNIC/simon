@@ -851,17 +851,21 @@ def getCountry(request):
     if (request.method != 'GET'):
         return HttpResponse("Invalid method: %s" % request.method)
 
-    error = "XX"
-
     try:
         callback = request.GET.get('callback')
 
-        reader = geoip2.database.Reader("%s/%s" % (settings.STATIC_ROOT, "geolocation/GeoLite2-City.mmdb"))
-        cc = error
-        cc = reader.city(request.META['REMOTE_ADDR']).country.iso_code
+        cc = getCountryFromIpAddress(request.META['REMOTE_ADDR'])
 
         return getResponse(callback, cc)
 
     except Exception as e:
-        print e
         return getResponse(callback, cc)
+
+def getCountryFromIpAddress(ip_address):
+    error = "XX"
+    try:
+        reader = geoip2.database.Reader("%s/%s" % (settings.STATIC_ROOT, "geolocation/GeoLite2-City.mmdb"))
+        cc = reader.city(ip_address).country.iso_code
+    except:
+        cc = error
+    return cc
