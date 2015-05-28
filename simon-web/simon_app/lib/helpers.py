@@ -15,7 +15,8 @@ def simon_processor(request):
         'HOURLY' : len(Results.objects.get_hourly_results()),
         'DAILY' : len(Results.objects.get_daily_results()),
         'WEEKLY' : len(Results.objects.get_weekly_results()),
-        'feedbackform' : FeedbackForm()
+        'feedbackform' : FeedbackForm(),
+        'CHARTS_URL' : settings.CHARTS_URL
     }
 #
 

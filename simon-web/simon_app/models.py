@@ -525,6 +525,20 @@ class ChartManager(models.Manager):
                     colors=json.dumps(['orange']))
         return requests.post(self.url, data=data).text
 
+    def asyncChart(self, data, cc1, divId, date_from, date_to, labels, colors, cc2=None, bidirectional=True):
+        from django.template import Context
+        from django.template.loader import get_template
+
+        t = get_template("panels/async_chart.panel.html")
+        ctx = Context({
+            'divId':divId,
+            'data':data,
+            'labels':labels,
+            'colors':colors
+        })
+        return t.render(ctx)
+
+
     def filterQuerySet(self, queryset, cc1, date_from, date_to, cc2=None, bidirectional=True):
         """
         :param queryset:

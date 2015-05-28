@@ -459,7 +459,8 @@ def home(request):
 
 
 def prueba(request):
-    return render_to_response('prueba.html', getContext(request))
+    context = getContext(request)
+    return render_to_response('prueba.html', context)
 
 
 def objectives(request):
@@ -502,17 +503,23 @@ def reports(request):
         else:
             cc2 = Country.objects.get(id=country2).iso
 
-        latency_histogram_js = Chart.objects.javascriptChart(cc1=cc1, cc2=cc2, date_from=date_from, date_to=date_to, divId='latency_histogram_js', bidirectional=bidirectional)
+        js = Chart.objects.filterQuerySet(Results.objects.javascript(), cc1=cc1, cc2=cc2, date_from=date_from, date_to=date_to, bidirectional=bidirectional)
+        latency_histogram_js = Chart.objects.asyncChart(data=js, cc1=cc1, cc2=cc2, divId="chart_js", date_from=date_from, date_to=date_to, labels=['JavaScript'], colors=['#6F8AB7'])
 
-        latency_histogram_applet = Chart.objects.appletChart(cc1=cc1, cc2=cc2, date_from=date_from, date_to=date_to, divId='latency_histogram_applet', bidirectional=bidirectional)
+        applet = Chart.objects.filterQuerySet(Results.objects.applet().filter(testype='ntp'), cc1=cc1, cc2=cc2, date_from=date_from, date_to=date_to, bidirectional=bidirectional)
+        latency_histogram_applet = Chart.objects.asyncChart(data=applet, cc1=cc1, cc2=cc2, divId="chart_applet", date_from=date_from, date_to=date_to, labels=['Applet'], colors=['#615D6C'])
+
+        print latency_histogram_js
 
     else:
         form = ReportForm()
 
-    return render_to_response('reports.html', {'form': form,
-                                               'latency_histogram_applet': latency_histogram_applet,
-                                               'latency_histogram_js': latency_histogram_js
-    }, getContext(request))
+    context = getContext(request)
+    context['form'] = form
+    context['latency_histogram_applet'] = latency_histogram_applet
+    context['latency_histogram_js'] = latency_histogram_js
+
+    return render_to_response('reports.html', context)
 
 
 def charts_reports(request):

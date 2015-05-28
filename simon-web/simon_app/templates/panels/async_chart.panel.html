@@ -1,10 +1,13 @@
 <script src="https://www.google.com/jsapi" type="text/javascript"></script>
 <script src="http://fgnass.github.io/spin.js/spin.min.js" type="text/javascript"></script>
 
+<div id="{{ divId }}" style="font-family: Lato" class="center-block">
+{#    Hola#}
+</div>
 <script type="text/javascript">
 
     google.load('visualization', '1.0', {'packages': ['table', 'corechart']});
-    google.setOnLoadCallback(getChart(document, "script", "chart", "{{ data|safe }}", "['Hola']", "['orange']"));
+    google.setOnLoadCallback(getChart(document, "script", "{{ divId }}", "[[{% for d in data %}{{ d }},{% endfor %}]]", "{{ labels | safe }}", "{{ colors | safe }}"));
 
     /*
      to be called when google is already loaded
@@ -20,7 +23,7 @@
 
         $.ajax({
             type: 'POST',
-            url: "http://127.0.0.1:8001/charts/hist/code",
+            url: "http://simon.lacnic.net/charts/hist/code",
             data: payload,
             traditional: true,
             success: function (code) {
@@ -36,20 +39,17 @@
             dataType: "text",
             async: false
         });
-    }
-    ;
+    };
 </script>
-
-<div id="chart" style="min-height: 15em;"></div>
 
 <script>
     {#        Spinner#}
     var opts = {
-        lines: 17, // The number of lines to draw
+        lines: 8, // The number of lines to draw
         length: 1, // The length of each line
-        width: 9, // The line thickness
-        radius: 30, // The radius of the inner circle
-        corners: 0, // Corner roundness (0..1)
+        width: 8, // The line thickness
+        radius: 20, // The radius of the inner circle
+        corners: 0.6, // Corner roundness (0..1)
         rotate: 0, // The rotation offset
         direction: 1, // 1: clockwise, -1: counterclockwise
         color: '#000', // #rgb or #rrggbb or array of colors
@@ -63,6 +63,6 @@
         left: '50%' // Left position relative to parent
     };
 
-    var target = document.getElementById('chart');
+    var target = document.getElementById('{{ divId }}');
     var spinner = new Spinner(opts).spin(target);
 </script>

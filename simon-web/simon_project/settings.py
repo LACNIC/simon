@@ -226,12 +226,12 @@ if HOSTNAME == 'simon':
     DEBUG = False
     URL_PFX = ""
     SIMON_URL = 'http://simon.lacnic.net'
-    CHARTS_URL = "http://simon.lacnic.net/charts"  # "http://charts.simon.labs.lacnic.net/charts/hist/code"
+    CHARTS_URL = "http://simon.lacnic.net/charts"
 else:
     # Developer mode
     DEBUG = True
     URL_PFX = ""
     SIMON_URL = 'http://127.0.0.1:8000'
-    CHARTS_URL = "http://127.0.0.1:8001/charts"
+    CHARTS_URL = "http://simon.lacnic.net/charts"
 
 TEMPLATE_DEBUG = DEBUG
