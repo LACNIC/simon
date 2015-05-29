@@ -409,7 +409,6 @@ class TestPointManager(models.Manager):
 
 
 class TestPoint(models.Model):
-    # testpointid is automatically inserted as Django identifier
     description = models.TextField(default='')
     testtype = models.CharField(max_length=20)
     ip_address = models.GenericIPAddressField()
@@ -424,6 +423,9 @@ class TestPoint(models.Model):
 
     def __unicode__(self):
         return self.ip_address
+
+class SpeedtestTestPoint(TestPoint):
+    speedtest_url = models.TextField(null=True)
 
 
 class Images(models.Model):

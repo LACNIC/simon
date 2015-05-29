@@ -35,3 +35,6 @@ admin.site.register(Params)
 # admin.site.register(Alert)
 # admin.site.register(Error)
 # admin.site.register(Success)
+
+admin.site.register(ProbeApiPingResult)
+admin.site.register(SpeedtestTestPoint)

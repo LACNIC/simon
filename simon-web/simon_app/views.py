@@ -613,7 +613,7 @@ def charts_reports(request):
         if day__count > 0:
 
             rate = day__count / rs_all.filter(date_test__year=d.year, date_test__month=d.month, date_test__day=d.day).count()
-            if rate < 0.060:
+            if rate < 0.50:
                 ipv6_penetration_rates.append(rate)
             else:
                 ipv6_penetration_rates.append(0)
