@@ -4,7 +4,7 @@
     <facet type="django" name="Django">
       <configuration>
         <option name="rootFolder" value="$MODULE_DIR$" />
-        <option name="settingsModule" value="settings.py" />
+        <option name="settingsModule" value="cemd/settings.py" />
         <option name="manageScript" value="manage.py" />
       </configuration>
     </facet>

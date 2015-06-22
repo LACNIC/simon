@@ -15,6 +15,9 @@ framework.
 """
 import os, sys
 from django.core.wsgi import get_wsgi_application
+import newrelic.agent
+
+newrelic.agent.initialize('/home/agustin/newrelic.ini')
 
 sys.path.append('/opt/django/simon/simon-web')
 sys.path.append('/Users/agustin/git/simon/simon-web/simon_project')
