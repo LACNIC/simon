@@ -18,7 +18,7 @@ admin.site.register(Country)
 # admin.site.register(ThroughputResults)
 admin.site.register(Results, ResultsAdmin)
 admin.site.register(RipeAtlasPingResult)
-admin.site.register(RipeAtlasMeasurement)
+# admin.site.register(RipeAtlasMeasurement)
 admin.site.register(RipeAtlasResult)
 admin.site.register(TracerouteResult)
 

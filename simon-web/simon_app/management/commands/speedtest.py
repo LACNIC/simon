@@ -12,8 +12,10 @@ from lxml import etree
 class Command(BaseCommand):
     def handle(self, *args, **options):
         from sys import stdout
+        from simon_app.reportes import GMTUY
 
         ccs = [c.iso for c in Country.objects.get_region_countries()]
+        tz = GMTUY()
 
         # Read the XML XMLfile
         print "Fetching XML file..."
@@ -27,6 +29,7 @@ class Command(BaseCommand):
         print "Parsing XML file..."
         servers = etree.fromstring(str(data))[0]
         N = len(servers)
+        nuevos = []
         for i, server in enumerate(servers):
             stdout.write("\r%.2f%%" % (100.0 * i / N))
             stdout.flush()
@@ -48,7 +51,6 @@ class Command(BaseCommand):
             try:
                 #could be done with DNSpython
                 ok = False
-                nuevos = []
 
                 if country not in ccs:
                     continue
@@ -89,14 +91,14 @@ class Command(BaseCommand):
                             tp.save()
                             nuevos.append(tp)
 
-                if len(nuevos) > 0:
-                    print "The following Test Points have been added:"
-                for tp in nuevos:
-                    print str(tp.ip_address)
-
             except AddrFormatError:
                 print 'Address Format Error'
                 pass
             except socket.gaierror:
                 print "No address associated with hostname"
                 pass
+
+        if len(nuevos) > 0:
+            print "The following Test Points have been added:"
+        for tp in nuevos:
+            print str(tp.ip_address)

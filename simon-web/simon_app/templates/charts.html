@@ -84,7 +84,7 @@
             datos recabados es el estudio de histogramas de latencia. Estos
             histogrmas pueden reflejar problemas vinculados a enrutamiento
             subóptimo, malas políticas de enrutamiento, o falta de peering entre
-            proveedores de serivcio. A través de anomalías en los histogramas se
+            proveedores de servicio. A través de anomalías en los histogramas se
             pueden identificar problemas, o proponer mejoras en la infraestructura
             o topología de redes de LAC, y dar pasos icrementales hacia una
             Internet regional de mejor calidad. Una de estas anomalías es cuando
@@ -103,14 +103,23 @@
             caso de haber múltiples picos en el histograma, se puede decir que la
             latencia a nivel regional se agrupa en múltiples subconjuntos.</p>
 
-        <h4 class="page-header">Medidor: Applet</h4>
+        <h4 class="page-header">Medidor: Applet (<code>NTP</code>)</h4>
+
+        <p class="alert alert-info">Nota: Para optimizar la consulta, por el momento cargamos 1000 muestras aleatorias desde 2009 hasta la fecha. Más datos se pueden ver a través de la sección de <a
+                href="{% url 'simon_app.views.reports' %}" style="color: orange">Reportes</a> o la
+            sección de <a href="{% url 'simon_app.views.api' %}" style="color: orange">API</a>
+        </p>
         <script type="text/javascript">
             {{ latency_histogram_applet | safe }}
         </script>
         <div id="latency_histogram_applet"></div>
 
 
-        <h4 class="page-header">Medidor: Javascript</h4>
+        <h4 class="page-header">Medidor: Javascript (<code>HTTP</code>)</h4>
+
+        <p>
+            Los datos correspondientes a la siguiente gráfica pertenecen a las muestras recogidas en el último mes.
+        </p>
         <script type="text/javascript">
             {{ latency_histogram_js | safe }}
         </script>
@@ -120,7 +129,7 @@
         <h3 class="page-header">Porcentaje de mediciones por IPv6</h3>
 
         <p>
-            La siguiente gráfica muestra la proporción de pruebas de Simón realizadas por IPv6 en los últimos 12 meses.
+            La siguiente gráfica muestra la proporción de pruebas de Simón realizadas por IPv6 en los últimos 2 meses.
         </p>
         <script type="text/javascript">
             {{ ipv6_penetration | safe }}
@@ -182,7 +191,7 @@
             <script type="text/javascript">
                 {{ inner_latency | safe }}
             </script>
-            <div id="inner_latency" style="min-height: 25em;"></div>
+            <div id="inner_latency" style="min-height: {{ inner_count }}em;"></div>
 
             {#            <div align="center" id="column_chart_div" class="barchart border"></div>#}
         </div>

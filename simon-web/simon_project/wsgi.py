@@ -14,14 +14,16 @@ framework.
 
 """
 import os, sys
+from django.core.wsgi import get_wsgi_application
 
 sys.path.append('/opt/django/simon/simon-web')
+sys.path.append('/Users/agustin/git/simon/simon-web/simon_project')
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "simon_project.settings")
+# os.environ.setdefault("DJANGO_SETTINGS_MODULE", "simon_project.settings")
+os.environ['DJANGO_SETTINGS_MODULE'] = 'simon_project.settings'
 
 # This application object is used by any WSGI server configured to use this
 # file. This includes Django's development server, if the WSGI_APPLICATION
 # setting points here.
-from django.core.wsgi import get_wsgi_application
 
 application = get_wsgi_application()

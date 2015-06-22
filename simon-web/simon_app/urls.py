@@ -50,8 +50,6 @@ urlpatterns = patterns('',
                        url(r'^addnewwebpoint$', 'simon_app.views.add_new_webpoint'),
                        url(r'^addnewntppoint$', 'simon_app.views.add_new_ntppoint'),
 
-                       url(r'^removetestpoint/([0-9A-Za-z]{%s})$' % (str(settings.TOKEN_LENGTH)), 'simon_app.views.remove_testpoint'),
-
                        url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': '%s/files' % (settings.STATIC_ROOT)}),
 
                        url(r'^charts/$', 'simon_app.views.charts_reports'),

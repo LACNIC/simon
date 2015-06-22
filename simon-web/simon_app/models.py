@@ -30,6 +30,9 @@ class CountryManager(models.Manager):
     def get_countries_with_testpoints(self):
         return self.get_region_countries().filter(iso__in=TestPoint.objects.values_list('country', flat=True))
 
+    def get_countries_with_speedtest_testpoints(self):
+        return self.get_region_countries().filter(iso__in=SpeedtestTestPoint.objects.values_list('country', flat=True))
+
     def get_country_with_least_results(self, ip_version, test_type='tcp_web', amount=1, days=7, country_origin=''):
         """
 			Function that provides the next country to perform the test.
@@ -136,14 +139,10 @@ class ASManager(models.Manager):
             return AS.objects.get(id=1)  # 0.0.0.0/0
 
 
-# for autsys in AS.objects.order_by('-pfx_length'):
-# if IPAddress(ip_address) in IPNetwork(autsys.network):
-# return autsys
-
 class AS(models.Model):
-    asn = models.IntegerField()
-    network = models.GenericIPAddressField()
-    pfx_length = models.IntegerField()
+    asn = models.IntegerField(default=0)
+    network = models.GenericIPAddressField(null=True, blank=True)
+    pfx_length = models.IntegerField(default=0)
     objects = ASManager()
 
     def __unicode__(self):
@@ -160,11 +159,14 @@ class ResultsManager(models.Manager):
     def javascript(self):
         return Results.objects.clean().filter(tester='JavaScript')
 
+    def probeapi(self):
+        return ProbeApiPingResult.objects.filter(ave_rtt__lte=800).filter(ave_rtt__gt=0)
+
     def inner(self):
         from django.db import connection
 
         cursor = connection.cursor()
-        cursor.execute("SELECT country_destination, AVG(ave_rtt) FROM simon_app_results WHERE country_origin = country_destination GROUP BY country_destination")
+        cursor.execute("SELECT country_destination, AVG(ave_rtt) FROM simon_app_results WHERE country_origin = country_destination AND tester='Applet' AND date_test < now() - interval '1 months' GROUP BY country_destination")
         return cursor.fetchall()
 
     def ipv4(self):
@@ -172,6 +174,18 @@ class ResultsManager(models.Manager):
 
     def ipv6(self):
         return Results.objects.clean().filter(ip_version='6')
+
+    def ipv6_penetration_timeline(self):
+        from django.db import connection
+
+        cursor = connection.cursor()
+        cursor.execute("SELECT date_trunc('day', date_test), SUM(case when ip_version=4 then 1 else 0 end) AS v4 , SUM(case when ip_version=6 then 1 else 0 end) AS v6 " \
+                       "FROM simon_app_results " \
+                       "WHERE date_test > now() - interval '2 months' " \
+                       "AND date_test < now() " \
+                       "GROUP BY 1 " \
+                       "ORDER BY 1; ")
+        return cursor.fetchall()
 
     def get_yearly_results(self):
         return Results.objects.javascript().filter(date_test__gt=datetime.now() - timedelta(365))
@@ -218,8 +232,8 @@ class ResultsManager(models.Manager):
 class Results(models.Model):
     date_test = models.DateTimeField('test date', default=datetime.now())
     version = models.IntegerField(null=True, default=0)
-    ip_origin = models.GenericIPAddressField(default='127.0.0.1')
-    ip_destination = models.GenericIPAddressField(default='127.0.0.1')
+    ip_origin = models.GenericIPAddressField(null=True)
+    ip_destination = models.GenericIPAddressField(null=True)
     testype = models.CharField(max_length=20, default='N/A')
     number_probes = models.IntegerField(null=True)
     min_rtt = models.IntegerField(null=True)
@@ -233,10 +247,10 @@ class Results(models.Model):
     ip_version = models.IntegerField(default=0)
     tester = models.CharField(max_length=20)
     tester_version = models.CharField(max_length=10)
-    as_origin = models.ForeignKey(AS, related_name='as_origin', default=0)
-    as_destination = models.ForeignKey(AS, related_name='as_destination', default=0)
-    user_agent = models.CharField(max_length=200, default='')
-    url = models.CharField(max_length=2000, default='')
+    as_origin = models.ForeignKey(AS, related_name='as_origin', default=0, null=True)
+    as_destination = models.ForeignKey(AS, related_name='as_destination', default=0, null=True)
+    user_agent = models.CharField(max_length=2000, default='')
+    url = models.CharField(max_length=2083, default='', null=True)
     objects = ResultsManager()
 
     def __unicode__(self):
@@ -286,6 +300,16 @@ class Results(models.Model):
             self.tester = text
         if (tag == 'tester_version'):
             self.tester_version = text
+
+
+class ProbeApiPingResult(Results):
+    def save(self, *args, **kwargs):
+        self.tester = 'probeapi'
+        self.version = 1
+        self.tester_version = self.version
+        self.testype = 'ping'
+
+        super(ProbeApiPingResult, self).save(*args, **kwargs)  # Call the "real" save() method.
 
 
 class TracerouteResultManager(models.Manager):
@@ -424,6 +448,7 @@ class TestPoint(models.Model):
     def __unicode__(self):
         return self.ip_address
 
+
 class SpeedtestTestPoint(TestPoint):
     speedtest_url = models.TextField(null=True)
 
@@ -476,12 +501,6 @@ class Params(models.Model):
         return self.config_value
 
 
-class ActiveTokens(models.Model):
-    token_value = CharField(max_length=100)
-    token_expiration = models.DateTimeField('expiration daytime')
-    testpoint = models.ForeignKey(TestPoint)
-
-
 class Notification(models.Model):
     title = models.TextField(default='')
     text = models.TextField(default='')
@@ -527,16 +546,16 @@ class ChartManager(models.Manager):
                     colors=json.dumps(['orange']))
         return requests.post(self.url, data=data).text
 
-    def asyncChart(self, data, cc1, divId, date_from, date_to, labels, colors, cc2=None, bidirectional=True):
+    def asyncChart(self, data, divId, labels, colors):
         from django.template import Context
         from django.template.loader import get_template
 
         t = get_template("panels/async_chart.panel.html")
         ctx = Context({
-            'divId':divId,
-            'data':data,
-            'labels':labels,
-            'colors':colors
+            'divId': divId,
+            'data': data,
+            'labels': labels,
+            'colors': colors
         })
         return t.render(ctx)
 
@@ -550,13 +569,14 @@ class ChartManager(models.Manager):
         :return:
         """
 
+        print queryset
         if cc2 is None:
-            # one country
+            # one country against the region
             queryset = queryset.filter(
                 Q(country_origin=cc1) | Q(country_destination=cc1)
             )
         else:
-            # two countries
+            # between two countries
             if bidirectional:
                 queryset = queryset.filter(
                     Q(country_origin=cc1) & Q(country_destination=cc2) \

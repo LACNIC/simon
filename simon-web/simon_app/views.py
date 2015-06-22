@@ -32,7 +32,8 @@ from simon_app.forms import FeedbackForm
 from simon_app.functions import KMG2bps, inLACNICResources, whoIs, bps2KMG
 from simon_app.javascript_latency import CountryForm
 from simon_app.models import *
-from simon_app.reportes import ResultsForm, AddNewWebPointForm, AddNewNtpPointForm, GMTUY, CountryDropdownForm, ReportForm
+from simon_app.reportes import AddNewWebPointForm, AddNewNtpPointForm, GMTUY
+# from simon_app.reportes import ResultsForm, AddNewWebPointForm, AddNewNtpPointForm, GMTUY, CountryDropdownForm, ReportForm
 import simon_project.settings as settings
 from _socket import timeout
 
@@ -386,6 +387,9 @@ def post_xml_throughput_result(request):
 
 @csrf_exempt
 def post_offline_testpoints(request):
+
+    from simon_app.reportes import GMTUY
+
     if (request.method != 'POST'):  # and request.method != 'GET'
         return HttpResponse("invalid method: %s" % request.method)
 
@@ -472,8 +476,10 @@ def participate(request):
 
 
 def reports(request):
+    from simon_app.reportes import ReportForm
+
     # ip = request.META.get('REMOTE_ADDR', None)
-    latency_histogram_applet = latency_histogram_js = ""
+    latency_histogram_applet = latency_histogram_js = latency_histogram_probeapi = ""
 
     if request.method == "POST":
 
@@ -493,7 +499,7 @@ def reports(request):
         if date_to != '':
             date_to = datetime.strptime(date_to, "%d/%m/%Y")
         else:
-            date_to = datetime.now()
+            date_to = datetime.now(GMTUY())
 
         country1 = data['country1'].value()
         country2 = data['country2'].value()
@@ -504,12 +510,13 @@ def reports(request):
             cc2 = Country.objects.get(id=country2).iso
 
         js = Chart.objects.filterQuerySet(Results.objects.javascript(), cc1=cc1, cc2=cc2, date_from=date_from, date_to=date_to, bidirectional=bidirectional)
-        latency_histogram_js = Chart.objects.asyncChart(data=js, cc1=cc1, cc2=cc2, divId="chart_js", date_from=date_from, date_to=date_to, labels=['JavaScript'], colors=['#6F8AB7'])
+        latency_histogram_js = Chart.objects.asyncChart(data=js, divId="chart_js", labels=['JavaScript'], colors=['#6F8AB7'])
 
         applet = Chart.objects.filterQuerySet(Results.objects.applet().filter(testype='ntp'), cc1=cc1, cc2=cc2, date_from=date_from, date_to=date_to, bidirectional=bidirectional)
-        latency_histogram_applet = Chart.objects.asyncChart(data=applet, cc1=cc1, cc2=cc2, divId="chart_applet", date_from=date_from, date_to=date_to, labels=['Applet'], colors=['#615D6C'])
+        latency_histogram_applet = Chart.objects.asyncChart(data=applet, divId="chart_applet", labels=['Applet'], colors=['#615D6C'])
 
-        print latency_histogram_js
+        probeapi = Chart.objects.filterQuerySet(Results.objects.probeapi(), cc1=cc1, cc2=cc2, date_from=date_from, date_to=date_to, bidirectional=bidirectional)
+        latency_histogram_probeapi = Chart.objects.asyncChart(data=probeapi, divId="chart_probeapi", labels=['DOS ping'], colors=['#608BC4'])
 
     else:
         form = ReportForm()
@@ -517,6 +524,7 @@ def reports(request):
     context = getContext(request)
     context['form'] = form
     context['latency_histogram_applet'] = latency_histogram_applet
+    context['latency_histogram_probeapi'] = latency_histogram_probeapi
     context['latency_histogram_js'] = latency_histogram_js
 
     return render_to_response('reports.html', context)
@@ -530,7 +538,8 @@ def charts_reports(request):
     :return:
     """
     import datetime
-    import json
+    from simon_app.reportes import CountryDropdownForm
+
     # ###########
     # DROPDOWN #
     ############
@@ -567,7 +576,7 @@ def charts_reports(request):
     key = 'heatmap_asns_values'
     heatmap_asns_values = Params.objects.get(config_name=key)  #json.loads("{ \"%s\" : %s}" % (key, Params.objects.get(config_name=key)))
 
-    ####### 
+    #######
     # MAP #
     #######
 
@@ -594,36 +603,15 @@ def charts_reports(request):
     import requests
 
     now = datetime.datetime.now()
-    a_year_ago = now - datetime.timedelta(days=365)
-    rtts_applet = Results.objects.applet().values_list('ave_rtt', flat=True)
-    rtts_js = Results.objects.javascript().filter(date_test__gte=a_year_ago).values_list('ave_rtt', flat=True)
+    a_month_ago = now - datetime.timedelta(days=30)
+    rtts_applet = Results.objects.applet().values_list('ave_rtt', flat=True).order_by('?')[:1000]
+    rtts_js = Results.objects.javascript().filter(date_test__gte=a_month_ago).values_list('ave_rtt', flat=True)
 
-    # #########################
-    # IPv6 penetration chart #
-    ##########################
+    # IPv6 penetration chart
+    rs = Results.objects.ipv6_penetration_timeline()
+    ipv6_penetration_ratios = [(r[2]*1.0/(r[1]+r[2])) for r in rs if r[1]>0 or r[2]>0]
 
-    days = range(1, 365)
-    datetimes = [(now - datetime.timedelta(days=d)) for d in days]  # .strftime("%d/%m/%Y")
-    rsy = Results.objects.get_yearly_results()
-    rs_all = rsy
-    rs_6 = rs_all.filter(ip_version='6')
-    ipv6_penetration_rates = []
-    for d in datetimes:
-        day__count = rs_6.filter(date_test__year=d.year, date_test__month=d.month, date_test__day=d.day).count()
-        if day__count > 0:
-
-            rate = day__count / rs_all.filter(date_test__year=d.year, date_test__month=d.month, date_test__day=d.day).count()
-            if rate < 0.50:
-                ipv6_penetration_rates.append(rate)
-            else:
-                ipv6_penetration_rates.append(0)
-        else:
-            ipv6_penetration_rates.append(0)
-
-    #######################
-    # Inner Latency Chart #
-    #######################
-
+    # Inner Latency Chart
     inners = Results.objects.inner()
     inner_isos = []
     inner_lats = []
@@ -640,38 +628,45 @@ def charts_reports(request):
     # Charts Services #
     ###################
 
-    url = settings.CHARTS_URL + "/hist/code"
-    data = dict(data=json.dumps([list(rtts_applet)]),
-                divId='latency_histogram_applet',
-                labels=json.dumps(['Regional latency']),
-                colors=json.dumps(['orange']))
-    latency_histogram_applet = requests.post(url, data=data).text
+    latency_histogram_applet = Chart.objects.asyncChart(data=rtts_applet, divId="latency_histogram_applet", labels=['NTP'], colors=['#608BC4'])
 
-    data = dict(data=json.dumps([list(rtts_js)]),
-                divId='latency_histogram_js',
-                labels=json.dumps(['Regional latency']),
-                colors=json.dumps(['orange']))
-    latency_histogram_js = requests.post(url, data=data).text
+    latency_histogram_js = Chart.objects.asyncChart(data=rtts_js, divId="latency_histogram_js", labels=['HTTP'], colors=['#608BC4'])
 
     url = settings.CHARTS_URL + "/code"
-    data = dict(data=json.dumps([list((d.strftime("%d/%m/%Y") for d in datetimes)), list(ipv6_penetration_rates)]),
+
+    data = dict(data=json.dumps([list((d[0].strftime("%d/%m/%Y") for d in rs)), list(ipv6_penetration_ratios)]),
                 divId='ipv6_penetration',
-                labels=json.dumps(['Regional IPv6 Penetration']),
-                colors=json.dumps(['orange']),
-                kind='LineChart',
+                labels=json.dumps(['IPv6 sample ratio']),
+                colors=json.dumps(['#615D6C']),
+                kind='AreaChart',
                 xAxis='date')
     ipv6_penetration = requests.post(url, data=data).text
+    # ipv6_penetration = Chart.objects.asyncChart(data=json.dumps([list((d[0].strftime("%d/%m/%Y") for d in rs)), list(ipv6_penetration_ratios)]),
+    #                                             divId="ipv6_penetration",
+    #                                             labels=["IPv6 sample ratio"],
+    #                                             colors=['#608BC4'],
+    #                                             kind='LineChart',
+    #                                             xAxis='date') # requests.post(url, data=data).text
 
+    inner_count = len(inner_isos)
     data = dict(data=json.dumps([list(inner_isos), list(inner_lats)]),
                 divId='inner_latency',
                 labels=json.dumps(['Inner latency']),
-                colors=json.dumps(['orange']),
+                colors=json.dumps(['#92977E']),
                 kind='BarChart',
                 xAxis='string')
     inner_latency = requests.post(url, data=data).text
 
+    # inner_latency = Chart.objects.asyncChart(
+    #             data=json.dumps([list(inner_isos), list(inner_lats)]),
+    #             divId='inner_latency',
+    #             labels=json.dumps(['Inner latency']),
+    #             colors=json.dumps(['orange']),
+    #             kind='BarChart',
+    #             xAxis='string')
+
     ############
-    # RESPONSE #        
+    # RESPONSE #
     ############
 
     return render_to_response('charts.html', {
@@ -686,8 +681,8 @@ def charts_reports(request):
         'latency_histogram_applet': latency_histogram_applet,
         'latency_histogram_js': latency_histogram_js,
         'ipv6_penetration': ipv6_penetration,
-        'inner_latency': inner_latency
-        # 'latency_histogram_inner' : latency_histogram_inner
+        'inner_latency': inner_latency,
+        'inner_count': inner_count * 2 # 2em for each country at the chart
     }, getContext(request))
 
 
@@ -724,6 +719,8 @@ def feedbackForm(request):
     return redirect('simon_app.views.home')
 
 def form(request):
+    from simon_app.reportes import ResultsForm
+
     # Processes the form and redirects to the table
     if request.method == 'POST':  # If the form has been submitted...
         form = ResultsForm(request.POST)  # A form bound to the POST data
@@ -749,6 +746,8 @@ def form(request):
 
 
 def throughput_form(request):
+    from simon_app.reportes import ResultsForm
+
     # Processes the form and redirects to the table
     if request.method == 'POST':  # If the form has been submitted...
         form = ResultsForm(request.POST)  # A form bound to the POST data
@@ -775,6 +774,7 @@ def throughput_form(request):
 
 # Forms for point submitting
 def add_new_webpoint_form(request):
+
     title = 'Agregar Nuevo Punto Web'
     text = "Para registrar su servidor como un punto de testing NTP, complete el siguiente formulario. Una vez completado el formulario, nuestro equipo lo evaluará y lo pondrá a disposición de la comunidad para que se realicen tests sobre el. Su servidor formara parte de los 400 servidores que conforman este proyecto. Queremos recordarle que los tests no son demasiado frecuentes como para afectar la performance se su servidor."
     web_form = AddNewWebPointForm()
@@ -794,6 +794,9 @@ def add_new_ntppoint_form(request):
 
 # Views for point submitting
 def add_new_webpoint(request):
+
+    from simon_app.reportes import AddNewWebPointForm, GMTUY
+
     if request.method == 'POST':
         MINIMUM_BANDWIDTH = 1000000  # 1Mbps
         MEETS_BANDWITH = False
@@ -809,7 +812,7 @@ def add_new_webpoint(request):
         if str(images_path)[-1] is not '/':
             images_path = '%s/' % images_path
 
-        # check if the URL is valid (example: is not 'http://.....') and free of typos 
+        # check if the URL is valid (example: is not 'http://.....') and free of typos
         url = form.data['server_url']
         if str(url)[:7] is 'http://':
             url = str(url)[7:]
@@ -924,7 +927,7 @@ def add_new_webpoint(request):
                     str(testPoint.ip_address), str(testPoint.country))
 
                 try:
-                    msg = EmailMultiAlternatives(asunto, texto, settings.DEFAULT_FROM_EMAIL, [settings.SERVER_EMAIL])  # 
+                    msg = EmailMultiAlternatives(asunto, texto, settings.DEFAULT_FROM_EMAIL, [settings.SERVER_EMAIL])  #
                     msg.attach_alternative(texto_HTML, "text/html")
                     msg.content_subtype = "html"  # Main content is now text/html
                     msg.send()
@@ -1058,27 +1061,6 @@ def add_new_ntppoint(request):
         title = 'Gracias por su contribución.'
         text = 'Su servidor web debería comenzar a atender tests prontamente. Le recomendamos que siga contribuyando a la comunidad realizando más tests'
         return render_to_response('general.html', {'title': title, 'text': text}, getContext(request))
-
-
-def remove_testpoint(request, token):
-    try:
-        active_token = ActiveTokens.objects.get(token_value=token)
-        tz = GMTUY()
-        now = datetime.datetime.now(tz)
-
-        if active_token.token_expiration > now:
-
-            testPoint = active_token.testpoint
-            testPoint.enabled = False
-            testPoint.save()
-            active_token.delete()
-
-            return render_to_response('general.html', {'title': 'Thank you', 'text': 'The test point has been removed successfully!'}, getContext(request))
-        else:
-            return render_to_response('general.html', {'title': 'Sorry', 'text': 'The token corresponding to that test point has expired'}, getContext(request))
-    except ActiveTokens.DoesNotExist:
-        # Not found
-        return redirect('/')
 
 
 def applet(request):
