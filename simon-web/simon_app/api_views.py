@@ -44,7 +44,7 @@ def web_points(request, amount, ip_version):
         points = TestPoint.objects.get_ipv6()
     elif int(ip_version) == 4:
         points = TestPoint.objects.get_ipv4()
-    
+
     country = Country.objects.get_countries_with_testpoints().order_by('?')[0]
 #     points = points.filter(testtype='tcp_web', country=country.iso, enabled=True).order_by('?')[:int(amount)]
     points = points.filter(testtype='tcp_web', enabled=True).order_by('?')[:int(amount)]
