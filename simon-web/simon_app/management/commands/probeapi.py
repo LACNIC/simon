@@ -23,7 +23,7 @@ class Command(BaseCommand):
             origins += c + ','
         origins = origins[0:-1]  # remove trailing comma
 
-        tps = SpeedtestTestPoint.objects.all().distinct('country').order_by('country')  # one TP per country TODO get *really* random tests...
+        tps = SpeedtestTestPoint.objects.all()#.distinct('country').order_by('country')  # one TP per country TODO get *really* random tests...
         for tp in tps:
 
             destination_ip = tp.ip_address
