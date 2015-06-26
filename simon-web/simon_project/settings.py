@@ -26,7 +26,7 @@ MANAGERS = ADMINS
 
 # application version
 APP_VERSION = "1.4"
-DATE_UPDATED = "Tue Jul 29 12:35:34 UYT 2014"
+DATE_UPDATED = "Tue Jun 22 14:46:34 UYT 2015"
 
 PROJECT_ROOT = os.path.abspath(os.path.pardir)
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
