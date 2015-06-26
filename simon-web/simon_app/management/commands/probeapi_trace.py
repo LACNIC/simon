@@ -60,12 +60,12 @@ class Command(BaseCommand):
                 cc_origin = result['Country']['CountryCode']
                 asn = result['ASN']['AsnID'][2:]  # strip 'AS'
 
+                rtts = []
                 packet_loss = 0
                 for ping_ in result['Ping']:
                     # for each testpoint
                     tp = SpeedtestTestPoint.objects.get(ip_address=ping_['IP'])
 
-                    rtts = []
                     for r in ping_['PingTimeArray']:
                         try:
                             rtts.append(int(r))
