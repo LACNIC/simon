@@ -140,9 +140,13 @@ class ASManager(models.Manager):
 
 
 class AS(models.Model):
+
     asn = models.IntegerField(default=0)
     network = models.GenericIPAddressField(null=True, blank=True)
     pfx_length = models.IntegerField(default=0)
+    date_updated = models.DateTimeField()
+    regional = models.BooleanField()
+
     objects = ASManager()
 
     def __unicode__(self):
@@ -247,8 +251,8 @@ class Results(models.Model):
     ip_version = models.IntegerField(default=0)
     tester = models.CharField(max_length=20)
     tester_version = models.CharField(max_length=10)
-    as_origin = models.ForeignKey(AS, related_name='as_origin', default=0, null=True)
-    as_destination = models.ForeignKey(AS, related_name='as_destination', default=0, null=True)
+    as_origin = models.IntegerField(null=True)
+    as_destination = models.IntegerField(null=True)
     user_agent = models.CharField(max_length=2000, default='')
     url = models.CharField(max_length=2083, default='', null=True)
     objects = ResultsManager()

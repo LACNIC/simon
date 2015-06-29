@@ -294,8 +294,8 @@ def post_xml_result(request):
                 result.country_destination = TestPoint.objects.get(ip_address=result.ip_destination).country
                 result.tester = simon.find('tester').text
                 result.tester_version = simon.find('tester_version').text
-                result.as_origin = AS.objects.get_as_by_ip(result.ip_origin)
-                result.as_destination = AS.objects.get_as_by_ip(result.ip_destination)
+                result.as_origin = AS.objects.get_as_by_ip(result.ip_origin).asn
+                result.as_destination = AS.objects.get_as_by_ip(result.ip_destination).asn
                 result.user_agent = simon.find('user_agent').text
                 result.url = simon.find('url').text
 
