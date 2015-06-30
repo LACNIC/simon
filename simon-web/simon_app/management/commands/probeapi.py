@@ -61,7 +61,9 @@ class Command(BaseCommand):
                 asn = result['ASN']['AsnID'][2:]  # strip 'AS'
 
                 packet_loss = 0
+
                 for ping_ in result['Ping']:
+
                     # for each testpoint
                     tp = SpeedtestTestPoint.objects.get(ip_address=ping_['IP'])
 
@@ -73,9 +75,9 @@ class Command(BaseCommand):
                             packet_loss += 1
                             continue
 
-                    empty_ass = AS.objects.filter(network__isnull=True, asn=asn)  # get the asn with no network associated
+                    empty_ass = AS.objects.filter(network__isnull=True, asn=asn) # get the asn with no network associated
                     if len(empty_ass) <= 0:
-                        as_origin = AS(asn=asn)  # create the empty-network AS
+                        as_origin = AS(asn=asn) # create the empty-network AS
                         as_origin.save()
                     elif len(empty_ass) > 1:
                         continue
@@ -110,8 +112,8 @@ class Command(BaseCommand):
                         country_origin=cc_origin,
                         country_destination=cc_destination,
                         ip_version=6 if ':' in destination_ip else 4,
-                        as_origin=as_origin,
-                        as_destination=as_destination,
+                        as_origin=as_origin.asn,
+                        as_destination=as_destination.asn,
                         url=tp.speedtest_url,
                         number_probes=len(rtts)
                     ).save()
