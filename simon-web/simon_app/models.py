@@ -144,8 +144,8 @@ class AS(models.Model):
     asn = models.IntegerField(default=0)
     network = models.GenericIPAddressField(null=True, blank=True)
     pfx_length = models.IntegerField(default=0)
-    date_updated = models.DateTimeField()
-    regional = models.BooleanField()
+    date_updated = models.DateTimeField(null=True)
+    regional = models.NullBooleanField(null=True)
 
     objects = ASManager()
 
