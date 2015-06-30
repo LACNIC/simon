@@ -67,6 +67,22 @@ def KMG2bps(KMG):
     
     return KMG # failed
 
+def networkInLACNICResources(network):
+    try:
+        for resource in settings.v4resources:
+                if IPNetwork(network) in IPNetwork(resource):
+                    return True
+
+        for resource in settings.v6resources:
+                if IPNetwork(network) in IPNetwork(resource):
+                    return True
+
+    except AddrFormatError:
+        print 'Error en el formato de la direccion'
+
+    return False
+
+
 def inLACNICResources(ip_address):
     try:
         for resource in settings.v4resources:
