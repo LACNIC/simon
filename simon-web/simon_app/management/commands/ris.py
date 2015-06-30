@@ -17,6 +17,8 @@ class Command(BaseCommand):
         ris = zlib.decompress(file, 16+zlib.MAX_WBITS)
         asn_list = [asn.split('\t') for asn in ris.split('\n')]
 
+        AS.objects.all().delete() # Delete ALL AS-related info and make place for new information
+
         N = len(asn_list)
         i=0
         for line in asn_list:
