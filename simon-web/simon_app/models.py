@@ -187,6 +187,18 @@ class ResultsManager(models.Manager):
                        "ORDER BY 1; ")
         return cursor.fetchall()
 
+    def results_matrix_cc(self):
+        from django.db import connection
+
+        cursor = connection.cursor()
+        cursor.execute("select country_origin, country_destination, AVG(ave_rtt) "
+                       "FROM simon_app_results "
+                       "WHERE country_origin IN (select iso FROM simon_app_country WHERE region_id=3) AND country_destination IN (select iso FROM simon_app_country WHERE region_id=3) "
+                       "GROUP BY country_origin, country_destination "
+                       "ORDER BY country_origin;")
+        return cursor.fetchall()
+
+
     def get_yearly_results(self):
         return Results.objects.javascript().filter(date_test__gt=datetime.now() - timedelta(365))
 
@@ -317,12 +329,18 @@ class TracerouteResultManager(models.Manager):
         return TracerouteResult.objects.all().exclude(output__isnull=True).exclude(output__exact='')
 
 
-class TracerouteResult(Results):
+class TracerouteResult(models.Model):
+    ip_origin = models.GenericIPAddressField(null=True)
+    ip_destination = models.GenericIPAddressField(null=True)
+    hop_count = models.IntegerField(default=0)
+
     output = models.TextField(max_length=2000, default='')
     objects = TracerouteResultManager()
 
+
     def save(self, *args, **kwargs):
         from geoip2.errors import AddressNotFoundError
+        import geoip2.database
 
         reader = geoip2.database.Reader(settings.GEOIP_DATABASE)
         try:
@@ -336,10 +354,11 @@ class TracerouteResult(Results):
         super(TracerouteResult, self).save(*args, **kwargs)
 
     def __str__(self):
-        return self.pretty_print()
+        return self.traceroutehop_set.all()
 
     def pretty_print(self):
         from geoip2.errors import AddressNotFoundError
+        import geoip2.database
 
         reader = geoip2.database.Reader(settings.GEOIP_DATABASE)
 
@@ -376,6 +395,8 @@ class TracerouteResult(Results):
         except Exception:
             return None
 
+class TracerouteHop(Results):
+    traceroute_result = models.ForeignKey(TracerouteResult)
 
 class RipeAtlasResult(Results):
     probe_id = models.IntegerField(null=False)
@@ -424,25 +445,23 @@ class RipeAtlasMeasurement(models.Model):
 
 class TestPointManager(models.Manager):
     def get_ipv4(self):
-        cursor = connection.cursor()
         return TestPoint.objects.exclude(ip_address__contains=':')
 
     def get_ipv6(self):
-        cursor = connection.cursor()
         return TestPoint.objects.filter(ip_address__contains=':')
 
 
 class TestPoint(models.Model):
-    description = models.TextField(default='')
-    testtype = models.CharField(max_length=20)
-    ip_address = models.GenericIPAddressField()
-    country = models.CharField(max_length=2)
+    description = models.TextField(default='', null=True)
+    testtype = models.CharField(max_length=20, null=True)
+    ip_address = models.GenericIPAddressField(null=True)
+    country = models.CharField(max_length=2, null=True)
     enabled = models.BooleanField(default=False)
     date_created = models.DateTimeField('test date', default=datetime.now(), null=True)
     url = models.TextField(null=True)
-    city = models.CharField(max_length=100)
-    latitude = models.FloatField(default=0.0)
-    longitude = models.FloatField(default=0.0)
+    city = models.CharField(max_length=100, null=True)
+    latitude = models.FloatField(default=0.0, null=True)
+    longitude = models.FloatField(default=0.0, null=True)
     objects = TestPointManager()
 
     def __unicode__(self):
@@ -451,6 +470,7 @@ class TestPoint(models.Model):
 
 class SpeedtestTestPoint(TestPoint):
     speedtest_url = models.TextField(null=True)
+    objects = TestPointManager()
 
 
 class Images(models.Model):
