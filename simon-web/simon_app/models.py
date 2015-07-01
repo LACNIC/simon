@@ -408,6 +408,10 @@ class RipeAtlasResult(Results):
     type = CharField(max_length=100)
     oneoff = models.BooleanField(default=False)
 
+class RipeAtlasProbe(models.Model):
+    probe_id = models.IntegerField(null=False)
+    country = models.CharField(max_length=2)
+
 
 class RipeAtlasPingResult(RipeAtlasResult):
     def is_valid(self):
