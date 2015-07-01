@@ -38,3 +38,5 @@ admin.site.register(Params)
 
 admin.site.register(ProbeApiPingResult)
 admin.site.register(SpeedtestTestPoint)
+
+admin.site.register(RipeAtlasProbe)

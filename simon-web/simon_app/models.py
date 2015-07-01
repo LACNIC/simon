@@ -409,8 +409,15 @@ class RipeAtlasResult(Results):
     oneoff = models.BooleanField(default=False)
 
 class RipeAtlasProbe(models.Model):
-    probe_id = models.IntegerField(null=False)
-    country = models.CharField(max_length=2)
+    probe_id = models.IntegerField(null=True)
+    country_code = models.CharField(max_length=2, null=True)
+    asn_v4 = models.IntegerField(null=True)
+    asn_v6 = models.IntegerField(null=True)
+    prefix_v4 = models.GenericIPAddressField(null=True)
+    prefix_v6 = models.GenericIPAddressField(null=True)
+
+    def __unicode__(self):
+        return self.country_code
 
 
 class RipeAtlasPingResult(RipeAtlasResult):
