@@ -44,7 +44,7 @@ class Command(BaseCommand):
                          "probeslimit={{ probeslimit }}&"
                          "timeout={{ timeout }}")
 
-            ctx = Context({'cc': origins, 'count': count, 'destination': destination_ip, 'probeslimit': len(ccs), 'timeout': 30000})
+            ctx = Context({'cc': origins, 'count': count, 'destination': destination_ip, 'probeslimit': 10 * len(ccs), 'timeout': 30000})
             url = t.render(ctx)
 
             response = opener.open(url).read()
