@@ -15,28 +15,20 @@ class ResultsAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Country)
-# admin.site.register(ThroughputResults)
 admin.site.register(Results, ResultsAdmin)
 admin.site.register(RipeAtlasPingResult)
-# admin.site.register(RipeAtlasMeasurement)
 admin.site.register(RipeAtlasResult)
 admin.site.register(TracerouteResult)
 
 admin.site.register(TestPoint)
-# admin.site.register(Images)
-# admin.site.register(Images_in_TestPoints)
 admin.site.register(OfflineReport)
 admin.site.register(Configs)
 admin.site.register(AS)
 
 admin.site.register(Params)
 
-# admin.site.register(Notification)
-# admin.site.register(Alert)
-# admin.site.register(Error)
-# admin.site.register(Success)
-
 admin.site.register(ProbeApiPingResult)
 admin.site.register(SpeedtestTestPoint)
 
 admin.site.register(RipeAtlasProbe)
+admin.site.register(RipeAtlasMeasurement)
