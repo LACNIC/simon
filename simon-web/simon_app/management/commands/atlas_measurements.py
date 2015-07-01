@@ -11,11 +11,15 @@ class Command(BaseCommand):
         from datetime import datetime
         from simon_app.api_views import getCountryFromIpAddress
         from simon_project.settings import asns
+        from sys import stdout
 
         base_url = "https://atlas.ripe.net"
-        probes = RipeAtlasProbe.objects.exclude(probe_id=None)
         stopped = 4
-        for asn in asns:
+        N = len(asns)
+        i = 0
+        for i, asn in enumerate(asns):
+            stdout.write("\r%.2f%%" % (100.0 * i / N))
+            stdout.flush()
 
             type = "ping"
             status = stopped
@@ -44,7 +48,6 @@ class Command(BaseCommand):
                    ) % (asn, type, status, offset)
 
             while previous != None:
-                print url
                 page_content = json.loads(urllib2.urlopen(url).read())
                 previous = page_content['meta']['previous']
 
@@ -52,11 +55,12 @@ class Command(BaseCommand):
                     # fetch the actual results for every "pointer'
 
                     msm_id = msm_pointer['msm_id']
-                    if msm_id in RipeAtlasMeasurement.objects.all().values_list('measurement_id', flat=True):
-                        break # next probe
+                    break_ = False
+                    if msm_id in RipeAtlasResult.objects.all().values_list('measurement_id', flat=True):
+                        break_ = True
+                        break # stop pagination for this measurement
 
                     if not inLACNICResources(msm_pointer['dst_addr']):
-                        print '.',
                         continue
 
                     result_url = msm_pointer['result']
@@ -100,3 +104,5 @@ class Command(BaseCommand):
                         )
                         rar.save()
                         print "\t", rar
+                if break_:
+                    break  # stop pagination for this measurement
