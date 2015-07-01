@@ -166,6 +166,9 @@ class ResultsManager(models.Manager):
     def probeapi(self):
         return ProbeApiPingResult.objects.filter(ave_rtt__lte=800).filter(ave_rtt__gt=0)
 
+    def ripe_atlas(self):
+        return RipeAtlasPingResult.objects.filter(ave_rtt__lte=800).filter(ave_rtt__gt=0)
+
     def inner(self):
         from django.db import connection
 

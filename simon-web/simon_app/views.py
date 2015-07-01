@@ -387,7 +387,6 @@ def post_xml_throughput_result(request):
 
 @csrf_exempt
 def post_offline_testpoints(request):
-
     from simon_app.reportes import GMTUY
 
     if (request.method != 'POST'):  # and request.method != 'GET'
@@ -417,8 +416,8 @@ def post_offline_testpoints(request):
                         # generate the token
                         dbTestPoint = TestPoint.objects.get(ip_address=dbPoint.ip_address)
 
-                        dbTestPoint.enabled = False  ###################################33
-                        #                         dbTestPoint.save()  #########################################33
+                        dbTestPoint.enabled = False  # ##################################33
+                        # dbTestPoint.save()  #########################################33
 
                         #                         token = ActiveTokens(token_value=''.join(random.choice('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz') for i in range(settings.TOKEN_LENGTH)), token_expiration=datetime.datetime.now() + datetime.timedelta(minutes=settings.TOKEN_TIMEOUT), testpoint=dbTestPoint)
                         #                         token.save()
@@ -479,7 +478,7 @@ def reports(request):
     from simon_app.reportes import ReportForm
 
     # ip = request.META.get('REMOTE_ADDR', None)
-    latency_histogram_applet = latency_histogram_js = latency_histogram_probeapi = ""
+    latency_histogram_applet = latency_histogram_js = latency_histogram_probeapi = latency_histogram_ripe_atlas = ""
 
     if request.method == "POST":
 
@@ -510,13 +509,18 @@ def reports(request):
             cc2 = Country.objects.get(id=country2).iso
 
         js = Chart.objects.filterQuerySet(Results.objects.javascript(), cc1=cc1, cc2=cc2, date_from=date_from, date_to=date_to, bidirectional=bidirectional)
-        latency_histogram_js = Chart.objects.asyncChart(data=js, divId="chart_js", labels=['JavaScript'], colors=['#6F8AB7'])
+        latency_histogram_js = Chart.objects.asyncChart(data=js, divId="chart_js", labels=['JavaScript'], colors=['#81B3C1'])
 
         applet = Chart.objects.filterQuerySet(Results.objects.applet().filter(testype='ntp'), cc1=cc1, cc2=cc2, date_from=date_from, date_to=date_to, bidirectional=bidirectional)
-        latency_histogram_applet = Chart.objects.asyncChart(data=applet, divId="chart_applet", labels=['Applet'], colors=['#615D6C'])
+        latency_histogram_applet = Chart.objects.asyncChart(data=applet, divId="chart_applet", labels=['Applet'], colors=['#77A4DD'])
 
         probeapi = Chart.objects.filterQuerySet(Results.objects.probeapi(), cc1=cc1, cc2=cc2, date_from=date_from, date_to=date_to, bidirectional=bidirectional)
-        latency_histogram_probeapi = Chart.objects.asyncChart(data=probeapi, divId="chart_probeapi", labels=['DOS ping'], colors=['#608BC4'])
+        latency_histogram_probeapi = Chart.objects.asyncChart(data=probeapi, divId="chart_probeapi", labels=['DOS ping'], colors=['#6F8AB7'])
+
+        ripe_atlas = Chart.objects.filterQuerySet(Results.objects.ripe_atlas(), cc1=cc1, cc2=cc2, date_from=date_from, date_to=date_to, bidirectional=bidirectional)
+        latency_histogram_ripe_atlas = Chart.objects.asyncChart(data=ripe_atlas, divId="chart_ripe_atlas", labels=['RIPE Atlas'], colors=['#615D6C'])
+        print ripe_atlas
+        print latency_histogram_ripe_atlas
 
     else:
         form = ReportForm()
@@ -526,6 +530,7 @@ def reports(request):
     context['latency_histogram_applet'] = latency_histogram_applet
     context['latency_histogram_probeapi'] = latency_histogram_probeapi
     context['latency_histogram_js'] = latency_histogram_js
+    context['latency_histogram_ripe_atlas'] = latency_histogram_ripe_atlas
 
     return render_to_response('reports.html', context)
 
@@ -542,7 +547,7 @@ def charts_reports(request):
 
     # ###########
     # DROPDOWN #
-    ############
+    # ###########
 
     ip = request.META.get('REMOTE_ADDR', None)
     g = GeoIP()
@@ -609,7 +614,7 @@ def charts_reports(request):
 
     # IPv6 penetration chart
     rs = Results.objects.ipv6_penetration_timeline()
-    ipv6_penetration_ratios = [(r[2]*1.0/(r[1]+r[2])) for r in rs if r[1]>0 or r[2]>0]
+    ipv6_penetration_ratios = [(r[2] * 1.0 / (r[1] + r[2])) for r in rs if r[1] > 0 or r[2] > 0]
 
     # Inner Latency Chart
     inners = Results.objects.inner()
@@ -682,12 +687,13 @@ def charts_reports(request):
         'latency_histogram_js': latency_histogram_js,
         'ipv6_penetration': ipv6_penetration,
         'inner_latency': inner_latency,
-        'inner_count': inner_count * 2 # 2em for each country at the chart
+        'inner_count': inner_count * 2  # 2em for each country at the chart
     }, getContext(request))
 
 
 def charts_reports_bandwidth(request):
     return render_to_response('charts_reports_bandwidth.html', getContext(request))
+
 
 def feedbackForm(request):
     """
@@ -717,6 +723,7 @@ def feedbackForm(request):
 
     # request.method = 'GET'
     return redirect('simon_app.views.home')
+
 
 def form(request):
     from simon_app.reportes import ResultsForm
@@ -774,7 +781,6 @@ def throughput_form(request):
 
 # Forms for point submitting
 def add_new_webpoint_form(request):
-
     title = 'Agregar Nuevo Punto Web'
     text = "Para registrar su servidor como un punto de testing NTP, complete el siguiente formulario. Una vez completado el formulario, nuestro equipo lo evaluará y lo pondrá a disposición de la comunidad para que se realicen tests sobre el. Su servidor formara parte de los 400 servidores que conforman este proyecto. Queremos recordarle que los tests no son demasiado frecuentes como para afectar la performance se su servidor."
     web_form = AddNewWebPointForm()
@@ -794,7 +800,6 @@ def add_new_ntppoint_form(request):
 
 # Views for point submitting
 def add_new_webpoint(request):
-
     from simon_app.reportes import AddNewWebPointForm, GMTUY
 
     if request.method == 'POST':
@@ -998,7 +1003,7 @@ def add_new_ntppoint(request):
                 ok = True
 
                 # if ok is not True:
-                #            # email volunteer
+                # # email volunteer
                 #            asunto = 'Su servidor esta siendo estudiado - Proyecto Simón'
                 #            texto = 'Hemos recibido una petición para agregar su servidor a nuestra lista de servidores. Nuestro equipo ha determinado que por el momento no es apto para integrar la lista de servidores debido a que su dirección no forma parte del espacio de direcciones de LACNIC. De todos modos será estudiado, y en caso de ser apto, le notificaremos al respecto.'
                 #            texto_HTML = '<p>Hemos recibido una petición para agregar su servidor a nuestra lista de servidores. Nuestro equipo ha determinado que por el momento no es apto para integrar la lista de servidores debido a que su dirección no forma parte del espacio de direcciones de LACNIC. De todos modos será estudiado, y en caso de ser apto, le notificaremos al respecto.</p><p>Datos del servidor:</p><p>Organización: %s</p><p>URL: %s</p><p>País: %s</p><p>Dirección IP: <strong>%s</strong></p><p>Muchas gracias por su colaboración. Lo invitamos a seguir siendo partícipe de este proyecto realizando algunos tests <a href="http://simon.labs.lacnic.net/simon/participate/">aquí</a>.</p>' % (str(testPoint.description), str(testPoint.url), str(country_printable), str(testPoint.ip_address))
@@ -1079,7 +1084,7 @@ def javascript_run(request):
     #
     # try:
     # # cc = whoIs(ip)['operator']['country']
-    #     cc = whoIs(ip)['country']
+    # cc = whoIs(ip)['country']
     #     countries = CountryForm(initial={'countries': cc})
     # except (TypeError, HTTPError):
     #     # IP is probably a local address
