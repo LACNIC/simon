@@ -51,11 +51,11 @@ class Command(BaseCommand):
                 page_content = json.loads(urllib2.urlopen(url).read())
                 previous = page_content['meta']['previous']
 
+                break_ = False
                 for msm_pointer in page_content['objects']:
                     # fetch the actual results for every "pointer'
 
                     msm_id = msm_pointer['msm_id']
-                    break_ = False
                     if msm_id in RipeAtlasResult.objects.all().values_list('measurement_id', flat=True):
                         break_ = True
                         break # stop pagination for this measurement
@@ -67,11 +67,28 @@ class Command(BaseCommand):
                     result_content = json.loads(urllib2.urlopen(base_url + result_url).read())
 
                     for result in result_content:
-                        destination_ip = result['dst_addr']
-                        origin_ip = result['from']
-                        min = result['min']
-                        max = result['max']
-                        avg = result['avg']
+                        try:
+                            destination_ip = result['dst_addr']
+                            origin_ip = result['from']
+                            min = result['min']
+                            max = result['max']
+                            avg = result['avg']
+                        except KeyError:
+                            continue
+
+                        if origin_ip == "" or destination_ip == "":
+                            continue
+
+                        if not inLACNICResources(origin_ip):
+                            continue
+
+                        try:
+                            country_origin = getCountryFromIpAddress(origin_ip)
+                            country_destination = getCountryFromIpAddress(destination_ip)
+                            as_origin = AS.objects.get_as_by_ip(origin_ip).asn
+                            as_destination = AS.objects.get_as_by_ip(destination_ip).asn
+                        except:
+                            continue
 
                         rar = RipeAtlasPingResult(
 
@@ -92,13 +109,13 @@ class Command(BaseCommand):
                             dev_rtt=(max-avg + avg-min) / 2 / 2,  # asuming min avg - 2*std. dev. and max = avg + 2*std. dev.
                             median_rtt=avg,  # todo
                             packet_loss=int(result['sent']) - int(result['rcvd']),
-                            country_origin=getCountryFromIpAddress(origin_ip),
-                            country_destination=getCountryFromIpAddress(destination_ip),
+                            country_origin=country_origin,
+                            country_destination=country_destination,
                             ip_version=6 if ':' in destination_ip else 4,
                             tester=tester,
                             tester_version="1",
-                            as_origin=AS.objects.get_as_by_ip(origin_ip).asn,
-                            as_destination=AS.objects.get_as_by_ip(destination_ip).asn,
+                            as_origin=as_origin,
+                            as_destination=as_destination,
                             user_agent="",
                             url=""
                         )

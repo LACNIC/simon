@@ -26,7 +26,7 @@ class Command(BaseCommand):
 
                     if probe['id'] in existent_probes:
                         continue
-                        
+
                     rap = RipeAtlasProbe(
                         probe_id = probe['id'],
                         country_code = probe['country_code'],
