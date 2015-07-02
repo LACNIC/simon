@@ -8,6 +8,8 @@ class Command(BaseCommand):
         import json
         import urllib2
 
+        existent_probes = RipeAtlasProbe.objects.all().values_list('probe_id', flat=True)
+
         base_url = "https://atlas.ripe.net"
         ccs = Country.objects.get_region_countries().values_list('iso', flat=True)
         for cc in ccs:
@@ -21,6 +23,10 @@ class Command(BaseCommand):
                 next = page_content['meta']['next']
 
                 for probe in page_content['objects']:
+
+                    if probe['id'] in existent_probes:
+                        continue
+                        
                     rap = RipeAtlasProbe(
                         probe_id = probe['id'],
                         country_code = probe['country_code'],
