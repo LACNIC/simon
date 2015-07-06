@@ -662,14 +662,14 @@ def charts_reports(request):
                 xAxis='string')
     inner_latency = requests.post(url, data=data).text
 
-    # inner_latency = Chart.objects.asyncChart(
-    #             data=json.dumps([list(inner_isos), list(inner_lats)]),
-    #             divId='inner_latency',
-    #             labels=json.dumps(['Inner latency']),
-    #             colors=json.dumps(['orange']),
-    #             kind='BarChart',
-    #             xAxis='string')
 
+    matrix = Results.objects.results_matrix_cc()
+    origins = []
+    destinations = []
+    for m in matrix:
+        origins.append(dict(m[0], 1))
+        destinations.append(m[1])
+    print origins
     ############
     # RESPONSE #
     ############
@@ -687,7 +687,8 @@ def charts_reports(request):
         'latency_histogram_js': latency_histogram_js,
         'ipv6_penetration': ipv6_penetration,
         'inner_latency': inner_latency,
-        'inner_count': inner_count * 2  # 2em for each country at the chart
+        'inner_count': inner_count * 2,  # 2em for each country at the chart
+        # 'matrix': str(Results.objects.results_matrix_cc())
     }, getContext(request))
 
 

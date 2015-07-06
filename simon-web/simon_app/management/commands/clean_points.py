@@ -16,8 +16,9 @@ class Command(BaseCommand):
                 urlopen("http://" + t.ip_address + "/", timeout=5).read()
             except HTTPError as e:
                 httpCode = e.code
-                if httpCode == 403 or httpCode == 404:
+                if httpCode != 200:
                     t.enabled = False
+                    print t
                     t.save()
                     print t
                 continue

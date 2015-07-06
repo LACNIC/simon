@@ -1,6 +1,10 @@
 from selenium import webdriver
 from time import sleep
-from simon_app.models import *
+from selenium.webdriver.common.keys import Keys
+
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 credentials = 'http://desarrolloenlacn:4y2eYr1zgpHmH9mzq7Vp@hub.browserstack.com:80/wd/hub'
 url = 'http://localhost:8000/prueba/'
@@ -23,42 +27,48 @@ ie = dict(
 
 browsers = [chrome, firefox, ie]
 
-# Windows 7
 windows7 = dict(
     os='Windows',
     os_version='7'
 )
 
+windows8 = dict(
+    os='Windows',
+    os_version='8'
+)
+
+windows_xp = dict(
+    os='Windows',
+    os_version='XP'
+)
+
+osx = dict(
+    os='OS X',
+    os_version='Yosemite'
+)
+
+oss = [windows7, windows8, windows_xp, osx]
+
 # Load configs
-configs = []
-print browsers
-for b in browsers:
-    windows7.update(b)
-    print windows7
-    configs.append(windows7)
+# conne = []
+for os in oss:
+    for browser in browsers:
 
-# Delete previous Results
-rs = Results.objects.filter(ip_destination='200.3.14.147')
-for r in rs:
-    r.delete()
+        os_ = os.copy()
+        os_.update(browser)
 
-try:
-    for config in configs:
-        config['browserstack.tunnel'] = True
-        config['browserstack.debug'] = True
-
+        os_['browserstack.tunnel'] = True
+        os_['browserstack.debug'] = True
         driver = webdriver.Remote(command_executor=credentials,
-                                  desired_capabilities=config)
-        driver.get(url)
+                                  desired_capabilities=os_)
+        try:
+            driver.get(url)
 
-        for time in [50, 50, 50]:
-            driver.find_element_by_tag_name("body")
-            sleep(time)  # 100 samples + connection time = 150 sec
-except:
-    pass
-finally:
-    driver.close()
+            wait = WebDriverWait(driver, 1200)
+            element = wait.until(EC.text_to_be_present_in_element((By.ID, 'output'), ','))
 
-# At his moment, results are stored in the database
-
-print Results.objects.filter(ip_destination='200.3.14.147')
+            print os_
+            print driver.find_element_by_id("output").text
+        finally:
+            driver.quit()
+            sleep(20)
