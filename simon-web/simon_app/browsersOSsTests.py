@@ -6,6 +6,16 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+from selenium.common.exceptions import TimeoutException
+
+def build_config(browser, os):
+    os_ = os.copy()
+    os_.update(browser)
+    os_['browserstack.tunnel'] = True
+    os_['browserstack.debug'] = True
+
+    return os_
+
 credentials = 'http://desarrolloenlacn:4y2eYr1zgpHmH9mzq7Vp@hub.browserstack.com:80/wd/hub'
 url = 'http://localhost:8000/prueba/'
 
@@ -20,13 +30,39 @@ firefox = dict(
     browser_version='35'
 )
 
-ie = dict(
+ie6 = dict(
+    browser='IE',
+    browser_version='6'
+)
+
+ie7 = dict(
+    browser='IE',
+    browser_version='7'
+)
+
+ie8 = dict(
+    browser='IE',
+    browser_version='8'
+)
+
+ie9 = dict(
+    browser='IE',
+    browser_version='9'
+)
+
+ie10 = dict(
+    browser='IE',
+    browser_version='10'
+)
+
+ie11 = dict(
     browser='IE',
     browser_version='11'
 )
 
-browsers = [chrome, firefox, ie]
+browsers = [chrome, firefox, ie6, ie7, ie8, ie9, ie10, ie11]
 
+# OSes
 windows7 = dict(
     os='Windows',
     os_version='7'
@@ -49,26 +85,40 @@ osx = dict(
 
 oss = [windows7, windows8, windows_xp, osx]
 
-# Load configs
-# conne = []
+
+# Build configs
+
+configs = []
+
+for browser in [ie6, ie7]:
+    configs.append(build_config(browser, windows_xp))
+
+for browser in [ie8, ie9, ie10, ie11]:
+    configs.append(build_config(browser, windows7))
+
+for browser in [ie10]:
+    configs.append(build_config(browser, windows8))
+
 for os in oss:
-    for browser in browsers:
+    configs.append(build_config(chrome, os))
+    configs.append(build_config(firefox, os))
 
-        os_ = os.copy()
-        os_.update(browser)
 
-        os_['browserstack.tunnel'] = True
-        os_['browserstack.debug'] = True
-        driver = webdriver.Remote(command_executor=credentials,
-                                  desired_capabilities=os_)
-        try:
-            driver.get(url)
+for config in configs:
+    driver = webdriver.Remote(command_executor=credentials,
+                              desired_capabilities=config)
+    try:
+        driver.get(url)
 
-            wait = WebDriverWait(driver, 1200)
-            element = wait.until(EC.text_to_be_present_in_element((By.ID, 'output'), ','))
+        wait = WebDriverWait(driver, 1200)
+        element = wait.until(EC.text_to_be_present_in_element((By.ID, 'output'), ','))
 
-            print os_
-            print driver.find_element_by_id("output").text
-        finally:
-            driver.quit()
-            sleep(20)
+        print config
+        print driver.find_element_by_id("output").text
+
+    except TimeoutException:
+        continue
+
+    finally:
+        driver.quit()
+        sleep(20)
