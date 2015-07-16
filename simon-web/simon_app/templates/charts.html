@@ -1,5 +1,15 @@
 {% extends 'bootstrap.html' %}
+{% load static %}
 {% block headers %}
+
+    <style>
+        #heatmap {
+            min-width: 300px;
+            max-width: 800px;
+            height: 400px;
+            margin: 1em auto;
+        }
+    </style>
 
     {#    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>#}
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
@@ -57,7 +67,7 @@
             <h3 class="page-header">Ubicación de los puntos de medición que forman parte del
                 proyecto Simón</h3>
 
-            <p>El mapa de la izquierda muestra la ubicación de los servidores
+            <p>El siguiente mapa muestra la ubicación de los servidores
                 donde se realizan las mediciones de latencia. Existen varios tipos de
                 servidores, incluyendo NTP, setvidores Speedtest, y servdores CAIDA
                 Ark. En un futuro próximo se incluirán puntos de testing de RIPE
@@ -137,12 +147,6 @@
         <div id="ipv6_penetration"></div>
 
 
-        {#        <div id="late-header">Latencia interna</h4>#}
-        {#        <script type="text/javascript">#}
-        {#            {{ latency_histogram_inner | safe }}#}
-        {#        </script>#}
-        {#        <div id="latency_histogram_inner"></div>#}
-
         <p>
             Para obtener más información acerca de la calidad de Internet en tu
             país, ver la sección de <a href="{% url 'simon_app.views.reports' %}">Reportes por país</a>. Allí
@@ -152,30 +156,6 @@
             términos de latencia.
         </p>
 
-
-        {#        <h4 class="page-header">Latencia por lugar desglosada en años</h4>#}
-
-        {#        <a href="/static/histograms/region/Region%20latency%20histogram,%202009-2014.png"#}
-        {#           title="Histograma de distribución de latencia, año 2009"><img#}
-        {#                alt="Histograma de distribución de latencia, año 2009"#}
-        {#                src="/static/histograms/region/Region%20latency%20histogram,%202009-2014.png" style="width: 250px"#}
-        {#                class="hover"/></a>#}
-
-        {#        <form id="country_form" method="post">#}
-        {#            {% csrf_token %}#}
-        {#            {{ countries_dropdown.as_p }}#}
-        {#        </form>#}
-
-        {#        <p>Idem al gráfico anterior, pero se puede ver la evolución de los#}
-        {#            retardos en la red. Las curvas que tienen un máximo sobre la izquierda#}
-        {#            muestran una buena interconexión (rápida), las que lo tienen a la#}
-        {#            derecha una mala interconexión (lenta), y las que lo tienen en la zona#}
-        {#            media una interconexión media (posiblemente la diferencia entre los#}
-        {#            caminos de ida y vuelta de los paquetes causa que un enlace sea rápido#}
-        {#            y otro lento).</p>#}
-
-        <div align="center" id="distribution_history_div"
-             class="barchart border"></div>
 
         <div class="chartdiv">
             <h3 class="page-header">Latencia desde un país hacia él mismo</h3>
@@ -191,34 +171,31 @@
             <script type="text/javascript">
                 {{ inner_latency | safe }}
             </script>
-            <div id="inner_latency" style="min-height: {{ inner_count }}em;"></div>
+            <div id="inner_latency" style="min-height: {{ inner_count | safe }}em;"></div>
 
             {#            <div align="center" id="column_chart_div" class="barchart border"></div>#}
         </div>
 
-        {#        <div id="center" class="chartdiv">#}
-        {#            <h3 class="page-header">Matriz con latencias</h3>#}
-        {##}
-        {#            <p>#}
-        {#                La gráfica a continuación representa la latencia promedio en la#}
-        {#                región. Las filas representan los paises de origen de los tests, y las#}
-        {#                columnas los de destino. Es decir, si se quieren ver todos los tests#}
-        {#                con origen Guatemala, basta ver la fila Guatemala; si se quieren ver#}
-        {#                los que tienen destino Guatemala, entonces habrá que recorrer la#}
-        {#                columna Guatemala. <br/> Las latencias más altas se corresponden con#}
-        {#                las tonalidaades más oscuras. Se puede ver que la diagonal principal#}
-        {#                tiene, lógicamente, menor latencia que el promedio, ya que se#}
-        {#                corresponde con la latencia interna de los países.#}
-        {#            </p>#}
-        {##}
-        {#            <div class="border">#}
-        {#                <div id="heatmap"#}
-        {#                     style="width: 600px; height: 600px; margin: 3em 0 0 100px"></div>#}
-        {##}
-        {#                <div id="heatmap_asns"#}
-        {#                     style="width: 600px; height: 600px; margin: 3em 0 0 100px"></div>#}
-        {##}
-        {#            </div>#}
-        {#        </div>#}
+
+        <div class="chartdiv">
+            <h3 class="page-header">Matriz con latencias</h3>
+
+            <p>
+                La gráfica a continuación representa la latencia promedio en la
+                región. Las filas representan los paises de origen de los tests, y las
+                columnas los de destino. Es decir, si se quieren ver todos los tests
+                con origen Brasil, basta ver la fila BR; si se quieren ver
+                los que tienen destino Brasil, entonces habrá que recorrer la
+                columna BR. <br/> Las latencias más altas se corresponden con
+                las tonalidaades más oscuras. Se puede ver que la diagonal principal
+                tiene, lógicamente, menor latencia que el promedio, ya que se
+                corresponde con la latencia interna de los países.
+            </p>
+
+            <img class="center-block" src="{% static 'simon_app/imgs/heatmap-javascript.png' %}" >
+        </div>
+
     </div>
+
+
 {% endblock %}

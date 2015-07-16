@@ -419,7 +419,7 @@ def post_offline_testpoints(request):
                         dbTestPoint.enabled = False  # ##################################33
                         # dbTestPoint.save()  #########################################33
 
-                        #                         token = ActiveTokens(token_value=''.join(random.choice('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz') for i in range(settings.TOKEN_LENGTH)), token_expiration=datetime.datetime.now() + datetime.timedelta(minutes=settings.TOKEN_TIMEOUT), testpoint=dbTestPoint)
+                        # token = ActiveTokens(token_value=''.join(random.choice('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz') for i in range(settings.TOKEN_LENGTH)), token_expiration=datetime.datetime.now() + datetime.timedelta(minutes=settings.TOKEN_TIMEOUT), testpoint=dbTestPoint)
                         #                         token.save()
                         #
                         #                         minutes = math.ceil((token.token_expiration - datetime.datetime.now()).total_seconds() / 60)
@@ -564,7 +564,7 @@ def charts_reports(request):
     except:
         countries_dropdown = CountryDropdownForm()
 
-    ############
+    # ###########
     # HEATMAPS #
     ############
 
@@ -646,8 +646,7 @@ def charts_reports(request):
                 colors=json.dumps(['#615D6C']),
                 kind='AreaChart',
                 xAxis='date')
-    ipv6_penetration = requests.post(url, data=data, headers={'Connection':'close'}).text
-    print ipv6_penetration
+    ipv6_penetration = requests.post(url, data=data, headers={'Connection': 'close'}).text
 
     # ipv6_penetration = Chart.objects.asyncChart(data=json.dumps([list((d[0].strftime("%d/%m/%Y") for d in rs)), list(ipv6_penetration_ratios)]),
     #                                             divId="ipv6_penetration",
@@ -663,34 +662,13 @@ def charts_reports(request):
                 colors=json.dumps(['#92977E']),
                 kind='BarChart',
                 xAxis='string')
-    inner_latency = requests.post(url, data=data, headers={'Connection':'close'}).text
-    print inner_latency
-
-    # HEATMAP
-
-    # from collections import defaultdict
-    # matrix = Results.objects.results_matrix_cc()
-    # origins = []
-    # destinations = defaultdict()
-    # for m in matrix:
-    #     o = m[0]
-    #     d = m[1]
-    #     v = m[2]
-    #     origins.append(o)
-    #     destinations.append(d)
-    # ccs = list(set(origins + destinations))
-    # indexes = []
-    # for i, cc in enumerate(ccs):
-    #     indexes.append(dict(cc, i))
-    # print indexes
-
-
+    inner_latency = requests.post(url, data=data, headers={'Connection': 'close'}).text
 
     ############
     # RESPONSE #
     ############
 
-    from django.template import RequestContext, loader
+    from django.template import RequestContext
     from lib.helpers import simon_processor
 
     ctx = RequestContext(request, {
@@ -1018,7 +996,7 @@ def add_new_ntppoint(request):
 
                 # if ok is not True:
                 # # email volunteer
-                #            asunto = 'Su servidor esta siendo estudiado - Proyecto Simón'
+                # asunto = 'Su servidor esta siendo estudiado - Proyecto Simón'
                 #            texto = 'Hemos recibido una petición para agregar su servidor a nuestra lista de servidores. Nuestro equipo ha determinado que por el momento no es apto para integrar la lista de servidores debido a que su dirección no forma parte del espacio de direcciones de LACNIC. De todos modos será estudiado, y en caso de ser apto, le notificaremos al respecto.'
                 #            texto_HTML = '<p>Hemos recibido una petición para agregar su servidor a nuestra lista de servidores. Nuestro equipo ha determinado que por el momento no es apto para integrar la lista de servidores debido a que su dirección no forma parte del espacio de direcciones de LACNIC. De todos modos será estudiado, y en caso de ser apto, le notificaremos al respecto.</p><p>Datos del servidor:</p><p>Organización: %s</p><p>URL: %s</p><p>País: %s</p><p>Dirección IP: <strong>%s</strong></p><p>Muchas gracias por su colaboración. Lo invitamos a seguir siendo partícipe de este proyecto realizando algunos tests <a href="http://simon.labs.lacnic.net/simon/participate/">aquí</a>.</p>' % (str(testPoint.description), str(testPoint.url), str(country_printable), str(testPoint.ip_address))
                 #            try:
@@ -1099,7 +1077,7 @@ def javascript_run(request):
     # try:
     # # cc = whoIs(ip)['operator']['country']
     # cc = whoIs(ip)['country']
-    #     countries = CountryForm(initial={'countries': cc})
+    # countries = CountryForm(initial={'countries': cc})
     # except (TypeError, HTTPError):
     #     # IP is probably a local address
     #     countries = CountryForm()
