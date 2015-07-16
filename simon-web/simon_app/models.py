@@ -7,6 +7,7 @@ import trparse
 import simon_project.settings as settings
 import geoip2
 import json, requests
+from django.contrib import admin
 
 
 class Region(models.Model):
@@ -151,6 +152,10 @@ class AS(models.Model):
 
     def __unicode__(self):
         return "ASN %s" % (self.asn)
+
+    class Meta:
+        verbose_name = 'Sistema Autonomo'
+        verbose_name_plural = 'Sistemas Autonomos'
 
 
 class ResultsManager(models.Manager):
@@ -298,6 +303,23 @@ class Results(models.Model):
     def get_as_destination(self):
         return AS.object.get_as_by_ip(self.ip_destination)
 
+    def protocol(self):
+        if self.tester == 'Applet' and self.testype == 'tcp_web':
+            return "TCP"
+        elif self.tester == 'JavaScript' and self.testype == 'tcp_web':
+            return "HTTP"
+        elif self.tester == 'Applet' and self.testype == 'ntp':
+            return "NTP"
+        elif self.tester == 'probeapi' and self.testype == 'ping':
+            return "ICMP"
+
+    def date_short(self):
+        return self.date_test.strftime("%x")
+
+    class Meta:
+        verbose_name = 'Resultado'
+        verbose_name_plural = 'Resultados'
+
     def set_data_test(self, tag, text):
         # if(tag == 'version'):
         # self.version = text
@@ -341,6 +363,10 @@ class ProbeApiPingResult(Results):
         self.testype = 'ping'
 
         super(ProbeApiPingResult, self).save(*args, **kwargs)  # Call the "real" save() method.
+
+    class Meta:
+        verbose_name = 'Resultado ProbeAPI'
+        verbose_name_plural = 'Resultados ProbeAPI'
 
 
 class TracerouteResultManager(models.Manager):
@@ -434,6 +460,10 @@ class RipeAtlasProbe(models.Model):
     def __unicode__(self):
         return self.country_code
 
+    class Meta:
+        verbose_name = 'RIPE Atlas Probe'
+        verbose_name_plural = 'RIPE Atlas Probes'
+
 
 class RipeAtlasPingResult(RipeAtlasResult):
     def is_valid(self):
@@ -462,6 +492,10 @@ class RipeAtlasPingResult(RipeAtlasResult):
         )
         return res
 
+    class Meta:
+        verbose_name = 'Resultado RIPE Atlas ICMP Ping'
+        verbose_name_plural = 'Resultados RIPE Atlas ICMP Ping'
+
 
 class RipeAtlasTracerouteResult(RipeAtlasResult):
     pass
@@ -487,7 +521,7 @@ class TestPoint(models.Model):
     ip_address = models.GenericIPAddressField(null=True)
     country = models.CharField(max_length=2, null=True)
     enabled = models.BooleanField(default=False)
-    date_created = models.DateTimeField('test date', default=datetime.now(), null=True)
+    date_created = models.DateTimeField('Date added', default=datetime.now(), null=True)
     url = models.TextField(null=True)
     city = models.CharField(max_length=100, null=True)
     latitude = models.FloatField(default=0.0, null=True)
@@ -497,10 +531,23 @@ class TestPoint(models.Model):
     def __unicode__(self):
         return self.ip_address
 
+    def autnum(self):
+        return AS.objects.get_as_by_ip(self.ip_address).asn
+    def date_short(self):
+        return self.date_created.strftime("%x")
+
+    class Meta:
+        verbose_name = 'Punto de prueba'
+        verbose_name_plural = 'Puntos de prueba'
+
 
 class SpeedtestTestPoint(TestPoint):
     speedtest_url = models.TextField(null=True)
     objects = TestPointManager()
+
+    class Meta:
+        verbose_name = 'Punto de prueba de Speedtest.com'
+        verbose_name_plural = 'Puntos de prueba de Speedtest.com'
 
 
 class Images(models.Model):
@@ -542,6 +589,10 @@ class Configs(models.Model):
     def __unicode__(self):
         return self.config_value
 
+    class Meta:
+        verbose_name = 'Configuracion'
+        verbose_name_plural = 'Configuraciones'
+
 
 class Params(models.Model):
     config_name = models.TextField()
@@ -549,6 +600,10 @@ class Params(models.Model):
 
     def __unicode__(self):
         return self.config_value
+
+    class Meta:
+        verbose_name = 'Parametro'
+        verbose_name_plural = 'Parametros'
 
 
 class Notification(models.Model):
