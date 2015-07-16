@@ -37,13 +37,20 @@ class RipeAtlasProbeAdmin(admin.ModelAdmin):
     list_display = ['country_code', 'asn_v4', 'asn_v6', 'prefix_v4', 'prefix_v6']
     search_fields = ['country_code']
 
+class ConfigsAdmin(admin.ModelAdmin):
+    def enable(modeladmin, request, queryset):
+        queryset.update(config_value="1")
+
+    def disable(modeladmin, request, queryset):
+        queryset.update(config_value="0")
+    list_display = ['config_name', 'config_value', 'config_description']
+    actions = [enable, disable]
+
 
 admin.site.register(Results, ResultsAdmin)
 
 admin.site.register(TestPoint, TestPointAdmin)
-admin.site.register(Configs)
-
-admin.site.register(Params)
+admin.site.register(Configs, ConfigsAdmin)
 
 admin.site.register(ProbeApiPingResult, ResultsAdmin)
 admin.site.register(SpeedtestTestPoint, TestPointAdmin)

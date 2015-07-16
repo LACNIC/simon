@@ -570,18 +570,6 @@ def charts_reports(request):
 
     import json
 
-    key = 'heatmap_countries'
-    heatmap_countries = Params.objects.get(config_name=key)
-
-    key = 'heatmap_values'
-    heatmap_values = json.loads("{ \"%s\" : %s}" % (key, Params.objects.get(config_name=key)))
-
-    key = 'heatmap_asns'
-    heatmap_asns = Params.objects.get(config_name=key)
-
-    key = 'heatmap_asns_values'
-    heatmap_asns_values = Params.objects.get(config_name=key)  #json.loads("{ \"%s\" : %s}" % (key, Params.objects.get(config_name=key)))
-
     #######
     # MAP #
     #######
