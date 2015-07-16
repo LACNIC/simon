@@ -8,13 +8,20 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from selenium.common.exceptions import TimeoutException
 
+
 def build_config(browser, os):
     os_ = os.copy()
     os_.update(browser)
     os_['browserstack.tunnel'] = True
     os_['browserstack.debug'] = True
-
     return os_
+
+def build_browser(browser_name, version):
+    return dict(
+        browser=browser_name,
+        browser_version=version
+    )
+
 
 credentials = 'http://desarrolloenlacn:4y2eYr1zgpHmH9mzq7Vp@hub.browserstack.com:80/wd/hub'
 url = 'http://localhost:8000/prueba/'
@@ -90,19 +97,23 @@ oss = [windows7, windows8, windows_xp, osx]
 
 configs = []
 
-for browser in [ie6, ie7]:
-    configs.append(build_config(browser, windows_xp))
+# for browser in [ie6, ie7]:
+# configs.append(build_config(browser, windows_xp))
+# for browser in [ie8, ie9, ie10, ie11]:
+# configs.append(build_config(browser, windows7))
+# for browser in [ie10]:
+# configs.append(build_config(browser, windows8))
 
-for browser in [ie8, ie9, ie10, ie11]:
+# for os in oss:
+#     configs.append(build_config(chrome, os))
+#     configs.append(build_config(firefox, os))
+
+for version in range(33, 43):
+    browser = build_browser('Chrome', version)
     configs.append(build_config(browser, windows7))
 
-for browser in [ie10]:
-    configs.append(build_config(browser, windows8))
-
-for os in oss:
-    configs.append(build_config(chrome, os))
-    configs.append(build_config(firefox, os))
-
+# browser = build_browser('IE', 10)
+# configs.append(build_config(browser, windows8))
 
 for config in configs:
     driver = webdriver.Remote(command_executor=credentials,
@@ -113,8 +124,8 @@ for config in configs:
         wait = WebDriverWait(driver, 1200)
         element = wait.until(EC.text_to_be_present_in_element((By.ID, 'output'), ','))
 
+        config['data'] = [driver.find_element_by_id("output").text]
         print config
-        print driver.find_element_by_id("output").text
 
     except TimeoutException:
         continue
