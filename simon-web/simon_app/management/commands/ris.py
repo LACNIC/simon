@@ -13,7 +13,6 @@ class Command(BaseCommand):
         now = datetime.datetime.now()
 
         print "Downloading RIS..."
-<<<<<<< HEAD
         file_v4=urllib2.urlopen('http://www.ris.ripe.net/dumps/riswhoisdump.IPv4.gz').read()
         file_v6=urllib2.urlopen('http://www.ris.ripe.net/dumps/riswhoisdump.IPv6.gz').read()
 
@@ -24,15 +23,6 @@ class Command(BaseCommand):
 
         print "Deleting old records..."
         AS.objects.all().delete() # Delete ALL AS-related info and make place for new information
-=======
-        file = urllib2.urlopen('http://www.ris.ripe.net/dumps/riswhoisdump.IPv4.gz').read()
-
-        print "Parsing RIS..."
-        ris = zlib.decompress(file, 16 + zlib.MAX_WBITS)
-        asn_list = [asn.split('\t') for asn in ris.split('\n')]
-
-        AS.objects.all().delete()  # Delete ALL AS-related info and make place for new information
-
         internet = AS(
             asn=0,
             network="0.0.0.0/0",
@@ -41,23 +31,13 @@ class Command(BaseCommand):
             regional=False
         )
         internet.save()
->>>>>>> heatmap
 
         print "Inserting new records (%s)" % (now)
         N = len(asn_list)
-<<<<<<< HEAD
-        i=0
         for i, line in enumerate(asn_list):
             try:
                 stdout.write("\r%.2f%%" % (100.0 * i / N))
                 stdout.flush()
-=======
-        i = 0
-        for line in asn_list:
-            try:
-                print "%.2f%%" % (100.0 * i / N)
-                i += 1
->>>>>>> heatmap
 
                 if len(line) != 3: continue
 
