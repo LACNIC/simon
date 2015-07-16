@@ -5,25 +5,35 @@ from simon_project import settings
 import zlib, urllib2
 import datetime
 
+
 class Command(BaseCommand):
     def handle(self, *args, **options):
 
         now = datetime.datetime.now()
 
         print "Downloading RIS..."
-        file=urllib2.urlopen('http://www.ris.ripe.net/dumps/riswhoisdump.IPv4.gz').read()
+        file = urllib2.urlopen('http://www.ris.ripe.net/dumps/riswhoisdump.IPv4.gz').read()
 
         print "Parsing RIS..."
-        ris = zlib.decompress(file, 16+zlib.MAX_WBITS)
+        ris = zlib.decompress(file, 16 + zlib.MAX_WBITS)
         asn_list = [asn.split('\t') for asn in ris.split('\n')]
 
-        AS.objects.all().delete() # Delete ALL AS-related info and make place for new information
+        AS.objects.all().delete()  # Delete ALL AS-related info and make place for new information
+
+        internet = AS(
+            asn=0,
+            network="0.0.0.0/0",
+            pfx_length=0,
+            date_updated=now,
+            regional=False
+        )
+        internet.save()
 
         N = len(asn_list)
-        i=0
+        i = 0
         for line in asn_list:
             try:
-                print "%.2f%%" % (100.0*i / N)
+                print "%.2f%%" % (100.0 * i / N)
                 i += 1
 
                 if len(line) != 3: continue
