@@ -419,7 +419,7 @@ def post_offline_testpoints(request):
                         dbTestPoint.enabled = False  # ##################################33
                         # dbTestPoint.save()  #########################################33
 
-                        #                         token = ActiveTokens(token_value=''.join(random.choice('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz') for i in range(settings.TOKEN_LENGTH)), token_expiration=datetime.datetime.now() + datetime.timedelta(minutes=settings.TOKEN_TIMEOUT), testpoint=dbTestPoint)
+                        # token = ActiveTokens(token_value=''.join(random.choice('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz') for i in range(settings.TOKEN_LENGTH)), token_expiration=datetime.datetime.now() + datetime.timedelta(minutes=settings.TOKEN_TIMEOUT), testpoint=dbTestPoint)
                         #                         token.save()
                         #
                         #                         minutes = math.ceil((token.token_expiration - datetime.datetime.now()).total_seconds() / 60)
@@ -544,6 +544,7 @@ def charts_reports(request):
     """
     import datetime
     from simon_app.reportes import CountryDropdownForm
+    from django.template import Context
 
     # ###########
     # DROPDOWN #
@@ -563,7 +564,7 @@ def charts_reports(request):
     except:
         countries_dropdown = CountryDropdownForm()
 
-    ############
+    # ###########
     # HEATMAPS #
     ############
 
@@ -617,7 +618,7 @@ def charts_reports(request):
     ipv6_penetration_ratios = [(r[2] * 1.0 / (r[1] + r[2])) for r in rs if r[1] > 0 or r[2] > 0]
 
     # Inner Latency Chart
-    inners = Results.objects.inner()
+    inners = Results.objects.inner('JavaScript', 12)
     inner_isos = []
     inner_lats = []
     for i in inners:
@@ -628,10 +629,10 @@ def charts_reports(request):
         inner_isos.append(iso)
         inner_lats.append(lat)
 
-
     ###################
     # Charts Services #
     ###################
+
 
     latency_histogram_applet = Chart.objects.asyncChart(data=rtts_applet, divId="latency_histogram_applet", labels=['NTP'], colors=['#608BC4'])
 
@@ -645,13 +646,14 @@ def charts_reports(request):
                 colors=json.dumps(['#615D6C']),
                 kind='AreaChart',
                 xAxis='date')
-    ipv6_penetration = requests.post(url, data=data).text
+    ipv6_penetration = requests.post(url, data=data, headers={'Connection': 'close'}).text
+
     # ipv6_penetration = Chart.objects.asyncChart(data=json.dumps([list((d[0].strftime("%d/%m/%Y") for d in rs)), list(ipv6_penetration_ratios)]),
     #                                             divId="ipv6_penetration",
     #                                             labels=["IPv6 sample ratio"],
     #                                             colors=['#608BC4'],
     #                                             kind='LineChart',
-    #                                             xAxis='date') # requests.post(url, data=data).text
+    #                                             xAxis='date')
 
     inner_count = len(inner_isos)
     data = dict(data=json.dumps([list(inner_isos), list(inner_lats)]),
@@ -660,35 +662,25 @@ def charts_reports(request):
                 colors=json.dumps(['#92977E']),
                 kind='BarChart',
                 xAxis='string')
-    inner_latency = requests.post(url, data=data).text
-
-    # inner_latency = Chart.objects.asyncChart(
-    #             data=json.dumps([list(inner_isos), list(inner_lats)]),
-    #             divId='inner_latency',
-    #             labels=json.dumps(['Inner latency']),
-    #             colors=json.dumps(['orange']),
-    #             kind='BarChart',
-    #             xAxis='string')
+    inner_latency = requests.post(url, data=data, headers={'Connection': 'close'}).text
 
     ############
     # RESPONSE #
     ############
 
-    return render_to_response('charts.html', {
-        'heatmap_asns': heatmap_asns,
-        'heatmap_asns_values': heatmap_asns_values,
-        'heatmap_countries': heatmap_countries,
-        'heatmap_values': heatmap_values['heatmap_values'],
-        'countries_dropdown': countries_dropdown,
-        'countries': countries,
-        'years': years,
+    from django.template import RequestContext
+    from lib.helpers import simon_processor
 
+    ctx = RequestContext(request, {
+        'countries': countries,
         'latency_histogram_applet': latency_histogram_applet,
         'latency_histogram_js': latency_histogram_js,
         'ipv6_penetration': ipv6_penetration,
         'inner_latency': inner_latency,
-        'inner_count': inner_count * 2  # 2em for each country at the chart
-    }, getContext(request))
+        'inner_count': inner_count * 2
+    }, processors=[simon_processor])
+
+    return render_to_response('charts.html', ctx)
 
 
 def charts_reports_bandwidth(request):
@@ -1004,7 +996,7 @@ def add_new_ntppoint(request):
 
                 # if ok is not True:
                 # # email volunteer
-                #            asunto = 'Su servidor esta siendo estudiado - Proyecto Simón'
+                # asunto = 'Su servidor esta siendo estudiado - Proyecto Simón'
                 #            texto = 'Hemos recibido una petición para agregar su servidor a nuestra lista de servidores. Nuestro equipo ha determinado que por el momento no es apto para integrar la lista de servidores debido a que su dirección no forma parte del espacio de direcciones de LACNIC. De todos modos será estudiado, y en caso de ser apto, le notificaremos al respecto.'
                 #            texto_HTML = '<p>Hemos recibido una petición para agregar su servidor a nuestra lista de servidores. Nuestro equipo ha determinado que por el momento no es apto para integrar la lista de servidores debido a que su dirección no forma parte del espacio de direcciones de LACNIC. De todos modos será estudiado, y en caso de ser apto, le notificaremos al respecto.</p><p>Datos del servidor:</p><p>Organización: %s</p><p>URL: %s</p><p>País: %s</p><p>Dirección IP: <strong>%s</strong></p><p>Muchas gracias por su colaboración. Lo invitamos a seguir siendo partícipe de este proyecto realizando algunos tests <a href="http://simon.labs.lacnic.net/simon/participate/">aquí</a>.</p>' % (str(testPoint.description), str(testPoint.url), str(country_printable), str(testPoint.ip_address))
                 #            try:
@@ -1085,7 +1077,7 @@ def javascript_run(request):
     # try:
     # # cc = whoIs(ip)['operator']['country']
     # cc = whoIs(ip)['country']
-    #     countries = CountryForm(initial={'countries': cc})
+    # countries = CountryForm(initial={'countries': cc})
     # except (TypeError, HTTPError):
     #     # IP is probably a local address
     #     countries = CountryForm()

@@ -11,47 +11,54 @@
 <!-- SIMON script async loading -->
 <script type="application/javascript">
 
-{#    (function (d, s) {#}
-{#        var js = d.createElement(s),#}
-{#                sc = d.getElementsByTagName(s)[0];#}
-{##}
-{#        js.src = "http://127.0.0.1:8000/simon/static/simon_app/js/simon_probe_plugin.js";//http://simon.lacnic.net/simon/static/simon_app/js/simon_probe_plugin.js";#}
-{#        js.type = "text/javascript";#}
-{#        sc.parentNode.insertBefore(js, sc);#}
-{##}
-{##}
-{#        js.onload = js.onreadystatechange = function () {#}
-{##}
-{#            SIMON.after_points = function () {#}
-{#                var testPoint = {#}
-{#                    "ip": '200.3.14.147',#}
-{#                    "url": 'prueba-001',#}
-{#                    "country": 'UY',#}
-{#                    "countryName": 'Uruguay',#}
-{#                    "city": 'Montevideo',#}
-{#                    "region": 'S-A',#}
-{#                    "results": [],#}
-{#                    "throughputResults": [],#}
-{#                    "online": false,#}
-{#                    "onlineFinished": false#}
-{#                };#}
-{##}
-{#                SIMON.points = [testPoint];#}
-{#            };#}
-{##}
-{#            SIMON.params.numTests = 100;#}
-{##}
-{#            SIMON.init();#}
-{#        };#}
-{##}
-{#    }(document, "script"));#}
+    (function (d, s) {
+        var js = d.createElement(s),
+                sc = d.getElementsByTagName(s)[0];
+
+        js.src = "http://127.0.0.1:8000/simon/static/simon_app/js/simon_probe_plugin.js";//http://simon.lacnic.net/simon/static/simon_app/js/simon_probe_plugin.js";
+        js.type = "text/javascript";
+        sc.parentNode.insertBefore(js, sc);
+
+
+        js.onload = js.onreadystatechange = function () {
+
+            SIMON.after_points = function () {
+                var testPoint = {
+                    "ip": '200.3.14.147',
+                    "url": 'prueba-001',
+                    "country": 'UY',
+                    "countryName": 'Uruguay',
+                    "city": 'Montevideo',
+                    "region": 'S-A',
+                    "results": [],
+                    "throughputResults": [],
+                    "online": false,
+                    "onlineFinished": false
+                };
+
+                SIMON.points = [testPoint];
+            };
+
+            SIMON.after_each = function() {};
+            SIMON.print = false;
+
+            SIMON.after_end = function() {
+                for(t in SIMON.points) {
+                    cur_html = $("#output").html();
+                    $("#output").html(cur_html + SIMON.points[t].results + "<br>");
+                }
+            }
+
+            SIMON.params.numTests = 1000;
+
+            SIMON.init();
+        };
+
+    }(document, "script"));
 
 </script>
 
-<div class="row">
-    <div class="col-lg-12">
-        {{ latency_histogram_js }}
-    </div>
+<div id="output" class="row">
 </div>
 
 </body>

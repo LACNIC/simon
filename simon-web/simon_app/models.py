@@ -136,7 +136,7 @@ class ASManager(models.Manager):
             return AS.objects.raw(
                 "SELECT * FROM simon_app_as WHERE INET(network) >>= inet '%s' ORDER BY pfx_length DESC LIMIT 1" % ip_address)[0]
         except IndexError:
-            return AS.objects.get(id=1)  # 0.0.0.0/0
+            return AS.objects.filter(pfx_length=0).filter(asn=0)[0]
 
 
 class AS(models.Model):
@@ -169,11 +169,16 @@ class ResultsManager(models.Manager):
     def ripe_atlas(self):
         return RipeAtlasPingResult.objects.filter(ave_rtt__lte=800).filter(ave_rtt__gt=0)
 
-    def inner(self):
+    def inner(self, tester, months):
         from django.db import connection
 
         cursor = connection.cursor()
-        cursor.execute("SELECT country_destination, AVG(ave_rtt) FROM simon_app_results WHERE country_origin = country_destination AND tester='Applet' AND date_test < now() - interval '1 months' GROUP BY country_destination")
+        cursor.execute("SELECT country_destination, AVG(ave_rtt), COUNT(*) "
+                       "FROM simon_app_results "
+                       "WHERE country_origin = country_destination "
+                       "AND tester='%s' "
+                       "AND date_test > now() - interval '%s months' "
+                       "GROUP BY country_destination" % (tester, months))
         return cursor.fetchall()
 
     def ipv4(self):
@@ -194,15 +199,22 @@ class ResultsManager(models.Manager):
                        "ORDER BY 1; ")
         return cursor.fetchall()
 
-    def results_matrix_cc(self):
+    def results_matrix_cc(self, tester):
         from django.db import connection
 
         cursor = connection.cursor()
-        cursor.execute("select country_origin, country_destination, AVG(ave_rtt) "
-                       "FROM simon_app_results "
+        cursor.execute("SELECT country_origin, country_destination, AVG(ave_rtt) "
+                       "FROM "
+                           "("
+                           "SELECT * FROM simon_app_results "
+                           "WHERE ave_rtt > 5 "
+                           "AND ave_rtt < 800 "
+                           "AND dev_rtt < 0.9 * ave_rtt"
+                           ") AS results "
                        "WHERE country_origin IN (select iso FROM simon_app_country WHERE region_id=3) AND country_destination IN (select iso FROM simon_app_country WHERE region_id=3) "
+                       "AND tester='%s' "
                        "GROUP BY country_origin, country_destination "
-                       "ORDER BY country_origin;")
+                       "ORDER BY country_origin;" % (tester))
         return cursor.fetchall()
 
 
