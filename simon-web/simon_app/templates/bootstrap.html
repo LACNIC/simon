@@ -64,7 +64,7 @@
     </a>
 
     <a class="navbar-brand pull-right" href="{% url 'simon_app.views.home' %}">
-        <h2 style="color: #ffffff; font-family: 'Lato'">
+        <h2 style="color: #ffffff; font-family: 'HelveticaNeue-Light'">
             <span class="hidden-xs hidden-sm">
                 Proyecto Simón
             </span>
@@ -78,15 +78,18 @@
 {#Segunda barra#}
 <div class="navbar visible-md visible-lg visible-xl" style="background-color: #FFC285; border-radius: 0; margin: 0; text-align: right; padding-right: 1em;">
 
-    <h4 style="color: #ffffff; font-family: 'Lato'">
+    <h4 style="color: #ffffff; font-family: 'HelveticaNeue-Light'">
+       Cantidad de mediciones:
+    </h4>
+    <h6 style="color: #ffffff; font-family: 'HelveticaNeue-Light'">
         Última hora: {{ HOURLY }}
-    </h4>
-    <h4 style="color: #ffffff; font-family: 'Lato'">
+    </h6>
+    <h6 style="color: #ffffff; font-family: 'HelveticaNeue-Light'">
         Último día: {{ DAILY }}
-    </h4>
-    <h4 style="color: #ffffff; font-family: 'Lato'">
+    </h6>
+    <h6 style="color: #ffffff; font-family: 'HelveticaNeue-Light'">
         Última semana: {{ WEEKLY }}
-    </h4>
+    </h6>
 </div>
 
 <div class="container" style="background-color: #FFFAF2;">

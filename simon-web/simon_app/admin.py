@@ -22,11 +22,11 @@ class TestPointAdmin(admin.ModelAdmin):
 
     def enable(modeladmin, request, queryset):
         queryset.update(enabled=True)
-    enable.short_description = "Habilitar punto de testing"
+    enable.short_description = "Habilitar punto de prueba"
 
     def disable(modeladmin, request, queryset):
         queryset.update(enabled=False)
-    enable.short_description = "Deshabilitar punto de testing"
+    disable.short_description = "Deshabilitar punto de prueba"
 
     list_display = ['country', 'ip_address', 'autnum', 'city', 'date_short', 'enabled']
     ordering = ['-date_created', 'enabled']
