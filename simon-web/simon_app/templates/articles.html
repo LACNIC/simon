@@ -1,5 +1,5 @@
 {% extends 'bootstrap.html' %}
-
+{% load staticfiles %}
 {% block content %}
 
     <div class="col-lg-12">
@@ -14,11 +14,11 @@
         <ul>
 
             <li><a
-                    href="/static/articles/PositionPaper-Alternativestotraditionallatencymeasurementtechniques%20(1).pdf">
+                    href="{% static 'simon_app/articles/PositionPaper-Alternativestotraditionallatencymeasurementtechniques.pdf' %}">
                 Alternatives to traditional latency measurement techniques</a> (PDF)
             </li>
+            <li><a href="{% static 'simon_app/articles/Measuring latency from the browser.pdf' %}">Measuring latency from the browser</a> (PDF)</li>
             <li>Measuring LAC region connectivity (en progreso)</li>
-            <li>Determining TCP latency from different browsers and operating systems (en progreso)</li>
 
         </ul>
     </div>
