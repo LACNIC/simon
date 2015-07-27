@@ -536,6 +536,30 @@ class TestPoint(models.Model):
     def date_short(self):
         return self.date_created.strftime("%x")
 
+    def check(self):
+
+        from urllib2 import urlopen, HTTPError
+
+        try:
+            if ':' in self.ip_address:
+                url = "http://[" + self.ip_address + "]/"
+            else:
+                url = "http://" + self.ip_address + "/"
+            page = urlopen(url, timeout=5)
+            httpCode = page.getcode()
+
+            if httpCode != 200:
+                self.enabled = False
+            else:
+                self.enabled = True
+
+        except HTTPError as e:
+            self.enabled = False
+        except Exception:
+            self.enabled = False
+
+        self.save()
+
     class Meta:
         verbose_name = 'Punto de prueba'
         verbose_name_plural = 'Puntos de prueba'
