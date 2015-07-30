@@ -111,11 +111,20 @@ SIMON = {
             context: this
         }).success(function (data) {
 
+            if(data.configs.run == 1) {
+                SIMON.workflow.run = true;
+            } else {
+                SIMON.printr("Stopping script execution...");
+                return;
+//                SIMON.workflow.run = false;
+            }
+
             if (data.configs.latency == 1) {
                 SIMON.workflow.latency = true;
             } else {
                 SIMON.workflow.latency = false;
             }
+
             if (data.configs.throughput == 1) {
                 SIMON.workflow.throughput = true;
             } else {
