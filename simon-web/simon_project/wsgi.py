@@ -15,6 +15,7 @@ framework.
 """
 import os, sys
 
+
 sys.path.append('/opt/django/simon/simon-web')
 sys.path.append('/Users/agustin/git/simon/simon-web/simon_project')
 
@@ -27,3 +28,7 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'simon_project.settings'
 
 from django.core.wsgi import get_wsgi_application
 application = get_wsgi_application()
+
+import newrelic.agent
+import settings
+newrelic.agent.initialize(settings.NEWRELIC)

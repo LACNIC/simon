@@ -17,6 +17,8 @@ ADMINS = (
     ('Desarrollo', 'agustin@lacnic.net')
 )
 
+NEWRELIC = ""
+
 DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.lacnic.net', '*']
@@ -230,6 +232,7 @@ if HOSTNAME == 'simon':
     URL_PFX = ""
     SIMON_URL = 'http://simon.lacnic.net'
     CHARTS_URL = "http://simon.lacnic.net/charts"
+    NEWRELIC = "/home/agustin/newrelic.ini"
 else:
     # Developer mode
     DEBUG = True
