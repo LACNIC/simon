@@ -11,20 +11,11 @@ class Command(BaseCommand):
         tps = SpeedtestTestPoint.objects.filter(enabled=True)
         N = len(tps)
         disabled = []
-        for i, t in enumerate(tps):
+        for i, tp in enumerate(tps):
             stdout.write("\r%.2f%%" % (100.0 * i / N))
             stdout.flush()
 
-            try:
-                urlopen("http://" + t.ip_address + "/", timeout=5).read()
-            except HTTPError as e:
-                httpCode = e.code
-                if httpCode != 200:
-                    t.enabled = False
-                    t.save()
-                    disabled.append(t)
-                continue
-            except Exception:
-                continue
+            tp.check()
+
         print ""
         print "The following points have been disabled ", disabled
