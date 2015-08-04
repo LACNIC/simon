@@ -22,6 +22,11 @@ def build_browser(browser_name, version):
         browser_version=version
     )
 
+def chunks(l, n):
+    """Yield successive n-sized chunks from l."""
+    for i in xrange(0, len(l), n):
+        yield l[i:i+n]
+
 
 credentials = 'http://desarrolloenlacn:4y2eYr1zgpHmH9mzq7Vp@hub.browserstack.com:80/wd/hub'
 url = 'http://localhost:8000/prueba/'
@@ -104,32 +109,36 @@ configs = []
 # for browser in [ie10]:
 # configs.append(build_config(browser, windows8))
 
-# for os in oss:
-#     configs.append(build_config(chrome, os))
-#     configs.append(build_config(firefox, os))
+for os in oss:
+    configs.append(build_config(chrome, os))
 
-for version in range(33, 43):
-    browser = build_browser('Chrome', version)
-    configs.append(build_config(browser, windows7))
+# for version in range(33, 43):
+#     browser = build_browser('Chrome', version)
+#     configs.append(build_config(browser, osx))
 
 # browser = build_browser('IE', 10)
 # configs.append(build_config(browser, windows8))
 
+
+
 for config in configs:
-    driver = webdriver.Remote(command_executor=credentials,
-                              desired_capabilities=config)
     try:
-        driver.get(url)
+        driver = webdriver.Remote(command_executor=credentials,
+                                  desired_capabilities=config)
+        try:
+            driver.get(url)
 
-        wait = WebDriverWait(driver, 1200)
-        element = wait.until(EC.text_to_be_present_in_element((By.ID, 'output'), ','))
+            wait = WebDriverWait(driver, 1200)
+            element = wait.until(EC.text_to_be_present_in_element((By.ID, 'output'), ','))
 
-        config['data'] = [driver.find_element_by_id("output").text]
-        print config
+            config['data'] = [driver.find_element_by_id("output").text]
+            print config
 
-    except TimeoutException:
-        continue
+        except TimeoutException:
+            continue
 
+        finally:
+            driver.quit()
     finally:
         driver.quit()
         sleep(20)
