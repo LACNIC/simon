@@ -1079,4 +1079,4 @@ def atlas(request):
     all = RipeAtlasProbe.objects.all()
     # countries = Counter([a.country_code for a in all])
     ctx = {'probes': all}
-    return render_to_response("atlas.html", ctx)
+    return render_to_response("atlas.html", ctx, getContext(request))
