@@ -67,7 +67,7 @@
             </p>
 
             <p>Para ver más formas de participar de manera simple en el
-                Proyecto Simón, enterate como <a href="{{ url_pr }}">en esta sección</a>.</p>
+                Proyecto Simón, enterate cómo <a href="{{ url_pr }}">en esta sección</a>.</p>
         </div>
 
         <div class="homeBox">
@@ -106,14 +106,6 @@
                 consulta nuestra API.</p>
         </div>
 
-{#        <div class="homeBox">#}
-{#            <a href="{{ URL_PFX }}{% url 'simon_app.views.traceroute' %}">#}
-{#                <h2>Traceroute</h2></a>#}
-{##}
-{#            <p>En esta sección recibimos archivos con información de#}
-{#                traceroute. Esta información es recopilada junto con las demás#}
-{#                fuentes de información para determinar la interconectividad.</p>#}
-{#        </div>#}
 
         <div class="homeBox">
             <a href="{{ URL_PFX }}{% url 'simon_app.views.atlas' %}">
@@ -122,22 +114,40 @@
             <p>¿Quieres saber más acerca del estado de la plataforma RIPE Atlas en Latinoamérica y el Caribe? Consulta esta sección!</p>
         </div>
 
-        <div class="homeBox">
-            <a href="{{ URL_PFX }}{% url 'simon_app.views.articles' %}">
-                <h2>Artículos</h2></a>
+    </div>
 
-            <p>Aquí residen algunos artículos, en fase de desarrollo, que
-                exponen nuestro punto de vista en cuanto a los aspectos técnicos
-                detrás de estas mediciones.</p>
+
+
+
+
+
+    <div class="col-lg-12">
+        <div class="homeBoxMini col-lg-4 col-md-12 col-sm-12">
+            <a href="{{ URL_PFX }}{% url 'simon_app.views.traceroute' %}">
+                <h4>Traceroute</h4></a>
+
+            <p>En esta sección recibimos archivos con información de
+                traceroute. Esta información es recopilada junto con las demás
+                fuentes de información para determinar la interconectividad.</p>
         </div>
 
-        <div class="homeBox">
+
+        <div class="homeBoxMini col-lg-4 col-md-12 col-sm-12">
             <a href="{{ URL_PFX }}{% url 'simon_app.views.lab' %}">
-                <h2>Latency Lab</h2></a>
+                <h4>Latency Lab</h4></a>
 
             <p>Este espacio está dedicado a explorar el medidor JavaScript.
                 Desde aquí se pueden realizar pruebas de latencia TCP hacia una
                 dirección IP en particular, a través de IPv4 o IPv6.</p>
+        </div>
+
+        <div class="homeBoxMini col-lg-4 col-md-12 col-sm-12">
+            <a href="{{ URL_PFX }}{% url 'simon_app.views.articles' %}">
+                <h4>Artículos</h4></a>
+
+            <p>Aquí residen algunos artículos, en fase de desarrollo, que
+                exponen nuestro punto de vista en cuanto a los aspectos técnicos
+                detrás de estas mediciones.</p>
         </div>
     </div>
 

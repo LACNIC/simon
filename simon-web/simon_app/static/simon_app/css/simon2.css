@@ -25,6 +25,23 @@
     text-decoration: none;
 }
 
+.homeBoxMini {
+    background-color: #ffffff;
+    padding: .5em;
+    border: 1px solid;
+    border-radius: 5px;
+    border-color: #E6E6E6;
+    margin-bottom: .5em;
+}
+
+.homeBoxMini a {
+    color: black;
+}
+
+.homeBoxMini a:link {
+    text-decoration: none;
+}
+
 #tracerouteConsole {
     padding: 3em 1em 3em 1em;
     background-color: black;
