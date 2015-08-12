@@ -1,0 +1,56 @@
+{% extends 'bootstrap.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+    <div class="col-lg-12">
+
+        <h1 class="page-header">RIPE Atlas en LAC</h1>
+
+{#        <p>Esta sección contiene los artículos que consideramos son de#}
+{#            utilidad para el proyecto. Los artículos pueden abatcar diferentes#}
+{#            áreas dek proyecto, como las metodologías de recabamiento de datos, las#}
+{#            técnicas para procesar dichos datos y sacar conclusiones, etc.</p>#}
+{##}
+{#        <h2 class="page-header">Resumen por país</h2>#}
+{#        {% for c in countries %}#}
+{#            {{ c }} {{ countries.c }}#}
+{#        {% endfor %}#}
+
+
+        <h2 class="page-header">Listado completo de probes en LAC</h2>
+
+        <table class="table">
+            <th>Probe ID</th>
+            <th>País</th>
+            <th>ASN (v4) / (v6)</th>
+            <th>Último status</th>
+            <th>Momento de chequeo</th>
+
+            {% for probe in probes %}
+                <tr>
+                    <td>
+                        {{ probe.probe_id }}
+                    </td>
+                    <td>
+                        {{ probe.country_code }}
+                    </td>
+                    <td>
+                        {{ probe.asn_v4 }} / {{ probe.asn_v6 }}
+                    </td>
+                    <td>
+                        {% if probe.status.status == 'Disconnected' %}
+                            <span class="glyphicon glyphicon glyphicon-minus-sign" aria-hidden="true" style="color: indianred"></span>
+                        {% else %}
+                            <span class="glyphicon glyphicon glyphicon-ok-sign" aria-hidden="true" style="color: darkgreen"></span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {{ probe.last_check_date | safe }}
+                    </td>
+                </tr>
+            {% endfor %}
+
+        </table>
+    </div>
+{% endblock %}

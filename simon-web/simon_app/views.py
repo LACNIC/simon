@@ -420,7 +420,7 @@ def post_offline_testpoints(request):
                         # dbTestPoint.save()  #########################################33
 
                         # token = ActiveTokens(token_value=''.join(random.choice('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz') for i in range(settings.TOKEN_LENGTH)), token_expiration=datetime.datetime.now() + datetime.timedelta(minutes=settings.TOKEN_TIMEOUT), testpoint=dbTestPoint)
-                        #                         token.save()
+                        # token.save()
                         #
                         #                         minutes = math.ceil((token.token_expiration - datetime.datetime.now()).total_seconds() / 60)
                         #
@@ -566,7 +566,7 @@ def charts_reports(request):
 
     # ###########
     # HEATMAPS #
-    ############
+    # ###########
 
     import json
 
@@ -985,7 +985,7 @@ def add_new_ntppoint(request):
                 # if ok is not True:
                 # # email volunteer
                 # asunto = 'Su servidor esta siendo estudiado - Proyecto Simón'
-                #            texto = 'Hemos recibido una petición para agregar su servidor a nuestra lista de servidores. Nuestro equipo ha determinado que por el momento no es apto para integrar la lista de servidores debido a que su dirección no forma parte del espacio de direcciones de LACNIC. De todos modos será estudiado, y en caso de ser apto, le notificaremos al respecto.'
+                # texto = 'Hemos recibido una petición para agregar su servidor a nuestra lista de servidores. Nuestro equipo ha determinado que por el momento no es apto para integrar la lista de servidores debido a que su dirección no forma parte del espacio de direcciones de LACNIC. De todos modos será estudiado, y en caso de ser apto, le notificaremos al respecto.'
                 #            texto_HTML = '<p>Hemos recibido una petición para agregar su servidor a nuestra lista de servidores. Nuestro equipo ha determinado que por el momento no es apto para integrar la lista de servidores debido a que su dirección no forma parte del espacio de direcciones de LACNIC. De todos modos será estudiado, y en caso de ser apto, le notificaremos al respecto.</p><p>Datos del servidor:</p><p>Organización: %s</p><p>URL: %s</p><p>País: %s</p><p>Dirección IP: <strong>%s</strong></p><p>Muchas gracias por su colaboración. Lo invitamos a seguir siendo partícipe de este proyecto realizando algunos tests <a href="http://simon.labs.lacnic.net/simon/participate/">aquí</a>.</p>' % (str(testPoint.description), str(testPoint.url), str(country_printable), str(testPoint.ip_address))
                 #            try:
                 #                msg = EmailMultiAlternatives(asunto, texto, settings.DEFAULT_FROM_EMAIL, [volunteer_email])
@@ -1067,7 +1067,16 @@ def javascript_run(request):
     # cc = whoIs(ip)['country']
     # countries = CountryForm(initial={'countries': cc})
     # except (TypeError, HTTPError):
-    #     # IP is probably a local address
+    # # IP is probably a local address
     #     countries = CountryForm()
 
     return render_to_response('javascript_run.html', {'countries': CountryForm()}, getContext(request))
+
+
+def atlas(request):
+    from collections import Counter
+
+    all = RipeAtlasProbe.objects.all()
+    # countries = Counter([a.country_code for a in all])
+    ctx = {'probes': all}
+    return render_to_response("atlas.html", ctx)

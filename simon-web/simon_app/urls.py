@@ -65,7 +65,10 @@ urlpatterns = patterns('',
                        url(r'^traceroute/curl/$', 'simon_app.views.traceroute_curl'),
 
                        # Articles
-                       url(r'^articles/$', 'simon_app.views.articles')
+                       url(r'^articles/$', 'simon_app.views.articles'),
+
+                       # RIPE Atlas indicators
+                       url(r'^atlas/$', 'simon_app.views.atlas')
 ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 admin.autodiscover()

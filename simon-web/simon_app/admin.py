@@ -34,6 +34,8 @@ class TestPointAdmin(admin.ModelAdmin):
     check.short_description = "Chequear punto de prueba"
 
     list_display = ['country', 'ip_address', 'autnum', 'city', 'date_short', 'enabled']
+    # list_filter = ['country', 'ip_version']
+    list_filter = ('country', )
     ordering = ['-date_created', 'enabled']
     actions = [enable, disable, check]
     search_fields = ['country']

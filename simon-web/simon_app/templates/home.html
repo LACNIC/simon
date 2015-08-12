@@ -106,13 +106,20 @@
                 consulta nuestra API.</p>
         </div>
 
-        <div class="homeBox">
-            <a href="{{ URL_PFX }}{% url 'simon_app.views.traceroute' %}">
-                <h2>Traceroute</h2></a>
+{#        <div class="homeBox">#}
+{#            <a href="{{ URL_PFX }}{% url 'simon_app.views.traceroute' %}">#}
+{#                <h2>Traceroute</h2></a>#}
+{##}
+{#            <p>En esta sección recibimos archivos con información de#}
+{#                traceroute. Esta información es recopilada junto con las demás#}
+{#                fuentes de información para determinar la interconectividad.</p>#}
+{#        </div>#}
 
-            <p>En esta sección recibimos archivos con información de
-                traceroute. Esta información es recopilada junto con las demás
-                fuentes de información para determinar la interconectividad.</p>
+        <div class="homeBox">
+            <a href="{{ URL_PFX }}{% url 'simon_app.views.atlas' %}">
+                <h2>RIPE Atlas en LAC</h2></a>
+
+            <p>¿Quieres saber más acerca del estado de la plataforma RIPE Atlas en Latinoamérica y el Caribe? Consulta esta sección!</p>
         </div>
 
         <div class="homeBox">

@@ -141,7 +141,6 @@ class ASManager(models.Manager):
 
 
 class AS(models.Model):
-
     asn = models.IntegerField(default=0)
     network = models.GenericIPAddressField(null=True, blank=True)
     pfx_length = models.IntegerField(default=0)
@@ -210,12 +209,12 @@ class ResultsManager(models.Manager):
         cursor = connection.cursor()
         cursor.execute("SELECT country_origin, country_destination, AVG(ave_rtt) "
                        "FROM "
-                           "("
-                           "SELECT * FROM simon_app_results "
-                           "WHERE ave_rtt > 5 "
-                           "AND ave_rtt < 800 "
-                           "AND dev_rtt < 0.9 * ave_rtt"
-                           ") AS results "
+                       "("
+                       "SELECT * FROM simon_app_results "
+                       "WHERE ave_rtt > 5 "
+                       "AND ave_rtt < 800 "
+                       "AND dev_rtt < 0.9 * ave_rtt"
+                       ") AS results "
                        "WHERE country_origin IN (select iso FROM simon_app_country WHERE region_id=3) AND country_destination IN (select iso FROM simon_app_country WHERE region_id=3) "
                        "AND tester='%s' "
                        "GROUP BY country_origin, country_destination "
@@ -440,14 +439,17 @@ class TracerouteResult(models.Model):
         except Exception:
             return None
 
+
 class TracerouteHop(Results):
     traceroute_result = models.ForeignKey(TracerouteResult)
+
 
 class RipeAtlasResult(Results):
     probe_id = models.IntegerField(null=False)
     measurement_id = models.IntegerField(null=False)
     type = CharField(max_length=100)
     oneoff = models.BooleanField(default=False)
+
 
 class RipeAtlasProbe(models.Model):
     probe_id = models.IntegerField(null=True)
@@ -460,9 +462,29 @@ class RipeAtlasProbe(models.Model):
     def __unicode__(self):
         return self.country_code
 
+
+    def latest_status(self):
+        return RipeAtlasProbeStatus.objects.filter(probe=self).order_by('date').reverse()[0]
+
+    def last_check(self):
+        status_date = self.latest_status().date
+        return datetime.strftime(status_date, "%d/%b/%Y %X")
+
+    status = property(latest_status)
+    last_check_date = property(last_check)
+
     class Meta:
         verbose_name = 'RIPE Atlas Probe'
         verbose_name_plural = 'RIPE Atlas Probes'
+
+
+class RipeAtlasProbeStatus(models.Model):
+    probe = models.ForeignKey(RipeAtlasProbe)
+    date = models.DateTimeField()
+    status = models.CharField(max_length=20, null=True)
+
+    def __unicode__(self):
+        return self.status
 
 
 class RipeAtlasPingResult(RipeAtlasResult):
@@ -533,6 +555,7 @@ class TestPoint(models.Model):
 
     def autnum(self):
         return AS.objects.get_as_by_ip(self.ip_address).asn
+
     def date_short(self):
         return self.date_created.strftime("%x")
 
