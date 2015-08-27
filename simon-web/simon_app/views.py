@@ -422,9 +422,9 @@ def post_offline_testpoints(request):
                         # token = ActiveTokens(token_value=''.join(random.choice('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz') for i in range(settings.TOKEN_LENGTH)), token_expiration=datetime.datetime.now() + datetime.timedelta(minutes=settings.TOKEN_TIMEOUT), testpoint=dbTestPoint)
                         # token.save()
                         #
-                        #                         minutes = math.ceil((token.token_expiration - datetime.datetime.now()).total_seconds() / 60)
+                        # minutes = math.ceil((token.token_expiration - datetime.datetime.now()).total_seconds() / 60)
                         #
-                        #                         country = Country.objects.get(iso=dbTestPoint.country)
+                        # country = Country.objects.get(iso=dbTestPoint.country)
                         #
                         #                         asunto = 'Server offline notification - Simon Project'
                         #                         texto = 'This message has been sent to the Simon Project mailing list.'
@@ -464,6 +464,7 @@ def home(request):
 def prueba(request):
     context = getContext(request)
     return render_to_response('prueba.html', context)
+
 
 def prueba_rt(request):
     context = getContext(request)
@@ -578,9 +579,9 @@ def charts_reports(request):
 
     import json
 
-    #######
+    # ######
     # MAP #
-    #######
+    # ######
 
     testpoints = TestPoint.objects.all()
     countries = {}
@@ -994,8 +995,8 @@ def add_new_ntppoint(request):
                 # # email volunteer
                 # asunto = 'Su servidor esta siendo estudiado - Proyecto Simón'
                 # texto = 'Hemos recibido una petición para agregar su servidor a nuestra lista de servidores. Nuestro equipo ha determinado que por el momento no es apto para integrar la lista de servidores debido a que su dirección no forma parte del espacio de direcciones de LACNIC. De todos modos será estudiado, y en caso de ser apto, le notificaremos al respecto.'
-                #            texto_HTML = '<p>Hemos recibido una petición para agregar su servidor a nuestra lista de servidores. Nuestro equipo ha determinado que por el momento no es apto para integrar la lista de servidores debido a que su dirección no forma parte del espacio de direcciones de LACNIC. De todos modos será estudiado, y en caso de ser apto, le notificaremos al respecto.</p><p>Datos del servidor:</p><p>Organización: %s</p><p>URL: %s</p><p>País: %s</p><p>Dirección IP: <strong>%s</strong></p><p>Muchas gracias por su colaboración. Lo invitamos a seguir siendo partícipe de este proyecto realizando algunos tests <a href="http://simon.labs.lacnic.net/simon/participate/">aquí</a>.</p>' % (str(testPoint.description), str(testPoint.url), str(country_printable), str(testPoint.ip_address))
-                #            try:
+                # texto_HTML = '<p>Hemos recibido una petición para agregar su servidor a nuestra lista de servidores. Nuestro equipo ha determinado que por el momento no es apto para integrar la lista de servidores debido a que su dirección no forma parte del espacio de direcciones de LACNIC. De todos modos será estudiado, y en caso de ser apto, le notificaremos al respecto.</p><p>Datos del servidor:</p><p>Organización: %s</p><p>URL: %s</p><p>País: %s</p><p>Dirección IP: <strong>%s</strong></p><p>Muchas gracias por su colaboración. Lo invitamos a seguir siendo partícipe de este proyecto realizando algunos tests <a href="http://simon.labs.lacnic.net/simon/participate/">aquí</a>.</p>' % (str(testPoint.description), str(testPoint.url), str(country_printable), str(testPoint.ip_address))
+                # try:
                 #                msg = EmailMultiAlternatives(asunto, texto, settings.DEFAULT_FROM_EMAIL, [volunteer_email])
                 #                msg.attach_alternative(texto_HTML, "text/html")
                 #                msg.content_subtype = "html"  # Main content is now text/html
@@ -1076,13 +1077,13 @@ def javascript_run(request):
     # countries = CountryForm(initial={'countries': cc})
     # except (TypeError, HTTPError):
     # # IP is probably a local address
-    #     countries = CountryForm()
+    # countries = CountryForm()
 
     return render_to_response('javascript_run.html', {'countries': CountryForm()}, getContext(request))
 
 
 def atlas(request):
-    from collections import Counter
+    from collections import Counter, defaultdict
 
     all = RipeAtlasProbeStatus.objects.all()
     connected = "%.1f%%" % (len(all.filter(status="Connected")) * 100.0 / len(all))
@@ -1090,14 +1091,46 @@ def atlas(request):
     never = "%.1f%%" % (len(all.filter(status="Never Connected")) * 100.0 / len(all))
     abandoned = "%.1f%%" % (len(all.filter(status="Abandoned")) * 100.0 / len(all))
 
+    # per country stats
+
     probes_all = RipeAtlasProbe.objects.all()
+    counter = Counter(probes_all.values_list('country_code', flat=True))
+    for cc in counter:
+        if len(probes_all.filter(country_code=cc)) == 0:
+            continue
+
+        country_statuses = RipeAtlasProbeStatus.objects.filter(probe__country_code=cc)
+        counter[cc] = dict()
+
+        country_connected = len(country_statuses.filter(status="Connected").order_by('probe', '-date').distinct('probe'))
+        country_disconnected = len(country_statuses.filter(status="Disconnected").order_by('probe', '-date').distinct('probe'))
+        country_abandoned = len(country_statuses.filter(status="Abandoned").order_by('probe', '-date').distinct('probe'))
+        country_never = len(country_statuses.filter(status="Never connected").order_by('probe', '-date').distinct('probe'))
+        country_all_count = country_connected + country_disconnected + country_abandoned + country_never
+
+        counter[cc]['connected_count'] = country_connected
+        counter[cc]['disconnected_count'] = country_disconnected
+        counter[cc]['abandoned_count'] = country_abandoned
+        counter[cc]['never_count'] = country_never
+        counter[cc]['country_all_count'] = country_all_count
+
+
+        counter[cc]['connected'] = "%.1f%%" % (country_connected * 100.0 / country_all_count)
+        counter[cc]['disconnected'] = "%.1f%%" % (country_disconnected * 100.0 / country_all_count)
+        counter[cc]['abandoned'] = "%.1f%%" % (country_abandoned * 100.0 / country_all_count)
+        counter[cc]['never'] = "%.1f%%" % (country_never * 100.0 / country_all_count)
+
+        counter[cc]['country_name'] = Country.objects.get(iso=cc).printable_name
+
+    counter = dict(counter)
     ctx = {
         'probes': probes_all,
         'len_probes': len(probes_all),
         'connected': connected,
         'disconnected': disconnected,
         'never': never,
-        'abandoned': abandoned
+        'abandoned': abandoned,
+        'counter': counter
     }
 
     return render_to_response("atlas.html", ctx, getContext(request))

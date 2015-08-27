@@ -9,16 +9,20 @@
 
 
         <p>
-            RIPE Atlas es una de las plataformas de medición de parámetros de red en Internet de mayor despliegue a nivel mundial. La misma pone a disposición de sus miembros recursos que permiten realizar mediciones de redes. <a href="https://www.ripe.net">RIPE NCC</a> es
+            RIPE Atlas es una de las plataformas de medición de parámetros de red en Internet de mayor despliegue a nivel mundial. La misma pone a disposición de sus miembros recursos que permiten realizar mediciones de redes. <a
+                href="https://www.ripe.net">RIPE NCC</a> es
             el organismo encargado de llevar adelante este enorme proyecto, y cuenta con la colaboración de LACNIC para la región de Latinoamérica y Caribe. En el momento la plataforma se encuentra en una etapa de expansión, enfocándose
-            principalmente en zonas donde la penetración puede ser mejor. Estas zonas donde se está poniendo foco son Asia, Latinoamérica y Caribe, y África. Más y mejor información se puede consultar en <a href="https://atlas.ripe.net/about/">la página de RIPE Atlas</a>.
+            principalmente en zonas donde la penetración puede ser mejor. Estas zonas donde se está poniendo foco son Asia, Latinoamérica y Caribe, y África. Más y mejor información se puede consultar en <a
+                href="https://atlas.ripe.net/about/">la página de RIPE Atlas</a>.
         </p>
+
+        <p>Más información de RIPE Atlas en Latinoamérica y Caribe en <a href="http://www.lacnic.net/web/lacnic/ripe-atlas">el sitio de LACNIC</a>.</p>
 
 
         <h2 class="page-header">Resumen</h2>
 
         <div style="display: inline; vertical-align: top;">
-            <p><code style="font-size: 3em">{{ len_probes }}</code> RIPE Atlas probes en la región LAC.</p>
+            <p><code style="font-size: 3em; color: black">{{ len_probes }}</code> RIPE Atlas probes en la región LAC.</p>
         </div>
 
         <div class="progress">
@@ -68,6 +72,33 @@
                 </div>
             </div>
         </div>
+
+
+        <h2 class="page-header">Listado por país</h2>
+        {% for c, val in counter.items %}
+            {{ c }}
+            {{ val.country_name }}
+            <code style="color: black">{{ val.all_count }}</code>
+            <code style="color: #9BC53D">{{ val.connected_count }}</code>
+            <code style="color: #C3423F">{{ val.disconnected_count }}</code>
+            <code style="color: #FDE74C">{{ val.abandoned_count }}</code>
+            <code style="color: darkgray">{{ val.never_count }}</code>
+
+            <div class="progress" style="max-height: .2em">
+                <div class="progress-bar" style="width: {{ val.connected }}; background-image: none; background-color: #9BC53D">
+                    <span class="sr-only"></span>
+                </div>
+                <div class="progress-bar" style="width: {{ val.disconnected }}; background-image: none; background-color: #C3423F">
+                    <span class="sr-only"></span>
+                </div>
+                <div class="progress-bar" style="width: {{ val.abandoned }}; background-image: none; background-color: #FDE74C">
+                    <span class="sr-only"></span>
+                </div>
+                <div class="progress-bar" style="width: {{ val.never }}; background-image: none; background-color: darkgray">
+                    <span class="sr-only"></span>
+                </div>
+            </div>
+        {% endfor %}
 
 
         <h2 class="page-header">Listado completo de probes en LAC</h2>
