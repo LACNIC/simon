@@ -21,6 +21,10 @@
 
         <h2 class="page-header">Resumen</h2>
 
+        <p>A continuación se muestra un resumen a nivel regional de la presencia de la plataforma RIPE Atlas en la región. La barra de colores indica el porcentaje de RIPE Atlas probes que se encuentran <code
+                style="color: #9BC53D">conectadas</code>, <code
+                style="color: #C3423F">desconectadas</code>, <code style="color: #FDE74C">abandonadas</code>, o que <code style="color: darkgray">jamás fueron conectadas</code>.</p>
+
         <div style="display: inline; vertical-align: top;">
             <p><code style="font-size: 3em; color: black">{{ len_probes }}</code> RIPE Atlas probes en la región LAC.</p>
         </div>
@@ -76,7 +80,8 @@
 
         <h2 class="page-header">Listado por país</h2>
 
-        <p>A continuación se muestra una lista con información a nivel de país. De forma similar a los datos regionales, se muestra información acerca de <code style="color: black">cantidad total</code> y porcentaje de probes <code style="color: #9BC53D">conectadas</code>, <code
+        <p>A continuación se muestra una lista con información a nivel de país. De forma similar a los datos regionales, se muestra información acerca de <code style="color: black">cantidad total</code> y porcentaje de probes <code
+                style="color: #9BC53D">conectadas</code>, <code
                 style="color: #C3423F">desconectadas</code>, <code style="color: #FDE74C">abandonadas</code>, y <code style="color: darkgray">jamás conectadas</code>.</p>
         {% for c, val in counter.items %}
 
@@ -106,6 +111,7 @@
 
 
         <h2 class="page-header">Países sin RIPE Atlas probes</h2>
+
         <p>El proyecto RIPE Atlas busca expandirse a todos los lugares donde aún no ha llegado. Si tienes una conexión a Internet en alguno de los siguientes paises, no dudes en ponerte en contacto para solicitar un RIPE Atlas probe.
             Necesitamos pioneros que lleven esta plataforma a lugares donde aún no ha llegado!</p>
         <ul>
@@ -116,7 +122,9 @@
 
 
         <h2 class="page-header">Listado completo de probes en LAC</h2>
+
         <p>A continuación se muestra un listado con todos los RIPE Atlas probes que se han detectado en la región de Latinoamérica y el Caribe.</p>
+
         <div class="panel panel-default">
             <div class="panel-body">
                 <p>Referencia de los estados de probes posibles</p>
