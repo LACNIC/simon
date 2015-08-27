@@ -18,14 +18,72 @@
         {#        {% endfor %}#}
 
 
+        <h2 class="page-header">Resumen</h2>
+
+        <div style="display: inline; vertical-align: top;">
+            <p><code style="font-size: 3em">{{ len_probes }}</code> RIPE Atlas probes en la región LAC.</p>
+        </div>
+
+        <div class="progress">
+            <div class="progress-bar" style="width: {{ connected }}; background-image: none; background-color: #9BC53D">
+                <span class="sr-only"></span>
+            </div>
+            <div class="progress-bar" style="width: {{ disconnected }}; background-image: none; background-color: #C3423F">
+                <span class="sr-only"></span>
+            </div>
+            <div class="progress-bar" style="width: {{ abandoned }}; background-image: none; background-color: #FDE74C">
+                <span class="sr-only"></span>
+            </div>
+            <div class="progress-bar" style="width: {{ never }}; background-image: none; background-color: darkgray">
+                <span class="sr-only"></span>
+            </div>
+        </div>
+
+
+
+
+    <div class="col-md-3">
+        <div class="panel panel-default" style="color: #9BC53D">
+            <div class="panel-body">
+                <h3>{{ connected }}</h3> conectadas
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="panel panel-default" style="color: #C3423F">
+            <div class="panel-body">
+                <h3>{{ disconnected }}</h3> desconectadas
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="panel panel-default" style="color: darkgray">
+            <div class="panel-body">
+                <h3>{{ never }}</h3> nunca se han conectado
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="panel panel-default" style="color: #FDE74C">
+            <div class="panel-body">
+                <h3>{{ abandoned }}</h3> han sido abandonadas
+            </div>
+        </div>
+    </div>
+
+
         <h2 class="page-header">Listado completo de probes en LAC</h2>
 
-        <p>Listado de statuses posibles</p>
+        <p>Referencia de los estados de probes posibles</p>
+
         <p>
-            <span class="glyphicon glyphicon glyphicon-ok-sign" aria-hidden="true" style="color: darkgreen"></span> Connected<br>
-            <span class="glyphicon glyphicon glyphicon-minus-sign" aria-hidden="true" style="color: indianred"></span> Disconnected<br>
-            <span class="glyphicon glyphicon-question-sign" aria-hidden="true" style="color: darkgrey"></span> Never Connected<br>
-            <span class="glyphicon glyphicon-warning-sign" aria-hidden="true" style="color: #FF9F1C"></span> Abandoned
+            <span class="glyphicon glyphicon glyphicon-ok-sign" aria-hidden="true" style="color: #9BC53D"></span> Connected<br>
+            <span class="glyphicon glyphicon glyphicon-minus-sign" aria-hidden="true" style="color: #C3423F"></span> Disconnected<br>
+            <span class="glyphicon glyphicon-question-sign" aria-hidden="true" style="color: darkgray"></span> Never Connected<br>
+            <span class="glyphicon glyphicon-warning-sign" aria-hidden="true" style="color: #FDE74C"></span> Abandoned
         </p>
 
         <table class="table">
@@ -48,13 +106,13 @@
                     </td>
                     <td>
                         {% if probe.status.status == 'Disconnected' %}
-                            <span class="glyphicon glyphicon glyphicon-minus-sign" aria-hidden="true" style="color: indianred"></span>
+                            <span class="glyphicon glyphicon glyphicon-minus-sign" aria-hidden="true" style="color: #C3423F"></span>
 
                         {% elif probe.status.status == 'Connected' %}
-                            <span class="glyphicon glyphicon glyphicon-ok-sign" aria-hidden="true" style="color: darkgreen"></span>
+                            <span class="glyphicon glyphicon glyphicon-ok-sign" aria-hidden="true" style="color: #9BC53D"></span>
 
                         {% elif probe.status.status == 'Abandoned' %}
-                            <span class="glyphicon glyphicon-warning-sign" aria-hidden="true" style="color: #FF9F1C"></span>
+                            <span class="glyphicon glyphicon-warning-sign" aria-hidden="true" style="color: #FDE74C"></span>
 
                         {% elif probe.status.status == 'Never Connected' %}
                             <span class="glyphicon glyphicon-question-sign" aria-hidden="true" style="color: darkgrey"></span>

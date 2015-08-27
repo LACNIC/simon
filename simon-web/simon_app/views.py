@@ -465,6 +465,14 @@ def prueba(request):
     context = getContext(request)
     return render_to_response('prueba.html', context)
 
+def prueba_rt(request):
+    context = getContext(request)
+
+    response = render_to_response('prueba_rt.html', context)
+    response["Timing-Allow-Origin"] = "*"
+
+    return response
+
 
 def objectives(request):
     return render_to_response('objectives.html', getContext(request))
@@ -1076,7 +1084,20 @@ def javascript_run(request):
 def atlas(request):
     from collections import Counter
 
-    all = RipeAtlasProbe.objects.all()
-    # countries = Counter([a.country_code for a in all])
-    ctx = {'probes': all}
+    all = RipeAtlasProbeStatus.objects.all()
+    connected = "%.1f%%" % (len(all.filter(status="Connected")) * 100.0 / len(all))
+    disconnected = "%.1f%%" % (len(all.filter(status="Disconnected")) * 100.0 / len(all))
+    never = "%.1f%%" % (len(all.filter(status="Never Connected")) * 100.0 / len(all))
+    abandoned = "%.1f%%" % (len(all.filter(status="Abandoned")) * 100.0 / len(all))
+
+    probes_all = RipeAtlasProbe.objects.all()
+    ctx = {
+        'probes': probes_all,
+        'len_probes': len(probes_all),
+        'connected': connected,
+        'disconnected': disconnected,
+        'never': never,
+        'abandoned': abandoned
+    }
+
     return render_to_response("atlas.html", ctx, getContext(request))
