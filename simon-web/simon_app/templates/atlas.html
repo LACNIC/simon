@@ -7,15 +7,12 @@
 
         <h1 class="page-header">RIPE Atlas en LAC</h1>
 
-        {#        <p>Esta sección contiene los artículos que consideramos son de#}
-        {#            utilidad para el proyecto. Los artículos pueden abatcar diferentes#}
-        {#            áreas dek proyecto, como las metodologías de recabamiento de datos, las#}
-        {#            técnicas para procesar dichos datos y sacar conclusiones, etc.</p>#}
-        {##}
-        {#        <h2 class="page-header">Resumen por país</h2>#}
-        {#        {% for c in countries %}#}
-        {#            {{ c }} {{ countries.c }}#}
-        {#        {% endfor %}#}
+
+        <p>
+            RIPE Atlas es una de las plataformas de medición de parámetros de red en Internet de mayor despliegue a nivel mundial. La misma pone a disposición de sus miembros recursos que permiten realizar mediciones de redes. <a href="https://www.ripe.net">RIPE NCC</a> es
+            el organismo encargado de llevar adelante este enorme proyecto, y cuenta con la colaboración de LACNIC para la región de Latinoamérica y Caribe. En el momento la plataforma se encuentra en una etapa de expansión, enfocándose
+            principalmente en zonas donde la penetración puede ser mejor. Estas zonas donde se está poniendo foco son Asia, Latinoamérica y Caribe, y África. Más y mejor información se puede consultar en <a href="https://atlas.ripe.net/about/">la página de RIPE Atlas</a>.
+        </p>
 
 
         <h2 class="page-header">Resumen</h2>
@@ -40,39 +37,37 @@
         </div>
 
 
-
-
-    <div class="col-md-3">
-        <div class="panel panel-default" style="color: #9BC53D">
-            <div class="panel-body">
-                <h3>{{ connected }}</h3> conectadas
+        <div class="col-md-3">
+            <div class="panel panel-default" style="color: #9BC53D">
+                <div class="panel-body">
+                    <h3>{{ connected }}</h3> conectadas
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-md-3">
-        <div class="panel panel-default" style="color: #C3423F">
-            <div class="panel-body">
-                <h3>{{ disconnected }}</h3> desconectadas
+        <div class="col-md-3">
+            <div class="panel panel-default" style="color: #C3423F">
+                <div class="panel-body">
+                    <h3>{{ disconnected }}</h3> desconectadas
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-md-3">
-        <div class="panel panel-default" style="color: darkgray">
-            <div class="panel-body">
-                <h3>{{ never }}</h3> nunca se han conectado
+        <div class="col-md-3">
+            <div class="panel panel-default" style="color: darkgray">
+                <div class="panel-body">
+                    <h3>{{ never }}</h3> nunca se han conectado
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-md-3">
-        <div class="panel panel-default" style="color: #FDE74C">
-            <div class="panel-body">
-                <h3>{{ abandoned }}</h3> han sido abandonadas
+        <div class="col-md-3">
+            <div class="panel panel-default" style="color: #FDE74C">
+                <div class="panel-body">
+                    <h3>{{ abandoned }}</h3> han sido abandonadas
+                </div>
             </div>
         </div>
-    </div>
 
 
         <h2 class="page-header">Listado completo de probes en LAC</h2>
