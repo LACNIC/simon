@@ -3,6 +3,7 @@
 from __future__ import division
 
 import math
+from operator import itemgetter
 import re
 from smtplib import SMTPException
 from socket import gaierror
@@ -1083,7 +1084,7 @@ def javascript_run(request):
 
 
 def atlas(request):
-    from collections import Counter, defaultdict
+    from collections import Counter, OrderedDict
 
     all = RipeAtlasProbeStatus.objects.all()
     connected = "%.1f%%" % (len(all.filter(status="Connected")) * 100.0 / len(all))
@@ -1093,8 +1094,10 @@ def atlas(request):
 
     # per country stats
 
-    probes_all = RipeAtlasProbe.objects.all()
-    counter = Counter(probes_all.values_list('country_code', flat=True))
+    probes_all = RipeAtlasProbe.objects.all().order_by('country_code')
+    countries_with_probes = probes_all.values_list('country_code', flat=True)
+    countries_without_probes = [ {'iso': c.iso, 'printable_name': c.printable_name} for c in Country.objects.get_region_countries() if c.iso not in countries_with_probes]
+    counter = Counter(countries_with_probes)
     for cc in counter:
         if len(probes_all.filter(country_code=cc)) == 0:
             continue
@@ -1122,7 +1125,8 @@ def atlas(request):
 
         counter[cc]['country_name'] = Country.objects.get(iso=cc).printable_name
 
-    counter = dict(counter)
+    counter = OrderedDict(sorted(counter.items(), key=lambda t: t[0]))
+
     ctx = {
         'probes': probes_all,
         'len_probes': len(probes_all),
@@ -1130,7 +1134,8 @@ def atlas(request):
         'disconnected': disconnected,
         'never': never,
         'abandoned': abandoned,
-        'counter': counter
+        'counter': counter,
+        'countries_without_probes': countries_without_probes
     }
 
     return render_to_response("atlas.html", ctx, getContext(request))

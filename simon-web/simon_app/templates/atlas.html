@@ -75,10 +75,14 @@
 
 
         <h2 class="page-header">Listado por país</h2>
+
+        <p>A continuación se muestra una lista con información a nivel de país. De forma similar a los datos regionales, se muestra información acerca de <code style="color: black">cantidad total</code> y porcentaje de probes <code style="color: #9BC53D">conectadas</code>, <code
+                style="color: #C3423F">desconectadas</code>, <code style="color: #FDE74C">abandonadas</code>, y <code style="color: darkgray">jamás conectadas</code>.</p>
         {% for c, val in counter.items %}
-            {{ c }}
-            {{ val.country_name }}
-            <code style="color: black">{{ val.all_count }}</code>
+
+            {{ val.country_name }} ({{ c }})
+
+            <code style="color: black">{{ val.country_all_count }}</code>
             <code style="color: #9BC53D">{{ val.connected_count }}</code>
             <code style="color: #C3423F">{{ val.disconnected_count }}</code>
             <code style="color: #FDE74C">{{ val.abandoned_count }}</code>
@@ -101,16 +105,31 @@
         {% endfor %}
 
 
+        <h2 class="page-header">Países sin RIPE Atlas probes</h2>
+        <p>El proyecto RIPE Atlas busca expandirse a todos los lugares donde aún no ha llegado. Si tienes una conexión a Internet en alguno de los siguientes paises, no dudes en ponerte en contacto para solicitar un RIPE Atlas probe.
+            Necesitamos pioneros que lleven esta plataforma a lugares donde aún no ha llegado!</p>
+        <ul>
+            {% for c in countries_without_probes %}
+                <li>{{ c.printable_name }} ({{ c.iso }})</li>
+            {% endfor %}
+        </ul>
+
+
         <h2 class="page-header">Listado completo de probes en LAC</h2>
+        <p>A continuación se muestra un listado con todos los RIPE Atlas probes que se han detectado en la región de Latinamérica y el Caribe.</p>
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <p>Referencia de los estados de probes posibles</p>
 
-        <p>Referencia de los estados de probes posibles</p>
+                <p>
+                    <span class="glyphicon glyphicon glyphicon-ok-sign" aria-hidden="true" style="color: #9BC53D"></span> Connected<br>
+                    <span class="glyphicon glyphicon glyphicon-minus-sign" aria-hidden="true" style="color: #C3423F"></span> Disconnected<br>
+                    <span class="glyphicon glyphicon-question-sign" aria-hidden="true" style="color: darkgray"></span> Never Connected<br>
+                    <span class="glyphicon glyphicon-warning-sign" aria-hidden="true" style="color: #FDE74C"></span> Abandoned
+                </p>
+            </div>
+        </div>
 
-        <p>
-            <span class="glyphicon glyphicon glyphicon-ok-sign" aria-hidden="true" style="color: #9BC53D"></span> Connected<br>
-            <span class="glyphicon glyphicon glyphicon-minus-sign" aria-hidden="true" style="color: #C3423F"></span> Disconnected<br>
-            <span class="glyphicon glyphicon-question-sign" aria-hidden="true" style="color: darkgray"></span> Never Connected<br>
-            <span class="glyphicon glyphicon-warning-sign" aria-hidden="true" style="color: #FDE74C"></span> Abandoned
-        </p>
 
         <table class="table">
             <th>Probe ID</th>
