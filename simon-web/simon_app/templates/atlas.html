@@ -12,165 +12,185 @@
     <div class="col-lg-12">
 
 
-        <h1 class="page-header">RIPE Atlas en LAC</h1>
+    <h1 class="page-header">RIPE Atlas en LAC</h1>
 
-        <p>
-            RIPE Atlas es una de las plataformas de medición de parámetros de red en Internet de mayor despliegue a nivel mundial. La misma pone a disposición de sus miembros recursos que permiten realizar mediciones de redes. <a
-                href="https://www.ripe.net">RIPE NCC</a> es
-            el organismo encargado de llevar adelante este enorme proyecto, y cuenta con la colaboración de LACNIC para la región de Latinoamérica y Caribe. En el momento la plataforma se encuentra en una etapa de expansión, enfocándose
-            principalmente en zonas donde la penetración puede ser mejor. Estas zonas donde se está poniendo foco son Asia, Latinoamérica y Caribe, y África. Más y mejor información se puede consultar en <a
-                href="https://atlas.ripe.net/about/">la página de RIPE Atlas</a>.
-        </p>
+    <p>
+        RIPE Atlas es una de las plataformas de medición de parámetros de red en Internet de mayor despliegue a nivel mundial. La misma pone a disposición de sus miembros recursos que permiten realizar mediciones de redes. <a
+            href="https://www.ripe.net">RIPE NCC</a> es
+        el organismo encargado de llevar adelante este enorme proyecto, y cuenta con la colaboración de LACNIC para la región de Latinoamérica y Caribe. En el momento la plataforma se encuentra en una etapa de expansión, enfocándose
+        principalmente en zonas donde la penetración puede ser mejor. Estas zonas donde se está poniendo foco son Asia, Latinoamérica y Caribe, y África. Más y mejor información se puede consultar en <a
+            href="https://atlas.ripe.net/about/">la página de RIPE Atlas</a>.
+    </p>
 
-        <p>Más información de RIPE Atlas en Latinoamérica y Caribe en <a href="http://www.lacnic.net/web/lacnic/ripe-atlas">el sitio de LACNIC</a>.</p>
+    <p>Más información de RIPE Atlas en Latinoamérica y Caribe en <a href="http://www.lacnic.net/web/lacnic/ripe-atlas">el sitio de LACNIC</a>.</p>
 
 
-        <h2 class="page-header">Resumen</h2>
+    <h2 class="page-header">Resumen</h2>
 
-        <p>A continuación se muestra un resumen a nivel regional de la presencia de la plataforma RIPE Atlas en la región. La barra de colores indica el porcentaje de RIPE Atlas probes que se encuentran <code
-                style="color: #9BC53D">conectadas</code>, <code
-                style="color: #C3423F">desconectadas</code>, <code style="color: #FDE74C">abandonadas</code>, o que <code style="color: darkgray">jamás fueron conectadas</code>.</p>
+    <p>A continuación se muestra un resumen a nivel regional de la presencia de la plataforma RIPE Atlas en la región. La barra de colores indica el porcentaje de RIPE Atlas probes que se encuentran <code
+            style="color: #9BC53D">conectadas</code>, <code
+            style="color: #C3423F">desconectadas</code>, <code style="color: #FDE74C">abandonadas</code>, o que <code style="color: darkgray">jamás fueron conectadas</code>.</p>
 
-        <div style="display: inline; vertical-align: top;">
-            <p><code style="font-size: 3em; color: black">{{ len_probes }}</code> RIPE Atlas probes en la región LAC.</p>
+    <div style="display: inline; vertical-align: top;">
+        <p><code style="font-size: 3em; color: black">{{ len_probes }}</code> RIPE Atlas probes en la región LAC.</p>
+    </div>
+
+    <div class="progress">
+        <div class="progress-bar" style="width: {{ connected }}; background-image: none; background-color: #9BC53D">
+            <span class="sr-only"></span>
         </div>
-
-        <div class="progress">
-            <div class="progress-bar" style="width: {{ connected }}; background-image: none; background-color: #9BC53D">
-                <span class="sr-only"></span>
-            </div>
-            <div class="progress-bar" style="width: {{ disconnected }}; background-image: none; background-color: #C3423F">
-                <span class="sr-only"></span>
-            </div>
-            <div class="progress-bar" style="width: {{ abandoned }}; background-image: none; background-color: #FDE74C">
-                <span class="sr-only"></span>
-            </div>
-            <div class="progress-bar" style="width: {{ never }}; background-image: none; background-color: darkgray">
-                <span class="sr-only"></span>
-            </div>
+        <div class="progress-bar" style="width: {{ disconnected }}; background-image: none; background-color: #C3423F">
+            <span class="sr-only"></span>
         </div>
-
-
-        <div class="col-md-3">
-            <div class="panel panel-default" style="color: #9BC53D">
-                <div class="panel-body">
-                    <h3>{{ connected }}</h3> conectadas
-                </div>
-            </div>
+        <div class="progress-bar" style="width: {{ abandoned }}; background-image: none; background-color: #FDE74C">
+            <span class="sr-only"></span>
         </div>
+        <div class="progress-bar" style="width: {{ never }}; background-image: none; background-color: darkgray">
+            <span class="sr-only"></span>
+        </div>
+    </div>
 
-        <div class="col-md-3">
-            <div class="panel panel-default" style="color: #C3423F">
-                <div class="panel-body">
-                    <h3>{{ disconnected }}</h3> desconectadas
-                </div>
+
+    <div class="col-md-3">
+        <div class="panel panel-default" style="color: #9BC53D">
+            <div class="panel-body">
+                <h3>{{ connected }}</h3> conectadas
             </div>
         </div>
+    </div>
 
-        <div class="col-md-3">
-            <div class="panel panel-default" style="color: darkgray">
-                <div class="panel-body">
-                    <h3>{{ never }}</h3> nunca se han conectado
-                </div>
+    <div class="col-md-3">
+        <div class="panel panel-default" style="color: #C3423F">
+            <div class="panel-body">
+                <h3>{{ disconnected }}</h3> desconectadas
             </div>
         </div>
+    </div>
 
-        <div class="col-md-3">
-            <div class="panel panel-default" style="color: #FDE74C">
-                <div class="panel-body">
-                    <h3>{{ abandoned }}</h3> han sido abandonadas
-                </div>
+    <div class="col-md-3">
+        <div class="panel panel-default" style="color: darkgray">
+            <div class="panel-body">
+                <h3>{{ never }}</h3> nunca se han conectado
             </div>
         </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="panel panel-default" style="color: #FDE74C">
+            <div class="panel-body">
+                <h3>{{ abandoned }}</h3> han sido abandonadas
+            </div>
+        </div>
+    </div>
 
     <h3 class="page-header">Evolución histórica de las probes</h3>
+
     <p>La siguiente gráfica es una linea del tiempo que indica la cantidad de chequeos que se han obtenido de probes de la región en los últimos dos meses.</p>
-        <script type="text/javascript">
-            {{ statuses_timeline | safe }}
-        </script>
-        <div id="statuses_timeline"></div>
+    <script type="text/javascript">
+        {{ statuses_timeline | safe }}
+    </script>
+    <div id="statuses_timeline"></div>
 
 
-        <h2 class="page-header">Listado por país</h2>
+    <h2 class="page-header">Listado por país</h2>
 
-        <p>A continuación se muestra una lista con información a nivel de país. De forma similar a los datos regionales, se muestra información acerca de <code style="color: black">cantidad total</code> y porcentaje de probes <code
-                style="color: #9BC53D">conectadas</code>, <code
-                style="color: #C3423F">desconectadas</code>, <code style="color: #FDE74C">abandonadas</code>, y <code style="color: darkgray">jamás conectadas</code>.</p>
-        {% for c, val in counter.items %}
+    <p>A continuación se muestra una lista con información a nivel de país. De forma similar a los datos regionales, se muestra información acerca de <code style="color: black">cantidad total</code> y porcentaje de probes <code
+            style="color: #9BC53D">conectadas</code>, <code
+            style="color: #C3423F">desconectadas</code>, <code style="color: #FDE74C">abandonadas</code>, y <code style="color: darkgray">jamás conectadas</code>.</p>
+    {% for c, val in counter.items %}
 
-            {{ val.country_name }} ({{ c }})
+        {{ val.country_name }} ({{ c }})
 
-            <code style="color: black">{{ val.country_all_count }}</code>
-            <code style="color: #9BC53D">{{ val.connected_count }}</code>
-            <code style="color: #C3423F">{{ val.disconnected_count }}</code>
-            <code style="color: #FDE74C">{{ val.abandoned_count }}</code>
-            <code style="color: darkgray">{{ val.never_count }}</code>
+        <code style="color: black">{{ val.country_all_count }}</code>
+        <code style="color: #9BC53D">{{ val.connected_count }}</code>
+        <code style="color: #C3423F">{{ val.disconnected_count }}</code>
+        <code style="color: #FDE74C">{{ val.abandoned_count }}</code>
+        <code style="color: darkgray">{{ val.never_count }}</code>
 
-            <div class="progress" style="max-height: .2em">
-                <div class="progress-bar" style="width: {{ val.connected }}; background-image: none; background-color: #9BC53D">
-                    <span class="sr-only"></span>
-                </div>
-                <div class="progress-bar" style="width: {{ val.disconnected }}; background-image: none; background-color: #C3423F">
-                    <span class="sr-only"></span>
-                </div>
-                <div class="progress-bar" style="width: {{ val.abandoned }}; background-image: none; background-color: #FDE74C">
-                    <span class="sr-only"></span>
-                </div>
-                <div class="progress-bar" style="width: {{ val.never }}; background-image: none; background-color: darkgray">
-                    <span class="sr-only"></span>
-                </div>
+        <div class="progress" style="max-height: .2em">
+            <div class="progress-bar" style="width: {{ val.connected }}; background-image: none; background-color: #9BC53D">
+                <span class="sr-only"></span>
             </div>
-        {% endfor %}
-
-
-        <h2 class="page-header">Países sin RIPE Atlas probes</h2>
-
-        <p>El proyecto RIPE Atlas busca expandirse a todos los lugares donde aún no ha llegado. Si tienes una conexión a Internet en alguno de los siguientes paises, no dudes en ponerte en contacto para solicitar un RIPE Atlas probe.
-            Necesitamos pioneros que lleven esta plataforma a lugares donde aún no ha llegado!</p>
-        <ul>
-            {% for c in countries_without_probes %}
-                <li>{{ c.printable_name }} ({{ c.iso }})</li>
-            {% endfor %}
-        </ul>
-
-
-        <h2 class="page-header">Listado completo de probes en LAC</h2>
-
-        <p>A continuación se muestra un listado con todos los RIPE Atlas probes que se han detectado en la región de Latinoamérica y el Caribe.</p>
-
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <p>Referencia de los estados de probes posibles</p>
-
-                <p>
-                    <span class="glyphicon glyphicon glyphicon-ok-sign" aria-hidden="true" style="color: #9BC53D"></span> Connected<br>
-                    <span class="glyphicon glyphicon glyphicon-minus-sign" aria-hidden="true" style="color: #C3423F"></span> Disconnected<br>
-                    <span class="glyphicon glyphicon-question-sign" aria-hidden="true" style="color: darkgray"></span> Never Connected<br>
-                    <span class="glyphicon glyphicon-warning-sign" aria-hidden="true" style="color: #FDE74C"></span> Abandoned
-                </p>
+            <div class="progress-bar" style="width: {{ val.disconnected }}; background-image: none; background-color: #C3423F">
+                <span class="sr-only"></span>
+            </div>
+            <div class="progress-bar" style="width: {{ val.abandoned }}; background-image: none; background-color: #FDE74C">
+                <span class="sr-only"></span>
+            </div>
+            <div class="progress-bar" style="width: {{ val.never }}; background-image: none; background-color: darkgray">
+                <span class="sr-only"></span>
             </div>
         </div>
+    {% endfor %}
 
 
-        <table class="table">
+    <h2 class="page-header">Países sin RIPE Atlas probes</h2>
+
+    <p>El proyecto RIPE Atlas busca expandirse a todos los lugares donde aún no ha llegado. Si tienes una conexión a Internet en alguno de los siguientes paises, no dudes en ponerte en contacto para solicitar un RIPE Atlas probe.
+        Necesitamos pioneros que lleven esta plataforma a lugares donde aún no ha llegado!</p>
+
+    <p>
+        <a type="button" class="btn btn-default" href="https://atlas.ripe.net/apply/?source=87aa7f2c-6cac-459e-8cda-6c192911f5e2">Solicita tu RIPE Atlas probe!</a>
+    </p>
+    <ul>
+        {% for c in countries_without_probes %}
+            <li>{{ c.printable_name }} ({{ c.iso }})</li>
+        {% endfor %}
+    </ul>
+
+
+    <h2 class="page-header">Listado completo de probes en LAC</h2>
+
+
+    <p>A continuación se muestra un listado con todos los RIPE Atlas probes que se han detectado en la región de Latinoamérica y el Caribe.</p>
+
+    <div class="panel panel-default" style="max-width: 20em">
+        <div class="panel-body">
+            <p>Referencia de los estados de probes posibles</p>
+
+            <p>
+                <span class="glyphicon glyphicon glyphicon-ok-sign" aria-hidden="true" style="color: #9BC53D"></span> Connected<br>
+                <span class="glyphicon glyphicon glyphicon-minus-sign" aria-hidden="true" style="color: #C3423F"></span> Disconnected<br>
+                <span class="glyphicon glyphicon-question-sign" aria-hidden="true" style="color: darkgray"></span> Never Connected<br>
+                <span class="glyphicon glyphicon-warning-sign" aria-hidden="true" style="color: #FDE74C"></span> Abandoned
+            </p>
+        </div>
+    </div>
+
+    <div id="probes-list">
+        <input class="search form form-control" style="max-width: 20em" placeholder="Buscar por ID, país, o ASN"/>
+
+
+        <table class="table" style="margin-top: 1em">
+
             <th>Probe ID</th>
-            <th>País</th>
+            <th>
+                País
+                <a class="sort" data-sort="pais-atlas">
+                    ordenar
+                </a></th>
             <th>ASN (v4) / (v6)</th>
-            <th>Último status</th>
+            <th>
+                Último status
+                <a class="sort" data-sort="status-atlas">
+                    ordenar
+                </a>
+            </th>
             <th>Momento de chequeo</th>
 
+            <tbody class="list">
             {% for probe in probes %}
                 <tr>
-                    <td>
+                    <td class="id-atlas">
                         {{ probe.probe_id }}
                     </td>
-                    <td>
+                    <td class="pais-atlas">
                         {{ probe.country_code }}
                     </td>
-                    <td>
+                    <td class="asn-atlas">
                         {{ probe.asn_v4 }} / {{ probe.asn_v6 }}
                     </td>
-                    <td>
+                    <td class="status-atlas">
                         {% if probe.status.status == 'Disconnected' %}
                             <span class="glyphicon glyphicon glyphicon-minus-sign" aria-hidden="true" style="color: #C3423F"></span>
 
@@ -190,7 +210,33 @@
                     </td>
                 </tr>
             {% endfor %}
-
+            </tbody>
         </table>
+    </div>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.1.1/list.min.js"></script>
+    <script src="https://raw.githubusercontent.com/javve/list.pagination.js/v0.1.1/dist/list.pagination.min.js"></script>
+    <script type="text/javascript">
+        var options = {
+            valueNames: [ 'pais-atlas', 'status-atlas', 'id-atlas', 'asn-atlas' ]
+        };
+
+        var hackerList = new List('probes-list', options);
+    </script>
+
+    {#    <nav>#}
+    {#        <ul class="pager">#}
+    {#            <li>{% if probes_paginated.has_previous %}#}
+    {#                <a href="?page={{ probes_paginated.previous_page_number }}">anterior</a>#}
+    {#            {% endif %}</li>#}
+    {##}
+    {#            <li>{{ probes_paginated.number }} de {{ probes_paginated.paginator.num_pages }}</li>#}
+    {##}
+    {#            <li>{% if probes_paginated.has_next %}#}
+    {#                <a href="?page={{ probes_paginated.next_page_number }}">siguiente</a>#}
+    {#            {% endif %}</li>#}
+    {#        </ul>#}
+    {#    </nav>#}
+
+
     </div>
 {% endblock %}
