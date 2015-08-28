@@ -1,12 +1,18 @@
 {% extends 'bootstrap.html' %}
 {% load staticfiles %}
 
+{% block headers %}
+    <!-- Google Charts -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+    <script src="https://www.google.com/jsapi" type="text/javascript"></script>
+{% endblock %}
+
 {% block content %}
 
     <div class="col-lg-12">
 
-        <h1 class="page-header">RIPE Atlas en LAC</h1>
 
+        <h1 class="page-header">RIPE Atlas en LAC</h1>
 
         <p>
             RIPE Atlas es una de las plataformas de medición de parámetros de red en Internet de mayor despliegue a nivel mundial. La misma pone a disposición de sus miembros recursos que permiten realizar mediciones de redes. <a
@@ -76,6 +82,13 @@
                 </div>
             </div>
         </div>
+
+    <h3 class="page-header">Evolución histórica de las probes</h3>
+    <p>La siguiente gráfica es una linea del tiempo que indica la cantidad de chequeos que se han obtenido de probes de la región en los últimos dos meses.</p>
+        <script type="text/javascript">
+            {{ statuses_timeline | safe }}
+        </script>
+        <div id="statuses_timeline"></div>
 
 
         <h2 class="page-header">Listado por país</h2>

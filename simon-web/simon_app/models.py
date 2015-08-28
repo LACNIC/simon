@@ -478,10 +478,25 @@ class RipeAtlasProbe(models.Model):
         verbose_name_plural = 'RIPE Atlas Probes'
 
 
+class RipeAtlasProbeStatusManager(models.Manager):
+    def get_timeline(self):
+        from django.db import connection
+
+        cursor = connection.cursor()
+        cursor.execute("SELECT date_trunc('day', date), SUM(case when status='Connected' then 1 else 0 end) AS connected , SUM(case when status='Disconnected' then 1 else 0 end) AS disconnected , SUM(case when status='Abandoned' then 1 else 0 end) AS abandoned , SUM(case when status='Never Connected' then 1 else 0 end) AS never " \
+                       "FROM simon_app_ripeatlasprobestatus " \
+                       "WHERE date > now() - interval '2 months' " \
+                       "AND date < now() " \
+                       "GROUP BY 1 " \
+                       "ORDER BY 1; ")
+
+        return cursor.fetchall()
+
 class RipeAtlasProbeStatus(models.Model):
     probe = models.ForeignKey(RipeAtlasProbe)
     date = models.DateTimeField()
     status = models.CharField(max_length=20, null=True)
+    objects = RipeAtlasProbeStatusManager()
 
     def __unicode__(self):
         return self.status
