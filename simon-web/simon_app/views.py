@@ -1088,10 +1088,10 @@ def atlas(request):
     from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
     rs = RipeAtlasProbeStatus.objects.get_timeline()
-    connected_timeline = [r[1] for r in rs]
-    disconnected_timeline = [r[2] for r in rs]
-    abandoned_timeline = [r[3] for r in rs]
-    never_timeline = [r[4] for r in rs]
+    connected_timeline = [r[1] / 2 for r in rs]
+    disconnected_timeline = [r[2] / 2 for r in rs]
+    abandoned_timeline = [r[3] / 2 for r in rs]
+    never_timeline = [r[4] / 2 for r in rs]
     data = dict(data=json.dumps([list((d[0].strftime("%d/%m/%Y") for d in rs)), connected_timeline, disconnected_timeline, abandoned_timeline, never_timeline]),
                 divId='statuses_timeline',
                 labels=json.dumps(['Connected', 'Disconnected', 'Abandoned', 'Never Connected']),
