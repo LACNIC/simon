@@ -492,6 +492,22 @@ class RipeAtlasProbeStatusManager(models.Manager):
 
         return cursor.fetchall()
 
+    def get_cron_frequencies(self):
+        from django.db import connection
+
+        cursor = connection.cursor()
+        sql = "SELECT date_trunc('day', date), COUNT(*) AS count "\
+        "FROM simon_app_ripeatlasprobestatus "\
+        "WHERE date > now() - interval '2 months' "\
+        "AND date < now() "\
+        "AND probe_id = 648 "\
+        "GROUP BY 1 "\
+        "ORDER BY 1;"
+
+        cursor.execute(sql)
+
+        return cursor.fetchall()
+
 class RipeAtlasProbeStatus(models.Model):
     probe = models.ForeignKey(RipeAtlasProbe)
     date = models.DateTimeField()
