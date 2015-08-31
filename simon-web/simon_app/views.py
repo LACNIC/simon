@@ -427,7 +427,7 @@ def post_offline_testpoints(request):
                         #
                         # country = Country.objects.get(iso=dbTestPoint.country)
                         #
-                        #                         asunto = 'Server offline notification - Simon Project'
+                        # asunto = 'Server offline notification - Simon Project'
                         #                         texto = 'This message has been sent to the Simon Project mailing list.'
                         #                         texto_HTML = '<p>The point <strong>%s</strong> in %s has been reported offline %s times. To unsubscribe the point please <a href="%s/%s">click here</a>. Note that the link will expire after %s minutes</p>' % (dbTestPoint.ip_address, country.printable_name, dbPoint.report_count, settings.UNSUBSCRIBE_TESTPOINT_URL, token.token_value, minutes)
 
@@ -601,7 +601,7 @@ def charts_reports(request):
     year = datetime.datetime.now().year
     years = range(2009, year + 1)
 
-    ##############
+    # #############
     # Histograms #
     ##############
     import requests
@@ -998,7 +998,7 @@ def add_new_ntppoint(request):
                 # texto = 'Hemos recibido una petición para agregar su servidor a nuestra lista de servidores. Nuestro equipo ha determinado que por el momento no es apto para integrar la lista de servidores debido a que su dirección no forma parte del espacio de direcciones de LACNIC. De todos modos será estudiado, y en caso de ser apto, le notificaremos al respecto.'
                 # texto_HTML = '<p>Hemos recibido una petición para agregar su servidor a nuestra lista de servidores. Nuestro equipo ha determinado que por el momento no es apto para integrar la lista de servidores debido a que su dirección no forma parte del espacio de direcciones de LACNIC. De todos modos será estudiado, y en caso de ser apto, le notificaremos al respecto.</p><p>Datos del servidor:</p><p>Organización: %s</p><p>URL: %s</p><p>País: %s</p><p>Dirección IP: <strong>%s</strong></p><p>Muchas gracias por su colaboración. Lo invitamos a seguir siendo partícipe de este proyecto realizando algunos tests <a href="http://simon.labs.lacnic.net/simon/participate/">aquí</a>.</p>' % (str(testPoint.description), str(testPoint.url), str(country_printable), str(testPoint.ip_address))
                 # try:
-                #                msg = EmailMultiAlternatives(asunto, texto, settings.DEFAULT_FROM_EMAIL, [volunteer_email])
+                # msg = EmailMultiAlternatives(asunto, texto, settings.DEFAULT_FROM_EMAIL, [volunteer_email])
                 #                msg.attach_alternative(texto_HTML, "text/html")
                 #                msg.content_subtype = "html"  # Main content is now text/html
                 #                msg.send()
@@ -1088,10 +1088,19 @@ def atlas(request):
     from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
     rs = RipeAtlasProbeStatus.objects.get_timeline()
-    connected_timeline = [r[1] / 2 for r in rs]
-    disconnected_timeline = [r[2] / 2 for r in rs]
-    abandoned_timeline = [r[3] / 2 for r in rs]
-    never_timeline = [r[4] / 2 for r in rs]
+
+    # get the amount of times the cron job was ran in that day so far
+    cron_frequencies = RipeAtlasProbeStatus.objects.get_cron_frequencies()
+
+    connected_timeline = zip([r[1] for r in rs], [cf[1] for cf in cron_frequencies])
+    disconnected_timeline = zip([r[2] for r in rs], [cf[1] for cf in cron_frequencies])
+    abandoned_timeline = zip([r[3] for r in rs], [cf[1] for cf in cron_frequencies])
+    never_timeline = zip([r[4] for r in rs], [cf[1] for cf in cron_frequencies])
+
+    connected_timeline = [conn[0] / conn[1] for conn in connected_timeline]
+    disconnected_timeline = [conn[0] / conn[1] for conn in disconnected_timeline]
+    abandoned_timeline = [conn[0] / conn[1] for conn in abandoned_timeline]
+    never_timeline = [conn[0] / conn[1] for conn in never_timeline]
     data = dict(data=json.dumps([list((d[0].strftime("%d/%m/%Y") for d in rs)), connected_timeline, disconnected_timeline, abandoned_timeline, never_timeline]),
                 divId='statuses_timeline',
                 labels=json.dumps(['Connected', 'Disconnected', 'Abandoned', 'Never Connected']),
@@ -1100,7 +1109,6 @@ def atlas(request):
                 xAxis='date')
     url = settings.CHARTS_URL + "/code"
     statuses_timeline = requests.post(url, data=data, headers={'Connection': 'close'}).text
-
 
     all = RipeAtlasProbeStatus.objects.all()
     connected = "%.1f%%" % (len(all.filter(status="Connected")) * 100.0 / len(all))
@@ -1112,7 +1120,7 @@ def atlas(request):
 
     probes_all = RipeAtlasProbe.objects.all().order_by('country_code')
     countries_with_probes = probes_all.values_list('country_code', flat=True)
-    countries_without_probes = [ {'iso': c.iso, 'printable_name': c.printable_name} for c in Country.objects.get_region_countries() if c.iso not in countries_with_probes]
+    countries_without_probes = [{'iso': c.iso, 'printable_name': c.printable_name} for c in Country.objects.get_region_countries() if c.iso not in countries_with_probes]
     counter = Counter(countries_with_probes)
     for cc in counter:
         if len(probes_all.filter(country_code=cc)) == 0:
@@ -1133,7 +1141,6 @@ def atlas(request):
         counter[cc]['never_count'] = country_never
         counter[cc]['country_all_count'] = country_all_count
 
-
         counter[cc]['connected'] = "%.1f%%" % (country_connected * 100.0 / country_all_count)
         counter[cc]['disconnected'] = "%.1f%%" % (country_disconnected * 100.0 / country_all_count)
         counter[cc]['abandoned'] = "%.1f%%" % (country_abandoned * 100.0 / country_all_count)
@@ -1142,7 +1149,6 @@ def atlas(request):
         counter[cc]['country_name'] = Country.objects.get(iso=cc).printable_name
 
     counter = OrderedDict(sorted(counter.items(), key=lambda t: t[0]))
-
 
     paginator = Paginator(probes_all, 15)
     page = request.GET.get('page')

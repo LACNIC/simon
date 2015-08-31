@@ -12,7 +12,7 @@
     <div class="col-lg-12">
 
 
-    <h1 class="page-header">RIPE Atlas en LAC</h1>
+    <h1 class="page-header">RIPE Atlas en Latinoamérica y el Caribe</h1>
 
     <p>
         RIPE Atlas es una de las plataformas de medición de parámetros de red en Internet de mayor despliegue a nivel mundial. La misma pone a disposición de sus miembros recursos que permiten realizar mediciones de redes. <a
@@ -54,7 +54,7 @@
     <div class="col-md-3">
         <div class="panel panel-default" style="color: #9BC53D">
             <div class="panel-body">
-                <h3>{{ connected }}</h3> conectadas
+                <h3>{{ connected }}</h3> Conectadas
             </div>
         </div>
     </div>
@@ -62,7 +62,16 @@
     <div class="col-md-3">
         <div class="panel panel-default" style="color: #C3423F">
             <div class="panel-body">
-                <h3>{{ disconnected }}</h3> desconectadas
+                <h3>{{ disconnected }}</h3> Desconectadas
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-3">
+        <div class="panel panel-default" style="color: #FDE74C">
+            <div class="panel-body">
+                <h3>{{ abandoned }}</h3> Han sido abandonadas
             </div>
         </div>
     </div>
@@ -70,15 +79,7 @@
     <div class="col-md-3">
         <div class="panel panel-default" style="color: darkgray">
             <div class="panel-body">
-                <h3>{{ never }}</h3> nunca se han conectado
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="panel panel-default" style="color: #FDE74C">
-            <div class="panel-body">
-                <h3>{{ abandoned }}</h3> han sido abandonadas
+                <h3>{{ never }}</h3> Nunca se han conectado
             </div>
         </div>
     </div>
@@ -182,7 +183,10 @@
             {% for probe in probes %}
                 <tr>
                     <td class="id-atlas">
-                        {{ probe.probe_id }}
+                        <a href="https://atlas.ripe.net/probes/{{ probe.probe_id }}" target="_blank">
+                            {{ probe.probe_id }}
+                            <span class="glyphicon glyphicon-new-window" style="font-size: .8em"></span>
+                        </a>
                     </td>
                     <td class="pais-atlas">
                         {{ probe.country_code }}
