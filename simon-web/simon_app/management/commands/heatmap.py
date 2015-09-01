@@ -197,10 +197,14 @@ class Command(BaseCommand):
 
 def build_heatmap(dictionary, filename):
     from collections import defaultdict
+    import matplotlib
     from matplotlib import pyplot as plt
     from datetime import datetime
     import numpy as np
-    from simon_project.settings import STATIC_ROOT
+    from simon_project.settings import STATIC_ROOT, DEBUG
+
+    if not DEBUG:
+        matplotlib.use('Agg')
 
     origins = []
     destinations = []
