@@ -7,10 +7,7 @@ from simon_app.models import Country, Params
 from django.db.models import Q
 from simon_app.functions import meanLatency
 from simon_app.models import Results, AS
-from simon_app.reportes import GMTUY
-from datetime import timedelta, datetime
-import json
-import sys
+import json, sys
 
 def asn_heatmap():
     rs = Results.objects.filter((Q(as_origin__gt=1) | Q(as_destination__gt=1)))# & Q(ip_version=4))
@@ -198,13 +195,14 @@ class Command(BaseCommand):
 def build_heatmap(dictionary, filename):
     from collections import defaultdict
     import matplotlib
+    if not DEBUG:
+        matplotlib.use('Agg')
     from matplotlib import pyplot as plt
     from datetime import datetime
     import numpy as np
     from simon_project.settings import STATIC_ROOT, DEBUG
 
-    if not DEBUG:
-        matplotlib.use('Agg')
+
 
     origins = []
     destinations = []
