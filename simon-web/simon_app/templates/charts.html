@@ -184,15 +184,26 @@
                 La gráfica a continuación representa la latencia promedio en la
                 región. Las filas representan los paises de origen de los tests, y las
                 columnas los de destino. Es decir, si se quieren ver todos los tests
-                con origen Brasil, basta ver la fila BR; si se quieren ver
+                con origen Brasil, basta ver la fila BR, si se quieren ver
                 los que tienen destino Brasil, entonces habrá que recorrer la
-                columna BR. <br/> Las latencias más altas se corresponden con
-                las tonalidaades más oscuras. Se puede ver que la diagonal principal
-                tiene, lógicamente, menor latencia que el promedio, ya que se
+                columna BR.
+            </p>
+
+            <p>Las latencias más altas se corresponden con
+                las tonalidaades más oscuras. Se puede ver que las diagonales principales
+                tienen, lógicamente, menor latencia que el promedio de la matriz, ya que se
                 corresponde con la latencia interna de los países.
             </p>
 
-            <img class="center-block" src="{% static 'simon_app/imgs/heatmap-javascript.png' %}" >
+            <div class="col-lg-6">
+                <h4>Matriz para medidor Javascript (<code>http</code>)</h4>
+                <img class="center-block" src="{% static 'simon_app/imgs/heatmap-javascript.png' %}" style="max-width: 100%">
+            </div>
+            <div class="col-lg-6">
+                <h4>Matriz para medidor Applet (<code>ntp</code>)</h4>
+                <img class="center-block" src="{% static 'simon_app/imgs/heatmap-applet.png' %}" style="max-width: 100%">
+            </div>
+
         </div>
 
     </div>

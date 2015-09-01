@@ -143,14 +143,100 @@ def heatmap(start, end):
         param = Params(config_name='heatmap_values', config_value=json.dumps(values))
         param.save()
 
+
+def build_dict(results):
+    from collections import defaultdict
+    from sys import stdout
+
+    ccs = ['AR', 'BO', 'BR', 'CL', 'CO', 'EC', 'PE', 'PY', 'SR', 'UY', 'VE', 'BZ', 'CR', 'CU', 'DO', 'GT', 'HN', 'MX', 'PA', 'SV', 'TT'] # Country.objects.get_region_countrycodes()
+    N = len(ccs)
+    region_dict = defaultdict(None)
+    for i, cc_o in enumerate(ccs):
+        stdout.write("\r%.2f%%" % (100.0 * i / N))
+        stdout.flush()
+        rs = results.filter(country_origin=cc_o)
+
+        if len(rs) == 0:
+            continue
+
+        cc_dict = defaultdict(None)
+        for cc_d in ccs:
+            rtts = rs.filter(country_destination=cc_d).values_list('ave_rtt', flat=True)
+            if len(rtts) > 0:
+                rtt = sum(rtts) / len(rtts)
+            # else:
+            #     rtt = 0
+                cc_dict[cc_d] = rtt
+        region_dict[cc_o] = cc_dict
+    return region_dict
+
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
         # asn_heatmap()
-        year = 2009#[2009, 2010, 2011, 2012, 2013]
-        start = datetime.strptime("Jan 1 %s" % (year), '%b %d %Y').replace(tzinfo=GMTUY())
-        end = datetime.now(GMTUY())#start + timedelta(365)#
-        heatmap(start, end)
+        # year = 2009#[2009, 2010, 2011, 2012, 2013]
+        # start = datetime.strptime("Jan 1 %s" % (year), '%b %d %Y').replace(tzinfo=GMTUY())
+        # end = datetime.now(GMTUY())#start + timedelta(365)#
+        # heatmap(start, end)
+
+        results = Results.objects.javascript()
+        dictionary = build_dict(results)
+        filename = "heatmap-javascript.png"
+        build_heatmap(dictionary, filename)
+
+        results = Results.objects.applet()
+        dictionary = build_dict(results)
+        filename = "heatmap-applet.png"
+        build_heatmap(dictionary, filename)
+
+        results = Results.objects.probeapi()
+        dictionary = build_dict(results)
+        filename = "heatmap-icmp.png"
+        build_heatmap(dictionary, filename)
+
+
+def build_heatmap(dictionary, filename):
+    from collections import defaultdict
+    from matplotlib import pyplot as plt
+    from datetime import datetime
+    import numpy as np
+    from simon_project.settings import STATIC_ROOT
+
+    origins = []
+    destinations = []
+    for o in sorted(dictionary):
+        if o not in origins: origins.append(o)
+        for d in sorted(dictionary[o]):
+            if d not in destinations: destinations.append(d)
+
+            res = []
+    for o in origins:
+        for d in destinations:
+            try:
+                res.append(dictionary[o][d])
+            except:
+                res.append(0)
+
+    data = np.reshape(res, (len(origins), len(destinations)))
+    fig, ax = plt.subplots()
+    heatmap = ax.pcolor(data, cmap=plt.cm.Blues)
+
+
+    # put the major ticks at the middle of each cell
+    plt.ylim(0, len(origins))
+    plt.xlim(0, len(destinations))
+    ax.set_xticks(np.arange(len(destinations))+.5, minor=False)
+    ax.set_yticks(np.arange(len(origins))+.5, minor=False)
+
+    # want a more natural, table-like display
+    ax.invert_yaxis()
+    ax.xaxis.tick_top()
+    ax.set_xticklabels(destinations, minor=False)
+    ax.set_yticklabels(origins, minor=False)
+
+    # plt.title("LAC region country-level latency matrix\nGenerated %s\n" % (datetime.now().strftime('%d %b %Y')))
+    plt.savefig("%s/simon_app/imgs/%s" % (STATIC_ROOT, filename), transparent=True)
+
         
 def spinning_cursor():
     while True:
