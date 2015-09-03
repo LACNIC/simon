@@ -1122,8 +1122,15 @@ def atlas(request):
     countries_with_probes = probes_all.values_list('country_code', flat=True)
     countries_without_probes = [{'iso': c.iso, 'printable_name': c.printable_name} for c in Country.objects.get_region_countries() if c.iso not in countries_with_probes]
     counter = Counter(countries_with_probes)
+
+    # Dict for the map
+    map = ""
+    for c in counter.items():
+        map += "%s," % ([c[0].encode("utf8"), c[1]])
+
     for cc in counter:
-        if len(probes_all.filter(country_code=cc)) == 0:
+        n = len(probes_all.filter(country_code=cc))
+        if n == 0:
             continue
 
         country_statuses = RipeAtlasProbeStatus.objects.filter(probe__country_code=cc)
@@ -1171,7 +1178,9 @@ def atlas(request):
         'counter': counter,
         'countries_without_probes': countries_without_probes,
 
-        'statuses_timeline': statuses_timeline
+        'statuses_timeline': statuses_timeline,
+
+        'map': map
     }
 
     return render_to_response("atlas.html", ctx, getContext(request))

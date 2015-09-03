@@ -92,6 +92,55 @@
     </script>
     <div id="statuses_timeline"></div>
 
+    {#    Map#}
+    <h3 class="page-header">Mapa regional de la distribución de probes</h3>
+
+    <script>
+        google.load("visualization", "1", {packages: ["geochart"]});
+        google.setOnLoadCallback(drawRegionsMap);
+
+        function drawRegionsMap() {
+
+            var data = google.visualization.arrayToDataTable([
+                ['Country', 'Points count'],
+                {{ map|safe }}
+            ]);
+
+            var options = {
+                region: '029',
+                colorAxis: {
+                    colors: ['white', 'orange'],
+                    maxValue: 10
+                },
+                backgroundColor: {
+                    fill: '#FFFAF2'
+                }
+            };
+            var chart = new google.visualization.GeoChart(document.getElementById('map_caribbean'));
+            chart.draw(data, options);
+
+            var chart = new google.visualization.GeoChart(document.getElementById('map_central'));
+            options['region'] = '013';
+            options['colorAxis']['maxValue'] = 20;
+            chart.draw(data, options);
+
+            var chart = new google.visualization.GeoChart(document.getElementById('map_south'));
+            options['region'] = '005';
+            options['colorAxis']['maxValue'] = 50;
+            chart.draw(data, options);
+        }
+    </script>
+    <div class="col-lg-4">
+        <div id="map_caribbean" style="width: 60%; margin-left: auto; margin-right: auto;"></div>
+        <div class=""></div>
+    </div>
+    <div class="col-lg-4">
+        <div id="map_central" style="width: 60%; margin-left: auto; margin-right: auto;"></div>
+    </div>
+    <div class="col-lg-4">
+        <div id="map_south" style="width: 60%; margin-left: auto; margin-right: auto;"></div>
+    </div>
+
 
     <h2 class="page-header">Listado por país</h2>
 
@@ -108,7 +157,7 @@
         <code style="color: #FDE74C">{{ val.abandoned_count }}</code>
         <code style="color: darkgray">{{ val.never_count }}</code>
 
-        <div class="progress" style="max-height: .2em">
+        <div class="progress" style="max-height: 3px">
             <div class="progress-bar" style="width: {{ val.connected }}; background-image: none; background-color: #9BC53D">
                 <span class="sr-only"></span>
             </div>
@@ -221,25 +270,26 @@
     <script src="https://raw.githubusercontent.com/javve/list.pagination.js/v0.1.1/dist/list.pagination.min.js"></script>
     <script type="text/javascript">
         var options = {
-            valueNames: [ 'pais-atlas', 'status-atlas', 'id-atlas', 'asn-atlas' ]
+            valueNames: [ 'pais-atlas', 'status-atlas', 'id-atlas', 'asn-atlas' ],
+            page: 1000
         };
 
         var hackerList = new List('probes-list', options);
     </script>
 
-    {#    <nav>#}
-    {#        <ul class="pager">#}
-    {#            <li>{% if probes_paginated.has_previous %}#}
-    {#                <a href="?page={{ probes_paginated.previous_page_number }}">anterior</a>#}
-    {#            {% endif %}</li>#}
+    {#        <nav>#}
+    {#            <ul class="pager">#}
+    {#                <li>{% if probes_paginated.has_previous %}#}
+    {#                    <a href="?page={{ probes_paginated.previous_page_number }}">anterior</a>#}
+    {#                {% endif %}</li>#}
     {##}
-    {#            <li>{{ probes_paginated.number }} de {{ probes_paginated.paginator.num_pages }}</li>#}
+    {#                <li>{{ probes_paginated.number }} de {{ probes_paginated.paginator.num_pages }}</li>#}
     {##}
-    {#            <li>{% if probes_paginated.has_next %}#}
-    {#                <a href="?page={{ probes_paginated.next_page_number }}">siguiente</a>#}
-    {#            {% endif %}</li>#}
-    {#        </ul>#}
-    {#    </nav>#}
+    {#                <li>{% if probes_paginated.has_next %}#}
+    {#                    <a href="?page={{ probes_paginated.next_page_number }}">siguiente</a>#}
+    {#                {% endif %}</li>#}
+    {#            </ul>#}
+    {#        </nav>#}
 
 
     </div>
