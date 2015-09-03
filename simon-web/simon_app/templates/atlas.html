@@ -96,11 +96,14 @@
     <h3 class="page-header">Mapa regional de la distribución de probes</h3>
 
     <p>
-        Los siguientes mapas muestran la distribución de RIPE Atlas probes en la región. Se puede ver que si bien hay países que tiene una buena cantidad de probes (como <a href="#country-detail-BR">Brasil</a>), hay otros que tienen una cantidad mucho menor, o países que
+        Los siguientes mapas muestran la distribución de RIPE Atlas probes en la región. Se puede ver que si bien hay países que tiene una buena cantidad de probes (como <a href="#country-detail-BR">Brasil</a>), hay otros que tienen una
+        cantidad mucho menor, o países que
         inclusive <a href="#countries-without-probes">no tienen probes</a>.
     </p>
+
     <p>
-        Por otra parte surge la pregunta de qué cantidad de probes por país se debería tener. Con qué densidad? Si bien no se puede visualizar en el mapa, la distribución de probes no es uniforme en las ciudades o redes dentro de un país. Si sabes que tu ciudad u operador no cuenta con un RIPE Atlas probe, <a target="_blank" href="https://atlas.ripe.net/apply/?source=87aa7f2c-6cac-459e-8cda-6c192911f5e2">solicita el tuya ahora mismo</a>!
+        Por otra parte surge la pregunta de qué cantidad de probes por país se debería tener. Con qué densidad? Si bien no se puede visualizar en el mapa, la distribución de probes no es uniforme en las ciudades o redes dentro de un país.
+        Si sabes que tu ciudad u operador no cuenta con un RIPE Atlas probe, <a target="_blank" href="https://atlas.ripe.net/apply/?source=87aa7f2c-6cac-459e-8cda-6c192911f5e2">solicita el tuya ahora mismo</a>!
     </p>
 
     <script>
@@ -203,6 +206,7 @@
 
     <p>El proyecto RIPE Atlas busca expandirse a todos los lugares donde aún no ha llegado. Si tienes una conexión a Internet en alguno de los siguientes paises, no dudes en ponerte en contacto para solicitar un RIPE Atlas probe.
         Necesitamos pioneros que lleven esta plataforma a lugares donde aún no ha llegado!</p>
+
     <p>
         <a type="button" class="btn btn-default" target="_blank" href="https://atlas.ripe.net/apply/?source=87aa7f2c-6cac-459e-8cda-6c192911f5e2">Solicita tu RIPE Atlas probe!</a>
     </p>
@@ -289,13 +293,22 @@
             {% endfor %}
             </tbody>
         </table>
+    <div class="center-block">
+        <ul class="pagination"></ul>
     </div>
+
+    </div>
+
+{#    Listas y paginación#}
     <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.1.1/list.min.js"></script>
     <script src="https://raw.githubusercontent.com/javve/list.pagination.js/v0.1.1/dist/list.pagination.min.js"></script>
     <script type="text/javascript">
         var options = {
             valueNames: [ 'pais-atlas', 'status-atlas', 'id-atlas', 'asn-atlas' ],
-            page: 1000
+            page: 10,
+            plugins: [
+                ListPagination({})
+            ]
         };
 
         var hackerList = new List('probes-list', options);
