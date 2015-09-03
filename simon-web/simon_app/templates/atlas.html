@@ -95,6 +95,14 @@
     {#    Map#}
     <h3 class="page-header">Mapa regional de la distribución de probes</h3>
 
+    <p>
+        Los siguientes mapas muestran la distribución de RIPE Atlas probes en la región. Se puede ver que si bien hay países que tiene una buena cantidad de probes (como <a href="#country-detail-BR">Brasil</a>), hay otros que tienen una cantidad mucho menor, o países que
+        inclusive <a href="#countries-without-probes">no tienen probes</a>.
+    </p>
+    <p>
+        Por otra parte surge la pregunta de qué cantidad de probes por país se debería tener. Con qué densidad? Si bien no se puede visualizar en el mapa, la distribución de probes no es uniforme en las ciudades o redes dentro de un país. Si sabes que tu ciudad u operador no cuenta con un RIPE Atlas probe, <a target="_blank" href="https://atlas.ripe.net/apply/?source=87aa7f2c-6cac-459e-8cda-6c192911f5e2">solicita el tuya ahora mismo</a>!
+    </p>
+
     <script>
         google.load("visualization", "1", {packages: ["geochart"]});
         google.setOnLoadCallback(drawRegionsMap);
@@ -102,7 +110,7 @@
         function drawRegionsMap() {
 
             var data = google.visualization.arrayToDataTable([
-                ['Country', 'Points count'],
+                ['País', 'Cantidad de RIPE Atlas probes en ese país'],
                 {{ map|safe }}
             ]);
 
@@ -130,15 +138,30 @@
             chart.draw(data, options);
         }
     </script>
-    <div class="col-lg-4">
-        <div id="map_caribbean" style="width: 60%; margin-left: auto; margin-right: auto;"></div>
-        <div class=""></div>
-    </div>
-    <div class="col-lg-4">
-        <div id="map_central" style="width: 60%; margin-left: auto; margin-right: auto;"></div>
-    </div>
-    <div class="col-lg-4">
-        <div id="map_south" style="width: 60%; margin-left: auto; margin-right: auto;"></div>
+
+    <div class="col-lg-12">
+        <div class="col-lg-4">
+            <div>
+                <h4 class="caption">Caribe</h4>
+
+                <div id="map_caribbean" style="margin-left: auto; margin-right: auto;"></div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div>
+                <h4 class="caption">América Central</h4>
+
+                <div id="map_central" style="margin-left: auto; margin-right: auto;"></div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div>
+                <h4 class="caption">América del Sur</h4>
+
+                <div id="map_south" style="margin-left: auto; margin-right: auto;"></div>
+
+            </div>
+        </div>
     </div>
 
 
@@ -149,38 +172,39 @@
             style="color: #C3423F">desconectadas</code>, <code style="color: #FDE74C">abandonadas</code>, y <code style="color: darkgray">jamás conectadas</code>.</p>
     {% for c, val in counter.items %}
 
-        {{ val.country_name }} ({{ c }})
+        <div id="country-detail-{{ c }}">
+            {{ val.country_name }} ({{ c }})
 
-        <code style="color: black">{{ val.country_all_count }}</code>
-        <code style="color: #9BC53D">{{ val.connected_count }}</code>
-        <code style="color: #C3423F">{{ val.disconnected_count }}</code>
-        <code style="color: #FDE74C">{{ val.abandoned_count }}</code>
-        <code style="color: darkgray">{{ val.never_count }}</code>
+            <code style="color: black">{{ val.country_all_count }}</code>
+            <code style="color: #9BC53D">{{ val.connected_count }}</code>
+            <code style="color: #C3423F">{{ val.disconnected_count }}</code>
+            <code style="color: #FDE74C">{{ val.abandoned_count }}</code>
+            <code style="color: darkgray">{{ val.never_count }}</code>
 
-        <div class="progress" style="max-height: 3px">
-            <div class="progress-bar" style="width: {{ val.connected }}; background-image: none; background-color: #9BC53D">
-                <span class="sr-only"></span>
-            </div>
-            <div class="progress-bar" style="width: {{ val.disconnected }}; background-image: none; background-color: #C3423F">
-                <span class="sr-only"></span>
-            </div>
-            <div class="progress-bar" style="width: {{ val.abandoned }}; background-image: none; background-color: #FDE74C">
-                <span class="sr-only"></span>
-            </div>
-            <div class="progress-bar" style="width: {{ val.never }}; background-image: none; background-color: darkgray">
-                <span class="sr-only"></span>
+            <div class="progress" style="max-height: 3px">
+                <div class="progress-bar" style="width: {{ val.connected }}; background-image: none; background-color: #9BC53D">
+                    <span class="sr-only"></span>
+                </div>
+                <div class="progress-bar" style="width: {{ val.disconnected }}; background-image: none; background-color: #C3423F">
+                    <span class="sr-only"></span>
+                </div>
+                <div class="progress-bar" style="width: {{ val.abandoned }}; background-image: none; background-color: #FDE74C">
+                    <span class="sr-only"></span>
+                </div>
+                <div class="progress-bar" style="width: {{ val.never }}; background-image: none; background-color: darkgray">
+                    <span class="sr-only"></span>
+                </div>
             </div>
         </div>
     {% endfor %}
 
 
-    <h2 class="page-header">Países sin RIPE Atlas probes</h2>
+    <h2 id="countries-without-probes" class="page-header">Países sin RIPE Atlas probes</h2>
 
     <p>El proyecto RIPE Atlas busca expandirse a todos los lugares donde aún no ha llegado. Si tienes una conexión a Internet en alguno de los siguientes paises, no dudes en ponerte en contacto para solicitar un RIPE Atlas probe.
         Necesitamos pioneros que lleven esta plataforma a lugares donde aún no ha llegado!</p>
-
     <p>
-        <a type="button" class="btn btn-default" href="https://atlas.ripe.net/apply/?source=87aa7f2c-6cac-459e-8cda-6c192911f5e2">Solicita tu RIPE Atlas probe!</a>
+        <a type="button" class="btn btn-default" target="_blank" href="https://atlas.ripe.net/apply/?source=87aa7f2c-6cac-459e-8cda-6c192911f5e2">Solicita tu RIPE Atlas probe!</a>
     </p>
     <ul>
         {% for c in countries_without_probes %}
