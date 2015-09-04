@@ -53,6 +53,34 @@ class ConfigsAdmin(admin.ModelAdmin):
     list_display = ['config_name', 'config_value', 'config_description']
     actions = [enable, disable]
 
+from django.contrib.admin.views.main import ChangeList
+class InactiveUsersView(ChangeList):
+    """
+        This view displays the list of inactive users
+    """
+    def __init__(self, *args, **kwargs):
+        super(InactiveUsersView, self).__init__(*args, **kwargs)
+        self.list_display = ('description')
+
+    def get_queryset(self, request):
+        qs = super(InactiveUsersView, self).get_queryset(request)
+        # filter inactive and admin users
+        return qs.filter(is_staff=False, is_active=False, is_superuser=False)
+
+class RipeAtlasTokenAdmin(admin.ModelAdmin):
+    pass
+
+class RipeAtlasTokenListAdmin(admin.ModelAdmin):
+    pass
+     # def save_model(self, request, obj, form, change):
+     #     print obj
+     #     tokens = self.token_list.split(sep="\n")
+     #     for token in tokens:
+     #         print token
+     #         rat = RipeAtlasToken(token=token)
+     #         rat.save()
+
+admin.site.register(Comment)
 
 admin.site.register(Results, ResultsAdmin)
 
@@ -64,3 +92,6 @@ admin.site.register(SpeedtestTestPoint, TestPointAdmin)
 admin.site.register(RipeAtlasPingResult, ResultsAdmin)
 
 admin.site.register(RipeAtlasProbe, RipeAtlasProbeAdmin)
+
+admin.site.register(RipeAtlasToken, RipeAtlasTokenAdmin)
+admin.site.register(RipeAtlasTokenList, RipeAtlasTokenListAdmin)

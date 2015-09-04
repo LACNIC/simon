@@ -694,13 +694,13 @@ def feedbackForm(request):
     if request.method != 'POST':
         return HttpResponse("Invalid Method")
 
-    from django.core.mail import send_mail
+    from django.core.mail import EmailMessage
 
-    print request.META['HTTP_REFERER']
+    post = request.POST
+    mensaje = post['mensaje']
+    remitente = post['remitente']
 
-    form = FeedbackForm(request.POST)
-    mensaje = form.data['mensaje']
-    remitente = form.data['remitente']
+    Comment(person=remitente, comment=mensaje).save()
 
     subject = 'Feedback desde Simón'
     mssg = "%s dice:\n%s" % (remitente, mensaje)
@@ -709,7 +709,9 @@ def feedbackForm(request):
     to = []
     for admin in settings.ADMINS:
         to.append(admin[1])
-    send_mail(subject, mssg, from_, to, fail_silently=False)
+
+    # EmailMessage(subject, mssg, to=["agustin@lacnic.net"]).send()
+    # send_mail(subject, mssg, from_, to, fail_silently=False)
 
     # request.method = 'GET'
     return redirect('simon_app.views.home')

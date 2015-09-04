@@ -776,3 +776,57 @@ class ChartManager(models.Manager):
 class Chart(models.Model):
     objects = ChartManager()
     pass
+
+class RipeAtlasTokenManager(models.Manager):
+    # Nada
+    pass
+
+class RipeAtlasToken(models.Model):
+    token = models.CharField(default='', max_length=100, verbose_name="Token de RIPE Atlas", null=False)
+    probe = models.ForeignKey(RipeAtlasProbe, null=True)
+    comments = models.TextField(default='', verbose_name="Comentarios", null=True)
+    date_added = models.DateTimeField(default=datetime.now())
+
+    objects = RipeAtlasTokenManager()
+
+class RipeAtlasTokenList(models.Model):
+    token_list = models.TextField(default='', verbose_name="Lista de Tokens separadas por saltos de linea")
+    processed = models.BooleanField(default=False)
+    date_added = models.DateTimeField(default=datetime.now())
+
+    def save(self, *args, **kwargs):
+        """
+        :param args:
+        :param kwargs:
+        :return:
+        """
+        # if self.token_list is None or self.token_list == "":
+        #     return
+
+        token_list = super(RipeAtlasTokenList, self).save(*args, **kwargs)  # Call the "real" save() method.
+
+        # Save all the tokens
+        tokens = str(self.token_list).splitlines()
+        for token in tokens:
+            print token
+            rat = RipeAtlasToken(token=token)
+            rat.save()
+        # Save the processed list
+        return token_list
+
+class CommentManager(models.Manager):
+    pass
+
+class Comment(models.Model):
+    person = models.CharField(default="(No especificado)", max_length=200, null=True)
+    comment = models.TextField(default='', null=False)
+    date = models.DateTimeField(default=datetime.now())
+    read = models.BooleanField(default=False)
+    objects = CommentManager()
+
+    def __str__(self):
+        return "%s: %s" % (self.person, self.comment)
+
+    class Meta:
+        verbose_name = 'Comentario'
+        verbose_name_plural = 'Comentarios'
