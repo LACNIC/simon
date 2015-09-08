@@ -102,7 +102,8 @@
     </p>
 
     <p>
-        Por otra parte surge la pregunta de qué cantidad de probes por país se debería tener. Con qué densidad? Si bien no se puede visualizar en el mapa, la distribución de probes no es uniforme en las ciudades o redes dentro de un país.
+        Por otra parte surge la pregunta de qué cantidad de probes por país se debería tener. Con qué densidad? Si bien no se puede visualizar en el mapa, la distribución de probes no es uniforme en las ciudades o redes dentro de un
+        país.
         Si sabes que tu ciudad u operador no cuenta con un RIPE Atlas probe, <a target="_blank" href="https://atlas.ripe.net/apply/?source=87aa7f2c-6cac-459e-8cda-6c192911f5e2">solicita el tuya ahora mismo</a>!
     </p>
 
@@ -173,33 +174,42 @@
     <p>A continuación se muestra una lista con información a nivel de país. De forma similar a los datos regionales, se muestra información acerca de <code style="color: black">cantidad total</code> y porcentaje de probes <code
             style="color: #9BC53D">conectadas</code>, <code
             style="color: #C3423F">desconectadas</code>, <code style="color: #FDE74C">abandonadas</code>, y <code style="color: darkgray">jamás conectadas</code>.</p>
-    {% for c, val in counter.items %}
 
-        <div id="country-detail-{{ c }}">
-            {{ val.country_name }} ({{ c }})
+    <div id="countries-list">
+        <ul class="list">
+            {% for c, val in counter.items %}
 
-            <code style="color: black">{{ val.country_all_count }}</code>
-            <code style="color: #9BC53D">{{ val.connected_count }}</code>
-            <code style="color: #C3423F">{{ val.disconnected_count }}</code>
-            <code style="color: #FDE74C">{{ val.abandoned_count }}</code>
-            <code style="color: darkgray">{{ val.never_count }}</code>
+                <li id="country-detail-{{ c }}">
+                    <div class="codigo-pais-atlas">{{ val.country_name }} ({{ c }})
 
-            <div class="progress" style="max-height: 3px">
-                <div class="progress-bar" style="width: {{ val.connected }}; background-image: none; background-color: #9BC53D">
-                    <span class="sr-only"></span>
-                </div>
-                <div class="progress-bar" style="width: {{ val.disconnected }}; background-image: none; background-color: #C3423F">
-                    <span class="sr-only"></span>
-                </div>
-                <div class="progress-bar" style="width: {{ val.abandoned }}; background-image: none; background-color: #FDE74C">
-                    <span class="sr-only"></span>
-                </div>
-                <div class="progress-bar" style="width: {{ val.never }}; background-image: none; background-color: darkgray">
-                    <span class="sr-only"></span>
-                </div>
-            </div>
+                        <code style="color: black">{{ val.country_all_count }}</code>
+                        <code style="color: #9BC53D">{{ val.connected_count }}</code>
+                        <code style="color: #C3423F">{{ val.disconnected_count }}</code>
+                        <code style="color: #FDE74C">{{ val.abandoned_count }}</code>
+                        <code style="color: darkgray">{{ val.never_count }}</code>
+                    </div>
+
+                    <div class="progress" style="max-height: 3px">
+                        <div class="progress-bar" style="width: {{ val.connected }}; background-image: none; background-color: #9BC53D">
+                            <span class="sr-only"></span>
+                        </div>
+                        <div class="progress-bar" style="width: {{ val.disconnected }}; background-image: none; background-color: #C3423F">
+                            <span class="sr-only"></span>
+                        </div>
+                        <div class="progress-bar" style="width: {{ val.abandoned }}; background-image: none; background-color: #FDE74C">
+                            <span class="sr-only"></span>
+                        </div>
+                        <div class="progress-bar" style="width: {{ val.never }}; background-image: none; background-color: darkgray">
+                            <span class="sr-only"></span>
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+        <div class="center-block">
+            <ul class="pagination"></ul>
         </div>
-    {% endfor %}
+    </div>
 
 
     <h2 id="countries-without-probes" class="page-header">Países sin RIPE Atlas probes</h2>
@@ -293,13 +303,13 @@
             {% endfor %}
             </tbody>
         </table>
-    <div class="center-block">
-        <ul class="pagination"></ul>
-    </div>
+        <div class="center-block">
+            <ul class="pagination"></ul>
+        </div>
 
     </div>
 
-{#    Listas y paginación#}
+    {#    Listas y paginación#}
     <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.1.1/list.min.js"></script>
     <script src="https://raw.githubusercontent.com/javve/list.pagination.js/v0.1.1/dist/list.pagination.min.js"></script>
     <script type="text/javascript">
@@ -312,6 +322,18 @@
         };
 
         var hackerList = new List('probes-list', options);
+    </script>
+
+    <script type="text/javascript">
+        var options = {
+            valueNames: [ 'codigo-pais-atlas' ],
+            page: 10,
+            plugins: [
+                ListPagination({})
+            ]
+        };
+
+        var hackerList = new List('countries-list', options);
     </script>
 
     {#        <nav>#}
