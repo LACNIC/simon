@@ -54,7 +54,11 @@
     <div class="col-md-3">
         <div class="panel panel-default" style="color: #9BC53D">
             <div class="panel-body">
-                <h3>{{ connected }}</h3> Conectadas
+                <h3>{{ connected }}</h3>
+                <h4>Conectadas</h4>
+                <p>
+                    Son probes que se encuentran conectadas a la red Atlas y forman parte de mediciones!
+                </p>
             </div>
         </div>
     </div>
@@ -62,7 +66,11 @@
     <div class="col-md-3">
         <div class="panel panel-default" style="color: #C3423F">
             <div class="panel-body">
-                <h3>{{ disconnected }}</h3> Desconectadas
+                <h3>{{ disconnected }}</h3>
+                <h4>Desconectadas</h4>
+                <p>
+                    Son probes que han estado conectadas alguna vez, pero que no se las ha visto recientemente.
+                </p>
             </div>
         </div>
     </div>
@@ -71,7 +79,11 @@
     <div class="col-md-3">
         <div class="panel panel-default" style="color: #FDE74C">
             <div class="panel-body">
-                <h3>{{ abandoned }}</h3> Han sido abandonadas
+                <h3>{{ abandoned }}</h3>
+                <h4>Han sido abandonadas</h4>
+                <p>
+                    Estas son probes que han figurado como desconectadas por un período mayor a dos meses.
+                </p>
             </div>
         </div>
     </div>
@@ -79,7 +91,9 @@
     <div class="col-md-3">
         <div class="panel panel-default" style="color: darkgray">
             <div class="panel-body">
-                <h3>{{ never }}</h3> Nunca se han conectado
+                <h3>{{ never }}</h3>
+                <h4>Nunca se han conectado</h4>
+                <p>Estas son probes que si bien fueron distribuidas, nunca han sido vistas desde la plataforma RIPE Atlas.</p>
             </div>
         </div>
     </div>
