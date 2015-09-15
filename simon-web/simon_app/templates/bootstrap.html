@@ -254,7 +254,7 @@
         var js = d.createElement(s),
                 sc = d.getElementsByTagName(s)[0];
 
-        js.src = "https://simon.lacnic.net/simon/static/simon_app/js/simon_probe_plugin.js";
+        js.src = "{% static 'simon_app/js/simon_probe_plugin.js' %}";// "https://simon.lacnic.net/simon/static/simon_app/js/simon_probe_plugin.js";
         js.type = "text/javascript";
         sc.parentNode.insertBefore(js, sc);
 
