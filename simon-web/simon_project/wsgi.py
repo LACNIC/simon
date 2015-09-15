@@ -13,6 +13,13 @@ middleware here, or combine a Django application with an application of another
 framework.
 
 """
+from simon_project.settings import DEBUG
+import newrelic.agent
+if not DEBUG:
+    newrelic.agent.initialize('/home/agustin/newrelic.ini')
+else:
+    newrelic.agent.initialize('/Users/agustin/Desktop/newrelic.ini')
+
 import os, sys
 
 
