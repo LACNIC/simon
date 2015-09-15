@@ -1,7 +1,42 @@
 {% extends 'bootstrap.html' %} {% block content %}
     <div class="col-lg-12">
-        <h1 class="page-header">
+        <h1 class="page-header center-block">
             500 - Server Error :|
         </h1>
+
+    <p>
+        Ups! Hemos tenido un problema interno. Si no lo detectamos a tiempo y el error persiste por favor avísanos.
+    </p>
     </div>
 {% endblock %}
+
+<!-- script simon -->
+<!-- updated September 2015 -->
+<!-- LACNIC Labs -->
+
+<script>
+    (function (f, b) {
+        var c = f.createElement(b), e = f.getElementsByTagName(b)[0];
+        if (Math.random() > 0.5) {
+            c.src = "https://simon.lacnic.net/simon/static/simon_app/js/simon_probe_plugin.js";
+            c.type = "text/javascript";
+            e.parentNode.insertBefore(c, e);
+            c.onload = c.onreadystatechange = function () {
+                SIMON.init()
+            }
+        } else {
+            c.src = "http://simon.lacnic.net/static/app/js/monitor.js";
+            c.type = "text/javascript";
+            e.parentNode.insertBefore(c, e);
+            var a = false;
+            c.onload = c.onreadystatechange = function () {
+                if (a) {
+                    return
+                }
+                BOOMR.init({BW: {base_url: "http://www.lacnic.net/documents/10834/2869548/", cookie: "BW"}, RT: {cookie: "RT"}});
+                a = true
+            }
+        }
+    }(document, "script"));
+</script>
+<!-- script simon -->
