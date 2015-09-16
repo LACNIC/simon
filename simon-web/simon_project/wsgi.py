@@ -13,14 +13,6 @@ middleware here, or combine a Django application with an application of another
 framework.
 
 """
-from simon_project.settings import DEBUG
-import newrelic.agent
-if not DEBUG:
-    newrelic.agent.initialize('/home/agustin/newrelic.ini')
-else:
-    pass
-    # newrelic.agent.initialize('/Users/agustin/Desktop/newrelic.ini')
-
 import os, sys
 
 
@@ -35,5 +27,6 @@ os.environ['DJANGO_SETTINGS_MODULE'] = 'simon_project.settings'
 # setting points here.
 
 from django.core.wsgi import get_wsgi_application
+
 application = get_wsgi_application()
 
