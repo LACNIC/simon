@@ -18,7 +18,8 @@ import newrelic.agent
 if not DEBUG:
     newrelic.agent.initialize('/home/agustin/newrelic.ini')
 else:
-    newrelic.agent.initialize('/Users/agustin/Desktop/newrelic.ini')
+    pass
+    # newrelic.agent.initialize('/Users/agustin/Desktop/newrelic.ini')
 
 import os, sys
 
