@@ -119,10 +119,9 @@
                 href="{% url 'simon_app.views.reports' %}" style="color: orange">Reportes</a> o la
             sección de <a href="{% url 'simon_app.views.api' %}" style="color: orange">API</a>
         </p>
-        <script type="text/javascript">
-            {{ latency_histogram_applet | safe }}
-        </script>
+
         <div id="latency_histogram_applet"></div>
+        {{ latency_histogram_applet | safe }}
 
 
         <h4 class="page-header">Medidor: Javascript (<code>HTTP</code>)</h4>
@@ -130,10 +129,9 @@
         <p>
             Los datos correspondientes a la siguiente gráfica pertenecen a las muestras recogidas en el último mes.
         </p>
-        <script type="text/javascript">
-            {{ latency_histogram_js | safe }}
-        </script>
+
         <div id="latency_histogram_js"></div>
+        {{ latency_histogram_js | safe }}
 
 
         <h3 class="page-header">Porcentaje de mediciones por IPv6</h3>

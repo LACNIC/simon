@@ -846,7 +846,7 @@ def getCountry(request):
         else:
             httpResponse = '%s({ cc : "%s"});' % (callback, cc)
 
-        return HttpResponse(httpResponse)
+        return HttpResponse(httpResponse, mimetype="application/json")
 
     if (request.method != 'GET'):
         return HttpResponse("Invalid method: %s" % request.method)

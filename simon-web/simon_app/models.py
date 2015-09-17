@@ -738,7 +738,8 @@ class ChartManager(models.Manager):
             'divId': divId,
             'data': data,
             'labels': labels,
-            'colors': colors
+            'colors': colors,
+            'charts_url': settings.CHARTS_URL
         })
         return t.render(ctx)
 
