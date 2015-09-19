@@ -17,13 +17,13 @@ SIMON = {
     },
 
     urls: {
-        home: SIMON.debug && "http://127.0.0.1:8000/" || "https://simon.lacnic.net/simon/",
-        configs: SIMON.debug && "http://127.0.0.1:8000/web_configs/" || "https://simon.lacnic.net/simon/web_configs/",
-        offline: SIMON.debug && "http://127.0.0.1:8000/postxmlresult/offline/" || "https://simon.lacnic.net/simon/postxmlresult/offline/",
-        post: SIMON.debug && "http://127.0.0.1:8000/postxmlresult/latency/" || "https://simon.lacnic.net/simon/postxmlresult/latency/",
-        country: "https://simon.lacnic.net/simon/getCountry/",
-        ipv6ResolveURL: "https://simon.v6.labs.lacnic.net/cemd/getip/jsonp/",
-        ipv4ResolveURL: "https://simon.v4.labs.lacnic.net/cemd/getip/jsonp/"
+        home: SIMON.debug && "http://127.0.0.1:8000/" || "http://simon.lacnic.net/simon/",
+        configs: SIMON.debug && "http://127.0.0.1:8000/web_configs/" || "http://simon.lacnic.net/simon/web_configs/",
+        offline: SIMON.debug && "http://127.0.0.1:8000/postxmlresult/offline/" || "http://simon.lacnic.net/simon/postxmlresult/offline/",
+        post: SIMON.debug && "http://127.0.0.1:8000/postxmlresult/latency/" || "http://simon.lacnic.net/simon/postxmlresult/latency/",
+        country: "http://simon.lacnic.net/simon/getCountry/",
+        ipv6ResolveURL: "http://simon.v6.labs.lacnic.net/cemd/getip/jsonp/",
+        ipv4ResolveURL: "http://simon.v4.labs.lacnic.net/cemd/getip/jsonp/"
     },
 
     workflow: {
@@ -85,7 +85,7 @@ SIMON = {
 
         $.ajax({
             type: 'GET',
-            url: SIMON.urls.country, //.home + "getCountry",
+            url: SIMON.urls.country,
             contentType: "text/javascript",
             dataType: 'jsonp',
             crossDomain: true,
@@ -415,7 +415,7 @@ SIMON = {
 
                 if (this.getIPversion(data.ip) == '4') {
                     SIMON.ipv4Address = data.ip;
-                    SIMON.getTestsConfigs();
+                    SIMON.getTestsConfigs();// exit
 
                 } else if (this.getIPversion(data.ip) == '6') {
                     SIMON.ipv6Address = data.ip;
@@ -423,6 +423,7 @@ SIMON = {
                 }
             },
             error: function (jqXHR, textStatus, errorThrown) {
+
                 if (SIMON.ipv4Address == "")
                     SIMON.getMyIPAddress(SIMON.urls.ipv4ResolveURL);
             },

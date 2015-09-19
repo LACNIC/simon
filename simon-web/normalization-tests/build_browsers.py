@@ -7,6 +7,12 @@ def build_config(browser, os):
     os_['browserstack.debug'] = True
     return os_
 
+def build_browser(browser_name, version):
+    return dict(
+        browser=browser_name,
+        browser_version=version
+    )
+
 # Browsers
 chrome = dict(
     browser='Chrome',
@@ -85,8 +91,8 @@ configs = []
 # for browser in [ie10]:
 # configs.append(build_config(browser, windows8))
 
-for os in oss:
-    configs.append(build_config(chrome, os))
+# for os in oss:
+#     configs.append(build_config(chrome, os))
 
 # for version in range(33, 43):
 #     browser = build_browser('Chrome', version)
@@ -95,6 +101,8 @@ for os in oss:
 # browser = build_browser('IE', 10)
 # configs.append(build_config(browser, windows8))
 
+browser = build_browser('Chrome', 44)
+configs.append(build_config(browser, osx))
 
 import json
 
@@ -102,3 +110,5 @@ import json
 with open("browsers.json", "w") as f:
     f.write(json.dumps(configs))
     f.close()
+
+print "Built %.0f configurations" % (len(configs))
