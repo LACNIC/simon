@@ -122,7 +122,16 @@ def web_configs(request):
     #######
 
 def latency(request, country='all', ip_version='all', year=2009, month=01):
-    # Returns JSON with latency
+    """
+    API View in charge of returning Latency queries
+
+    :param request:
+    :param country:
+    :param ip_version:
+    :param year:
+    :param month:
+    :return:
+    """
     
     date_from = datetime.date(int(year), int(month), 1)
     results = Results.objects.filter(Q(date_test__gt=date_from))
@@ -154,6 +163,16 @@ def latency(request, country='all', ip_version='all', year=2009, month=01):
     return HttpResponse(json_response, mimetype="application/json")
 
 def ases(request, asn_origin, asn_destination):
+    """
+    API View in charge of returning AS queries
+
+    :param request:
+    :param asn_origin:
+    :param asn_destination:
+    :return:
+    """
+
+
     res = Results.objects.get_results_by_as_origin_and_destination(int(asn_origin), int(asn_destination))
     print res
     
