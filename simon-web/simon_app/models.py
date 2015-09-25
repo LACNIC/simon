@@ -248,17 +248,7 @@ class ResultsManager(models.Manager):
 
     def get_results_by_as_origin_and_destination(self, asn_origin, asn_destination):
 
-        # return []
         return Results.objects.filter(Q(as_destination=asn_origin) & Q(as_origin=asn_destination))
-
-        # res = []
-        # for as_origin in AS.objects.filter(asn=asn_origin):  # asns list
-        #     for as_destination in AS.objects.filter(asn=asn_destination):  # asns list
-        #         if Results.objects.filter(
-        #                         Q(as_destination_id=as_origin.id) & Q(as_origin_id=as_destination.id)).count() > 0:
-        #             res.extend(
-        #                 Results.objects.filter(Q(as_destination_id=as_origin.id) & Q(as_origin_id=as_destination.id)))
-        # return res
 
     def get_results_by_as(self, as_number):
         from itertools import chain
