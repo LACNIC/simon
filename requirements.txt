@@ -67,8 +67,6 @@ pytz==2014.4
 pyzmq==14.7.0
 requests==2.3.0
 requests-oauthlib==0.4.1
-ripe.atlas.cousteau==0.6
-ripe.atlas.sagan==0.8.0
 rsa==3.1.4
 scipy==0.15.1
 seaborn==0.6.dev
