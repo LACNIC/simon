@@ -59,7 +59,7 @@
                         {% for error in field.errors %}
                             <div class="alert alert-danger" role="alert">
                                 <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                                {#                                <span class="sr-only">Error:</span>#}
+                                                                <span class="sr-only">Error:</span>
                                 {{ error }}
                             </div>
                         {% endfor %}
@@ -73,6 +73,26 @@
             <input type="submit" value="Submit" id="submit" class="btn btn-default navbar-btn" style="background: #FF9900; text-shadow: none; color: #ffffff; font-size: 1.0em; border-color: #ffffff"/>
         </form>
 
+        <h2 class="page-header">Algunas estadísticas para {{ cc }}</h2>
+        <table class="table">
+            <th>Origen</th>
+            <th>Destino</th>
+            <th>Latencia (<code>http</code>)</th>
+            <th>Latencia (<code>http</code>)</th>
+{#            <th>Latencia (<code>icmp</code>)</th>#}
+
+            {% for m in matrix_js %}
+            <tr>
+                <td>{{ m.0 }}</td>
+                <td>{{ m.1 }}</td>
+                <td>{{ m.2 }}</td>
+                <td>
+                    <div style="width: {{ m.2 }}px; height: 0.6em; background-color: orange; border-radius: 5px"></div>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        {{ matrix_probeapi }}
 
         <h2 class="page-header">Medidor: Javascript (<code>http</code>)</h2>
 

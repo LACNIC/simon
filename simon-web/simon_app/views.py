@@ -486,9 +486,10 @@ def participate(request):
 
 def reports(request):
     from simon_app.reportes import ReportForm
+    from collections import defaultdict
 
     # ip = request.META.get('REMOTE_ADDR', None)
-    latency_histogram_applet = latency_histogram_js = latency_histogram_probeapi = latency_histogram_ripe_atlas = ""
+    latency_histogram_applet = latency_histogram_js = latency_histogram_probeapi = latency_histogram_ripe_atlas = inner = ""
 
     if request.method == "POST":
 
@@ -518,6 +519,10 @@ def reports(request):
         else:
             cc2 = Country.objects.get(id=country2).iso
 
+        matrix_js = Results.objects.results_matrix_cc(tester="JavaScript")
+        print matrix_js
+        # matrix_probeapi = Results.objects.results_matrix_cc(tester="probeapi")
+
         js = Chart.objects.filterQuerySet(Results.objects.javascript(), cc1=cc1, cc2=cc2, date_from=date_from, date_to=date_to, bidirectional=bidirectional)
         latency_histogram_js = Chart.objects.asyncChart(data=js, divId="chart_js", labels=['JavaScript'], colors=['#81B3C1'])
 
@@ -529,8 +534,6 @@ def reports(request):
 
         ripe_atlas = Chart.objects.filterQuerySet(Results.objects.ripe_atlas(), cc1=cc1, cc2=cc2, date_from=date_from, date_to=date_to, bidirectional=bidirectional)
         latency_histogram_ripe_atlas = Chart.objects.asyncChart(data=ripe_atlas, divId="chart_ripe_atlas", labels=['RIPE Atlas'], colors=['#615D6C'])
-        print ripe_atlas
-        print latency_histogram_ripe_atlas
 
     else:
         form = ReportForm()
@@ -541,6 +544,8 @@ def reports(request):
     context['latency_histogram_probeapi'] = latency_histogram_probeapi
     context['latency_histogram_js'] = latency_histogram_js
     context['latency_histogram_ripe_atlas'] = latency_histogram_ripe_atlas
+    context['cc'] = cc1
+    context['matrix_js'] = [(m[0], m[1], int(m[2])) for m in matrix_js if m[0] == cc1 or m[1] == cc1]
 
     return render_to_response('reports.html', context)
 
