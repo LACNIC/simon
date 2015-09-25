@@ -486,66 +486,80 @@ def participate(request):
 
 def reports(request):
     from simon_app.reportes import ReportForm
-    from collections import defaultdict
 
-    # ip = request.META.get('REMOTE_ADDR', None)
-    latency_histogram_applet = latency_histogram_js = latency_histogram_probeapi = latency_histogram_ripe_atlas = inner = ""
+    latency_histogram_applet = latency_histogram_js = latency_histogram_probeapi = latency_histogram_ripe_atlas = cc1 = ""
+    matrix_js = matrix_js_origin_cc = matrix_js_destination_cc = []
 
-    if request.method == "POST":
-
-        form = ReportForm(request.POST)
-        if not form.is_valid():
-            return render_to_response('reports.html', {'form': form})
-
-        data = form  # .clean_data
-
-        if data['bidirectional'] == '2':
-            bidirectional = True
-        else:
-            bidirectional = False
-
-        date_from = datetime.strptime(form['date_from'].value(), "%d/%m/%Y")
-        date_to = form['date_to'].value()
-        if date_to != '':
-            date_to = datetime.strptime(date_to, "%d/%m/%Y")
-        else:
-            date_to = datetime.now(GMTUY())
-
-        country1 = data['country1'].value()
-        country2 = data['country2'].value()
-        cc1 = Country.objects.get(id=country1).iso
-        if country2 == "" or country2 is None:
-            cc2 = None
-        else:
-            cc2 = Country.objects.get(id=country2).iso
-
-        matrix_js = Results.objects.results_matrix_cc(tester="JavaScript")
-        print matrix_js
-        # matrix_probeapi = Results.objects.results_matrix_cc(tester="probeapi")
-
-        js = Chart.objects.filterQuerySet(Results.objects.javascript(), cc1=cc1, cc2=cc2, date_from=date_from, date_to=date_to, bidirectional=bidirectional)
-        latency_histogram_js = Chart.objects.asyncChart(data=js, divId="chart_js", labels=['JavaScript'], colors=['#81B3C1'])
-
-        applet = Chart.objects.filterQuerySet(Results.objects.applet().filter(testype='ntp'), cc1=cc1, cc2=cc2, date_from=date_from, date_to=date_to, bidirectional=bidirectional)
-        latency_histogram_applet = Chart.objects.asyncChart(data=applet, divId="chart_applet", labels=['Applet'], colors=['#77A4DD'])
-
-        probeapi = Chart.objects.filterQuerySet(Results.objects.probeapi(), cc1=cc1, cc2=cc2, date_from=date_from, date_to=date_to, bidirectional=bidirectional)
-        latency_histogram_probeapi = Chart.objects.asyncChart(data=probeapi, divId="chart_probeapi", labels=['DOS ping'], colors=['#6F8AB7'])
-
-        ripe_atlas = Chart.objects.filterQuerySet(Results.objects.ripe_atlas(), cc1=cc1, cc2=cc2, date_from=date_from, date_to=date_to, bidirectional=bidirectional)
-        latency_histogram_ripe_atlas = Chart.objects.asyncChart(data=ripe_atlas, divId="chart_ripe_atlas", labels=['RIPE Atlas'], colors=['#615D6C'])
-
-    else:
+    if request.method != "POST":
         form = ReportForm()
+        context = getContext(request)
+        context['form'] = form
+        context['collapse'] = ""
+        return render_to_response('reports.html', context)
+
+    form = ReportForm(request.POST)
+    if not form.is_valid():
+        return render_to_response('reports.html', {'form': form})
+
+    data = form  # .clean_data
+
+    if data['bidirectional'] == '2':
+        bidirectional = True
+    else:
+        bidirectional = False
+
+    date_from = datetime.strptime(form['date_from'].value(), "%d/%m/%Y")
+    date_to = form['date_to'].value()
+    if date_to != '':
+        date_to = datetime.strptime(date_to, "%d/%m/%Y")
+    else:
+        date_to = datetime.now(GMTUY())
+
+    country1 = data['country1'].value()
+    country2 = data['country2'].value()
+    country1_object = Country.objects.get(id=country1)
+    cc1 = country1_object.iso
+    if country2 == "" or country2 is None:
+        cc2 = None
+    else:
+        cc2 = Country.objects.get(id=country2).iso
+
+    matrix_region_js = Results.objects.results_matrix_cc(tester="JavaScript")
+    matrix_js = [(m[0], m[1], int(m[2])) for m in matrix_region_js if m[0] == cc1 or m[1] == cc1]
+    matrix_js_origin_cc = [m for m in matrix_js if m[0] == cc1] # having origin as CC
+    matrix_js_destination_cc = [m for m in matrix_js if m[1] == cc1] # having destination as CC
+
+    # matrix_probeapi = Results.objects.results_matrix_cc(tester="probeapi")
+
+    js = Chart.objects.filterQuerySet(Results.objects.javascript(), cc1=cc1, cc2=cc2, date_from=date_from, date_to=date_to, bidirectional=bidirectional)
+    latency_histogram_js = Chart.objects.asyncChart(data=js, divId="chart_js", labels=['JavaScript'], colors=['#81B3C1'])
+
+    applet = Chart.objects.filterQuerySet(Results.objects.applet().filter(testype='ntp'), cc1=cc1, cc2=cc2, date_from=date_from, date_to=date_to, bidirectional=bidirectional)
+    latency_histogram_applet = Chart.objects.asyncChart(data=applet, divId="chart_applet", labels=['Applet'], colors=['#77A4DD'])
+
+    probeapi = Chart.objects.filterQuerySet(Results.objects.probeapi(), cc1=cc1, cc2=cc2, date_from=date_from, date_to=date_to, bidirectional=bidirectional)
+    latency_histogram_probeapi = Chart.objects.asyncChart(data=probeapi, divId="chart_probeapi", labels=['DOS ping'], colors=['#6F8AB7'])
+
+    ripe_atlas = Chart.objects.filterQuerySet(Results.objects.ripe_atlas(), cc1=cc1, cc2=cc2, date_from=date_from, date_to=date_to, bidirectional=bidirectional)
+    latency_histogram_ripe_atlas = Chart.objects.asyncChart(data=ripe_atlas, divId="chart_ripe_atlas", labels=['RIPE Atlas'], colors=['#615D6C'])
 
     context = getContext(request)
+    context['collapse'] = "in"
     context['form'] = form
     context['latency_histogram_applet'] = latency_histogram_applet
     context['latency_histogram_probeapi'] = latency_histogram_probeapi
     context['latency_histogram_js'] = latency_histogram_js
     context['latency_histogram_ripe_atlas'] = latency_histogram_ripe_atlas
     context['cc'] = cc1
-    context['matrix_js'] = [(m[0], m[1], int(m[2])) for m in matrix_js if m[0] == cc1 or m[1] == cc1]
+    context['country'] = country1_object.printable_name
+    context['matrix_js'] = matrix_js
+    context['matrix_js_origin_cc'] = matrix_js_origin_cc
+    context['matrix_js_destination_cc'] = matrix_js_destination_cc
+    context['js'] = js
+    context['applet'] = applet
+    context['ripe_atlas'] = ripe_atlas
+    context['probeapi'] = probeapi
+    context['date_from'] = date_from
 
     return render_to_response('reports.html', context)
 
