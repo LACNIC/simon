@@ -37,7 +37,6 @@
             {% csrf_token %}
             {% for field in form %}
                 <div class="row">
-
                     <div class="col-md-4">
                         <div style="margin-top: 0.1em;">
                             <label for="{{ field.label }}">
@@ -59,7 +58,7 @@
                         {% for error in field.errors %}
                             <div class="alert alert-danger" role="alert">
                                 <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                                {#                                <span class="sr-only">Error:</span>#}
+                                <span class="sr-only">Error:</span>
                                 {{ error }}
                             </div>
                         {% endfor %}
@@ -73,41 +72,94 @@
             <input type="submit" value="Submit" id="submit" class="btn btn-default navbar-btn" style="background: #FF9900; text-shadow: none; color: #ffffff; font-size: 1.0em; border-color: #ffffff"/>
         </form>
 
+        <div class="row collapse {{ collapse }}">
+            <div class="col-lg-12">
+                <h2 class="page-header">
+                    Algunas estadísticas para {{ country }}
+                </h2>
+            </div>
 
-        <h2 class="page-header">Medidor: Javascript (<code>http</code>)</h2>
+            <div class="col-lg-8">
+                <div id=latencias-list">
+                    <table class="table">
+                        <th>Origen</th>
+                        <th>Destino</th>
+                        <th colspan="2">Latencia (<code>http</code>) <a class="sort" data-sort="latencias">ordenar</a></th>
 
-        <div class="col-lg-12">
-            {{ latency_histogram_js | safe }}
+                        {% for m in matrix_js %}
+                            <tr>
+                                <td>{{ m.0 }}</td>
+                                <td>{{ m.1 }}</td>
+                                <td class="latencias">{{ m.2 }}</td>
+                                <td>
+                                    <div style="width: {{ m.2 }}px; height: 0.6em; background-color: orange; border-radius: 5px"></div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+
+                {% if js|length != 0 %}
+                    <h2 class="page-header">Medidor: Javascript (<code>http</code>)</h2>
+
+                    <p>Esta gráfica esta basada en {{ js | length }} muestras recolectadas desde {{ date_from }}</p>
+                    {{ latency_histogram_js | safe }}
+                {% endif %}
+
+                {% if applet|length != 0 %}
+                    <h2 class="page-header">Medidor: Applet (<code>ntp</code>)</h2>
+
+                    <p>Esta gráfica esta basada en {{ applet | length }} muestras recolectadas desde {{ date_from }}</p>
+                    {{ latency_histogram_applet | safe }}
+                {% endif %}
+
+                {% if probeapi|length != 0 %}
+                    <h2 class="page-header">Medidor: ProbeAPI Ping (<code>icmp</code>)</h2>
+
+                    <p>Esta gráfica esta basada en {{ probeapi | length }} muestras recolectadas desde {{ date_from }}</p>
+                    {{ latency_histogram_probeapi | safe }}
+
+
+                    <p class="pull-right" style="font-size: 0.9em;">
+                        <code>ICMP</code> ProbeAPI Ping results are performed using the <a href="http://www.probeapi.com" target="_blank">ProbeAPI <span class="glyphicon glyphicon-new-window"></span></a> measurement platform.
+                    </p>
+                {% endif %}
+
+                {% if ripe_atlas|length != 0 %}
+                    <h2 class="page-header">Medidor: Ripe Atlas Ping (<code>icmp</code>)</h2>
+
+                    <p>Esta gráfica esta basada en {{ ripe_atlas | length }} muestras recolectadas desde {{ date_from }}</p>
+                    {{ latency_histogram_ripe_atlas | safe }}
+
+                    <p class="pull-right" style="font-size: 0.9em;">
+                        <code>ICMP</code> RIPE Atlas Ping results are performed using the <a href="http:/atlas.ripe.net" target="_blank">RIPE Atlas <span class="glyphicon glyphicon-new-window"></span></a> measurement platform.
+                    </p>
+                {% endif %}
+            </div>
+
+            <div class="col-lg-4">
+                <h2>Mapas de latencia de {{ country }}</h2>
+
+                <p>
+                    Los siguientes mapas muestran cómo es la latencia en relación a ese país. El primer mapa muestra cómo se ve la región desde {{ country }}, es decir las mediciones originadas en {{ country }}. El segundo mapa muestra cómo
+                    es que la región ve a {{ country }}, es decir las mediciones originadas en toda la región con destino {{ country }}.
+                </p>
+
+                <h3>Origen {{ country }}</h3>
+
+                <div id="map_origin" style="min-height: 20em; height: 20em">Country Map</div>
+
+                <h3>Destino {{ country }}</h3>
+
+                <div id="map_destination" style="min-height: 20em; height: 20em">Country Map</div>
+            </div>
+
         </div>
-
-        <h2 class="page-header">Medidor: Applet (<code>ntp</code>)</h2>
-
-        <div class="col-lg-12">
-            {{ latency_histogram_applet | safe }}
-        </div>
-
-        <h2 class="page-header">Medidor: ProbeAPI Ping (<code>icmp</code>)</h2>
-
-        <div class="col-lg-12">
-            {{ latency_histogram_probeapi | safe }}
-        </div>
-        <p class="pull-right" style="font-size: 0.9em;">
-            <code>ICMP</code> ProbeAPI Ping results are performed using the <a href="http://www.probeapi.com" target="_blank">ProbeAPI <span class="glyphicon glyphicon-new-window"></span></a> measurement platform.
-        </p>
-
-        <h2 class="page-header">Medidor: Ripe Atlas Ping (<code>icmp</code>)</h2>
-
-        <div class="col-lg-12">
-            {{ latency_histogram_ripe_atlas | safe }}
-        </div>
-        <p class="pull-right" style="font-size: 0.9em;">
-            <code>ICMP</code> RIPE Atlas Ping results are performed using the <a href="http:/atlas.ripe.net" target="_blank">RIPE Atlas <span class="glyphicon glyphicon-new-window"></span></a> measurement platform.
-        </p>
 
 
     </div>
 
-
+    {#    Date Picker#}
     <script type="application/javascript">
         $("#id_date_from").datepicker({
             format: "dd/mm/yyyy",
@@ -121,5 +173,59 @@
             language: "es"
         });
     </script>
+
+    {#    Country map#}
+    <script type="application/javascript">
+
+        google.load("visualization", "1", {packages: ["geochart"]});
+        google.setOnLoadCallback(cargo);
+
+        function cargo() {
+
+            var data = google.visualization.arrayToDataTable([
+                ['País', 'Latencia con origen {{ cc }}'],
+                {% for m in matrix_js_origin_cc %}
+                    ['{{ m.1 }}', {{ m.2 }}],
+                {% endfor %}
+            ]);
+
+            var options = {
+                region: '{{ cc }}',
+                colorAxis: {
+                    colors: ['white', 'orange'],
+                    {#                    maxValue: 500 // need a REFERENCE value#}
+                },
+                backgroundColor: {
+                    fill: '#FFFAF2'
+                },
+                legend: {numberFormat: '## ms'}
+            };
+
+            var chart = new google.visualization.GeoChart(document.getElementById('map_origin'));
+            chart.draw(data, options);
+
+            var data = google.visualization.arrayToDataTable([
+                ['País', 'Latencia con destino {{ cc }}'],
+                {% for m in matrix_js_destination_cc %}
+                    ['{{ m.0 }}', {{ m.2 }}],
+                {% endfor %}
+            ]);
+            var chart = new google.visualization.GeoChart(document.getElementById('map_destination'));
+            chart.draw(data, options);
+        }
+    </script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.1.1/list.min.js"></script>
+    <script src="https://raw.githubusercontent.com/javve/list.pagination.js/v0.1.1/dist/list.pagination.min.js"></script>
+    <script type="text/javascript">
+        var options = {
+            valueNames: [ 'latencias' ]
+        };
+
+        var hackerList = new List('latencias-list', options);
+    </script>
+
+
+
 
 {% endblock %}
