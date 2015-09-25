@@ -142,15 +142,19 @@
 [
   ...
   {
-    "country_destination": "CL",
-    "country_origin": "UY",
-    "max_rtt": 445,
-    "date_test": "2012-11-05 19:40:19+00:00",
-    "median_rtt": 411,
-    "min_rtt": 403,
-    "ave_rtt": 415,
-    "dev_rtt": 10
-  }
+    "as_destination": 262230,
+    "as_origin": 18822,
+    "ave_rtt": 30,
+    "country_destination": "AR",
+    "country_origin": "CL",
+    "date_test": "2015-07-16 14:48:00.139995+00:00",
+    "dev_rtt": 1,
+    "ip_version": "4",
+    "max_rtt": 34,
+    "median_rtt": 30,
+    "min_rtt": 29,
+    "tester": "probeapi"
+    }
   ...
 ]</pre>
 
@@ -207,9 +211,17 @@
         </table>
 
         <h4>Ejemplo</h4>
+        <p>
+            El siguiente es un ejemplo que consulta por todas las mediciones con origen el <a href="https://rdap.lacnic.net/rdap-web/autnum?key=22047" target="_blank">AS 22047</a> y destino el <a href="https://rdap.lacnic.net/rdap-web/autnum?key=28000" target="_blank">AS 28000</a>.
 
+            <code>
+                <a href="http://simon.lacnic.net/simon/api/latency/autnum/22047/28000/">http://simon.lacnic.net/simon/api/latency/autnum/22047/28000/</a>
+            </code>
+        </p>
         <pre class="prettyprint">
-[{
+[
+  ...
+  {
     "as_origin": 42708,
     "as_destination": 42708,
     "max_rtt": 445,
@@ -218,8 +230,10 @@
     "min_rtt": 403,
     "ave_rtt": 415,
     "dev_rtt": 10
-}]
-        </pre>
+  }
+  ...
+]
+</pre>
     </div>
 
 {% endblock %}

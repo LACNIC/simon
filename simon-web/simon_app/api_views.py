@@ -132,7 +132,9 @@ def latency(request, country='all', ip_version='all', year=2009, month=01):
     :param month:
     :return:
     """
-    
+
+    # if request.GET.get('year') is not None:
+
     date_from = datetime.date(int(year), int(month), 1)
     results = Results.objects.filter(Q(date_test__gt=date_from))
     
