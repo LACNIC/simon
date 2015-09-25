@@ -247,7 +247,6 @@ class ResultsManager(models.Manager):
         return res
 
     def get_results_by_as_origin_and_destination(self, asn_origin, asn_destination):
-
         return Results.objects.filter(Q(as_destination=asn_origin) & Q(as_origin=asn_destination))
 
     def get_results_by_as(self, as_number):

@@ -142,7 +142,6 @@ def latency(request, country='all', ip_version='all', year=2009, month=01):
     if country is not 'all':
         results = results.filter(Q(country_origin=country) | Q(country_destination=country))
         
-        
     response = []
     for result in results:
         row = {}
@@ -153,6 +152,8 @@ def latency(request, country='all', ip_version='all', year=2009, month=01):
         row['median_rtt'] = result.median_rtt
         row['country_origin'] = result.country_origin
         row['country_destination'] = result.country_destination
+        row['as_origin'] = result.as_origin
+        row['as_destination'] = result.as_destination
         row['date_test'] = str(result.date_test)
         row['ip_version'] = str(result.ip_version)
         row['tester'] = str(result.tester)
@@ -174,8 +175,7 @@ def ases(request, asn_origin, asn_destination):
 
 
     res = Results.objects.get_results_by_as_origin_and_destination(int(asn_origin), int(asn_destination))
-    print res
-    
+
     response = []
     for result in res:
         row = {}
@@ -184,8 +184,8 @@ def ases(request, asn_origin, asn_destination):
         row['ave_rtt'] = result.ave_rtt
         row['dev_rtt'] = result.dev_rtt
         row['median_rtt'] = result.median_rtt
-        row['as_origin'] = result.as_origin.asn
-        row['as_destination'] = result.as_destination.asn
+        row['as_origin'] = result.as_origin
+        row['as_destination'] = result.as_destination
         row['date_test'] = str(result.date_test)
         row['ip_version'] = str(result.ip_version)
         row['tester'] = str(result.tester)
