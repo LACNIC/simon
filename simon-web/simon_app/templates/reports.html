@@ -75,7 +75,7 @@
         <div class="row collapse {{ collapse }}">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    Algunas estadísticas para {{ country }}
+                    Estadísticas y gráficas para mediciones de {{ country }}
                 </h2>
             </div>
 
@@ -86,9 +86,10 @@
                     La siguiente lista describe la latencia percibida desde y hacia {{ country }}. Los datos están basados en {{ js|length }} muestras recolectadas por nuestro medidor JavaScript.
                 </p>
 
-                <a class="sort" data-sort="latencias">ordenar</a>
-
                 <div id=latencias-list">
+
+                    <a class="sort" data-sort="latencias">ordenar</a>
+
                     <table class="table">
                         <th>Origen</th>
                         <th>Destino</th>
@@ -109,7 +110,7 @@
 
                 {#            Gráficas#}
                 <h3 class="page-header">
-                    Algunas gráficas
+                    Histogramas de latencia
                 </h3>
                 {% if js|length != 0 %}
                     <h4 class="page-header">Medidor: Javascript (<code>http</code>)</h4>
