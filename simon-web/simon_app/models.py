@@ -217,6 +217,7 @@ class ResultsManager(models.Manager):
                        ") AS results "
                        "WHERE country_origin IN (select iso FROM simon_app_country WHERE region_id=3) AND country_destination IN (select iso FROM simon_app_country WHERE region_id=3) "
                        "AND tester='%s' "
+                       "AND date_test > now() - interval '12 months' "
                        "GROUP BY country_origin, country_destination "
                        "ORDER BY country_origin;" % (tester))
         return cursor.fetchall()
