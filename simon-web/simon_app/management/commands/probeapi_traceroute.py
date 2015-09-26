@@ -47,12 +47,8 @@ class Command(BaseCommand):
 
 
 
-
-            # opener = urllib2.build_opener()
-            # opener.addheaders = [
-            #     ("X-Mashape-Key", passwords.PROBEAPI),
-            #     ("Accept", "application/json")
-            # ]
+            destination_ip = "216.58.221.164"
+            # origins = "BR"
 
             t = Template(
                 "https://probeapifree.p.mashape.com/Probes.svc/StartTracertTestByCountry?"
@@ -60,15 +56,13 @@ class Command(BaseCommand):
                 "count={{ count }}&"
                 "destination={{ destination }}&"
                 "probeslimit={{ probeslimit }}"
-                "timeout={{ timeout }}"
+                # "timeout={{ timeout }}"
             )
-
-            print destination_ip
 
             ctx = Context({'cc': origins, 'count': count, 'destination': destination_ip, 'probeslimit': 2 * len(ccs), 'timeout': timeout})
             url = t.render(ctx)
 
-            print url
+            print destination_ip, url
 
             now = datetime.datetime.now(GMTUY())
 
@@ -77,7 +71,8 @@ class Command(BaseCommand):
                 req.add_header("X-Mashape-Key", passwords.PROBEAPI)
                 req.add_header("Accept", "application/json")
                 response = urllib2.urlopen(req).read()
-            except:
+            except Exception as e:
+                print e
                 continue
 
             print datetime.datetime.now(GMTUY()) - now
@@ -91,7 +86,7 @@ class Command(BaseCommand):
             # for each probe...
             for result in py_object['StartTracertTestByCountryResult']:
 
-                print json.dumps(result, indent=4, separators=(',', ': '))
+                # print json.dumps(result, indent=4, separators=(',', ': '))
 
                 cc_origin = result['Country']['CountryCode']
                 asn = result['ASN']['AsnID'][2:]  # strip 'AS'
@@ -193,3 +188,4 @@ class Command(BaseCommand):
                         tr.hop_count += 1
                         tr.save()
                         tr_hop.save()
+                print tr.hop_count
