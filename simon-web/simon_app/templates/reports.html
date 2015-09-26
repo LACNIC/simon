@@ -117,56 +117,67 @@
                 <h3 class="page-header">
                     Histogramas de latencia
                 </h3>
-                {% if js|length != 0 %}
-                    <h4 class="page-header">Medidor: Javascript (<code>http</code>)</h4>
 
-                    <p>Esta gráfica esta basada en {{ js | length }} muestras recolectadas desde {{ date_from }}. Los siguientes países están involucrados en los resultados de esta gráfica:</p>
+                <button type="button" class="btn btn-info pull-right" data-toggle="collapse" data-target="#histogramas"
+                        style="background: #808080; text-shadow: none; color: #ffffff; font-size: 0.8em; border-color: #ffffff">Ocultar / Mostrar
+                </button>
+                <div id="histogramas">
                     <p>
-                        {% for a in countries_js %}
-                            <span class="label label-info">{{ a }}</span>
-                        {% endfor %}
+                        Estos histogramas representan los valores de latencia más vistos en diferentes protocolos. En el eje x se representa la latencia y en el y la cantidad de veces que se midió ese valor. Por ejemplo si el histograma tiene un pico en 60 ms, quiere decir que la latencia más común es de 60 ms.
                     </p>
-                    {{ latency_histogram_js | safe }}
-                {% endif %}
+                    {% if js|length != 0 %}
+                        <h4 class="page-header">Medidor: Javascript (<code>http</code>)</h4>
 
-                {% if applet|length != 0 %}
-                    <h4 class="page-header">Medidor: Applet (<code>ntp</code>)</h4>
+                        <p>Esta gráfica esta basada en {{ js | length }} muestras recolectadas desde {{ date_from }}. Los siguientes países están involucrados en los resultados de esta gráfica:</p>
+                        <p>
+                            {% for a in countries_js %}
+                                <span class="label label-info">{{ a }}</span>
+                            {% endfor %}
+                        </p>
+                        {{ latency_histogram_js | safe }}
+                    {% endif %}
 
-                    <p>Esta gráfica esta basada en {{ applet | length }} muestras recolectadas desde {{ date_from }}</p>
-                    {{ latency_histogram_applet | safe }}
-                {% endif %}
+                    {% if applet|length != 0 %}
+                        <h4 class="page-header">Medidor: Applet (<code>ntp</code>)</h4>
 
-                {% if probeapi|length != 0 %}
-                    <h4 class="page-header">Medidor: ProbeAPI Ping (<code>icmp</code>)</h4>
+                        <p>Esta gráfica esta basada en {{ applet | length }} muestras recolectadas desde {{ date_from }}</p>
+                        {{ latency_histogram_applet | safe }}
+                    {% endif %}
 
-                    <p>Esta gráfica esta basada en {{ probeapi | length }} muestras recolectadas desde {{ date_from }}</p>
-                    {{ latency_histogram_probeapi | safe }}
+                    {% if probeapi|length != 0 %}
+                        <h4 class="page-header">Medidor: ProbeAPI Ping (<code>icmp</code>)</h4>
+
+                        <p>Esta gráfica esta basada en {{ probeapi | length }} muestras recolectadas desde {{ date_from }}</p>
+                        {{ latency_histogram_probeapi | safe }}
 
 
-                    <p class="pull-right" style="font-size: 0.9em;">
-                        <code>ICMP</code> ProbeAPI Ping results are performed using the <a href="http://www.probeapi.com" target="_blank">ProbeAPI <span class="glyphicon glyphicon-new-window"></span></a> measurement platform.
-                    </p>
-                {% endif %}
+                        <p class="pull-right" style="font-size: 0.9em;">
+                            <code>ICMP</code> ProbeAPI Ping results are performed using the <a href="http://www.probeapi.com" target="_blank">ProbeAPI <span class="glyphicon glyphicon-new-window"></span></a> measurement platform.
+                        </p>
+                    {% endif %}
 
-                {% if ripe_atlas|length != 0 %}
-                    <h4 class="page-header">Medidor: Ripe Atlas Ping (<code>icmp</code>)</h4>
+                    {% if ripe_atlas|length != 0 %}
+                        <h4 class="page-header">Medidor: Ripe Atlas Ping (<code>icmp</code>)</h4>
 
-                    <p>Esta gráfica esta basada en {{ ripe_atlas | length }} muestras recolectadas desde {{ date_from }}</p>
-                    {{ latency_histogram_ripe_atlas | safe }}
+                        <p>Esta gráfica esta basada en {{ ripe_atlas | length }} muestras recolectadas desde {{ date_from }}</p>
+                        {{ latency_histogram_ripe_atlas | safe }}
 
-                    <p class="pull-right" style="font-size: 0.9em;">
-                        <code>ICMP</code> RIPE Atlas Ping results are performed using the <a href="http:/atlas.ripe.net" target="_blank">RIPE Atlas <span class="glyphicon glyphicon-new-window"></span></a> measurement platform.
-                    </p>
-                {% endif %}
+                        <p class="pull-right" style="font-size: 0.9em;">
+                            <code>ICMP</code> RIPE Atlas Ping results are performed using the <a href="http:/atlas.ripe.net" target="_blank">RIPE Atlas <span class="glyphicon glyphicon-new-window"></span></a> measurement platform.
+                        </p>
+                    {% endif %}
+                </div>
             </div>
 
             <div class="col-lg-4">
                 <h3>
                     Mediciones via IPv6
                 </h3>
+
                 <p>
                     {{ v6_count_js }}% de las mediciones de {{ country }} se realizaron via IPv6.
                 </p>
+
                 <h3>Mapas de latencia de {{ country }}</h3>
 
                 <p>
