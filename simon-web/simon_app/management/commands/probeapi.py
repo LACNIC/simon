@@ -13,6 +13,7 @@ class Command(BaseCommand):
         import json
         import datetime
         import numpy
+        from random import shuffle
 
         now = datetime.datetime.now(GMTUY())
 
@@ -24,6 +25,7 @@ class Command(BaseCommand):
         origins = origins[0:-1]  # remove trailing comma
 
         tps = SpeedtestTestPoint.objects.distinct('country').order_by('country')  # one TP per country TODO get *really* random tests...
+        shuffle(tps)
         for tp in tps:
 
             destination_ip = tp.ip_address
