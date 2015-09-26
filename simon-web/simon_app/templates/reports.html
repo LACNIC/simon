@@ -80,11 +80,19 @@
             </div>
 
             <div class="col-lg-8">
+                <h3 class="page-header">Tabla de latencias</h3>
+
+                <p>
+                    La siguiente lista describe la latencia percibida desde y hacia {{ country }}. Los datos están basados en {{ js|length }} muestras recolectadas por nuestro medidor JavaScript.
+                </p>
+
+                <a class="sort" data-sort="latencias">ordenar</a>
+
                 <div id=latencias-list">
                     <table class="table">
                         <th>Origen</th>
                         <th>Destino</th>
-                        <th colspan="2">Latencia (<code>http</code>) <a class="sort" data-sort="latencias">ordenar</a></th>
+                        <th colspan="2">Latencia (<code>http</code>)</th>
 
                         {% for m in matrix_js %}
                             <tr>
@@ -99,22 +107,31 @@
                     </table>
                 </div>
 
+                {#            Gráficas#}
+                <h3 class="page-header">
+                    Algunas gráficas
+                </h3>
                 {% if js|length != 0 %}
-                    <h2 class="page-header">Medidor: Javascript (<code>http</code>)</h2>
+                    <h4 class="page-header">Medidor: Javascript (<code>http</code>)</h4>
 
-                    <p>Esta gráfica esta basada en {{ js | length }} muestras recolectadas desde {{ date_from }}</p>
+                    <p>Esta gráfica esta basada en {{ js | length }} muestras recolectadas desde {{ date_from }}. Los siguientes países están involucrados en los resultados de esta gráfica:</p>
+                    <p>
+                        {% for a in countries_js %}
+                            <span class="label label-info">{{ a }}</span>
+                        {% endfor %}
+                    </p>
                     {{ latency_histogram_js | safe }}
                 {% endif %}
 
                 {% if applet|length != 0 %}
-                    <h2 class="page-header">Medidor: Applet (<code>ntp</code>)</h2>
+                    <h4 class="page-header">Medidor: Applet (<code>ntp</code>)</h4>
 
                     <p>Esta gráfica esta basada en {{ applet | length }} muestras recolectadas desde {{ date_from }}</p>
                     {{ latency_histogram_applet | safe }}
                 {% endif %}
 
                 {% if probeapi|length != 0 %}
-                    <h2 class="page-header">Medidor: ProbeAPI Ping (<code>icmp</code>)</h2>
+                    <h4 class="page-header">Medidor: ProbeAPI Ping (<code>icmp</code>)</h4>
 
                     <p>Esta gráfica esta basada en {{ probeapi | length }} muestras recolectadas desde {{ date_from }}</p>
                     {{ latency_histogram_probeapi | safe }}
@@ -126,7 +143,7 @@
                 {% endif %}
 
                 {% if ripe_atlas|length != 0 %}
-                    <h2 class="page-header">Medidor: Ripe Atlas Ping (<code>icmp</code>)</h2>
+                    <h4 class="page-header">Medidor: Ripe Atlas Ping (<code>icmp</code>)</h4>
 
                     <p>Esta gráfica esta basada en {{ ripe_atlas | length }} muestras recolectadas desde {{ date_from }}</p>
                     {{ latency_histogram_ripe_atlas | safe }}
@@ -138,20 +155,38 @@
             </div>
 
             <div class="col-lg-4">
-                <h2>Mapas de latencia de {{ country }}</h2>
+                <h3>
+                    Mediciones via IPv6
+                </h3>
+                <p>
+                    {{ v6_count_js }}% de las mediciones de {{ country }} se realizaron via IPv6.
+                </p>
+                <h3>Mapas de latencia de {{ country }}</h3>
 
                 <p>
                     Los siguientes mapas muestran cómo es la latencia en relación a ese país. El primer mapa muestra cómo se ve la región desde {{ country }}, es decir las mediciones originadas en {{ country }}. El segundo mapa muestra cómo
                     es que la región ve a {{ country }}, es decir las mediciones originadas en toda la región con destino {{ country }}.
                 </p>
 
-                <h3>Origen {{ country }}</h3>
+                <h4>Origen {{ country }}</h4>
 
                 <div id="map_origin" style="min-height: 20em; height: 20em">Country Map</div>
 
-                <h3>Destino {{ country }}</h3>
+                <h4>Destino {{ country }}</h4>
 
                 <div id="map_destination" style="min-height: 20em; height: 20em">Country Map</div>
+
+                {#            ASes que participan en las mediciones#}
+                <h3>
+                    Sistemas Autónomos
+                </h3>
+
+                <p>
+                    Los siguientes sistemas autónomos forman parte de las mediciones <code>http</code> de este reporte.
+                </p>
+                {% for a in ases_js %}
+                    <span class="label label-info">{{ a }}</span>
+                {% endfor %}
             </div>
 
         </div>
@@ -219,13 +254,15 @@
     <script src="https://raw.githubusercontent.com/javve/list.pagination.js/v0.1.1/dist/list.pagination.min.js"></script>
     <script type="text/javascript">
         var options = {
-            valueNames: [ 'latencias' ]
+            valueNames: [ 'latencias' ],
+            page: 10,
+            plugins: [
+                ListPagination({})
+            ]
         };
 
-        var hackerList = new List('latencias-list', options);
+        var latenciesList = new List('latencias-list', options);
     </script>
-
-
 
 
 {% endblock %}

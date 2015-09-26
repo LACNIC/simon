@@ -58,6 +58,7 @@
             <div class="panel-body">
                 <h3>{{ connected }}</h3>
                 <h4>Conectadas</h4>
+
                 <p>
                     Son probes que se encuentran conectadas a la red Atlas y forman parte de mediciones!
                 </p>
@@ -70,6 +71,7 @@
             <div class="panel-body">
                 <h3>{{ disconnected }}</h3>
                 <h4>Desconectadas</h4>
+
                 <p>
                     Son probes que han estado conectadas alguna vez, pero que no se las ha visto recientemente.
                 </p>
@@ -83,6 +85,7 @@
             <div class="panel-body">
                 <h3>{{ abandoned }}</h3>
                 <h4>Han sido abandonadas</h4>
+
                 <p>
                     Estas son probes que han figurado como desconectadas por un período mayor a dos meses.
                 </p>
@@ -95,6 +98,7 @@
             <div class="panel-body">
                 <h3>{{ never }}</h3>
                 <h4>Nunca se han conectado</h4>
+
                 <p>Estas son probes que si bien fueron distribuidas, nunca han sido vistas desde la plataforma RIPE Atlas.</p>
             </div>
         </div>
@@ -351,21 +355,6 @@
 
         var hackerList = new List('countries-list', options);
     </script>
-
-    {#        <nav>#}
-    {#            <ul class="pager">#}
-    {#                <li>{% if probes_paginated.has_previous %}#}
-    {#                    <a href="?page={{ probes_paginated.previous_page_number }}">anterior</a>#}
-    {#                {% endif %}</li>#}
-    {##}
-    {#                <li>{{ probes_paginated.number }} de {{ probes_paginated.paginator.num_pages }}</li>#}
-    {##}
-    {#                <li>{% if probes_paginated.has_next %}#}
-    {#                    <a href="?page={{ probes_paginated.next_page_number }}">siguiente</a>#}
-    {#                {% endif %}</li>#}
-    {#            </ul>#}
-    {#        </nav>#}
-
 
     </div>
 {% endblock %}

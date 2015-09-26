@@ -532,6 +532,14 @@ def reports(request):
     # matrix_probeapi = Results.objects.results_matrix_cc(tester="probeapi")
 
     js = Chart.objects.filterQuerySet(Results.objects.javascript(), cc1=cc1, cc2=cc2, date_from=date_from, date_to=date_to, bidirectional=bidirectional)
+    _a1 = js.filter(country_origin=cc1).values_list('as_origin', flat=True)
+    _a2 = js.filter(country_destination=cc1).values_list('as_destination', flat=True)
+    countries_js = js.filter(country_origin=cc1).values_list('country_destination', flat=True).distinct('country_destination')
+    ases_js = []
+    [ases_js.append(a) for a in _a1 if a not in ases_js]
+    [ases_js.append(a) for a in _a2 if a not in ases_js]
+    v6_js = js.filter(ip_version=6)
+    v6_count_js = v6_js.count()
     latency_histogram_js = Chart.objects.asyncChart(data=js, divId="chart_js", labels=['JavaScript'], colors=['#81B3C1'])
 
     applet = Chart.objects.filterQuerySet(Results.objects.applet().filter(testype='ntp'), cc1=cc1, cc2=cc2, date_from=date_from, date_to=date_to, bidirectional=bidirectional)
@@ -560,6 +568,9 @@ def reports(request):
     context['ripe_atlas'] = ripe_atlas
     context['probeapi'] = probeapi
     context['date_from'] = date_from
+    context['ases_js'] = ases_js
+    context['countries_js'] = countries_js
+    context['v6_count_js'] = "%.1f" % (100.0 * v6_count_js / len(js))
 
     return render_to_response('reports.html', context)
 
