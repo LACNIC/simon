@@ -69,7 +69,7 @@
                     {#                    </div>#}
                 </div>
             {% endfor %}
-            <input type="submit" value="Submit" id="submit" class="btn btn-default navbar-btn" style="background: #FF9900; text-shadow: none; color: #ffffff; font-size: 1.0em; border-color: #ffffff"/>
+            <input type="submit" value="Enviar" id="submit" class="btn btn-default navbar-btn" style="background: #FF9900; text-shadow: none; color: #ffffff; font-size: 1.0em; border-color: #ffffff"/>
         </form>
 
         <div class="row collapse {{ collapse }}">
@@ -81,19 +81,24 @@
 
             <div class="col-lg-8">
                 <h3 class="page-header">Tabla de latencias</h3>
+                <button type="button" class="btn btn-info pull-right" data-toggle="collapse" data-target="#latencias-list"
+                        style="background: #808080; text-shadow: none; color: #ffffff; font-size: 0.8em; border-color: #ffffff">Ocultar / Mostrar
+                </button>
 
-                <p>
-                    La siguiente lista describe la latencia percibida desde y hacia {{ country }}. Los datos están basados en {{ js|length }} muestras recolectadas por nuestro medidor JavaScript.
-                </p>
 
-                <div id=latencias-list">
+                <div id="latencias-list">
+                    <p>
+                        La siguiente lista describe la latencia percibida desde y hacia {{ country }}. Los datos están basados en {{ js|length }} muestras recolectadas por nuestro medidor JavaScript.
+                    </p>
 
-                    <a class="sort" data-sort="latencias">ordenar</a>
+                    {#                    <a class="sort" data-sort="latencias">ordenar</a>#}
 
                     <table class="table">
                         <th>Origen</th>
                         <th>Destino</th>
-                        <th colspan="2">Latencia (<code>http</code>)</th>
+                        <th colspan="2">Latencia (<code>http</code>)
+
+                        </th>
 
                         {% for m in matrix_js %}
                             <tr>
