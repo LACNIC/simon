@@ -1,0 +1,97 @@
+{% extends 'bootstrap.html' %}
+
+{% block headers %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1.1','packages':['gauge']}]}"></script>
+{% endblock %}
+
+{% block title %}
+    Speed checker
+{% endblock %}
+{% block content %}
+
+    <h1 class="page-header">
+        Medidor de throughput
+    </h1>
+
+    <div class="col-lg-4">
+        <p>
+            <h2>
+                
+            </h2>
+        </p>
+    </div>
+    <div class="col-lg-4" id="chart_div" class="center-block" style="width: 200px; height: 200px;"></div>
+    <div class="col-lg-4">
+        <h2>
+            Acerca del medidor
+        </h2>
+        <p>Este medidor funciona descargando archivos de servidores Speedtest.</p>
+    </div>
+
+    <!-- SIMON script async loading -->
+    <script type="application/javascript">
+
+        (function (d, s) {
+            var js = d.createElement(s),
+                    sc = d.getElementsByTagName(s)[0];
+
+            js.src = "http://127.0.0.1:8000/simon/static/simon_app/js/simon_throughput_plugin.js";
+            js.type = "text/javascript";
+            sc.parentNode.insertBefore(js, sc);
+
+            js.onload = js.onreadystatechange = function () {
+
+            };
+
+        }(document, "script"));
+
+        var chart, data;
+
+        google.setOnLoadCallback(drawChart);
+
+        function updateChart() {
+
+        };
+
+        function drawChart() {
+
+            data = google.visualization.arrayToDataTable([
+                ['Label', 'Value'],
+                ['Throughput', 0]
+            ]);
+
+            var options = {
+                width: 200, height: 200,
+                redFrom: 0, redTo: 5,
+                yellowFrom: 5, yellowTo: 20,
+                greenFrom: 20, greenTo: 50,
+                minorTicks: 5,
+                min: 0, max: 30,
+                greenColor: '#508484',
+                yellowColor: "#79C99E",
+                redColor: "#97DB4F"
+            };
+
+            chart = new google.visualization.Gauge(document.getElementById('chart_div'));
+
+            setInterval(function () {
+
+                thputs = SIMON.quartiles.filter(SIMON.thput);
+                var sum = 0;
+                for(t in thputs) {
+                    sum += thputs[t];
+                }
+                avg = Math.floor(sum / thputs.length);
+                console.log(avg + " | " + thputs.length);
+                data.setValue(0, 1, (avg / 1000000));
+                options.max = Math.floor((SIMON.getMax(thputs) / 1000000) * 1.20);
+                chart.draw(data, options);
+            }, 1000);
+
+        }
+
+
+    </script>
+
+{% endblock %}

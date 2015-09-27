@@ -1,0 +1,58 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1.1','packages':['gauge']}]}"></script>
+
+<div id="chart_div" style="width: 200px; height: 120px;"></div>
+
+<!-- SIMON script async loading -->
+<script type="application/javascript">
+
+    google.setOnLoadCallback(drawChart);
+    function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+            ['Label', 'Value'],
+            ['Throughput', 0]
+        ]);
+
+        var options = {
+            width: 200, height: 80,
+            redFrom: 0, redTo: 40,
+            yellowFrom: 40, yellowTo: 90,
+            minorTicks: 5
+        };
+
+        var chart = new google.visualization.Gauge(document.getElementById('chart_div'));
+
+        chart.draw(data, options);
+
+        setInterval(function () {
+            data.setValue(0, 1, 40 + Math.round(60 * Math.random()));
+            chart.draw(data, options);
+        }, 13000);
+        setInterval(function () {
+            data.setValue(1, 1, 40 + Math.round(60 * Math.random()));
+            chart.draw(data, options);
+        }, 5000);
+        setInterval(function () {
+            data.setValue(2, 1, 60 + Math.round(20 * Math.random()));
+            chart.draw(data, options);
+        }, 26000);
+    }
+
+    (function (d, s) {
+        var js = d.createElement(s),
+                sc = d.getElementsByTagName(s)[0];
+
+        js.src = "http://127.0.0.1:8000/simon/static/simon_app/js/simon_throughput_plugin.js";
+        js.type = "text/javascript";
+        sc.parentNode.insertBefore(js, sc);
+
+
+        js.onload = js.onreadystatechange = function () {
+
+        };
+
+    }(document, "script"));
+
+</script>
+<div id="chart_div" style="width: 200px; height: 120px;"></div>

@@ -466,6 +466,10 @@ def prueba(request):
     context = getContext(request)
     return render_to_response('prueba.html', context)
 
+def speedtest(request):
+    context = getContext(request)
+    return render_to_response('speedtest.html', context)
+
 
 def prueba_rt(request):
     context = getContext(request)

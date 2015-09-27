@@ -14,6 +14,7 @@ urlpatterns = patterns('',
                        url(r'^$', 'simon_app.views.home', name='home'),
 
                        url(r'^prueba/$', 'simon_app.views.prueba'),
+                       url(r'^speedtest/$', 'simon_app.views.speedtest'),
 
                        url(r'^objectives/$', 'simon_app.views.objectives'),
                        url(r'^participate/$', 'simon_app.views.participate'),
