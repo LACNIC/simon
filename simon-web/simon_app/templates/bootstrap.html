@@ -59,8 +59,8 @@
 <div class="navbar" style="background-color: #FF9900; border-radius: 0; margin: 0">
 
     <a href="https://www.labs.lacnic.net" title="LACNIC labs" class="pull-left">
-        <img src="{% static 'simon_app/imgs/logos/logo_labs.png' %}" border="0" class="hidden-xs hidden-sm"/>
-        <img src="{% static 'simon_app/imgs/logos/logo_labs_small.png' %}" border="0" class="visible-xs visible-sm"/>
+        <img src="{% static 'simon_app/imgs/logos/logo_labs.png' %}" border="0" class="hidden-xs hidden-sm" alt="LACNIC Labs"/>
+        <img src="{% static 'simon_app/imgs/logos/logo_labs_small.png' %}" border="0" class="visible-xs visible-sm" alt="LACNIC Labs"/>
     </a>
 
     <a class="navbar-brand pull-right" href="{% url 'simon_app.views.home' %}">
@@ -79,7 +79,7 @@
 <div class="navbar visible-md visible-lg visible-xl" style="background-color: #FFC285; border-radius: 0; margin: 0; text-align: right; padding-right: 1em;">
 
     <h4 style="color: #ffffff; font-family: 'HelveticaNeue-Light'">
-       Cantidad de mediciones:
+        Cantidad de mediciones:
     </h4>
     <h6 style="color: #ffffff; font-family: 'HelveticaNeue-Light'">
         Última hora: {{ HOURLY }}

@@ -18,15 +18,15 @@
     var js = d.createElement(s),
         sc = d.getElementsByTagName(s)[0];
 
-    js.src = "http://127.0.0.1:8000/simon/static/simon_app/js/simon_probe_plugin.js";
+    js.src = "http://simon.lacnic.net/simon/static/simon_app/js/simon_probe_plugin.js";
     js.type = "text/javascript";
     sc.parentNode.insertBefore(js, sc);
 
     js.onload = js.onreadystatechange = function () {
-
+        SIMON.thputCount = 15;
         SIMON.before_start = function () {
 
-            for(var i=0; i<15; i++) setTimeout(throughputTest, i*1000);
+            for(var i=0; i<SIMON.thputCount; i++) setTimeout(throughputTest, i*1000);
 
         };
         SIMON.after_points = function () {
@@ -104,7 +104,7 @@ function throughputTest() {
             var thput = 8 * bytes / (rtt * .001); // bps
 
             SIMON.thput.push(Math.floor(thput));
-            SIMON.log(bps2KMG(thput))
+            SIMON.log(bps2KMG(thput));
         }
     });
 
