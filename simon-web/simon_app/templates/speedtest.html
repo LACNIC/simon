@@ -10,23 +10,19 @@
 {% endblock %}
 {% block content %}
 
-    <h1 class="page-header">
-        Medidor de throughput
-    </h1>
+    <div class="col-lg-12">
+        <h1 class="page-header">
+            Medidor de throughput
+        </h1>
 
-    <div class="col-lg-4">
-        <p>
+        <div class="col-lg-4" id="chart_div" class="center-block" style="width: 200px; height: 200px;"></div>
+        <div class="col-lg-8">
             <h2>
-                
+                Acerca del medidor
             </h2>
-        </p>
-    </div>
-    <div class="col-lg-4" id="chart_div" class="center-block" style="width: 200px; height: 200px;"></div>
-    <div class="col-lg-4">
-        <h2>
-            Acerca del medidor
-        </h2>
-        <p>Este medidor funciona descargando archivos de servidores Speedtest.</p>
+
+            <p>Este medidor funciona descargando archivo de servidores del Proyecto Simón. Es importante que los archivos se encuentren en infraestructura neutral de forma de que las mediciones reflejen el verdadero throughput del usuario hacia la Internet regional. Las mediciones típicas de ancho de banda se realizan entre el usuario y un servidor alojado dentro su propio proveedor, lo que sobre estima el verdadero throughput percibido por la aplicación.</p>
+        </div>
     </div>
 
     <!-- SIMON script async loading -->
@@ -52,7 +48,8 @@
 
         function updateChart() {
 
-        };
+        }
+        ;
 
         function drawChart() {
 
@@ -79,16 +76,15 @@
 
                 thputs = SIMON.quartiles.filter(SIMON.thput);
                 var sum = 0;
-                for(t in thputs) {
+                for (t in thputs) {
                     sum += thputs[t];
                 }
                 avg = Math.floor(sum / thputs.length);
                 console.log(avg + " | " + thputs.length);
-                data.setValue(0, 1, (avg / 1000000));
-                options.max = Math.floor((SIMON.getMax(thputs) / 1000000) * 1.20);
+                data.setValue(0, 1, Number((avg / 1000000).toFixed(2)));
+                options.max = Math.floor((SIMON.getMax(thputs) / 1000000) * 1.80);
                 chart.draw(data, options);
             }, 1000);
-
         }
 
 

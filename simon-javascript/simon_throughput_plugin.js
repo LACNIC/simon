@@ -79,7 +79,7 @@ function bps2KMG(bps, leading){
 function throughputTest() {
     $.jsonp({
         type: 'GET',
-        url: "http://www.qnet.com.br/speedtest/speedtest/random350x350.jpg",
+        url: "http://simon.lacnic.net/simon/static/simon_app/imgs/random350x350.jpg",
         dataType: 'jsonp',
         crossDomain: true,
         context: this,
