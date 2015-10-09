@@ -5,7 +5,7 @@ from __future__ import division
 
 # import django_tables as tables
 from django import forms
-from simon_app.models import Country, Results, ThroughputResults, Images
+from simon_app.models import Country, Results, ThroughputResults, Images, AS
 from django.forms.fields import ChoiceField
 from datetime import tzinfo, timedelta
 from django.db.models import Q
@@ -14,8 +14,8 @@ import re
 
 
 # class ResultsForm(forms.Form):
-#     countries = Country.objects.get_region_countries().values('iso', 'printable_name').order_by('printable_name')
-#     countries_list = []
+# countries = Country.objects.get_region_countries().values('iso', 'printable_name').order_by('printable_name')
+# countries_list = []
 #
 #     for country in countries:
 #         register = []
@@ -166,34 +166,40 @@ class YearField(forms.ChoiceField):
     year = range(2009, datetime.datetime.now().year + 1)
 
 
-class ReportForm(forms.Form):
-    default_country = None
-
-    country1 = MyCountryModelChoiceField(queryset=Country.objects.get_region_countries().order_by('printable_name'),
+class ASForm(forms.Form):
+    ases = AS.objects.all()[:100]  # TODO cambiar para que abarque los regionales
+    as_dropdown = forms.ModelChoiceField(queryset=ases,
                                          widget=forms.Select(attrs={'class': 'form-control'}),
-                                         label="País de origen de las mediciones"
-    )
+                                         label="Sistema autónomo")
 
-    country2 = MyCountryModelChoiceField(queryset=Country.objects.get_region_countries().order_by('printable_name'),
-                                         widget=forms.Select(attrs={'class': 'form-control'}),
-                                         label="País de destino de las mediciones",
-                                         required=False
-    )
+    class ReportForm(forms.Form):
+        default_country = None
 
-    bidirectional = forms.NullBooleanField(
-        required=False,
-        initial=True,
-        label="Bidireccional",
-        help_text="Desmarcar esta opción si se desea filtrar mediciones en el sentido país origen --> país destino únicamente"
-    )
+        country1 = MyCountryModelChoiceField(queryset=Country.objects.get_region_countries().order_by('printable_name'),
+                                             widget=forms.Select(attrs={'class': 'form-control'}),
+                                             label="País de origen de las mediciones"
+        )
 
-    date_from = forms.DateField(
-        widget=forms.DateInput(attrs={'class': 'form-control'}),
-        label="Fecha desde"
-    )
+        country2 = MyCountryModelChoiceField(queryset=Country.objects.get_region_countries().order_by('printable_name'),
+                                             widget=forms.Select(attrs={'class': 'form-control'}),
+                                             label="País de destino de las mediciones",
+                                             required=False
+        )
 
-    date_to = forms.DateField(
-        widget=forms.DateInput(attrs={'class': 'form-control'}),
-        label="Fecha hasta",
-        required=False
-    )
+        bidirectional = forms.NullBooleanField(
+            required=False,
+            initial=True,
+            label="Bidireccional",
+            help_text="Desmarcar esta opción si se desea filtrar mediciones en el sentido país origen --> país destino únicamente"
+        )
+
+        date_from = forms.DateField(
+            widget=forms.DateInput(attrs={'class': 'form-control'}),
+            label="Fecha desde"
+        )
+
+        date_to = forms.DateField(
+            widget=forms.DateInput(attrs={'class': 'form-control'}),
+            label="Fecha hasta",
+            required=False
+        )

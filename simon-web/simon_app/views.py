@@ -33,7 +33,7 @@ from simon_app.forms import FeedbackForm
 from simon_app.functions import KMG2bps, inLACNICResources, whoIs, bps2KMG
 from simon_app.javascript_latency import CountryForm
 from simon_app.models import *
-from simon_app.reportes import AddNewWebPointForm, AddNewNtpPointForm, GMTUY
+from simon_app.reportes import AddNewWebPointForm, AddNewNtpPointForm, GMTUY, ASForm
 # from simon_app.reportes import ResultsForm, AddNewWebPointForm, AddNewNtpPointForm, GMTUY, CountryDropdownForm, ReportForm
 import simon_project.settings as settings
 from _socket import timeout
@@ -577,6 +577,29 @@ def reports(request):
     context['v6_count_js'] = "%.1f" % (100.0 * v6_count_js / len(js))
 
     return render_to_response('reports.html', context)
+
+def reports_as(request):
+    from simon_app.reportes import ASForm
+
+    context = getContext(request)
+    form = ASForm()
+    if request.method != "POST":
+        context['form'] = form
+        context['collapse'] = ""
+        return render_to_response('reports_as.html', context)
+
+    id = request.POST['as_dropdown']
+    as_ = AS.objects.get(id=id)
+
+    print as_.asn
+    print Results.object.filter(as_origin=as_.asn)
+
+    context['collapse'] = "in"
+    context['as'] = as_
+
+    return render_to_response('reports_as.html', context)
+
+
 
 
 def charts_reports(request):

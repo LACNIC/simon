@@ -20,8 +20,11 @@ urlpatterns = patterns('',
                        url(r'^participate/$', 'simon_app.views.participate'),
                        url(r'^thanks/$', 'simon_app.views.thanks'),
 
-                       url(r'^reports/$', 'simon_app.views.reports'),
-                       url(r'^results/$', 'simon_app.views.home'),
+                       url(r'^reports/$', 'simon_app.views.reports'), # Legacy URL
+                       url(r'^reports/country/$', 'simon_app.views.reports'),
+                       url(r'^reports/as/$', 'simon_app.views.reports_as'),
+
+                       # url(r'^results/$', 'simon_app.views.home'),
                        url(r'^results/form$', 'simon_app.views.form'),
 
                        url(r'^feedback$', 'simon_app.views.feedbackForm'),
