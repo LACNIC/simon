@@ -13,8 +13,7 @@ DBHOST = os.environ.get("SIMON_%s" % 'DBHOST', passwords.DBHOST)
 DBPORT = os.environ.get("SIMON_%s" % 'DBPORT', passwords.DBPORT)
 
 ADMINS = (
-    ('Agustin Formoso', 'agustin@lacnic.net'),
-    ('Desarrollo', 'agustin@lacnic.net')
+    ('Agustin Formoso', 'agustin@lacnic.net')
 )
 
 NEWRELIC = ""

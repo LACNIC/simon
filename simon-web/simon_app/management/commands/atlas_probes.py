@@ -1,6 +1,4 @@
 from django.core.management.base import BaseCommand
-from simon_app.models import RipeAtlasPingResult
-
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
