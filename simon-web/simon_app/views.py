@@ -48,6 +48,9 @@ def lab(request):
 def thanks(request):
     return render_to_response('thanks.html', getContext(request))
 
+def about(request):
+    return render_to_response('about.html', getContext(request))
+
 
 def browserstack(request):
     return render_to_response('browserstack.html', getContext(request))
