@@ -8,9 +8,11 @@ class Command(BaseCommand):
         import json
         import urllib2
         from simon_app.reportes import GMTUY
+        from simon_app.mailing import *
 
         existent_probes = RipeAtlasProbe.objects.all().values_list('probe_id', flat=True)
         statuses = []
+        new_probes = [] # stores probe and status objects
 
         base_url = "https://atlas.ripe.net"
         ccs = Country.objects.get_region_countries().values_list('iso', flat=True)
@@ -20,7 +22,6 @@ class Command(BaseCommand):
             while next != None:
 
                 url = "%s%s" % (base_url, next)
-                # print url
                 page_content = json.loads(urllib2.urlopen(url).read())
                 next = page_content['meta']['next']
 
@@ -53,10 +54,19 @@ class Command(BaseCommand):
 
                     rap_status.probe = rap
                     rap_status.save()
-                    print rap
+
+                    new_probes.append({'probe': rap, 'status': rap_status, 'cc': cc})
 
         from collections import Counter
         counter = Counter(statuses)
         for c in counter:
             amount = counter[c]
             print c, amount, "(%.0f%%)" % (100.0*amount/len(statuses))
+
+        # Mailing
+        if len(new_probes) > 0:
+            subject="Nuevas RIPE Atlas probes en LAC"
+            ctx = {
+                'probes': new_probes
+            }
+            send_mail(subject=subject, ctx=ctx)

@@ -50,6 +50,7 @@ EMAIL_HOST_PASSWORD = passwords.EMAIL_HOST_PASSWORD
 EMAIL_USE_TLS = passwords.EMAIL_USE_TLS
 DEFAULT_FROM_EMAIL = passwords.DEFAULT_FROM_EMAIL
 SERVER_EMAIL = passwords.SERVER_EMAIL
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 TESTPOINT_OFFLINE_OCCURRENCES = 10  # number of times a test point is allowed to be reported offline before an alarm is triggered
 TOKEN_TIMEOUT = 60  # in minutes
