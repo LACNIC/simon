@@ -13,8 +13,15 @@ middleware here, or combine a Django application with an application of another
 framework.
 
 """
-import os, sys
+from simon_project.settings import DEBUG
+import newrelic.agent
+if DEBUG:
+    path = '/Users/agustin/newrelic.ini'
+else:
+    path = '/home/agustin/newrelic.ini'
+newrelic.agent.initialize(path)
 
+import os, sys
 
 sys.path.append('/opt/django/simon/simon-web')
 sys.path.append('/Users/agustin/git/simon/simon-web/simon_project')
