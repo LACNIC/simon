@@ -592,7 +592,7 @@ def reports_as(request):
     as_ = AS.objects.get(id=id)
 
     print as_.asn
-    print Results.object.filter(as_origin=as_.asn)
+    print Results.objects.filter(as_origin=as_.asn)
 
     context['collapse'] = "in"
     context['as'] = as_
