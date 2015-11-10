@@ -4,15 +4,18 @@ from django.template import Context
 from django.core.mail import EmailMessage
 from django.template.loader import get_template
 from time import sleep
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User
 
-def send_mail(subject="", ctx={}):
 
-    from_email = "agustin@lacnic.net"
+def send_mail_new_probes_found(subject="Nuevas probes", ctx={}, from_email="agustin@lacnic.net"):
     users = User.objects.filter(groups__name='mailing_new_probe')
     recipient_list = [u.email for u in users]
 
-    message = get_template('emails/new_probe.html').render(Context(ctx))
+    send_mail(subject=subject, ctx=ctx, template_filename="emails/new_probe.html", from_email=from_email, recipient_list=recipient_list)
+
+
+def send_mail(subject="", template_filename="", ctx={}, from_email="agustin@lacnic.net", recipient_list=["agustin@lacnic.net"]):
+    message = get_template(template_filename).render(Context(ctx))
     msg = EmailMessage(subject=subject, body=message, from_email=from_email, to=recipient_list)
     msg.content_subtype = 'html'
 

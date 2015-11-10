@@ -67,4 +67,4 @@ class Command(BaseCommand):
             ctx = {
                 'probes': new_probes
             }
-            send_mail(subject=subject, ctx=ctx)
+            send_mail_new_probes_found(subject=subject, ctx=ctx)
