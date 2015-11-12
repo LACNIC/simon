@@ -1,20 +1,31 @@
-<h1>Nuevas probes ({{ probes|length }})</h1>
-<h2>RIPE Atlas en Latinoamérica y el Caribe</h2>
-<p>
-    Se han detectado nuevas probes de la región LAC en la plataforma RIPE Atlas.
+{% extends 'emails/pretty.html' %}
 
-<ul>
-    {% for p in probes %}
-        <li>{{ p.probe.probe_id }}, {{ p.status.status }} ({{ p.cc }}) [<a href="https://atlas.ripe.net/probes/{{ p.probe.probe_id }}/">+info</a>]</li>
-    {% endfor %}
-</ul>
-</p>
+{% block html_content %}
 
-<h2>Acerca de RIPE Atlas</h2>
-<p>
-    RIPE Atlas es una de las plataformas de medición de parámetros de red en Internet de mayor despliegue a nivel mundial. La misma pone a disposición de sus miembros recursos que permiten realizar mediciones de redes. RIPE NCC es el
-    organismo encargado de llevar adelante este enorme proyecto, y cuenta con la colaboración de LACNIC para la región de Latinoamérica y Caribe. En el momento la plataforma se encuentra en una etapa de expansión, enfocándose principalmente
-    en zonas donde la penetración puede ser mejor. Estas zonas donde se está poniendo foco son Asia, Latinoamérica y Caribe, y África. Más y mejor información se puede consultar en la página de RIPE Atlas.
-</p>
+    <h1>Nuevas probes ({{ probes|length }})</h1>
+    <h2>RIPE Atlas en Latinoamérica y el Caribe</h2>
+    <p>
+        Se han detectado nuevas probes de la región LAC en la plataforma RIPE Atlas.
 
-<p>Developer? Síganos en <a href="https://github.com/LACNIC/simon">GitHub</a></p>
+    <ul>
+        {% for p in probes %}
+            <li>{{ p.probe.probe_id }}, {{ p.status.status }} ({{ p.cc }}) [<a
+                    href="https://atlas.ripe.net/probes/{{ p.probe.probe_id }}/">+info</a>]
+            </li>
+        {% endfor %}
+    </ul>
+    </p>
+
+    <h2>Acerca de RIPE Atlas</h2>
+    <p>
+        RIPE Atlas es una de las plataformas de medición de parámetros de red en Internet de mayor despliegue a nivel
+        mundial. La misma pone a disposición de sus miembros recursos que permiten realizar mediciones de redes. RIPE
+        NCC es el
+        organismo encargado de llevar adelante este enorme proyecto, y cuenta con la colaboración de LACNIC para la
+        región de Latinoamérica y Caribe. En el momento la plataforma se encuentra en una etapa de expansión,
+        enfocándose principalmente
+        en zonas donde la penetración puede ser mejor. Estas zonas donde se está poniendo foco son Asia, Latinoamérica y
+        Caribe, y África. Más y mejor información se puede consultar en la página de RIPE Atlas.
+    </p>
+
+{% endblock %}

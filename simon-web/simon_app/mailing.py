@@ -21,7 +21,7 @@ def send_mail_on_command_failed(subject="Command failed to run", command="[comma
               recipient_list=["agustin@lacnic.net"])
 
 
-def send_mail(subject="", template_filename="emails/empty.html", ctx={}, from_email="agustin@lacnic.net",
+def send_mail(subject="", template_filename="emails/pretty.html", ctx={}, from_email="agustin@lacnic.net",
               recipient_list=["agustin@lacnic.net"]):
     message = get_template(template_filename).render(Context(ctx))
     subject = "[simon] %s" % (subject)  # add the 'simon' tag to mail subject
