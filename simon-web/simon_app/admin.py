@@ -80,6 +80,9 @@ class RipeAtlasTokenListAdmin(admin.ModelAdmin):
      #         rat = RipeAtlasToken(token=token)
      #         rat.save()
 
+class CommandAuditAdmin(admin.ModelAdmin):
+    list_display = ['command', 'date', 'status']
+
 admin.site.register(Comment)
 
 admin.site.register(Results, ResultsAdmin)
@@ -95,3 +98,5 @@ admin.site.register(RipeAtlasProbe, RipeAtlasProbeAdmin)
 
 admin.site.register(RipeAtlasToken, RipeAtlasTokenAdmin)
 admin.site.register(RipeAtlasTokenList, RipeAtlasTokenListAdmin)
+
+admin.site.register(CommandAudit, CommandAuditAdmin)

@@ -75,8 +75,9 @@ class Command(BaseCommand):
                 }
                 send_mail_new_probes_found(subject=subject, ctx=ctx)
 
-            ca = commandAudit(command=command, datetime=datetime.now(), status=True)
+            status = True
         except:
-            ca = commandAudit(command=command, datetime=datetime.now(), status=True)
+            status = False
         finally:
+            ca = CommandAudit(command=command, date=datetime.now(), status=status)
             ca.save()
