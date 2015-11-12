@@ -79,5 +79,5 @@ class Command(BaseCommand):
         except:
             status = False
         finally:
-            ca = CommandAudit(command=command, date=datetime.now(), status=status)
+            ca = CommandAudit(command=command, status=status)
             ca.save()

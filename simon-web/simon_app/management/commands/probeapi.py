@@ -83,15 +83,20 @@ class Command(BaseCommand):
                                 packet_loss += 1
                                 continue
 
-                        empty_ass = AS.objects.filter(network__isnull=True,
-                                                      asn=asn)  # get the asn with no network associated
-                        if len(empty_ass) <= 0:
+                        try:
+                            empty_ass = AS.objects.filter(network__isnull=True,
+                                                          asn=asn)  # get the asn with no network associated
+                            if len(empty_ass) <= 0:
+                                as_origin = AS(asn=asn)  # create the empty-network AS
+                                as_origin.save()
+                            elif len(empty_ass) > 1:
+                                continue
+                            else:
+                                as_origin = empty_ass[0]
+
+                        except:
                             as_origin = AS(asn=asn)  # create the empty-network AS
                             as_origin.save()
-                        elif len(empty_ass) > 1:
-                            continue
-                        else:
-                            as_origin = empty_ass[0]
 
                         if len(rtts) <= 0:
                             continue
@@ -131,10 +136,10 @@ class Command(BaseCommand):
                         ).save()
 
                         print "ICMP ping from %s to %s is %.0f ms (%s samples, +- %.0f ms, %.0f samples stripped)" % (
-                        cc_origin, cc_destination, numpy.mean(rtts), len(rtts), 2 * std_dev, _n - len(rtts))
+                            cc_origin, cc_destination, numpy.mean(rtts), len(rtts), 2 * std_dev, _n - len(rtts))
             status = True
         except:
             status = False
         finally:
-            ca = CommandAudit(command=command, date=now, status=status)
+            ca = CommandAudit(command=command, status=status)
             ca.save()
