@@ -1,5 +1,10 @@
 from django.core.management.base import BaseCommand
 from simon_app.decorators import *
+from simon_app.models import *
+import json
+import urllib2
+from simon_app.reportes import GMTUY
+from simon_app.mailing import *
 
 # @command(command="New Atlas Probes Check")
 class Command(BaseCommand):
@@ -7,15 +12,9 @@ class Command(BaseCommand):
         command = "New Atlas Probes Check"
         try:
 
-            from simon_app.models import *
-            import json
-            import urllib2
-            from simon_app.reportes import GMTUY
-            from simon_app.mailing import *
-
             existent_probes = RipeAtlasProbe.objects.all().values_list('probe_id', flat=True)
             statuses = []
-            new_probes = [] # stores probe and status objects
+            new_probes = []  # stores probe and status objects
 
             base_url = "https://atlas.ripe.net"
             ccs = Country.objects.get_region_countries().values_list('iso', flat=True)
@@ -45,7 +44,6 @@ class Command(BaseCommand):
                             rap_status.save()
                             continue
 
-
                         rap = RipeAtlasProbe(
                             probe_id=probe['id'],
                             country_code=probe['country_code'],
@@ -65,11 +63,11 @@ class Command(BaseCommand):
             counter = Counter(statuses)
             for c in counter:
                 amount = counter[c]
-                print c, amount, "(%.0f%%)" % (100.0*amount/len(statuses))
+                print c, amount, "(%.0f%%)" % (100.0 * amount / len(statuses))
 
             # Mailing
             if len(new_probes) > 0:
-                subject="Nuevas RIPE Atlas probes en LAC"
+                subject = "Nuevas RIPE Atlas probes en LAC"
                 ctx = {
                     'probes': new_probes
                 }
