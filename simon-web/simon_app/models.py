@@ -9,6 +9,7 @@ import geoip2
 import json, requests
 from django.contrib import admin
 
+from models_management import * # External models definitions
 
 class Region(models.Model):
     name = models.CharField(max_length=80)
