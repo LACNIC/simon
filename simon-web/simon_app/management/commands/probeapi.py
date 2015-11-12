@@ -15,7 +15,7 @@ from random import choice
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        command = "New Atlas Probes Check"
+        command = "ProbeAPI Measurements"
 
         try:
             now = datetime.now(GMTUY())
