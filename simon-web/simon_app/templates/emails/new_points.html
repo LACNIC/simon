@@ -6,19 +6,21 @@
     <p>
         Se han detectado nuevos puntos de pruebas.
 
-        <table>
-        <thead>Lugar</thead>
-        <thead>Dirección</thead>
-        <thead>Más info.</thead>
+    <table>
+        <tr>
+            <thead>Lugar</thead>
+            <thead>Dirección</thead>
+            <thead>Más info.</thead>
+        </tr>
 
-            {% for p in points %}
+        {% for p in points %}
             <tr>
                 <td>{{ p.city }}, {{ p.country }}</td>
                 <td>{{ p.ip_address }}</td>
                 <td>{{ p.description }}</td>
             </tr>
         {% endfor %}
-        </table>
+    </table>
     </p>
 
 {% endblock %}

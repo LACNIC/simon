@@ -1,3 +1,5 @@
+from cookielib import CookieJar
+
 from django.core.management.base import BaseCommand
 
 from simon_app.mailing import send_mail_new_points_found
@@ -7,7 +9,7 @@ from urlparse import urlparse
 from netaddr import IPAddress, IPNetwork, AddrFormatError
 import socket
 import simon_project.settings as settings
-from urllib2 import urlopen
+from urllib2 import urlopen, build_opener, HTTPCookieProcessor
 from lxml import etree
 
 
@@ -19,17 +21,23 @@ class Command(BaseCommand):
         ccs = [c.iso for c in Country.objects.get_region_countries()]
         tz = GMTUY()
 
+        # Enable cookies
+        cookie_jar = CookieJar()
+
         # Read the XML XMLfile
         print "Fetching XML file..."
-        XMLfile = urlopen('http://c.speedtest.net/speedtest-servers.php')
-        data = XMLfile.read()
-        XMLfile.close()
+        url = "http://www.speedtest.net/speedtest-servers.php"
+
+        import requests
+        r = requests.get(url, allow_redirects=True)
+        data = r.text
         timeFormat = "%Y-%m-%d %H:%M:%S"
 
 
         #Add new registers in the Test Points table
         print "Parsing XML file..."
-        servers = etree.fromstring(str(data))[0]
+        xml_ = etree.fromstring(data.encode('utf-8'))
+        servers = xml_[0]
         N = len(servers)
         nuevos = []
         for i, server in enumerate(servers):

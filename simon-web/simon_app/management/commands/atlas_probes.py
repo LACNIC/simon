@@ -1,12 +1,10 @@
 from django.core.management.base import BaseCommand
-from simon_app.decorators import *
 from simon_app.models import *
 import json
 import urllib2
 from simon_app.reportes import GMTUY
 from simon_app.mailing import *
 
-# @command(command="New Atlas Probes Check")
 class Command(BaseCommand):
     def handle(self, *args, **options):
         command = "New Atlas Probes Check"
@@ -37,8 +35,6 @@ class Command(BaseCommand):
                         )
                         statuses.append(status)
 
-                        print rap_status
-
                         if probe['id'] in existent_probes:
                             rap_status.probe = RipeAtlasProbe.objects.get(probe_id=probe['id'])
                             rap_status.save()
@@ -65,7 +61,12 @@ class Command(BaseCommand):
                 amount = counter[c]
                 print c, amount, "(%.0f%%)" % (100.0 * amount / len(statuses))
 
+
             # Mailing
+
+            # monitored = RipeAtlasMonitoredIds.objects.all().values_list('probe_id', flat=True)
+            # new_monitored = [np.probe for np in new_probes if np.probe_id in monitored]
+
             if len(new_probes) > 0:
                 subject = "Nuevas RIPE Atlas probes en LAC"
                 ctx = {
