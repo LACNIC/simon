@@ -1,6 +1,6 @@
 from django.db.models import Q
 from django.db import models, connection
-from django.db.models.fields import CharField
+from django.db.models.fields import CharField, IntegerField
 from django.db.models.fields.related import ForeignKey
 from datetime import datetime, timedelta
 import trparse
@@ -10,6 +10,7 @@ import json, requests
 from django.contrib import admin
 
 from models_management import * # External models definitions
+
 
 class Region(models.Model):
     name = models.CharField(max_length=80)
@@ -75,7 +76,6 @@ class CountryManager(models.Manager):
             result.append(r[0])
 
         return result
-
 
 class Country(models.Model):
     iso = models.CharField(max_length=2)
@@ -510,6 +510,13 @@ class RipeAtlasProbeStatus(models.Model):
     def __unicode__(self):
         return self.status
 
+    def isBeingMonitored(self):
+        monitored = RipeAtlasMonitoredIds.objects.all().values_list('probe_id', flat=True)
+        return self.probe.probe_id in monitored
+
+    def save(self, *args, **kwargs):
+        super(RipeAtlasProbeStatus, self).save(*args, **kwargs)
+
 
 class RipeAtlasPingResult(RipeAtlasResult):
     def is_valid(self):
@@ -807,6 +814,11 @@ class RipeAtlasTokenList(models.Model):
             rat.save()
         # Save the processed list
         return token_list
+
+class RipeAtlasMonitoredIds(models.Model):
+    probe_id = IntegerField()
+    date = models.DateTimeField(default=datetime.now())
+
 
 class CommentManager(models.Manager):
     pass

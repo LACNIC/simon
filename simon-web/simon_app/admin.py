@@ -99,4 +99,6 @@ admin.site.register(RipeAtlasProbe, RipeAtlasProbeAdmin)
 admin.site.register(RipeAtlasToken, RipeAtlasTokenAdmin)
 admin.site.register(RipeAtlasTokenList, RipeAtlasTokenListAdmin)
 
+admin.site.register(RipeAtlasMonitoredIds)
+
 admin.site.register(CommandAudit, CommandAuditAdmin)
