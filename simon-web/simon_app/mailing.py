@@ -14,6 +14,13 @@ def send_mail_new_probes_found(subject="Nuevas probes", ctx={}, from_email="agus
     send_mail(subject=subject, ctx=ctx, template_filename="emails/new_probe.html", from_email=from_email,
               recipient_list=recipient_list)
 
+def send_mail_new_points_found(subject="Nuevos puntos", ctx={}, from_email="agustin@lacnic.net"):
+    users = User.objects.filter(groups__name='mailing_new_probe')
+    recipient_list = [u.email for u in users]
+
+    send_mail(subject=subject, ctx=ctx, template_filename="emails/new_points.html", from_email=from_email,
+              recipient_list=recipient_list)
+
 
 def send_mail_on_command_failed(subject="Command failed to run", command="[command]", from_email="agustin@lacnic.net"):
     ctx = {'command': command}
