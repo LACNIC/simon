@@ -1,4 +1,6 @@
 from django.core.management.base import BaseCommand
+
+from simon_app.mailing import send_mail_new_points_found
 from simon_app.models import *
 from time import gmtime, strftime
 from urlparse import urlparse
@@ -19,7 +21,7 @@ class Command(BaseCommand):
 
         # Read the XML XMLfile
         print "Fetching XML file..."
-        XMLfile = urlopen('http://www.speedtest.net/speedtest-servers.php')
+        XMLfile = urlopen('http://c.speedtest.net/speedtest-servers.php')
         data = XMLfile.read()
         XMLfile.close()
         timeFormat = "%Y-%m-%d %H:%M:%S"
@@ -100,5 +102,6 @@ class Command(BaseCommand):
 
         if len(nuevos) > 0:
             print "The following Test Points have been added:"
-        for tp in nuevos:
-            print str(tp.ip_address)
+            for tp in nuevos:
+                print str(tp.ip_address)
+            send_mail_new_points_found(ctx={'points':nuevos})
