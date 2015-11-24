@@ -6,19 +6,19 @@ python:
 install: "pip install -r requirements.txt --allow-external ripe.atlas.sagan ripe.atlas.cousteau"
 
 before_script:
-  - export EMAIL_HOST='smtp.gmail.com'
-  - export EMAIL_PORT=587
-  - export EMAIL_HOST_USER=''
-  - export EMAIL_HOST_PASSWORD=''
-  - export SERVER_EMAIL=''
-  - export DEFAULT_FROM_EMAIL=""
-  - export DBNAME='simon'
-  - export DBUSER=''
-  - export DBPASSWORD=''
-  - export DBHOST='127.0.0.1'
-  - export DBPORT='5432'
-  - export PROBEAPI=""
-  - export TWITTER={}
+  - export SIMON_EMAIL_HOST='smtp.gmail.com'
+  - export SIMON_EMAIL_PORT=587
+  - export SIMON_EMAIL_HOST_USER=''
+  - export SIMON_EMAIL_HOST_PASSWORD=''
+  - export SIMON_SERVER_EMAIL=''
+  - export SIMON_DEFAULT_FROM_EMAIL=""
+  - export SIMON_DBNAME='simon'
+  - export SIMON_DBUSER=''
+  - export SIMON_DBPASSWORD=''
+  - export SIMON_DBHOST='127.0.0.1'
+  - export SIMON_DBPORT='5432'
+  - export SIMON_PROBEAPI=""
+  - export SIMON_TWITTER={}
 
 script:
   - python simon-web/manage.py test

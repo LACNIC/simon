@@ -5,7 +5,7 @@ import passwords
 from datetime import datetime
 
 # Passwords stored in env. variables or passwords.py file
-# Env. variable syntax: SIMON_<>
+# Env. variable syntax: SIMON_<variable>
 DBNAME = os.environ.get("SIMON_%s" % 'DBNAME', passwords.DBNAME)
 DBUSER = os.environ.get("SIMON_%s" % 'DBUSER', passwords.DBUSER)
 DBPASSWORD = os.environ.get("SIMON_%s" % 'DBPASSWORD', passwords.DBPASSWORD)
