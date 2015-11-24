@@ -3,14 +3,22 @@ import os
 import socket
 import passwords
 from datetime import datetime
+import passwords
 
 # Passwords stored in env. variables or passwords.py file
 # Env. variable syntax: SIMON_<variable>
-DBNAME = os.environ.get("SIMON_%s" % 'DBNAME', passwords.DBNAME)
-DBUSER = os.environ.get("SIMON_%s" % 'DBUSER', passwords.DBUSER)
-DBPASSWORD = os.environ.get("SIMON_%s" % 'DBPASSWORD', passwords.DBPASSWORD)
-DBHOST = os.environ.get("SIMON_%s" % 'DBHOST', passwords.DBHOST)
-DBPORT = os.environ.get("SIMON_%s" % 'DBPORT', passwords.DBPORT)
+try:
+    DBNAME = os.environ.get("SIMON_%s" % 'DBNAME', passwords.DBNAME)
+    DBUSER = os.environ.get("SIMON_%s" % 'DBUSER', passwords.DBUSER)
+    DBPASSWORD = os.environ.get("SIMON_%s" % 'DBPASSWORD', passwords.DBPASSWORD)
+    DBHOST = os.environ.get("SIMON_%s" % 'DBHOST', passwords.DBHOST)
+    DBPORT = os.environ.get("SIMON_%s" % 'DBPORT', passwords.DBPORT)
+except ImportError:
+    DBNAME = ""
+    DBUSER = ""
+    DBPASSWORD = ""
+    DBHOST = ""
+    DBPORT = ""
 
 ADMINS = (
     ('Agustin Formoso', 'agustin@lacnic.net')
@@ -42,13 +50,22 @@ asns = ['278','676','1251','1292','1296','1797','1831','1840','1916','2146','227
 
 # Admin's email address
 # Offline test points, new WEB points and new NTP points will be anounced here
-EMAIL_HOST = passwords.EMAIL_HOST
-EMAIL_PORT = passwords.EMAIL_PORT
-EMAIL_HOST_USER = passwords.EMAIL_HOST_USER
-EMAIL_HOST_PASSWORD = passwords.EMAIL_HOST_PASSWORD
-EMAIL_USE_TLS = passwords.EMAIL_USE_TLS
-DEFAULT_FROM_EMAIL = passwords.DEFAULT_FROM_EMAIL
-SERVER_EMAIL = passwords.SERVER_EMAIL
+try:
+    EMAIL_HOST = passwords.EMAIL_HOST
+    EMAIL_PORT = passwords.EMAIL_PORT
+    EMAIL_HOST_USER = passwords.EMAIL_HOST_USER
+    EMAIL_HOST_PASSWORD = passwords.EMAIL_HOST_PASSWORD
+    EMAIL_USE_TLS = passwords.EMAIL_USE_TLS
+    DEFAULT_FROM_EMAIL = passwords.DEFAULT_FROM_EMAIL
+    SERVER_EMAIL = passwords.SERVER_EMAIL
+except ImportError:
+    EMAIL_HOST = ""
+    EMAIL_PORT = ""
+    EMAIL_HOST_USER = ""
+    EMAIL_HOST_PASSWORD = ""
+    EMAIL_USE_TLS = ""
+    DEFAULT_FROM_EMAIL = ""
+    SERVER_EMAIL = ""
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 TESTPOINT_OFFLINE_OCCURRENCES = 10  # number of times a test point is allowed to be reported offline before an alarm is triggered
