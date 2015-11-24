@@ -13,7 +13,7 @@ before_script:
   - export SERVER_EMAIL=''
   - export DEFAULT_FROM_EMAIL=""
   - export DBNAME='simon'
-  - export DBUSER''
+  - export DBUSER=''
   - export DBPASSWORD=''
   - export DBHOST='127.0.0.1'
   - export DBPORT='5432'
