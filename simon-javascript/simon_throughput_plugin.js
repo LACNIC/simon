@@ -23,7 +23,7 @@
     sc.parentNode.insertBefore(js, sc);
 
     js.onload = js.onreadystatechange = function () {
-        SIMON.thputCount = 5;
+        SIMON.thputCount = 15;
         SIMON.before_start = function () {
 
             for(var i=0; i<SIMON.thputCount; i++) setTimeout(throughputTest, i*1000);
