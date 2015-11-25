@@ -23,7 +23,7 @@
     sc.parentNode.insertBefore(js, sc);
 
     js.onload = js.onreadystatechange = function () {
-        SIMON.thputCount = 15;
+        SIMON.thputCount = 5;
         SIMON.before_start = function () {
 
             for(var i=0; i<SIMON.thputCount; i++) setTimeout(throughputTest, i*1000);
@@ -45,7 +45,7 @@
 
 }(document, "script"));
 
-function bps2KMG(bps, leading){
+function bps2KMG(bps){
 	// returns string
 	// 1000 bps = 1Kbps
 	var K = 1000;
@@ -76,6 +76,36 @@ function bps2KMG(bps, leading){
 	return bps;
 }
 
+function bytes2KMG(bps){
+	// returns string
+	var K = 1024;
+	var M = K * K;
+	var G = K * M;
+	var T = K * G;
+
+	if(bps > K * T){
+		return "N/A";
+	}
+	if(bps > T){
+		return ( bps / T ) + " TB";
+	}
+	if(bps > G){
+		return (  bps / G ) + " GB";
+	}
+	if(bps > M){
+		return ( bps / M ) + " MB";
+	}
+	if(bps > K){
+		return ( bps / K ) + " KB";
+	}
+
+	if(bps < 0){
+		return "N/A";
+	}
+
+	return bps;
+}
+
 function throughputTest() {
     $.jsonp({
         type: 'GET',
@@ -95,10 +125,6 @@ function throughputTest() {
         },
 
         error: function (jqXHR, textStatus) {
-            /*
-             * If there is an error and the site is up, we can suppose
-             * it is due to 404
-             */
             var rtt = (+new Date - ts);
             var bytes = 245388;
             var thput = 8 * bytes / (rtt * .001); // bps
