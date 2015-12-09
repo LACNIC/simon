@@ -256,6 +256,6 @@ else:
     URL_PFX = ""
     SIMON_URL = 'http://127.0.0.1:8000'
     CHARTS_URL = "http://simon.lacnic.net/charts"
-    NEWRELIC = "/Users/agustin/newrelic.ini"
+    NEWRELIC = "newrelic.ini"
 
 TEMPLATE_DEBUG = DEBUG
