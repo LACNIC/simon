@@ -34,6 +34,10 @@ def send_mail_on_command_failed(subject="Command failed to run", command="[comma
     send_mail(subject=subject, ctx=ctx, template_filename="emails/command_failed.html", from_email=from_email,
               recipient_list=["agustin@lacnic.net"])
 
+def send_mail_test(subject="Testing the mailing system", command="[command]", from_email="agustin@lacnic.net"):
+    ctx = {'command': command}
+    send_mail(subject=subject, ctx=ctx, template_filename="emails/test.html", from_email=from_email,
+              recipient_list=["agustin@lacnic.net"])
 
 def send_mail(subject="", template_filename="emails/pretty.html", ctx={}, from_email="agustin@lacnic.net",
               recipient_list=["agustin@lacnic.net"]):

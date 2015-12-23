@@ -1,23 +1,26 @@
-{% extends 'emails/simon.html' %}
+{% extends 'emails/pretty.html' %}
 
 {% block html_content %}
 
     <h1>Nuevos puntos ({{ points|length }})</h1>
     <p>
         Se han detectado nuevos puntos de pruebas.
-
     <table>
         <tr>
-            <thead>Lugar</thead>
-            <thead>Dirección</thead>
-            <thead>Más info.</thead>
+            <th>Lugar</th>
+            <th>Dirección</th>
+            <th>Más info.</th>
         </tr>
 
         {% for p in points %}
             <tr>
                 <td>{{ p.city }}, {{ p.country }}</td>
                 <td>{{ p.ip_address }}</td>
-                <td>{{ p.description }}</td>
+                <td>{{ p.description }}
+                    {% if p.is_anchor %}
+                        (ANCHOR)
+                    {% endif %}
+                </td>
             </tr>
         {% endfor %}
     </table>

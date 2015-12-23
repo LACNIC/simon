@@ -32,6 +32,7 @@ from simon_app.api_views import \
 from simon_app.forms import FeedbackForm
 from simon_app.functions import KMG2bps, inLACNICResources, whoIs, bps2KMG
 from simon_app.javascript_latency import CountryForm
+from simon_app.mailing import send_mail_point_offline
 from simon_app.models import *
 from simon_app.reportes import AddNewWebPointForm, AddNewNtpPointForm, GMTUY
 # from simon_app.reportes import ResultsForm, AddNewWebPointForm, AddNewNtpPointForm, GMTUY, CountryDropdownForm, ReportForm
@@ -411,45 +412,23 @@ def post_offline_testpoints(request):
 
             for point in points:
                 try:
-                    dbPoint = OfflineReport.objects.get(ip_address=point.find('destination_ip').text)
                     # match
-                    dbPoint.report_count += 1
+                    offlineReport = OfflineReport.objects.get(ip_address=point.find('destination_ip').text)
+                    offlineReport.report_count += 1
 
-                    if True:  # dbPoint.report_count >= settings.TESTPOINT_OFFLINE_OCCURRENCES:##############################################
-                        # alarm
-                        # generate the token
-                        dbTestPoint = TestPoint.objects.get(ip_address=dbPoint.ip_address)
+                    tp = TestPoint.objects.get(ip_address=tp.ip_address)
+                    tp.enabled = False
+                    tp.save()
 
-                        dbTestPoint.enabled = False  # ##################################33
-                        # dbTestPoint.save()  #########################################33
+                    send_mail_point_offline(ctx={'point':tp})
 
-                        # token = ActiveTokens(token_value=''.join(random.choice('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz') for i in range(settings.TOKEN_LENGTH)), token_expiration=datetime.datetime.now() + datetime.timedelta(minutes=settings.TOKEN_TIMEOUT), testpoint=dbTestPoint)
-                        # token.save()
-                        #
-                        # minutes = math.ceil((token.token_expiration - datetime.datetime.now()).total_seconds() / 60)
-                        #
-                        # country = Country.objects.get(iso=dbTestPoint.country)
-                        #
-                        # asunto = 'Server offline notification - Simon Project'
-                        #                         texto = 'This message has been sent to the Simon Project mailing list.'
-                        #                         texto_HTML = '<p>The point <strong>%s</strong> in %s has been reported offline %s times. To unsubscribe the point please <a href="%s/%s">click here</a>. Note that the link will expire after %s minutes</p>' % (dbTestPoint.ip_address, country.printable_name, dbPoint.report_count, settings.UNSUBSCRIBE_TESTPOINT_URL, token.token_value, minutes)
-
-                        #                         try:
-                        #                             msg = EmailMultiAlternatives(asunto, texto, settings.DEFAULT_FROM_EMAIL, [settings.SERVER_EMAIL])
-                        #                             msg.attach_alternative(texto_HTML, "text/html")
-                        #                             msg.content_subtype = "html"  # Main content is now text/html
-                        #                             msg.send()############################################
-                        #                         except SMTPException as e:
-                        #                             print e
-
-                        #                     dbPoint.save()
                 except OfflineReport.DoesNotExist:
                     # new report
-                    offlinePoint = OfflineReport()
-                    offlinePoint.ip_address = point.find('destination_ip').text
-                    offlinePoint.date_reported = datetime.datetime.now(GMTUY())  # point.find('date').text
-                    offlinePoint.report_count = 1
-                    offlinePoint.save()
+                    offlineReport = OfflineReport()
+                    offlineReport.ip_address = point.find('destination_ip').text
+                    offlineReport.date_reported = datetime.datetime.now(GMTUY())
+                    offlineReport.report_count = 1
+                    offlineReport.save()
 
         except etree.XMLSyntaxError as e:
             # this exception is thrown on schema validation error

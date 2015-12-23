@@ -1,9 +1,0 @@
-{% extends email_from_template %}
-
-{% block html %}
-<p>Hi <strong>{{ user.username }}</strong></p>
-<p>Check out what they wrote here:</p>
-<a href="{{ site.url }}{% url profile:view user.username %}">
-    {{ site.url }}{% url profile:view user.username %}
-</a>
-{% endblock %}

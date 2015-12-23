@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
-# File that defines the non-persistent classes
-from __future__ import division
+"""
+    File that defines the non-persistent classes
+"""
 
-# import django_tables as tables
+from __future__ import division
 from django import forms
 from simon_app.models import Country, Results, ThroughputResults, Images
 from django.forms.fields import ChoiceField
