@@ -16,7 +16,9 @@ class Command(BaseCommand):
 
             base_url = "https://atlas.ripe.net"
             ccs = Country.objects.get_region_countries().values_list('iso', flat=True)
+            anchor = 0
 
+            anchor_count = anchor
             for cc in ccs:
 
                 next = "/api/v1/probe/?country_code=%s" % (cc)
@@ -27,6 +29,10 @@ class Command(BaseCommand):
                     next = page_content['meta']['next']
 
                     for probe in page_content['objects']:
+
+                        is_anchor = probe['is_anchor']
+                        if is_anchor:
+                            anchor_count += 1
 
                         status = probe['status_name']
                         rap_status = RipeAtlasProbeStatus(
@@ -53,13 +59,14 @@ class Command(BaseCommand):
                         rap_status.probe = rap
                         rap_status.save()
 
-                        new_probes.append({'probe': rap, 'status': rap_status, 'cc': cc})
+                        new_probes.append({'probe': rap, 'status': rap_status, 'cc': cc, 'is_anchor': is_anchor})
 
             from collections import Counter
             counter = Counter(statuses)
             for c in counter:
                 amount = counter[c]
                 print c, amount, "(%.0f%%)" % (100.0 * amount / len(statuses))
+            print "Anchor count for LAC region: %.0f" % (anchor_count)
 
 
             # Mailing
