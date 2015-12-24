@@ -6,21 +6,7 @@ python:
 install: "pip install -r requirements.txt --allow-external ripe.atlas.sagan ripe.atlas.cousteau"
 
 before_script:
-  - touch simon-web/simon_project/passwords.py
-  - echo SIMON_EMAIL_HOST='smtp.gmail.com' >> simon-web/simon_project/passwords.py
-  - echo SIMON_EMAIL_PORT=587 >> simon-web/simon_project/passwords.py
-  - echo SIMON_EMAIL_HOST_USER='' >> simon-web/simon_project/passwords.py
-  - echo SIMON_EMAIL_HOST_PASSWORD='' >> simon-web/simon_project/passwords.py
-  - echo SIMON_SERVER_EMAIL='' >> simon-web/simon_project/passwords.py
-  - echo SIMON_DEFAULT_FROM_EMAIL="" >> simon-web/simon_project/passwords.py
-  - echo SIMON_DBNAME='simon' >> simon-web/simon_project/passwords.py
-  - echo SIMON_DBUSER='' >> simon-web/simon_project/passwords.py
-  - echo SIMON_DBPASSWORD='' >> simon-web/simon_project/passwords.py
-  - echo SIMON_DBHOST='127.0.0.1' >> simon-web/simon_project/passwords.py
-  - echo SIMON_DBPORT='5432' >> simon-web/simon_project/passwords.py
-  - echo SIMON_PROBEAPI="" >> simon-web/simon_project/passwords.py
-  - echo SIMON_TWITTER={} >> simon-web/simon_project/passwords.py
-
+  - mv simon-web/simon_project/passwords_dummy.py simon-web/simon_project/passwords.py
 
 script:
   - python simon-web/manage.py test
