@@ -80,17 +80,17 @@ class Command(BaseCommand):
             # monitored = RipeAtlasMonitoredIds.objects.all().values_list('probe_id', flat=True)
             # new_monitored = [np.probe for np in new_probes if np.probe_id in monitored]
 
-            if len(new_probes) > 0:
+            n = len(new_probes)
+            if n > 0:
                 subject = "Nuevas RIPE Atlas probes en LAC"
                 ctx = {
                     'probes': new_probes
                 }
 
                 send_mail_new_probes_found(subject=subject, ctx=ctx)
-                print "New probes email sent"
                 # new_anchors = [p for p in new_probes if p.is_anchor]
-                tweet("%s nuevas probes en la región!" % (len(new_probes)))
-                print "New probes tweet tweeted"
+                text = "%s %s probes en la región!" % (n, "nuevas" if n > 1 else "nueva")
+                tweet(text)
 
             status = True
         except:
