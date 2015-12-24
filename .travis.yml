@@ -19,6 +19,7 @@ before_script:
   - export SIMON_DBPORT='5432'
   - export SIMON_PROBEAPI=""
   - export SIMON_TWITTER={}
+  - touch simon-web/simon_project/passwords.py
 
 script:
   - python simon-web/manage.py test
