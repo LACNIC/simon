@@ -225,16 +225,16 @@ class ResultsManager(models.Manager):
 
 
     def get_yearly_results(self):
-        return Results.objects.javascript().filter(date_test__gt=datetime.now() - timedelta(365))
+        return Results.objects.filter(date_test__gt=datetime.now() - timedelta(365))
 
     def get_weekly_results(self):
-        return Results.objects.javascript().filter(date_test__gt=datetime.now() - timedelta(7))
+        return Results.objects.filter(date_test__gt=datetime.now() - timedelta(7))
 
     def get_daily_results(self):
-        return Results.objects.javascript().filter(date_test__gt=datetime.now() - timedelta(1))
+        return Results.objects.filter(date_test__gt=datetime.now() - timedelta(1))
 
     def get_hourly_results(self):
-        return Results.objects.javascript().filter(date_test__gt=datetime.now() - timedelta(hours=1))
+        return Results.objects.filter(date_test__gt=datetime.now() - timedelta(hours=1))
 
     def get_results_by_as_origin(self, as_number):
         res = []

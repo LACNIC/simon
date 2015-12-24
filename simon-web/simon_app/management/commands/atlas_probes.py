@@ -1,9 +1,15 @@
+# -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand
 from simon_app.models import *
 import json
 import urllib2
 from simon_app.reportes import GMTUY
 from simon_app.mailing import *
+from simon_app.management.commands.tweet import *
+
+"""
+    Crawls the RIPE Atlas probe API looking for new probes in the region.
+"""
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
@@ -79,7 +85,12 @@ class Command(BaseCommand):
                 ctx = {
                     'probes': new_probes
                 }
+
                 send_mail_new_probes_found(subject=subject, ctx=ctx)
+                print "New probes email sent"
+                # new_anchors = [p for p in new_probes if p.is_anchor]
+                tweet("%s nuevas probes en la región!" % (len(new_probes)))
+                print "New probes tweet tweeted"
 
             status = True
         except:

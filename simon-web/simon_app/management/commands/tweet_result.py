@@ -1,5 +1,4 @@
 __author__ = 'agustin'
-import random
 from simon_app.management.commands.tweet import *
 from simon_app.models import *
 from django.core.management.base import BaseCommand
