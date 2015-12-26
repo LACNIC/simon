@@ -10,6 +10,7 @@ addons:
     packages:
     - libpq-dev
     - python-dev
+    - psycopg2
 
 install:
   - "pip install -r requirements.txt --allow-external ripe.atlas.sagan ripe.atlas.cousteau"
