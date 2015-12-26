@@ -7,6 +7,7 @@ The project aims to provide enough information about regional connectivity in or
 Visit [the site](http://simon.labs.lacnic.net "Proyecto Simón")! By visiting the site you help us by automatically generating measurements.
 
 ![Build status](https://travis-ci.org/LACNIC/simon.svg?branch=master)
+[![Test Coverage](https://codeclimate.com/github/LACNIC/simon/badges/coverage.svg)](https://codeclimate.com/github/LACNIC/simon/coverage)
 
 
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/LACNIC/simon/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
