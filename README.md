@@ -8,3 +8,7 @@ Visit [the site](http://simon.labs.lacnic.net "Proyecto Simón")! By visiting th
 
 ## Project build status
 ![Build status](https://travis-ci.org/LACNIC/simon.svg?branch=master)
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/LACNIC/simon/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
