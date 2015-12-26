@@ -8,6 +8,8 @@ services:
   - postgresql
 
 addons:
+  code_climate:
+    repo_token: f7fa84853f7688638c4692deda36f9c85b4c4099fd42da5a6e7097c2f29cd651
   apt:
     packages:
     - libpq-dev
