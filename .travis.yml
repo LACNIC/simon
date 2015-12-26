@@ -7,7 +7,7 @@ python:
 
 addons:
   apt:
-    sources:
+    packages:
     - libpq-dev
     - python-dev
 
