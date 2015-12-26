@@ -9,7 +9,8 @@ django-sekizai==0.7
 django-tagging==0.3.2
 django-xmlrpc==0.1.5
 djangocms-admin-style==0.2.2
-httplib2==0.9.1
-trparse==0.1.0
-newrelic==2.50.0.39
 geoip2==2.1.0
+httplib2==0.9.1
+newrelic==2.50.0.39
+psycopg2==2.5.1
+trparse==0.1.0
