@@ -14,3 +14,4 @@ httplib2==0.9.1
 newrelic==2.50.0.39
 psycopg2==2.5.1
 trparse==0.1.0
+lxml==3.3.5
