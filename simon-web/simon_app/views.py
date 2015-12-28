@@ -1129,10 +1129,31 @@ def atlas(request):
     statuses_timeline = requests.post(url, data=data, headers={'Connection': 'close'}).text
 
     all = RipeAtlasProbeStatus.objects.all()
-    connected = "%.1f%%" % (len(all.filter(status="Connected")) * 100.0 / len(all))
-    disconnected = "%.1f%%" % (len(all.filter(status="Disconnected")) * 100.0 / len(all))
-    never = "%.1f%%" % (len(all.filter(status="Never Connected")) * 100.0 / len(all))
-    abandoned = "%.1f%%" % (len(all.filter(status="Abandoned")) * 100.0 / len(all))
+    _c = all.filter(status="Connected")
+    if len(_c) > 0 and len(all) > 0:
+        connected = "%.1f%%" % (_c * 100.0 / len(all))
+    else:
+        connected = 0.0
+
+    _d = all.filter(status="Disconnected")
+    if len(_c) > 0 and len(all) > 0:
+        disconnected = "%.1f%%" % (len(_d) * 100.0 / len(all))
+    else:
+        disconnected = 0.0
+
+    _nc = all.filter(status="Never Connected")
+    if len(_c) > 0 and len(all) > 0:
+        never = "%.1f%%" % (len(_nc) * 100.0 / len(all))
+    else:
+        never = 0.0
+
+    _a = all.filter(status="Abandoned")
+    if len(_c) > 0 and len(all) > 0:
+        abandoned = "%.1f%%" % (len(_a) * 100.0 / len(all))
+    else:
+        abandoned = 0.0
+
+
 
     # per country stats
 
