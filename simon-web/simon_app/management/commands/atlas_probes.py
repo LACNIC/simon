@@ -89,7 +89,7 @@ class Command(BaseCommand):
 
                 send_mail_new_probes_found(subject=subject, ctx=ctx)
 
-                text = "%s %s probes en la región!" % (n, "nuevas" if n > 1 else "nueva")
+                text = "%s %s RIPE Atlas probes en la región!" % (n, "nuevas" if n > 1 else "nueva")
                 tweet(text)
 
                 new_anchors = [p for p in new_probes if p.is_anchor]
