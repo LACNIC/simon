@@ -17,7 +17,8 @@ addons:
     - python-psycopg2
 
 install:
-  - "pip install -r requirements.txt --allow-external ripe.atlas.sagan ripe.atlas.cousteau"
+  - pip install -r requirements.txt --allow-external ripe.atlas.sagan ripe.atlas.cousteau
+  - pip install coveralls
 
 before_script:
   - mv simon-web/simon_project/passwords_dummy.py simon-web/simon_project/passwords.py
@@ -25,3 +26,6 @@ before_script:
 
 script:
   - python simon-web/manage.py test
+  - coverage run simon-web/manage.py test
+
+after_success: coveralls
