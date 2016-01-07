@@ -115,25 +115,27 @@
             caso de haber múltiples picos en el histograma, se puede decir que la
             latencia a nivel regional se agrupa en múltiples subconjuntos.</p>
 
-        <h4 class="page-header">Medidor: Applet (<code>NTP</code>)</h4>
-
-        <p class="alert alert-info">Nota: Para optimizar la consulta, por el momento cargamos 1000 muestras aleatorias desde 2009 hasta la fecha. Más datos se pueden ver a través de la sección de <a
+        <p class="alert alert-info">Más datos disponibles a través de la sección de <a
                 href="{% url 'simon_app.views.reports' %}" style="color: orange">Reportes</a> o la
             sección de <a href="{% url 'simon_app.views.api' %}" style="color: orange">API</a>
         </p>
 
-        <div id="latency_histogram_applet"></div>
-        {{ latency_histogram_applet | safe }}
 
-
-        <h4 class="page-header">Medidor: Javascript (<code>HTTP</code>)</h4>
+        <h3 class="page-header">Histogramas por protocolo</h3>
 
         <p>
             Los datos correspondientes a la siguiente gráfica pertenecen a las muestras recogidas en el último mes.
         </p>
 
+        <h4>Medidor: Javascript (<code>HTTP</code>)</h4>
+
         <div id="latency_histogram_js"></div>
         {{ latency_histogram_js | safe }}
+
+        <h4>Medidor: ProbeAPI (<code>ICMP</code>)</h4>
+
+        <div id="latency_histogram_probeapi"></div>
+        {{ latency_histogram_probeapi | safe }}
 
 
         <h3 class="page-header">Porcentaje de mediciones por IPv6</h3>
@@ -146,6 +148,17 @@
         </script>
         <div id="ipv6_penetration"></div>
 
+        <h3 class="page-header">Cantidad de mediciones por protocolo</h3>
+
+        <p>
+            A continuación se muestra el histórico de la cantidad de muestras generadas diariamente durante los últimos
+            2 meses.
+        </p>
+        <script type="text/javascript">
+            {{ results_timeline | safe }}
+        </script>
+        <div id="results_timeline"></div>
+
 
         <p>
             Para obtener más información acerca de la calidad de Internet en tu
@@ -157,24 +170,21 @@
         </p>
 
 
-        <div class="chartdiv">
-            <h3 class="page-header">Latencia desde un país hacia él mismo</h3>
+        <h3 class="page-header">Latencia desde un país hacia él mismo</h3>
 
-            <p>La gráfica a continuación representa la latencia interna de un
-                país. Cuanto mayor la latencia, peor la calidad de la red. Si la
-                latencia resulta ser excesivamente alta, entonces se puede suponer que
-                el tráfico interno en un país está siendo enrutado hacia afuera, y
-                luego hacia adentro. Una causa de esto es la falta de IXP regionales y
-                locales. Para países pequeños, este valor debería ser menor que para
-                países grandes.</p>
+        <p>La gráfica a continuación representa la latencia interna de un
+            país, basada en los resultados <code>HTTP</code> de los últimos 6 meses. Cuanto mayor la latencia, peor la
+            calidad de la red. Si la
+            latencia resulta ser excesivamente alta, entonces se puede suponer que
+            el tráfico interno en un país está siendo enrutado hacia afuera, y
+            luego hacia adentro. Una causa de esto es la falta de IXP regionales y
+            locales. Para países pequeños, este valor debería ser menor que para
+            países grandes.</p>
 
-            <script type="text/javascript">
-                {{ inner_latency | safe }}
-            </script>
-            <div id="inner_latency" style="min-height: {{ inner_count | safe }}em;"></div>
-
-            {#            <div align="center" id="column_chart_div" class="barchart border"></div>#}
-        </div>
+        <script type="text/javascript">
+            {{ inner_latency | safe }}
+        </script>
+        <div id="inner_latency" style="min-height: 35em;"></div>
 
 
         <div class="chartdiv">
@@ -197,11 +207,13 @@
 
             <div class="col-lg-4">
                 <h4>Matriz de latencias <code>HTTP</code></h4>
-                <img class="center-block" src="{% static 'simon_app/imgs/heatmap-javascript.png' %}" style="max-width: 100%">
+                <img class="center-block" src="{% static 'simon_app/imgs/heatmap-javascript.png' %}"
+                     style="max-width: 100%">
             </div>
             <div class="col-lg-4">
                 <h4>Matriz de latencias <code>NTP</code></h4>
-                <img class="center-block" src="{% static 'simon_app/imgs/heatmap-applet.png' %}" style="max-width: 100%">
+                <img class="center-block" src="{% static 'simon_app/imgs/heatmap-applet.png' %}"
+                     style="max-width: 100%">
             </div>
             <div class="col-lg-4">
                 <h4>Matriz de latencias <code>ICMP</code></h4>

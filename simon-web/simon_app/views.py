@@ -624,35 +624,55 @@ def charts_reports(request):
 
     now = datetime.datetime.now()
     a_month_ago = now - datetime.timedelta(days=30)
-    rtts_applet = Results.objects.applet().values_list('ave_rtt', flat=True).order_by('?')[:1000]
+    rtts_probeapi = Results.objects.probeapi().filter(date_test__gte=a_month_ago).values_list('ave_rtt', flat=True)
     rtts_js = Results.objects.javascript().filter(date_test__gte=a_month_ago).values_list('ave_rtt', flat=True)
 
     # IPv6 penetration chart
     rs = Results.objects.ipv6_penetration_timeline()
     ipv6_penetration_ratios = [(r[2] * 1.0 / (r[1] + r[2])) for r in rs if r[1] > 0 or r[2] > 0]
 
+    results_timeline = Results.objects.get_results_timeline()
+
     # Inner Latency Chart
-    inners = Results.objects.inner('JavaScript', 12)
+    inners = Results.objects.inner('JavaScript', 6)
     inner_isos = []
     inner_lats = []
+    inner_lats_min = []
+    inner_lats_max = []
     for i in inners:
         if i[1] is None: continue
 
-        iso = str(i[0])
-        lat = float(i[1])
+        iso = "(%.0f muestras) %s" % (float(i[4]), str(i[0]))
         inner_isos.append(iso)
-        inner_lats.append(lat)
+        inner_lats_min.append(float(i[1]))
+        inner_lats.append(float(i[2]))
+        inner_lats_max.append(float(i[3]))
 
     ###################
     # Charts Services #
     ###################
 
 
-    latency_histogram_applet = Chart.objects.asyncChart(data=rtts_applet, divId="latency_histogram_applet", labels=['NTP'], colors=['#608BC4'])
+    latency_histogram_probeapi = Chart.objects.asyncChart(data=rtts_probeapi, divId="latency_histogram_probeapi", labels=['NTP'], colors=['#608BC4'])
 
     latency_histogram_js = Chart.objects.asyncChart(data=rtts_js, divId="latency_histogram_js", labels=['HTTP'], colors=['#608BC4'])
 
     url = settings.CHARTS_URL + "/code"
+
+    data = dict(data=json.dumps([list(d[0].strftime("%d/%m/%Y") for d in results_timeline), [r[1] for r in results_timeline], [r[2] for r in results_timeline]]),
+                divId='results_timeline',
+                labels=json.dumps(['HTTP', 'ICMP']),
+                colors=json.dumps(['#144C4C', '#57737A']),
+                kind='AreaChart',
+                xAxis='date')
+    results_timeline = requests.post(url, data=data, headers={'Connection': 'close'}).text
+
+    # ipv6_penetration = Chart.objects.asyncChart(data=json.dumps([list((d[0].strftime("%d/%m/%Y") for d in rs)), list(ipv6_penetration_ratios)]),
+    #                                             divId="ipv6_penetration",
+    #                                             labels=["IPv6 sample ratio"],
+    #                                             colors=['#608BC4'],
+    #                                             kind='LineChart',
+    #                                             xAxis='date')
 
     data = dict(data=json.dumps([list((d[0].strftime("%d/%m/%Y") for d in rs)), list(ipv6_penetration_ratios)]),
                 divId='ipv6_penetration',
@@ -662,19 +682,13 @@ def charts_reports(request):
                 xAxis='date')
     ipv6_penetration = requests.post(url, data=data, headers={'Connection': 'close'}).text
 
-    # ipv6_penetration = Chart.objects.asyncChart(data=json.dumps([list((d[0].strftime("%d/%m/%Y") for d in rs)), list(ipv6_penetration_ratios)]),
-    #                                             divId="ipv6_penetration",
-    #                                             labels=["IPv6 sample ratio"],
-    #                                             colors=['#608BC4'],
-    #                                             kind='LineChart',
-    #                                             xAxis='date')
-
     inner_count = len(inner_isos)
     data = dict(data=json.dumps([list(inner_isos), list(inner_lats)]),
                 divId='inner_latency',
-                labels=json.dumps(['Inner latency']),
-                colors=json.dumps(['#92977E']),
+                labels=json.dumps(['Ave RTT', 'Min RTT', 'Max RTT']),
+                colors=json.dumps(['#144C4C', '#57737A', '#57737A']),
                 kind='BarChart',
+                stacked=True,
                 xAxis='string')
     inner_latency = requests.post(url, data=data, headers={'Connection': 'close'}).text
 
@@ -687,9 +701,10 @@ def charts_reports(request):
 
     ctx = RequestContext(request, {
         'countries': countries,
-        'latency_histogram_applet': latency_histogram_applet,
+        'latency_histogram_probeapi': latency_histogram_probeapi,
         'latency_histogram_js': latency_histogram_js,
         'ipv6_penetration': ipv6_penetration,
+        'results_timeline': results_timeline,
         'inner_latency': inner_latency,
         'inner_count': inner_count * 2
     }, processors=[simon_processor])
@@ -1119,7 +1134,7 @@ def atlas(request):
     disconnected_timeline = [conn[0] / conn[1] for conn in disconnected_timeline]
     abandoned_timeline = [conn[0] / conn[1] for conn in abandoned_timeline]
     never_timeline = [conn[0] / conn[1] for conn in never_timeline]
-    data = dict(data=json.dumps([list((d[0].strftime("%d/%m/%Y") for d in rs)), connected_timeline, disconnected_timeline, abandoned_timeline, never_timeline]),
+    data = dict(data=json.dumps([list(d[0].strftime("%d/%m/%Y") for d in rs), connected_timeline, disconnected_timeline, abandoned_timeline, never_timeline]),
                 divId='statuses_timeline',
                 labels=json.dumps(['Connected', 'Disconnected', 'Abandoned', 'Never Connected']),
                 colors=json.dumps(['#9BC53D', '#C3423F', '#FDE74C', 'darkgray']),

@@ -178,7 +178,7 @@ class ResultsManager(models.Manager):
         from django.db import connection
 
         cursor = connection.cursor()
-        cursor.execute("SELECT country_destination, AVG(ave_rtt), COUNT(*) "
+        cursor.execute("SELECT country_destination, AVG(min_rtt), AVG(ave_rtt), AVG(max_rtt), COUNT(*) "
                        "FROM simon_app_results "
                        "WHERE country_origin = country_destination "
                        "AND tester='%s' "
@@ -202,6 +202,19 @@ class ResultsManager(models.Manager):
                        "AND date_test < now() " \
                        "GROUP BY 1 " \
                        "ORDER BY 1; ")
+        return cursor.fetchall()
+
+    def get_results_timeline(self):
+        from django.db import connection
+
+        cursor = connection.cursor()
+        cursor.execute("SELECT date_trunc('day', date_test), SUM(case when testype='tcp_web' then 1 else 0 end) AS http , SUM(case when testype='ping' then 1 else 0 end) AS icmp " \
+                       "FROM simon_app_results " \
+                       "WHERE date_test > now() - interval '2 months' " \
+                       "AND date_test < now() " \
+                       "GROUP BY 1 " \
+                       "ORDER BY 1; ")
+
         return cursor.fetchall()
 
     def results_matrix_cc(self, tester):
@@ -443,6 +456,16 @@ class RipeAtlasResult(Results):
     type = CharField(max_length=100)
     oneoff = models.BooleanField(default=False)
 
+class RipeAtlasProbeManager(models.Manager):
+
+    @property
+    def connected_now(self):
+        return RipeAtlasProbe.objects.filter(ripeatlasprobestatus__status="Connected")
+
+    @property
+    def connected_now_region(self):
+        _connected = self.connected_now
+        return [_c for _c in _connected if _c.country_code in Country.objects.get_region_countries().values_list('iso', flat=True)]
 
 class RipeAtlasProbe(models.Model):
     probe_id = models.IntegerField(null=True)
@@ -452,19 +475,22 @@ class RipeAtlasProbe(models.Model):
     prefix_v4 = models.GenericIPAddressField(null=True)
     prefix_v6 = models.GenericIPAddressField(null=True)
 
+    objects = RipeAtlasProbeManager()
+
     def __unicode__(self):
         return self.country_code
 
-
+    @property
     def latest_status(self):
         return RipeAtlasProbeStatus.objects.filter(probe=self).order_by('date').reverse()[0]
 
+    @property
     def last_check(self):
         status_date = self.latest_status().date
         return datetime.strftime(status_date, "%d/%b/%Y %X")
 
-    status = property(latest_status)
-    last_check_date = property(last_check)
+    # status = property(latest_status)
+    # last_check_date = property(last_check)
 
     class Meta:
         verbose_name = 'RIPE Atlas Probe'
