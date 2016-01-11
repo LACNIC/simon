@@ -221,7 +221,7 @@ class ResultsManager(models.Manager):
         from django.db import connection
 
         cursor = connection.cursor()
-        cursor.execute("SELECT country_origin, country_destination, AVG(ave_rtt) "
+        cursor.execute("SELECT country_origin, country_destination, AVG(min_rtt), AVG(ave_rtt), AVG(max_rtt) "
                        "FROM "
                        "("
                        "SELECT * FROM simon_app_results "
