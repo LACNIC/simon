@@ -91,7 +91,7 @@ class Command(BaseCommand):
 
                 _connected = RipeAtlasProbe.objects.filter(ripeatlasprobestatus__status="Connected")
                 connected_region = [_c for _c in _connected if _c.country_code in Country.objects.get_region_countries().values_list('iso', flat=True)]
-                text = "%s %s en la región! Eso hace que sean %s las probes activas en LAC." % (n, "nuevas RIPE Atlas probes" if n > 1 else "nueva RIPE Atlas probe", len(connected_region))
+                text = "%s %s en la región!" % (n, "nuevas RIPE Atlas probes" if n > 1 else "nueva RIPE Atlas probe")
                 tweet(text)
 
                 new_anchors = [p for p in new_probes if p.is_anchor]
