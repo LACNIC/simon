@@ -29,3 +29,6 @@ script:
   - coverage run simon-web/manage.py test
 
 after_success: coveralls
+
+notifications:
+  slack: lacnic-eng:jSDKPP0pyOgA5JV4lsQTGtuP
