@@ -1151,15 +1151,18 @@ def atlas(request):
     status_all = RipeAtlasProbeStatus.objects.distinct('probe')
     for s in status_all:
         status_dict[s.status] += 1
-    connected = "%.1f%%" % (status_dict["Connected"] * 100.0 / status_all.count())
-    disconnected = "%.1f%%" % (status_dict["Disconnected"] * 100.0 / status_all.count())
-    never = "%.1f%%" % (status_dict["Never Connected"] * 100.0 / status_all.count())
-    abandoned = "%.1f%%" % (status_dict["Abandoned"] * 100.0 / status_all.count())
 
-    print connected, disconnected, never, abandoned
-    print status_all.distinct('status')
-
-
+    n = status_all.count()
+    if n > 0:
+        connected = "%.1f%%" % (status_dict["Connected"] * 100.0 / n)
+        disconnected = "%.1f%%" % (status_dict["Disconnected"] * 100.0 / n)
+        never = "%.1f%%" % (status_dict["Never Connected"] * 100.0 / n)
+        abandoned = "%.1f%%" % (status_dict["Abandoned"] * 100.0 / n)
+    else:
+        connected = "0.0%%"
+        disconnected = "0.0%%"
+        never = "0.0%%"
+        abandoned = "0.0%%"
 
     # per country stats
 
