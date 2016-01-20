@@ -35,7 +35,7 @@ urlpatterns = patterns('',
 
                        # url(r'^postxmlresult/(?P<type>\blatency\b|\bthroughput\b)', 'simon_app.views.post_xml_result', name='postxmlresult'),
                        url(r'^postxmlresult/$', 'simon_app.views.post_xml_result', name='postxmlresult'),  # Applet
-                       url(r'^post/traceroute/$', 'simon_app.views.post_traceroute', name='post_traceroute'),  # Traceroute Donation Program
+                       # url(r'^post/traceroute/$', 'simon_app.views.post_traceroute', name='post_traceroute'),  # Traceroute Donation Program
                        url(r'^postxmlresult/latency/$', 'simon_app.views.post_xml_result', name='postxmlresult'),
                        url(r'^postxmlresult/offline/$', 'simon_app.views.post_offline_testpoints'),
 
@@ -63,8 +63,8 @@ urlpatterns = patterns('',
                        url(r'^servers_locations_maps$', 'simon_app.views.servers_locations_maps'),
 
                        # Traceroute
-                       url(r'^traceroute/$', 'simon_app.views.traceroute'),
-                       url(r'^traceroute/curl/$', 'simon_app.views.traceroute_curl'),
+                       # url(r'^traceroute/$', 'simon_app.views.traceroute'),
+                       # url(r'^traceroute/curl/$', 'simon_app.views.traceroute_curl'),
 
                        # Articles
                        url(r'^articles/$', 'simon_app.views.articles'),
