@@ -1143,30 +1143,21 @@ def atlas(request):
     url = settings.CHARTS_URL + "/code"
     statuses_timeline = requests.post(url, data=data, headers={'Connection': 'close'}).text
 
-    all = RipeAtlasProbeStatus.objects.all()
-    _c = all.filter(status="Connected")
-    if len(_c) > 0 and len(all) > 0:
-        connected = "%.1f%%" % (len(_c) * 100.0 / len(all))
-    else:
-        connected = 0.0
 
-    _d = all.filter(status="Disconnected")
-    if len(_c) > 0 and len(all) > 0:
-        disconnected = "%.1f%%" % (len(_d) * 100.0 / len(all))
-    else:
-        disconnected = 0.0
+    # Basic Atlas stats
 
-    _nc = all.filter(status="Never Connected")
-    if len(_c) > 0 and len(all) > 0:
-        never = "%.1f%%" % (len(_nc) * 100.0 / len(all))
-    else:
-        never = 0.0
+    from collections import defaultdict
+    status_dict = defaultdict(int)
+    status_all = RipeAtlasProbeStatus.objects.distinct('probe')
+    for s in status_all:
+        status_dict[s.status] += 1
+    connected = "%.1f%%" % (status_dict["Connected"] * 100.0 / status_all.count())
+    disconnected = "%.1f%%" % (status_dict["Disconnected"] * 100.0 / status_all.count())
+    never = "%.1f%%" % (status_dict["Never Connected"] * 100.0 / status_all.count())
+    abandoned = "%.1f%%" % (status_dict["Abandoned"] * 100.0 / status_all.count())
 
-    _a = all.filter(status="Abandoned")
-    if len(_c) > 0 and len(all) > 0:
-        abandoned = "%.1f%%" % (len(_a) * 100.0 / len(all))
-    else:
-        abandoned = 0.0
+    print connected, disconnected, never, abandoned
+    print status_all.distinct('status')
 
 
 
@@ -1224,7 +1215,6 @@ def atlas(request):
 
     ctx = {
         'probes': probes_all,
-        'len_probes': len(probes_all),
         'connected': connected,
         'disconnected': disconnected,
         'never': never,

@@ -458,14 +458,13 @@ class RipeAtlasResult(Results):
 
 class RipeAtlasProbeManager(models.Manager):
 
-    @property
     def connected_now(self):
         return RipeAtlasProbe.objects.filter(ripeatlasprobestatus__status="Connected")
 
-    @property
     def connected_now_region(self):
-        _connected = self.connected_now
-        return [_c for _c in _connected if _c.country_code in Country.objects.get_region_countries().values_list('iso', flat=True)]
+        connected_now = self.connected_now()
+        ccs = Country.objects.get_region_countries().values_list('iso', flat=True)
+        return [_c for _c in connected_now if _c.country_code in ccs]
 
 class RipeAtlasProbe(models.Model):
     probe_id = models.IntegerField(null=True)
@@ -482,15 +481,49 @@ class RipeAtlasProbe(models.Model):
 
     @property
     def latest_status(self):
-        return RipeAtlasProbeStatus.objects.filter(probe=self).order_by('date').reverse()[0]
+        reverse_ = RipeAtlasProbeStatus.objects.filter(probe=self).order_by('date').reverse()[0]
+        return reverse_
 
     @property
     def last_check(self):
-        status_date = self.latest_status().date
-        return datetime.strftime(status_date, "%d/%b/%Y %X")
+        return self.latest_status.date
 
-    # status = property(latest_status)
-    # last_check_date = property(last_check)
+
+    def last_check_timedelta(self, t1):
+        """
+        :param now:
+        :return: Time diff between latest check and t1
+        """
+        return t1 - self.last_check
+
+    @property
+    def time_since_last_check(self):
+        """
+        :param now:
+        :return:
+        """
+        from simon_app.reportes import GMTUY
+        from datetime import datetime, timedelta
+        now = datetime.now(tz=GMTUY())
+        td = self.last_check_timedelta(now)
+        return td
+
+    @property
+    def time_since_last_check_pretty_print(self):
+        """
+        :param now:
+        :return:
+        """
+        td = self.time_since_last_check
+        if td.seconds > 3600:
+            mins = "%.0f minutos" % ((td.seconds % 3600) / 60)
+            horas = "%.0f %s" % (td.seconds / 3600, "horas" if td.seconds / 3600 > 1 else "hora")
+            return "%s %s" %(horas, mins)
+        elif td.seconds > 60:
+            return "%.0f minutos" % (td.seconds / 60)
+        else:
+            return "%.0f segundos" % td.seconds
+
 
     class Meta:
         verbose_name = 'RIPE Atlas Probe'
