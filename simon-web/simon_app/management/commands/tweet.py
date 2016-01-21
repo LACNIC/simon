@@ -1,9 +1,13 @@
 __author__ = 'agustin'
 from simon_project.settings import DEBUG
+import logging
+import twitter
+from simon_project import passwords as passwords
 
 def tweet(text):
-    import twitter
-    from simon_project import passwords as passwords
+
+    logger = logging.getLogger(__name__)
+    logger.info("Sending tweet")
 
     api = twitter.Api(
         consumer_key=passwords.TWITTER['consumer_key'],

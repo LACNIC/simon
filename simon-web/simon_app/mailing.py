@@ -5,6 +5,7 @@ from django.core.mail import EmailMessage
 from django.template.loader import get_template
 from time import sleep
 from django.contrib.auth.models import User
+import logging
 
 
 def send_mail_new_probes_found(subject="Nuevas probes", ctx={}, from_email="agustin@lacnic.net"):
@@ -41,6 +42,10 @@ def send_mail_test(subject="Testing the mailing system", command="[command]", fr
 
 def send_mail(subject="", template_filename="emails/pretty.html", ctx={}, from_email="agustin@lacnic.net",
               recipient_list=["agustin@lacnic.net"]):
+
+    logger = logging.getLogger(__name__)
+    logger.info("Sending email [%s]" % (subject))
+
     message = get_template(template_filename).render(Context(ctx))
     subject = "[simon] %s" % (subject)  # add the 'simon' tag to mail subject
     msg = EmailMessage(subject=subject, body=message, from_email=from_email, to=recipient_list)
@@ -55,8 +60,8 @@ def send_mail(subject="", template_filename="emails/pretty.html", ctx={}, from_e
             sent = True
             return
         except Exception as e:
-            print "Trying to send message %s" % (subject)
-            print "Exception: %s" % (e)
+            logger.error("Error sending email [%s]" % (subject))
+            logger.error("Exception: %s" % (e))
             count += 1
         finally:
             sleep(30)
