@@ -1,4 +1,5 @@
 __author__ = 'agustin'
+from simon_project.settings import DEBUG
 
 def tweet(text):
     import twitter
@@ -10,4 +11,8 @@ def tweet(text):
         access_token_key=passwords.TWITTER['access_token'],
         access_token_secret=passwords.TWITTER['access_token_secret']
     )
-    api.PostUpdate(text)
+
+    if DEBUG:
+        print "[tweet]: " + text
+    else:
+        api.PostUpdate(text)
