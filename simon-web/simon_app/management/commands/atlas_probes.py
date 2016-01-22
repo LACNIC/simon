@@ -6,14 +6,20 @@ import urllib2
 from simon_app.reportes import GMTUY
 from simon_app.mailing import *
 from simon_app.management.commands.tweet import *
+import logging
+from collections import Counter
 
 """
     Crawls the RIPE Atlas probe API looking for new probes in the region.
 """
 
+
 class Command(BaseCommand):
     def handle(self, *args, **options):
         command = "New Atlas Probes Check"
+        logger = logging.getLogger(__name__)
+        logger.info("Starting command [%s]" % (command))
+
         try:
 
             existent_probes = RipeAtlasProbe.objects.all().values_list('probe_id', flat=True)
@@ -65,15 +71,16 @@ class Command(BaseCommand):
                         rap_status.probe = rap
                         rap_status.save()
 
+                        print is_anchor
                         new_probes.append({'probe': rap, 'status': rap_status, 'cc': cc, 'is_anchor': is_anchor})
 
-            from collections import Counter
             counter = Counter(statuses)
             for c in counter:
                 amount = counter[c]
                 print c, amount, "(%.0f%%)" % (100.0 * amount / len(statuses))
             print "Anchor count for LAC region: %.0f" % (anchor_count)
 
+            countries_counter = Counter([p['cc'] for p in new_probes])
 
             # Mailing
 
@@ -89,19 +96,33 @@ class Command(BaseCommand):
 
                 send_mail_new_probes_found(subject=subject, ctx=ctx)
 
-                _connected = RipeAtlasProbe.objects.filter(ripeatlasprobestatus__status="Connected")
-                connected_region = [_c for _c in _connected if _c.country_code in Country.objects.get_region_countries().values_list('iso', flat=True)]
-                text = "%s %s en la región!" % (n, "nuevas RIPE Atlas probes" if n > 1 else "nueva RIPE Atlas probe")
+                countries_text = ""
+                for c in countries_counter:
+                    countries_text += c + " "
+                countries_text = countries_text[:-1]
+
+                connected = unicode(counter["Connected"])
+                text = u"%.0f %s en la región (%s)! Eso hace un total de %s RIPE Atlas probes conectadas!" % (
+                        n,
+                        "nuevas RIPE Atlas probes" if n > 1 else "nueva RIPE Atlas probe",
+                        countries_text,
+                        connected
+                )
+                print text
                 tweet(text)
 
-                new_anchors = [p for p in new_probes if p.is_anchor]
+                new_anchors = [p for p in new_probes if p['is_anchor']]
                 for a in new_anchors:
-                    text = "Una buena noticia! Se ha detectado un nuevo RIPE Atlas Anchor en la región (%s)!" % (a.probe.country_code)
+                    text = u"Una buena noticia! Se ha detectado un nuevo RIPE Atlas Anchor en la región (%s)!" % (
+                    a['probe'].country_code)
                     tweet(text)
 
             status = True
-        except:
+        except Exception as e:
             status = False
+            logger.error("Command failed [%s]" % (command))
+            logger.error(e)
+
         finally:
             ca = CommandAudit(command=command, status=status)
             ca.save()
