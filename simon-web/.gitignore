@@ -1,5 +1,7 @@
 articles/
 bin/
+htmlcov/
 normalization-tests/
+.coverage
 .idea/
 *.pyc
