@@ -54,7 +54,7 @@ urlpatterns = patterns('',
 
                        url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': '%s/files' % (settings.STATIC_ROOT)}),
 
-                       url(r'^charts/$', 'simon_app.views.charts_reports'),
+                       url(r'^charts/$', 'simon_app.views.charts'),
 
                        url(r'^country_latency_chart/([A-Z]{2})$', 'simon_app.views.country_latency_chart'),
                        url(r'^country_latency_chart/([0-9]{1,3})$', 'simon_app.views.country_latency_chart'),
@@ -71,6 +71,6 @@ urlpatterns = patterns('',
 
                        # RIPE Atlas indicators
                        url(r'^atlas/$', 'simon_app.views.atlas')
-) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+                       ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 admin.autodiscover()

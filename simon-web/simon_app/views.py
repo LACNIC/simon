@@ -561,7 +561,7 @@ def reports(request):
     return render_to_response('reports.html', context)
 
 
-def charts_reports(request):
+def charts(request):
     """
         Regional Charts page.
 
