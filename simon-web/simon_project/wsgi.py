@@ -21,9 +21,9 @@ sys.path.append('/Users/agustin/git/simon/simon-web/simon_project')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'simon_project.settings'
 
 
-from simon_project.settings import NEWRELIC
-import newrelic.agent
-newrelic.agent.initialize(NEWRELIC)
+# from simon_project.settings import NEWRELIC
+# import newrelic.agent
+# newrelic.agent.initialize(NEWRELIC)
 
 
 # This application object is used by any WSGI server configured to use this
