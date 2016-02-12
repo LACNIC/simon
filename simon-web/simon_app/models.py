@@ -192,16 +192,16 @@ class ResultsManager(models.Manager):
     def ipv6(self):
         return Results.objects.clean().filter(ip_version='6')
 
-    def ipv6_penetration_timeline(self):
+    def ipv6_penetration_timeline(self, date=datetime.now(), months=2):
         from django.db import connection
 
         cursor = connection.cursor()
         cursor.execute("SELECT date_trunc('day', date_test), SUM(case when ip_version=4 then 1 else 0 end) AS v4 , SUM(case when ip_version=6 then 1 else 0 end) AS v6 " \
                        "FROM simon_app_results " \
-                       "WHERE date_test > now() - interval '2 months' " \
+                       "WHERE date_test > date '%s' - interval '%s months' " \
                        "AND date_test < now() " \
                        "GROUP BY 1 " \
-                       "ORDER BY 1; ")
+                       "ORDER BY 1; " % (date, months))
         return cursor.fetchall()
 
     def get_results_timeline(self):
@@ -217,11 +217,13 @@ class ResultsManager(models.Manager):
 
         return cursor.fetchall()
 
-    def results_matrix_cc(self, tester):
+    def results_matrix_cc(self, date=datetime.now(), months=12, tester="probeapi", ip_version=4):
         from django.db import connection
 
+        date_string = date#.strftime("%Y-%d-%m %H:%M:%S")
+
         cursor = connection.cursor()
-        cursor.execute("SELECT country_origin, country_destination, AVG(min_rtt), AVG(ave_rtt), AVG(max_rtt) "
+        cursor.execute("SELECT country_origin, country_destination, AVG(min_rtt), AVG(ave_rtt), AVG(max_rtt), COUNT(*) "
                        "FROM "
                        "("
                        "SELECT * FROM simon_app_results "
@@ -231,11 +233,12 @@ class ResultsManager(models.Manager):
                        ") AS results "
                        "WHERE country_origin IN (select iso FROM simon_app_country WHERE region_id=3) AND country_destination IN (select iso FROM simon_app_country WHERE region_id=3) "
                        "AND tester='%s' "
-                       "AND date_test > now() - interval '12 months' "
+                       "AND date_test > date '%s' - interval '%s months' "
+                       "AND date_test < date '%s' "
+                       "AND ip_version=%s"
                        "GROUP BY country_origin, country_destination "
-                       "ORDER BY country_origin;" % (tester))
+                       "ORDER BY country_origin;" % (tester, date, months, date, ip_version))
         return cursor.fetchall()
-
 
     def get_yearly_results(self):
         return Results.objects.filter(date_test__gt=datetime.now() - timedelta(365))
