@@ -683,10 +683,10 @@ def charts(request):
     ipv6_penetration = requests.post(url, data=data, headers={'Connection': 'close'}).text
 
     inner_count = len(inner_isos)
-    data = dict(data=json.dumps([list(inner_isos), list(inner_lats)]),
+    data = dict(data=json.dumps([list(inner_isos), list(inner_lats_min), list(inner_lats), list(inner_lats_max)]),
                 divId='inner_latency',
                 labels=json.dumps(['Ave RTT', 'Min RTT', 'Max RTT']),
-                colors=json.dumps(['#144C4C', '#57737A', '#57737A']),
+                colors=json.dumps(['#144C4C', '#57737A', '#95C1BE']),
                 kind='BarChart',
                 stacked=True,
                 xAxis='string')
