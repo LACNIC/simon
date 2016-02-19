@@ -4,6 +4,26 @@ The Simon Project was created to shed some light over Latin American and Caribbe
 
 The project aims to provide enough information about regional connectivity in order for infrastructure investors, content providers, Internet Service Providers, and other agents to have more agreements. A rise of this kind of agreements will undoubtedly end in a better Ineternet for end-users.
 
+## Collaborate
+
+```javascript
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+<script async type="application/javascript">
+
+(function (f, b) {
+    var c = f.createElement(b), e = f.getElementsByTagName(b)[0];
+    c.src = "http://simon.lacnic.net/simon/static/simon_app/js/simon_probe_plugin.js";
+    c.type = "text/javascript";
+    e.parentNode.insertBefore(c, e);
+    c.onload = c.onreadystatechange = function () {
+        SIMON.init()
+    }
+}(document, "script"));
+
+</script>
+```
+
 Visit [the site](http://simon.labs.lacnic.net "Proyecto Simón")! By visiting the site you help us by automatically generating measurements.
 
 ![Build status](https://travis-ci.org/LACNIC/simon.svg?branch=master)
