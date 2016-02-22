@@ -23,7 +23,7 @@ SIMON = {
         post: SIMON.debug && "http://127.0.0.1:8000/postxmlresult/latency/" || "https://simon.lacnic.net/simon/postxmlresult/latency/",
         country: "https://simon.lacnic.net/simon/getCountry/",
         ipv6ResolveURL: "http://simon.v6.labs.lacnic.net/cemd/getip/jsonp/",
-        ipv4ResolveURL: "http://simon.v4.labs.lacnic.net/cemd/getip/jsonp/"
+        ipv4ResolveURL: "https://simon.v4.labs.lacnic.net/cemd/getip/jsonp/"
     },
 
     workflow: {
