@@ -36,7 +36,7 @@ MANAGERS = ADMINS
 
 # application version
 APP_VERSION = "1.4"
-out = check_output(["git", "log", "-1"])
+# out = check_output(["git", "log", "-1"])
 DATE_UPDATED = "22nd Feb 2016" # out.split("\n")[2]
 LATEST_COMMIT = "" # out.split("\n")[0].split(" ")[1]
 
