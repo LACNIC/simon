@@ -1,6 +1,6 @@
 /*
  * JavaScript probe that is hosted in different sites and harvests data as users visit that site.
- * LACNIC Labs - 2014
+ * LACNIC Labs - 2016
  */
 SIMON = {};
 SIMON.debug = false;
@@ -17,11 +17,11 @@ SIMON = {
     },
 
     urls: {
-        home: SIMON.debug && "http://127.0.0.1:8000/" || "http://simon.lacnic.net/simon/",
-        configs: SIMON.debug && "http://127.0.0.1:8000/web_configs/" || "http://simon.lacnic.net/simon/web_configs/",
-        offline: SIMON.debug && "http://127.0.0.1:8000/postxmlresult/offline/" || "http://simon.lacnic.net/simon/postxmlresult/offline/",
-        post: SIMON.debug && "http://127.0.0.1:8000/postxmlresult/latency/" || "http://simon.lacnic.net/simon/postxmlresult/latency/",
-        country: "http://simon.lacnic.net/simon/getCountry/",
+        home: SIMON.debug && "http://127.0.0.1:8000/" || "https://simon.lacnic.net/simon/",
+        configs: SIMON.debug && "http://127.0.0.1:8000/web_configs/" || "https://simon.lacnic.net/simon/web_configs/",
+        offline: SIMON.debug && "http://127.0.0.1:8000/postxmlresult/offline/" || "https://simon.lacnic.net/simon/postxmlresult/offline/",
+        post: SIMON.debug && "http://127.0.0.1:8000/postxmlresult/latency/" || "https://simon.lacnic.net/simon/postxmlresult/latency/",
+        country: "https://simon.lacnic.net/simon/getCountry/",
         ipv6ResolveURL: "http://simon.v6.labs.lacnic.net/cemd/getip/jsonp/",
         ipv4ResolveURL: "http://simon.v4.labs.lacnic.net/cemd/getip/jsonp/"
     },
