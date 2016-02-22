@@ -4,6 +4,7 @@ import socket
 import passwords
 from datetime import datetime
 import passwords
+from subprocess import check_output
 
 # Passwords stored in env. variables or passwords.py file
 # Env. variable syntax: SIMON_<variable>
@@ -35,7 +36,9 @@ MANAGERS = ADMINS
 
 # application version
 APP_VERSION = "1.4"
-DATE_UPDATED = "Tue Jun 22 14:46:34 UYT 2015"
+out = check_output(["git", "log", "-1"])
+DATE_UPDATED = out.split("\n")[2]
+LATEST_COMMIT = out.split("\n")[0].split(" ")[1]
 
 PROJECT_ROOT = os.path.abspath(os.path.pardir)
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))

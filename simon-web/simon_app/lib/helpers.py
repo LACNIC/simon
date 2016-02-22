@@ -11,6 +11,7 @@ def simon_processor(request):
     return {
         'APP_VERSION': settings.APP_VERSION,
         'DATE_UPDATED': settings.DATE_UPDATED,
+        'LATEST_COMMIT' : settings.LATEST_COMMIT,
         'URL_PFX': settings.URL_PFX,
         'HOURLY' : len(Results.objects.get_hourly_results()),
         'DAILY' : len(Results.objects.get_daily_results()),
