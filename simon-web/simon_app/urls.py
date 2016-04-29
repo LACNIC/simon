@@ -23,7 +23,7 @@ urlpatterns = patterns('',
 
                        url(r'^reports/$', 'simon_app.views.reports'),
                        url(r'^results/$', 'simon_app.views.home'),
-                       url(r'^results/form$', 'simon_app.views.form'),
+                       # url(r'^results/form$', 'simon_app.views.form'),
 
                        url(r'^feedback$', 'simon_app.views.feedbackForm'),
 
@@ -46,11 +46,6 @@ urlpatterns = patterns('',
                        url(r'^web_configs/$', 'simon_app.views.web_configs'),
                        url(r'^lab/$', 'simon_app.views.lab'),
                        url(r'^getCountry/$', 'simon_app.views.getCountry'),
-
-                       url(r'^addnewwebpointform$', 'simon_app.views.add_new_webpoint_form'),
-                       url(r'^addnewntppointform$', 'simon_app.views.add_new_ntppoint_form'),
-                       url(r'^addnewwebpoint$', 'simon_app.views.add_new_webpoint'),
-                       url(r'^addnewntppoint$', 'simon_app.views.add_new_ntppoint'),
 
                        url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': '%s/files' % (settings.STATIC_ROOT)}),
 

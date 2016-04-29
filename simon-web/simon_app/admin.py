@@ -1,10 +1,15 @@
 from simon_app.models import *
 from django.contrib import admin
 
+class SimonGenericAdmin(admin.ModelAdmin):
+    """
+        Generic admin covering admin-wide
+    """
+    def get_readonly_fields(self, request, obj=None):
+        return [f.name for f in self.model._meta.fields]
 
-class ResultsAdmin(admin.ModelAdmin):
+class ResultsAdmin(SimonGenericAdmin):
     fields = ()
-    readonly_fields = ('as_origin', 'as_destination')
     list_display = ['country_origin', 'country_destination', 'as_origin', 'as_destination', 'ave_rtt', 'dev_rtt', 'date_short', 'protocol']
     ordering = ['-date_test', 'country_origin', 'country_destination']
     search_fields = ['country_origin', 'country_destination', 'as_origin', 'as_destination']
@@ -18,7 +23,24 @@ class ResultsAdmin(admin.ModelAdmin):
             # 'simon_app/admin/js/jquery-adapt.js'
         )
 
-class TestPointAdmin(admin.ModelAdmin):
+
+class TracerouteResultAdmin(SimonGenericAdmin):
+
+    def get_readonly_fields(self, request, obj=None):
+        return [f.name for f in self.model._meta.fields]
+
+    list_display = ['country_origin', 'country_destination', 'as_origin', 'as_destination', 'hop_count']
+    search_fields = ['country_origin', 'country_destination', 'as_origin', 'as_destination']
+
+class TracerouteHopAdmin(SimonGenericAdmin):
+
+    def get_readonly_fields(self, request, obj=None):
+        return [f.name for f in self.model._meta.fields]
+
+    list_display = ['country_origin', 'country_destination', 'as_origin', 'as_destination', 'ip_origin', 'ip_destination', 'ave_rtt', 'dev_rtt', 'date_short', 'protocol']
+    search_fields = ['country_origin', 'country_destination', 'as_origin', 'as_destination', 'ip_origin', 'ip_destination']
+
+class TestPointAdmin(SimonGenericAdmin):
 
     def enable(modeladmin, request, queryset):
         queryset.update(enabled=True)
@@ -40,7 +62,7 @@ class TestPointAdmin(admin.ModelAdmin):
     actions = [enable, disable, check]
     search_fields = ['country']
 
-class RipeAtlasProbeAdmin(admin.ModelAdmin):
+class RipeAtlasProbeAdmin(SimonGenericAdmin):
     list_display = ['country_code', 'asn_v4', 'asn_v6', 'prefix_v4', 'prefix_v6']
     search_fields = ['country_code']
 
@@ -67,10 +89,10 @@ class InactiveUsersView(ChangeList):
         # filter inactive and admin users
         return qs.filter(is_staff=False, is_active=False, is_superuser=False)
 
-class RipeAtlasTokenAdmin(admin.ModelAdmin):
+class RipeAtlasTokenAdmin(SimonGenericAdmin):
     pass
 
-class RipeAtlasTokenListAdmin(admin.ModelAdmin):
+class RipeAtlasTokenListAdmin(SimonGenericAdmin):
     pass
      # def save_model(self, request, obj, form, change):
      #     print obj
@@ -80,8 +102,12 @@ class RipeAtlasTokenListAdmin(admin.ModelAdmin):
      #         rat = RipeAtlasToken(token=token)
      #         rat.save()
 
-class CommandAuditAdmin(admin.ModelAdmin):
+class CommandAuditAdmin(SimonGenericAdmin):
     list_display = ['command', 'date', 'status']
+
+class ASAdmin(SimonGenericAdmin):
+    list_display = ['asn', 'network', 'pfx_length', 'date_updated', 'regional']
+    search_fields = ['asn', 'network']
 
 admin.site.register(Comment)
 
@@ -91,6 +117,9 @@ admin.site.register(TestPoint, TestPointAdmin)
 admin.site.register(Configs, ConfigsAdmin)
 
 admin.site.register(ProbeApiPingResult, ResultsAdmin)
+admin.site.register(TracerouteResult, TracerouteResultAdmin)
+admin.site.register(TracerouteHop, TracerouteHopAdmin)
+
 admin.site.register(SpeedtestTestPoint, TestPointAdmin)
 admin.site.register(RipeAtlasPingResult, ResultsAdmin)
 
@@ -102,3 +131,5 @@ admin.site.register(RipeAtlasTokenList, RipeAtlasTokenListAdmin)
 admin.site.register(RipeAtlasMonitoredIds)
 
 admin.site.register(CommandAudit, CommandAuditAdmin)
+
+admin.site.register(AS, ASAdmin)

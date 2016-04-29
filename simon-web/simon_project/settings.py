@@ -238,14 +238,21 @@ LOGGING = {
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',  # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': DBNAME,  # Or path to database file if using sqlite3.
-        'USER': DBUSER,  # Not used with sqlite3.
-        'PASSWORD': DBPASSWORD,  # Not used with sqlite3.
-        'HOST': DBHOST,  # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': DBPORT,  # Set to empty string for default. Not used with sqlite3.
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': DBNAME,
+        'USER': DBUSER,
+        'PASSWORD': DBPASSWORD,
+        'HOST': DBHOST,
+        'PORT': DBPORT
     }
 }
+
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+#         'LOCATION': '127.0.0.1:11211',
+#     }
+# }
 
 HOSTNAME = socket.gethostname()
 if HOSTNAME == 'simon':

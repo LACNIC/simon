@@ -3,11 +3,6 @@
 from __future__ import division
 
 import math
-from operator import itemgetter
-import re
-from smtplib import SMTPException
-from socket import gaierror
-
 from django.contrib.gis.geoip import GeoIP
 from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponse
@@ -31,32 +26,32 @@ from simon_app.api_views import \
     throughput_by_country_chart as throughput_by_country_chart_api, getCountry
 from simon_app.forms import FeedbackForm
 from simon_app.functions import KMG2bps, inLACNICResources, whoIs, bps2KMG
-from simon_app.javascript_latency import CountryForm
 from simon_app.mailing import send_mail_point_offline
 from simon_app.models import *
-from simon_app.reportes import AddNewWebPointForm, AddNewNtpPointForm, GMTUY
-# from simon_app.reportes import ResultsForm, AddNewWebPointForm, AddNewNtpPointForm, GMTUY, CountryDropdownForm, ReportForm
+from simon_app.reportes import GMTUY
 import simon_project.settings as settings
 from _socket import timeout
+from django.views.decorators.cache import cache_page
 
-
+@cache_page(60 * 60 * 24)
 def lab(request):
     """
     """
     return render_to_response('lab.html')
 
-
+@cache_page(60 * 60 * 24)
 def thanks(request):
     return render_to_response('thanks.html', getContext(request))
 
+@cache_page(60 * 60 * 24)
 def about(request):
     return render_to_response('about.html', getContext(request))
 
-
+@cache_page(60 * 60 * 24)
 def browserstack(request):
     return render_to_response('browserstack.html', getContext(request))
 
-
+@cache_page(60 * 15)
 def articles(request):
     return render_to_response('articles.html', getContext(request))
 
@@ -84,7 +79,7 @@ def traceroute(request):
     else:
         traceroutes = TracerouteResult.objects.clean().order_by('-date_test')[:5]
 
-        return render(request, 'traceroute.html', {'form': form, 'traceroutes': traceroutes})
+        return render(request, 'traceroute.html', {'traceroutes': traceroutes})
 
 
 def traceroute_curl(request):
@@ -113,7 +108,7 @@ def saveTracerouteResults(request, fileName):
     """
         Traceroute calculations
     """
-    from IPy import IP
+    # from IPy import IP
 
     f = open("%s" % (fileName), 'r')
     lines = f.readlines()
@@ -176,7 +171,7 @@ def saveTracerouteResults(request, fileName):
                 r.packet_loss = 3 - r.number_probes
                 r.country_origin = country_origin
                 r.country_destination = country_destination
-                r.ip_version = IP(ip_destination).version()
+                r.ip_version = 6 if ":" in ip_destination else 4
                 r.tester = 'Traceroute'
                 r.tester_version = '1'
 
@@ -218,7 +213,7 @@ def web_configs(request):
     response = web_configs_api(request)
     return HttpResponse(response)
 
-
+@cache_page(60 * 60 * 24)
 def api(request):
     return render_to_response('api.html', getContext(request))
 
@@ -268,7 +263,7 @@ def err404(request):
 @csrf_exempt
 def post_xml_result(request):
     """
-    View que recibe los datos de las mediciones
+        View que recibe los datos de las mediciones
     """
 
     if (request.method != 'POST'):  # and request.method != 'GET'
@@ -319,8 +314,8 @@ def post_xml_result(request):
 @csrf_exempt
 def post_traceroute(request):
     """
-    View que recibe los datos de traceroute.
-    Asume que la interfaz que postea los resultados es la misma que originó los tracroutes
+        View que recibe los datos de traceroute.
+        Asume que la interfaz que postea los resultados es la misma que originó los tracroutes
     """
 
     if (request.method != 'POST'):
@@ -439,7 +434,7 @@ def post_offline_testpoints(request):
 
     return HttpResponse("END")
 
-
+@cache_page(60 * 60 * 24)
 def home(request):
     return render_to_response('home.html', getContext(request))
 
@@ -560,7 +555,7 @@ def reports(request):
 
     return render_to_response('reports.html', context)
 
-
+# @cache_page(60 * 60 * 12)
 def charts(request):
     """
         Regional Charts page.
@@ -665,6 +660,7 @@ def charts(request):
                 colors=json.dumps(['#144C4C', '#57737A']),
                 kind='AreaChart',
                 xAxis='date')
+
     results_timeline = requests.post(url, data=data, headers={'Connection': 'close'}).text
 
     # ipv6_penetration = Chart.objects.asyncChart(data=json.dumps([list((d[0].strftime("%d/%m/%Y") for d in rs)), list(ipv6_penetration_ratios)]),
@@ -683,9 +679,13 @@ def charts(request):
     ipv6_penetration = requests.post(url, data=data, headers={'Connection': 'close'}).text
 
     inner_count = len(inner_isos)
-    data = dict(data=json.dumps([list(inner_isos), list(inner_lats_min), list(inner_lats), list(inner_lats_max)]),
+
+    avg_list = [a - m for a, m in zip(list(inner_lats), list(inner_lats_min))]
+    max_list = [max - avg for avg, max in zip(list(inner_lats), list(inner_lats_max))]
+
+    data = dict(data=json.dumps([list(inner_isos), list(inner_lats_min), avg_list, max_list]),
                 divId='inner_latency',
-                labels=json.dumps(['Ave RTT', 'Min RTT', 'Max RTT']),
+                labels=json.dumps(['Min RTT', 'Ave RTT', 'Max RTT']),
                 colors=json.dumps(['#144C4C', '#57737A', '#95C1BE']),
                 kind='BarChart',
                 stacked=True,
@@ -748,349 +748,6 @@ def feedbackForm(request):
     return redirect('simon_app.views.home')
 
 
-def form(request):
-    from simon_app.reportes import ResultsForm
-
-    # Processes the form and redirects to the table
-    if request.method == 'POST':  # If the form has been submitted...
-        form = ResultsForm(request.POST)  # A form bound to the POST data
-        # if form.is_valid(): # All validation rules pass
-        # Process the data in form.cleaned_data
-        country = str(form.data['countries'])
-        ip_version = str(form.data['ip_version'])
-        # tester includes tester version
-        tester = str(form.data['tester'])
-        # tester_version = str(form.data['tester_version'])
-        year = str(form.data['year'])
-        month = str(form.data['month'])
-        # test_type = form.data['test_type']
-
-        url = settings.URL_PFX + '/results/' + country + '/' + ip_version + '/' + year + '/' + month + '/' + tester  # + '/' + test_type
-        url = re.sub('\s+', '', url)
-        return redirect(url)
-    else:
-        form = ResultsForm()  # An unbound form
-
-    # return render(request, 'home.html', {'form': form})
-    return render_to_response('home.html', {'form': form}, getContext(request))
-
-
-def throughput_form(request):
-    from simon_app.reportes import ResultsForm
-
-    # Processes the form and redirects to the table
-    if request.method == 'POST':  # If the form has been submitted...
-        form = ResultsForm(request.POST)  # A form bound to the POST data
-        # if form.is_valid(): # All validation rules pass
-        # Process the data in form.cleaned_data
-        country = str(form.data['countries'])
-        ip_version = str(form.data['ip_version'])
-        # tester includes tester version
-        tester = str(form.data['tester'])
-        # tester_version = str(form.data['tester_version'])
-        year = str(form.data['year'])
-        month = str(form.data['month'])
-        # test_type = form.data['test_type']
-
-        url = settings.URL_PFX + '/throughputresults/' + country + '/' + ip_version + '/' + year + '/' + month + '/' + tester  # + '/' + test_type
-        url = re.sub('\s+', '', url)
-        return redirect(url)
-    else:
-        form = ResultsForm()  # An unbound form
-
-    # return render(request, 'home.html', {'form': form})
-    return render_to_response('home.html', {'form': form}, getContext(request))
-
-
-# Forms for point submitting
-def add_new_webpoint_form(request):
-    title = 'Agregar Nuevo Punto Web'
-    text = "Para registrar su servidor como un punto de testing NTP, complete el siguiente formulario. Una vez completado el formulario, nuestro equipo lo evaluará y lo pondrá a disposición de la comunidad para que se realicen tests sobre el. Su servidor formara parte de los 400 servidores que conforman este proyecto. Queremos recordarle que los tests no son demasiado frecuentes como para afectar la performance se su servidor."
-    web_form = AddNewWebPointForm()
-    action = settings.URL_PFX + "/addnewwebpoint"  # form action
-
-    return render_to_response('addpoint.html', {'form': web_form, 'action': action, 'title': title, 'text': text}, getContext(request))
-
-
-def add_new_ntppoint_form(request):
-    title = 'Agregar Nuevo Punto Ntp'
-    text = "Para registrar su servidor como un punto de testing NTP, complete el siguiente formulario. Una vez completado el formulario, nuestro equipo lo evaluará y lo pondrá a disposición de la comunidad para que se realicen tests sobre el. Su servidor formara parte de los 400 servidores que conforman este proyecto."
-    ntp_form = AddNewNtpPointForm()
-    action = settings.URL_PFX + "/addnewntppoint"  # form action
-
-    return render_to_response('addpoint.html', {'form': ntp_form, 'action': action, 'title': title, 'text': text}, getContext(request))
-
-
-# Views for point submitting
-def add_new_webpoint(request):
-    from simon_app.reportes import AddNewWebPointForm, GMTUY
-
-    if request.method == 'POST':
-        MINIMUM_BANDWIDTH = 1000000  # 1Mbps
-        MEETS_BANDWITH = False
-        IN_LACNIC_RESOURCES = False
-        HAS_IP = False
-
-        form = AddNewWebPointForm(request.POST)
-        volunteer_email = form.data['email']
-
-
-        # end with '/'. This way we avoid paths such as /simon//images...
-        images_path = form.data['images_path']
-        if str(images_path)[-1] is not '/':
-            images_path = '%s/' % images_path
-
-        # check if the URL is valid (example: is not 'http://.....') and free of typos
-        url = form.data['server_url']
-        if str(url)[:7] is 'http://':
-            url = str(url)[7:]
-
-        # Chack bandwidth requirements
-        bandwidth = form.data['bandwidth']
-        unit = form.data['unit']
-        bps = KMG2bps('%s %s' % (bandwidth, unit))
-        if bps > MINIMUM_BANDWIDTH:
-            MEETS_BANDWITH = True
-        else:
-            print '%s doesn\'t meet the minimum bandwidth of %s' % (url, bps2KMG(MINIMUM_BANDWIDTH))
-
-        country_printable = Country.objects.get(id=form.data['country']).printable_name
-
-        try:
-            # answers may hold multiple addresses for the same server (IPv4 and IPv6, or multiple addresses of the same kind)
-            answers = socket.getaddrinfo(url, 80, 0, 0, socket.SOL_TCP)
-
-            for answer in answers:
-                testPoint = TestPoint()
-                testPoint.description = form.data['organization']
-                testPoint.url = url
-                print answer[4][0]
-                if answer[4][0] is not None:
-                    testPoint.ip_address = answer[4][0]
-                    HAS_IP = True
-                else:
-                    print 'Couldn\'t find an address for %s' % url
-
-                    # check if point address is under LACNIC's resources
-                print testPoint.ip_address
-                if inLACNICResources(testPoint.ip_address) is True:
-                    IN_LACNIC_RESOURCES = True
-                else:
-                    print '%s not in LACNIC resources' % testPoint.ip_address
-
-                if IN_LACNIC_RESOURCES is not True or MEETS_BANDWITH is not True or HAS_IP is not True:  # triple condition not to repeat all the mailing text....
-                    # Error message
-                    if IN_LACNIC_RESOURCES is not True:
-                        problema = 'la dirección del servidor no forma parte del espacio de direcciones de LACNIC'
-                    elif MEETS_BANDWITH is not True:
-                        problema = 'el servidor no cumple con el mínimo de ancho de banda requerido'
-                    elif HAS_IP is not True:
-                        problema = 'no se ha encontrado una dirección IP para la URL provista'
-
-                    # email volunteer
-                    asunto = 'Su servidor esta siendo estudiado - Proyecto Simón'
-                    texto = 'Hemos recibido una petición para agregar su servidor a nuestra lista de servidores. Nuestro equipo ha determinado que por el momento no es apto para integrar la lista de servidores debido a que %s. De todos modos será estudiado, y en caso de ser apto, le notificaremos al respecto. Datos del servidor:Organización: %sURL: %sPaís: %sDirección IP: %s. Muchas gracias por su colaboración. Lo invitamos a seguir siendo partícipe de este proyecto realizando algunos tests.' % (
-                        problema, str(testPoint.description), str(testPoint.url), str(country_printable), str(testPoint.ip_address))
-                    texto_HTML = '<p>Hemos recibido una petición para agregar su servidor a nuestra lista de servidores. Nuestro equipo ha determinado que por el momento no es apto para integrar la lista de servidores debido a que %s. De todos modos será estudiado, y en caso de ser apto, le notificaremos al respecto.</p><p> <u>Datos del servidor:</u></p><p>Organización: %s</p><p>URL: %s</p><p>País: %s</p><p>Dirección IP: <strong>%s</strong></p><p>Muchas gracias por su colaboración. Lo invitamos a seguir siendo partícipe de este proyecto realizando algunos tests <a href="http://simon.labs.lacnic.net/simon/participate/">aquí</a>.</p>' % (
-                        problema, str(testPoint.description), str(testPoint.url), str(country_printable), str(testPoint.ip_address))
-                    try:
-                        msg = EmailMultiAlternatives(asunto, texto, settings.DEFAULT_FROM_EMAIL, [volunteer_email])
-                        msg.attach_alternative(texto_HTML, "text/html")
-                        msg.content_subtype = "html"  # Main content is now text/html
-                        msg.send()
-                    except SMTPException as e:
-                        print e
-                    # email admins
-                    asunto = 'Aviso de servidor WEB - Proyecto Simón'
-                    texto = 'Este mensaje ha sido enviado a la lista de correo del Proyecto Simón. El punto %s en %s quiere formar parte de la lista de servidores WEB, pero %s. Para darle de alta por favor póngase en contacto con %s. Muchas gracias.' % (
-                        str(testPoint.ip_address), str(country_printable), problema, str(volunteer_email))
-                    texto_HTML = 'Este mensaje ha sido enviado a la lista de correo del Proyecto Simón. <p>El punto <strong>%s</strong> en %s quiere formar parte de la lista de servidores WEB, pero %s. Para darle de alta por favor póngase en contacto con <a href="mailto:%s?subject=Contacto - Proyecto Simón">%s</a>.</p><p>Muchas gracias</p>.' % (
-                        str(testPoint.ip_address), str(country_printable), problema, str(volunteer_email), str(volunteer_email))
-
-                    try:
-                        msg = EmailMultiAlternatives(asunto, texto, settings.DEFAULT_FROM_EMAIL, [settings.SERVER_EMAIL])  # settings.SERVER_EMAIL
-                        msg.attach_alternative(texto_HTML, "text/html")
-                        msg.content_subtype = "html"  # Main content is now text/html
-                        msg.send()
-                    except SMTPException as e:
-                        print e
-
-                    # redireccion con error
-                    title = 'Ups!'
-                    text = '<p>Nuestro equipo ha determinado que por el momento su servidor no es apto para integrar la lista de servidores debido a que %s. De todos modos será estudiado, y en caso de ser apto, le notificaremos al respecto.</p><p>Lo invitamos a participar de este proyecto realizando algunos tests <a href="http://simon.labs.lacnic.net/simon/participate/">aquí</a>.</p><p>Muchas gracias.</p>' % problema
-                    button = '<p><button onclick="window.location.href=\'/\'">Volver</button></p>'
-                    return render_to_response('general.html', {'title': title, 'text': text, 'button': button}, getContext(request))
-
-                # OK message
-                # testPoint.description = form.data['organization']
-                try:
-                    # cc = whoIs(testPoint.ip_address)['operator']['country']
-                    cc = whoIs(testPoint.ip_address)['country']
-                    testPoint.country = Country.objects.get(iso=cc).is2o
-                except:
-                    testPoint.country = '##'
-                    print 'Error while retrieving Web server %s address.' % testPoint.ip_address
-
-                testPoint.testtype = 'tcp_web'
-                testPoint.enabled = False
-                tz = GMTUY()
-                testPoint.date_created = datetime.datetime.now(tz)
-                # testPoint.url = url
-                images = Images.objects.filter(online=True)
-
-                testPoint.save()
-
-                for image in images:
-                    image_in_test_points = Images_in_TestPoints()
-                    image_in_test_points.testPoint = testPoint
-                    image_in_test_points.image = image
-                    image_in_test_points.local_path = images_path  # image.name)
-                    image_in_test_points.save()
-
-                # email admins
-                asunto = 'Notificación de nuevo servidor web - Proyecto Simón'
-                texto = 'Este mensaje ha sido enviado a la lista de correo del Proyecto Simón. El punto %s ubicado en %s ha sido agregado a la lista de puntos web de testeo. Para darle de alta por favor hágalo mediante el administrados de Django. Muchas gracias.' % (
-                    str(testPoint.ip_address), str(testPoint.country))
-                texto_HTML = 'Este mensaje ha sido enviado a la lista de correo del Proyecto Simón. <p>El punto <strong>%s</strong> ubicado en %s ha sido agregado a la lista de puntos web de testeo. Para darle de alta por favor hágalo mediante el administrados de Django. Muchas gracias.' % (
-                    str(testPoint.ip_address), str(testPoint.country))
-
-                try:
-                    msg = EmailMultiAlternatives(asunto, texto, settings.DEFAULT_FROM_EMAIL, [settings.SERVER_EMAIL])  #
-                    msg.attach_alternative(texto_HTML, "text/html")
-                    msg.content_subtype = "html"  # Main content is now text/html
-                    msg.send()
-                except SMTPException as e:
-                    print e
-
-                # email volunteer
-                asunto = 'Gracias por su contribución - Proyecto Simón'
-                texto = 'Hemos recibido una petición para agregar su servidor a nuestra lista de servidores. Brevemente un miembro de nuestro equipo lo evaluará, y de cumplir los requisitos será agregado a la lista.'
-                texto_HTML = '<p>Hemos recibido una petición para agregar su servidor a nuestra lista de servidores. Brevemente un miembro de nuestro equipo lo evaluará, y en caso de cumplir los requisitos será agregado a la lista. Recuerde que los tests consumen muy poco ancho de banda y no afectan la performance de su servidor.</p><p>Datos del servidor:</p><p>Organización: %s</p><p>URL: %s</p><p>País: %s</p><p>Dirección IP: <strong>%s</strong></p><p>Ancho de banda (uplink): %s</p><p>Images uploaded: %s</p><p>Muchas gracias por su colaboración. Lo invitamos a seguir siendo partícipe de este proyecto realizando algunos tests <a href="http://simon.labs.lacnic.net/simon/participate/">aquí</a>.</p>' % (
-                    str(testPoint.description), str(testPoint.url), str(testPoint.country), str(testPoint.ip_address), str(bandwidth), str(len(images)))
-                try:
-                    msg = EmailMultiAlternatives(asunto, texto, settings.DEFAULT_FROM_EMAIL, [volunteer_email])  # volunteer_email
-                    msg.attach_alternative(texto_HTML, "text/html")
-                    msg.content_subtype = "html"  # Main content is now text/html
-                    msg.send()
-                except SMTPException as e:
-                    print e
-
-        except gaierror:
-            print 'Error while retrieving %s IP address.' % form.data['server_url']
-        except:
-            pass
-
-        # redireccion
-        title = 'Gracias por su contribución.'
-        text = 'Su servidor web debería comenzar a atender tests prontamente. Le recomendamos que siga contribuyando a la comunidad realizando más tests'
-        button = '<p><button onclick="window.location.href='"/"'">Volver</button></p>'
-        return render_to_response('general.html', {'title': title, 'text': text, 'button': button}, getContext(request))
-        # return render_to_response('general.html', {'title':title, 'text':text}, getContext(request))
-
-
-def add_new_ntppoint(request):
-    if request.method == 'POST':
-        form = AddNewNtpPointForm(request.POST)
-        testPoint = TestPoint()
-        g = GeoIP()
-        volunteer_email = form.data['email']
-
-        ok = False
-
-        testPoint.description = '%s, contacto: %s' % (form.data['organization'], form.data['email'])
-        testPoint.testtype = 'ntp'
-
-        try:
-            c = NTPClient()
-            url = form.data['server_url']
-            response = c.request(url, version=3)
-            testPoint.ip_address = ref_id_to_text(response.ref_id)
-            print testPoint.ip_address
-        except NTPException:
-            ok = False
-            print 'Error while retrieving NTP server %s address.' % form.data['server_url']
-
-        testPoint.country = g.country_code(testPoint.ip_address)  # Country.objects.get(id=form.data['country']).iso
-        country_printable = Country.objects.get(iso=testPoint.country).printable_name
-        testPoint.enabled = False
-        testPoint.date_created = datetime.datetime.now()
-        testPoint.url = form.data['server_url']
-
-        # check if point address is under LACNIC's resources
-
-        for resource in settings.v4resources:
-            if IPAddress(testPoint.ip_address) in IPNetwork(resource):
-                ok = True
-        for resource in settings.v6resources:
-            if IPAddress(testPoint.ip_address) in IPNetwork(resource):
-                ok = True
-
-                # if ok is not True:
-                # # email volunteer
-                # asunto = 'Su servidor esta siendo estudiado - Proyecto Simón'
-                # texto = 'Hemos recibido una petición para agregar su servidor a nuestra lista de servidores. Nuestro equipo ha determinado que por el momento no es apto para integrar la lista de servidores debido a que su dirección no forma parte del espacio de direcciones de LACNIC. De todos modos será estudiado, y en caso de ser apto, le notificaremos al respecto.'
-                # texto_HTML = '<p>Hemos recibido una petición para agregar su servidor a nuestra lista de servidores. Nuestro equipo ha determinado que por el momento no es apto para integrar la lista de servidores debido a que su dirección no forma parte del espacio de direcciones de LACNIC. De todos modos será estudiado, y en caso de ser apto, le notificaremos al respecto.</p><p>Datos del servidor:</p><p>Organización: %s</p><p>URL: %s</p><p>País: %s</p><p>Dirección IP: <strong>%s</strong></p><p>Muchas gracias por su colaboración. Lo invitamos a seguir siendo partícipe de este proyecto realizando algunos tests <a href="http://simon.labs.lacnic.net/simon/participate/">aquí</a>.</p>' % (str(testPoint.description), str(testPoint.url), str(country_printable), str(testPoint.ip_address))
-                # try:
-                # msg = EmailMultiAlternatives(asunto, texto, settings.DEFAULT_FROM_EMAIL, [volunteer_email])
-                #                msg.attach_alternative(texto_HTML, "text/html")
-                #                msg.content_subtype = "html"  # Main content is now text/html
-                #                msg.send()
-                #            except SMTPException as e:
-                #                print e
-                #
-                #            # email admins
-                #            asunto = 'Aviso de servidor NTP - Proyecto Simón'
-                #            texto = 'Este mensaje ha sido enviado a la lista de correo del Proyecto Simón'
-                #            texto_HTML = 'Este mensaje ha sido enviado a la lista de correo del Proyecto Simón. <p>El punto <strong>%s</strong> ubicado en %s quiere formar parte de la lista de servidores NTP, pero no pertenece al espacio de direcciones de LACNIC. Para darle de alta por favor póngase en contacto con <a href="mailto:%s?subject=Contacto - Proyecto Simón">%s</a>. Muchas gracias.' % (str(testPoint.ip_address), str(country_printable), str(volunteer_email), str(volunteer_email))
-                #
-                #            try:
-                #                msg = EmailMultiAlternatives(asunto, texto, settings.DEFAULT_FROM_EMAIL, [settings.SERVER_EMAIL])# settings.SERVER_EMAIL
-                #                msg.attach_alternative(texto_HTML, "text/html")
-                #                msg.content_subtype = "html"  # Main content is now text/html
-                #                msg.send()
-                #            except SMTPException as e:
-                #                print e
-                #
-                #            # redireccion con error
-                #            title = 'Ups!'
-                #            text = '<p>Nuestro equipo ha determinado que por el momento su servidor no es apto para integrar la lista de servidores debido a que su dirección no forma parte del espacio de direcciones de LACNIC. De todos modos será estudiado, y en caso de ser apto, le notificaremos al respecto.</p><p>Lo invitamos a participar de este proyecto realizando algunos tests <a href="http://simon.labs.lacnic.net/simon/participate/">aquí</a>.</p><p>Muchas gracias.</p>'
-                #            return render_to_response('general.html', {'title':title, 'text':text}, getContext(request))
-
-        testPoint.save()
-
-        # email admins
-        asunto = 'Notificación de nuevo servidor NTP - Proyecto Simón'
-        texto = 'Este mensaje ha sido enviado a la lista de correo del Proyecto Simón'
-        texto_HTML = 'Este mensaje ha sido enviado a la lista de correo del Proyecto Simón. <p>El punto <strong>%s</strong> ubicado en %s ha sido agregado a la lista de puntos NTP de testeo. Para darle de alta por favor hágalo mediante el administrados de Django. Muchas gracias.' % (
-            str(testPoint.ip_address), str(testPoint.country))
-
-        try:
-            msg = EmailMultiAlternatives(asunto, texto, settings.DEFAULT_FROM_EMAIL, [settings.SERVER_EMAIL])  # settings.SERVER_EMAIL
-            msg.attach_alternative(texto, "text/html")
-            msg.content_subtype = "html"  # Main content is now text/html
-            msg.send()
-        except SMTPException as e:
-            print e
-
-        # email volunteer
-        asunto = 'Gracias por su contribución - Proyecto Simón'
-        texto = 'Hemos recibido una petición para agregar su servidor a nuestra lista de servidores. Brevemente un miembro de nuestro equipo lo evaluará, y de cumplir los requisitos será agregado a la lista.'
-        texto_HTML = '<p>Hemos recibido una petición para agregar su servidor a nuestra lista de servidores. Brevemente un miembro de nuestro equipo lo evaluará, y en caso de cumplir los requisitos será agregado a la lista. Recuerde que los tests consumen muy poco ancho de banda y no afectan la performance de su servidor.</p><p>Datos del servidor:</p><p>Organización: %s</p><p>URL: %s</p><p>País: %s</p><p>Dirección IP: <strong>%s</strong></p><p>Muchas gracias por su colaboración. Lo invitamos a seguir siendo partícipe de este proyecto realizando algunos tests <a href="http://simon.labs.lacnic.net/simon/participate/">aquí</a>.</p>' % (
-            str(testPoint.description), str(testPoint.url), str(testPoint.country), str(testPoint.ip_address))
-        try:
-            msg = EmailMultiAlternatives(asunto, texto, settings.DEFAULT_FROM_EMAIL, [volunteer_email])  # volunteer_email
-            msg.attach_alternative(texto_HTML, "text/html")
-            msg.content_subtype = "html"  # Main content is now text/html
-            msg.send()
-        except SMTPException as e:
-            print e
-
-        # redireccion
-        title = 'Gracias por su contribución.'
-        text = 'Su servidor web debería comenzar a atender tests prontamente. Le recomendamos que siga contribuyando a la comunidad realizando más tests'
-        return render_to_response('general.html', {'title': title, 'text': text}, getContext(request))
-
-
 def applet(request):
     # return render(request, 'applet.html')
     return render_to_response('applet.html', getContext(request))
@@ -1101,21 +758,7 @@ def applet_run(request):
     return render_to_response('applet_run.html', getContext(request))
 
 
-def javascript_run(request):
-    # Get address to pre-select the dropdown menu
-    # ip = request.META.get('REMOTE_ADDR', None)
-    #
-    # try:
-    # # cc = whoIs(ip)['operator']['country']
-    # cc = whoIs(ip)['country']
-    # countries = CountryForm(initial={'countries': cc})
-    # except (TypeError, HTTPError):
-    # # IP is probably a local address
-    # countries = CountryForm()
-
-    return render_to_response('javascript_run.html', {'countries': CountryForm()}, getContext(request))
-
-
+@cache_page(60 * 60 * 24)
 def atlas(request):
     from collections import Counter, OrderedDict
     from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger

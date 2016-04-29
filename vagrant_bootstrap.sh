@@ -1,7 +1,10 @@
 #!/usr/bin/env bash
 
 user=postgres
-webserver=/vagrant/simon-web
+home=/vagrant
+webserver=$home/simon-web
+dump=$home/simon.dump
+pip_requirements=$home/requirements.txt
 
 {
 	apt-get update
@@ -29,10 +32,11 @@ webserver=/vagrant/simon-web
 {
 	sudo -u postgres psql -c "alter role $user password 'postgres'"
 	sudo -u postgres psql -c "create database simon with owner=$user"
+	sudo -u postgres psql < $dump
 } > /dev/null && echo "Simon database created and populated"
 
 {
-	wget --quiet https://bootstrap.pypa.io/get-pip.py > /dev/null && python get-pip.py > /dev/null && rm get-pip.py && echo "pip installed" && pip install -r /vagrant/requirements.txt > /dev/null && echo "Python dependencies installed"
+	wget --quiet https://bootstrap.pypa.io/get-pip.py > /dev/null && python get-pip.py > /dev/null && rm get-pip.py && echo "pip installed" && pip install -r $pip_requirements > /dev/null && echo "Python dependencies installed"
 } && echo "Python dependencies installed"
 
 {
