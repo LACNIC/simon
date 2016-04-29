@@ -4,6 +4,7 @@ user=postgres
 home=/vagrant
 webserver=$home/simon-web
 dump=$home/simon.dump
+dump_zip=$dump.zip
 pip_requirements=$home/requirements.txt
 
 {
@@ -17,7 +18,8 @@ pip_requirements=$home/requirements.txt
 	python-psycopg2 \
 	python-dev \
 	libxml2-dev \
-	libxslt-dev
+	libxslt-dev \
+	unzip
 } > /dev/null && echo "New system dependencies installed"
 
 {
@@ -32,6 +34,7 @@ pip_requirements=$home/requirements.txt
 {
 	sudo -u postgres psql -c "alter role $user password 'postgres'"
 	sudo -u postgres psql -c "create database simon with owner=$user"
+	unzip $dump_zip
 	sudo -u postgres psql < $dump
 } > /dev/null && echo "Simon database created and populated"
 
