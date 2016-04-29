@@ -2,6 +2,9 @@
 .idea/
 .tern-project/
 
+# Database dumps
+**/*.dump
+
 # Java
 **/*.class
 **/*.jar
