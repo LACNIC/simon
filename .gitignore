@@ -1,3 +1,24 @@
 .vagrant/
 .idea/
 .tern-project/
+
+# Java
+**/*.class
+**/*.jar
+**/*.war
+**/*.ear
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+# Django stuff:
+**/*.log
+**/local_settings.py
+**/*.pyc
+
+# IPython Notebook
+**/*.ipynb
+**/*..ipynb_checkpoints
+
+# virtualenv
+venv/
+ENV/
