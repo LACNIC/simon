@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from simon_app.models import AS
 from simon_app.functions import networkInLACNICResources
-from simon_project import settings
+from simon_app import caching
 import zlib, urllib2
 import datetime
 from sys import stdout
@@ -11,6 +11,11 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         now = datetime.datetime.now()
+        # caching.set("as-cached", AS.objects.all())
+        # print caching.get("as-cached")
+        #
+        # print
+        # exit(1)
 
         print "Downloading RIS..."
         file_v4=urllib2.urlopen('http://www.ris.ripe.net/dumps/riswhoisdump.IPv4.gz').read()
@@ -21,8 +26,7 @@ class Command(BaseCommand):
         ris_v6 = zlib.decompress(file_v6, 16+zlib.MAX_WBITS)
         asn_list = [asn.split('\t') for asn in ris_v4.split('\n')] + [asn.split('\t') for asn in ris_v6.split('\n')]
 
-        print "Deleting old records..."
-        AS.objects.all().delete() # Delete ALL AS-related info and make place for new information
+        old = AS.objects.all() # Delete ALL AS-related info and make place for new information
         internet = AS(
             asn=0,
             network="0.0.0.0/0",
@@ -61,3 +65,8 @@ class Command(BaseCommand):
                 exit(1)
             except:
                 continue
+
+        print "Deleting old records..."
+        old.delete()
+
+        # caching.set("as-cached", AS.objects.all())
