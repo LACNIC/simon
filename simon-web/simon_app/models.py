@@ -240,6 +240,29 @@ class ResultsManager(models.Manager):
                        "ORDER BY country_origin;" % (tester, date, months, date, ip_version))
         return cursor.fetchall()
 
+    def results_matrix_as(self, date=datetime.now(), months=12, tester="JavaScript", ip_version=4):
+        from django.db import connection
+
+        date_string = date
+
+        cursor = connection.cursor()
+        cursor.execute("SELECT as_origin, as_destination, AVG(min_rtt), AVG(ave_rtt), AVG(max_rtt), COUNT(*) "
+                       "FROM "
+                       "("
+                       "SELECT * FROM simon_app_results "
+                       "WHERE ave_rtt > 5 "
+                       "AND ave_rtt < 800 "
+                       "AND dev_rtt < 0.9 * ave_rtt"
+                       ") AS results "
+                       "WHERE country_origin IN (select iso FROM simon_app_country WHERE region_id=3) AND country_destination IN (select iso FROM simon_app_country WHERE region_id=3) "
+                       "AND tester='%s' "
+                       "AND date_test > date '%s' - interval '%s months' "
+                       "AND date_test < date '%s' "
+                       "AND ip_version=%s"
+                       "GROUP BY as_origin, as_destination "
+                       "ORDER BY as_origin;" % (tester, date, months, date, ip_version))
+        return cursor.fetchall()
+
     def get_yearly_results(self):
         return Results.objects.filter(date_test__gt=datetime.now() - timedelta(365))
 
@@ -385,6 +408,10 @@ class TracerouteResultManager(models.Manager):
 class TracerouteResult(models.Model):
     ip_origin = models.GenericIPAddressField(null=True)
     ip_destination = models.GenericIPAddressField(null=True)
+    as_origin = models.IntegerField(null=True)
+    as_destination = models.IntegerField(null=True)
+    country_origin = models.CharField(max_length=2)
+    country_destination = models.CharField(max_length=2)
     hop_count = models.IntegerField(default=0)
 
     output = models.TextField(max_length=2000, default='')
@@ -406,8 +433,8 @@ class TracerouteResult(models.Model):
 
         super(TracerouteResult, self).save(*args, **kwargs)
 
-    def __str__(self):
-        return self.traceroutehop_set.all()
+    # def __str__(self):
+    #     return self.traceroutehop_set.all()
 
     def pretty_print(self):
         from geoip2.errors import AddressNotFoundError
@@ -451,6 +478,9 @@ class TracerouteResult(models.Model):
 
 class TracerouteHop(Results):
     traceroute_result = models.ForeignKey(TracerouteResult)
+
+    def __str__(self):
+        print "AS%s (%s) --> AS%s (%s)" % (self.as_origin, self.ip_origin, self.as_destination, self.ip_destination)
 
 
 class RipeAtlasResult(Results):
@@ -675,6 +705,7 @@ class TestPoint(models.Model):
             self.enabled = False
 
         self.save()
+        return self.enabled
 
     class Meta:
         verbose_name = 'Punto de prueba'

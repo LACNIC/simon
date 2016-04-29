@@ -15,14 +15,7 @@ def asn_heatmap():
     ases_tmp = rs.order_by('as_destination').distinct('as_destination')
     ases = set(ases_tmp) - set(ases)
     
-#     mean = []
-#     for asn in ases:
-#         if Results.objects.filter(Q(as_origin=asn.as_origin) & Q(as_destination=asn.as_origin)).count() > 0:
-#             rs = Results.objects.filter(Q(as_origin=asn.as_origin) & Q(as_destination=asn.as_origin) & Q(ave_rtt__lte=800)).values_list('ave_rtt', flat=True)
-#             print "AS %s\t%.1f ms (%s samples)" % (asn.as_origin.asn, sum(rs) / len(rs), len(rs))
-#             mean.append(sum(rs) / len(rs))
-#     print "------------------------\nRegion average : %s ms" % (sum(mean) / len(mean))
-    
+
     as_objects = []
     for r_asn in ases:
         if Results.objects.filter(Q(as_origin=r_asn.as_origin)).count() > 0\
@@ -166,6 +159,39 @@ def build_dict(results):
                 cc_dict[cc_d] = rtt
         region_dict[cc_o] = cc_dict
     return region_dict
+
+def build_dict_as(results):
+    from collections import defaultdict
+    from sys import stdout
+
+    ccs = AS.objects.all().values_list("asn", flat=True).distinct("asn")
+    N = len(ccs)
+    region_dict = defaultdict(None)
+    for i, cc_o in enumerate(ccs):
+        stdout.write("\r%.2f%%" % (100.0 * i / N))
+        stdout.flush()
+        rs = results.filter(as_origin=cc_o)
+        print "-",
+
+        if len(rs) == 0:
+            continue
+
+        print "/",
+
+        cc_dict = defaultdict(None)
+        print "\\",
+        for cc_d in ccs:
+            print ".",
+            rtts = rs.filter(as_destination=cc_d).values_list('ave_rtt', flat=True)
+            if len(rtts) > 0:
+                rtt = sum(rtts) / len(rtts)
+                print rtt
+            # else:
+            #     rtt = 0
+                cc_dict[cc_d] = rtt
+        region_dict[cc_o] = cc_dict
+    return region_dict
+
 
 class Command(BaseCommand):
 
