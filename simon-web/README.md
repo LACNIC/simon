@@ -3,17 +3,21 @@ The Simon Project was created to shed some light over Latin American and Caribbe
 
 The project aims to provide enough information about regional connectivity in order for infrastructure investors, content providers, Internet Service Providers, and other agents to have more agreements. A rise of this kind of agreements will undoubtedly end in a better Ineternet for end-users.
 
-Visit [the site](http://simon.labs.lacnic.net "Proyecto Simón")! By visiting the site you help us by automatically generating measurements.
+Visit [the site](http://simon.lacnic.net "Proyecto Simón")! By visiting the site you help us by automatically generating measurements.
 
 ## Join us!
-If you have not visited [the site](http://simon.labs.lacnic.net "Proyecto Simón"), check it out now!
+If you have not visited [the site](http://simon.lacnic.net "Proyecto Simón"), check it out now!
 
 You can also help the project just by adding our JavaScript probe in your own website. It's dead simple, just include the following:
+```
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 
-`<script type="text/javascript" src="http://simon.labs.lacnic.net/static/js/jquery1.8.0.js"></script>`<br>
-`<script type="text/javascript" src="http://simon.labs.lacnic.net/static/js/simon_probe.js"></script>`<br>
-`<script type="text/javascript" src="http://simon.labs.lacnic.net/static/js/dateFormatter.js"></script>`<br>
-`<script type="text/javascript" src="http://jquery-jsonp.googlecode.com/files/jquery.jsonp-1.0.4.min.js"></script>`<br>
+<script type="text/javascript" src="http://simon.lacnic.net/static/js/simon_min.js"></script><script type="text/javascript">
+  $(document).ready(function() {
+   SIMON.init();
+  });
+</script>
+```
 
 ## The web project
 There's a website that holds tests results, reports, charts, an API for data consumption, and more. It is a Django-based project and is located under `django/`.
@@ -57,35 +61,31 @@ Querying for
 ### Result object
 The result is a JSON array object with the following JSON objects inside:
 
-{<br>
-`country_destination` : 2 digit ISO country code of the country targeted by the test,<br>
-`country_origin` : 2 digit ISO country code of the country originating the test,<br>
-`max_rtt` : maximum RTT sampled in that test,<br>
-`date_test` : date time with time zone when the test was performed,<br>
-`median_rtt` : test result's median value (ms),<br>
-`min_rtt` : test result's minimum value (ms),<br>
-`ave_rtt` : test result's average value (ms),<br>
-`dev_rtt` : test result's standard deviation value (ms)<br>
+```
+{
+  `country_destination` : 2 digit ISO country code of the country targeted by the test,
+  `country_origin` : 2 digit ISO country code of the country originating the test,
+  `max_rtt` : maximum RTT sampled in that test,
+  `date_test` : date time with time zone when the test was performed,
+  `median_rtt` : test result's median value (ms),
+  `min_rtt` : test result's minimum value (ms),
+  `ave_rtt` : test result's average value (ms),
+  `dev_rtt` : test result's standard deviation value (ms)
 }
+```
 ### Example
-
-[<br>{<br>
-"country_destination": "CL",<br>
-"country_origin": "UY",<br>
-"max_rtt": 445,<br>
-"date_test": "2012-11-05 19:40:19+00:00",<br>
-"median_rtt": 411,<br>
-"min_rtt": 403,<br>
-"ave_rtt": 415,<br>
-"dev_rtt": 10<br>
-},<br>
-{<br>
-"country_destination": "CL",<br>
-"country_origin": "BO",<br>
-"max_rtt": 436,<br>
-"date_test": "2012-11-05 19:34:45+00:00",<br>
-"median_rtt": 425,<br>
-"min_rtt": 395,<br>
-"ave_rtt": 429,<br>
-"dev_rtt": 12<br>
-}<br>]
+```
+[
+  {
+  "country_destination": "CL",
+  "country_origin": "UY",
+  "max_rtt": 445,
+  "date_test": "2012-11-05 19:40:19+00:00",
+  "median_rtt": 411,
+  "min_rtt": 403,
+  "ave_rtt": 415,
+  "dev_rtt": 10
+  },
+...
+]
+```
