@@ -36,17 +36,18 @@ pip_requirements=$home/requirements.txt
 	sudo -u postgres psql -c "create database simon with owner=$user"
 	unzip $dump_zip
 	sudo -u postgres psql < $dump
+	# echo "from django.contrib.auth.models import User; User.objects.create_superuser('simon', 'admin@example.com', 'simon')" | python manage.py shell
 } > /dev/null && echo "Simon database created and populated"
 
 {
 	wget --quiet https://bootstrap.pypa.io/get-pip.py > /dev/null && python get-pip.py > /dev/null && rm get-pip.py && echo "pip installed" && pip install -r $pip_requirements > /dev/null && echo "Python dependencies installed"
 } && echo "Python dependencies installed"
 
-{
-	cd $webserver
-	python manage.py syncdb
-	python manage.py runserver 0.0.0.0:8000 &
-	cd -
-} && echo "Django web server is up  and running :)"
+#{
+	# cd $webserver
+	# python manage.py syncdb
+	# python manage.py runserver 0.0.0.0:8000 &
+	# cd -
+#} && echo "Django web server is up  and running :)"
 
 echo "VM dependencies installed"
