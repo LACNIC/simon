@@ -2,7 +2,8 @@
 {% load static %}
 {% block headers %}
 
-    <meta name="description" content="Gráficas de la región. Esta sección muestra las mediciones de latencia de la región LAC." />
+    <meta name="description"
+          content="Gráficas de la región. Esta sección muestra las mediciones de latencia de la región LAC."/>
 
     <style>
         #heatmap {
@@ -206,6 +207,8 @@
                 tienen, lógicamente, menor latencia que el promedio de la matriz, ya que se
                 corresponde con la latencia interna de los países.
             </p>
+
+            <p>Los números dentro de las celdas se corresponden con los valores de las mediciones.</p>
 
             <div class="col-lg-4">
                 <h4>Matriz de latencias <code>HTTP</code></h4>
