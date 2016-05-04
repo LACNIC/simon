@@ -555,8 +555,36 @@ def reports(request):
 
     return render_to_response('reports.html', context)
 
+<<<<<<< e3e5ca03047a7d98af95436a3b715b2683ad4800
 # @cache_page(60 * 60 * 12)
 def charts(request):
+=======
+def reports_as(request):
+    from simon_app.reportes import ASForm
+
+    context = getContext(request)
+    form = ASForm()
+    if request.method != "POST":
+        context['form'] = form
+        context['collapse'] = ""
+        return render_to_response('reports_as.html', context)
+
+    id = request.POST['as_dropdown']
+    as_ = AS.objects.get(id=id)
+
+    print as_.asn
+    print Results.objects.filter(as_origin=as_.asn)
+
+    context['collapse'] = "in"
+    context['as'] = as_
+
+    return render_to_response('reports_as.html', context)
+
+
+
+
+def charts_reports(request):
+>>>>>>> Bug fix
     """
         Regional Charts page.
 
