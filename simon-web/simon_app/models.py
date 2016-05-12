@@ -77,6 +77,7 @@ class CountryManager(models.Manager):
 
         return result
 
+
 class Country(models.Model):
     iso = models.CharField(max_length=2)
     name = models.CharField(max_length=80)
@@ -423,7 +424,6 @@ class TracerouteResult(models.Model):
     output = models.TextField(max_length=2000, default='')
     objects = TracerouteResultManager()
 
-
     def save(self, *args, **kwargs):
         from geoip2.errors import AddressNotFoundError
         import geoip2.database
@@ -505,6 +505,7 @@ class RipeAtlasProbeManager(models.Manager):
         ccs = Country.objects.get_region_countries().values_list('iso', flat=True)
         return [_c for _c in connected_now if _c.country_code in ccs]
 
+
 class RipeAtlasProbe(models.Model):
     probe_id = models.IntegerField(null=True)
     country_code = models.CharField(max_length=2, null=True)
@@ -526,7 +527,6 @@ class RipeAtlasProbe(models.Model):
     @property
     def last_check(self):
         return self.latest_status.date
-
 
     def last_check_timedelta(self, t1):
         """
@@ -688,29 +688,47 @@ class TestPoint(models.Model):
     def date_short(self):
         return self.date_created.strftime("%x")
 
-    def check(self):
+    def make_request(self, protocol="http"):
+        """
+            Make an HTTP request to the TestPoint address
+        :param protocol:
+        :return:
+        """
 
-        from urllib2 import urlopen, HTTPError
+        from requests import get
+        from socket import gethostbyaddr
 
         try:
+
+            if protocol == "https":
+                endpoint = gethostbyaddr(self.ip_address)[0]
+            else:
+                endpoint = self.ip_address
+
             if ':' in self.ip_address:
-                url = "http://[" + self.ip_address + "]/"
+                url = "%s://[%s]/" % (protocol, endpoint)
             else:
-                url = "http://" + self.ip_address + "/"
-            page = urlopen(url, timeout=5)
-            httpCode = page.getcode()
+                url = "%s://%s/" % (protocol, endpoint)
 
-            if httpCode != 200:
-                self.enabled = False
+            response = get(url, timeout=5)
+            if response.status_code != 200:
+                return False
             else:
-                self.enabled = True
+                return True
 
-        except HTTPError as e:
-            self.enabled = False
-        except Exception:
-            self.enabled = False
+        except Exception as e:
+            print e
+            return False
 
-        self.save()
+    def check_point(self, protocol="http"):
+        """
+            Checks and enables / disables the test point
+        :return:
+        """
+        did_fetch = self.make_request(protocol)
+        if self.enabled != did_fetch:
+            self.enabled = did_fetch
+            self.save()
         return self.enabled
 
     class Meta:
@@ -842,7 +860,6 @@ class ChartManager(models.Manager):
         })
         return t.render(ctx)
 
-
     def filterQuerySet(self, queryset, cc1, date_from, date_to, cc2=None, bidirectional=True):
         """
         :param queryset:
@@ -877,9 +894,11 @@ class Chart(models.Model):
     objects = ChartManager()
     pass
 
+
 class RipeAtlasTokenManager(models.Manager):
     # Nada
     pass
+
 
 class RipeAtlasToken(models.Model):
     token = models.CharField(default='', max_length=100, verbose_name="Token de RIPE Atlas", null=False)
@@ -888,6 +907,7 @@ class RipeAtlasToken(models.Model):
     date_added = models.DateTimeField(default=datetime.now())
 
     objects = RipeAtlasTokenManager()
+
 
 class RipeAtlasTokenList(models.Model):
     token_list = models.TextField(default='', verbose_name="Lista de Tokens separadas por saltos de linea")
@@ -914,6 +934,7 @@ class RipeAtlasTokenList(models.Model):
         # Save the processed list
         return token_list
 
+
 class RipeAtlasMonitoredIds(models.Model):
     probe_id = IntegerField()
     date = models.DateTimeField(default=datetime.now())
@@ -921,6 +942,7 @@ class RipeAtlasMonitoredIds(models.Model):
 
 class CommentManager(models.Manager):
     pass
+
 
 class Comment(models.Model):
     person = models.CharField(default="(No especificado)", max_length=200, null=True)
