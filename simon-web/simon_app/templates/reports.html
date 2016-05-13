@@ -39,40 +39,9 @@
 
         <form class="navbar-form" id="country_form" action="{% url 'simon_app.views.reports' %}" method="post">
             {% csrf_token %}
-            {% for field in form %}
-                <div class="row">
-                    <div class="col-md-4">
-                        <div style="margin-top: 0.1em;">
-                            <label for="{{ field.label }}">
-                                {{ field.label_tag }}
-                                {% if field.field.required %}
-                                    <span style="font-size: 2em">*</span>
-                                {% endif %}
-                            </label>
-
-                        </div>
-                    </div>
-
-                    <div class="col-md-4">
-                        {{ field }}
-                    </div>
-
-                    <div class="col-md-4">
-
-                        {% for error in field.errors %}
-                            <div class="alert alert-danger" role="alert">
-                                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
-                                <span class="sr-only">Error:</span>
-                                {{ error }}
-                            </div>
-                        {% endfor %}
-                    </div>
-
-                    {#                    <div class="col-md-4" style="color: dimgray">#}
-                    {#                        {{ field.help_text }}#}
-                    {#                    </div>#}
-                </div>
-            {% endfor %}
+            <table>
+                {{ form.as_table }}
+            </table>
             <input type="submit" value="Submit" id="submit" class="btn btn-default navbar-btn"
                    style="background: #FF9900; text-shadow: none; color: #ffffff; font-size: 1.0em; border-color: #ffffff"/>
         </form>
