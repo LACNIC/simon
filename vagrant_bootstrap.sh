@@ -19,8 +19,17 @@ pip_requirements=$home/requirements.txt
 	python-dev \
 	libxml2-dev \
 	libxslt-dev \
-	unzip
+	unzip \
+	python-numpy \
+	python-scipy \
+	python-matplotlib \
+	ipython \
+	ipython-notebook \
+	python-pandas \
+	python-sympy \
+	python-nose
 } > /dev/null && echo "New system dependencies installed"
+
 
 {
 	sudo apt-get install -y --force-yes \
