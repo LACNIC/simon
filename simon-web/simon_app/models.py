@@ -175,6 +175,12 @@ class ResultsManager(models.Manager):
         return RipeAtlasPingResult.objects.filter(ave_rtt__lte=800).filter(ave_rtt__gt=0)
 
     def inner(self, tester, months):
+        """
+            Returns the inner latency for all the countries
+        :param tester: the tester that performed the measurements
+        :param months: how many months you want to consider
+        :return: QuerySet?
+        """
         from django.db import connection
 
         cursor = connection.cursor()

@@ -6,6 +6,8 @@ The project aims to provide enough information about regional connectivity in or
 
 ## Collaborate
 
+By hosting the following JavaScript in your site, your visitors will start generating measurements automatically!
+
 ```javascript
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 
