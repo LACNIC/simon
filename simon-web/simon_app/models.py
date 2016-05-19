@@ -557,12 +557,11 @@ class RipeAtlasProbe(models.Model):
         if td.seconds > 3600:
             mins = "%.0f minutos" % ((td.seconds % 3600) / 60)
             horas = "%.0f %s" % (td.seconds / 3600, "horas" if td.seconds / 3600 > 1 else "hora")
-            return "%s %s" %(horas, mins)
+            return "%s %s" % (horas, mins)
         elif td.seconds > 60:
             return "%.0f minutos" % (td.seconds / 60)
         else:
             return "%.0f segundos" % td.seconds
-
 
     class Meta:
         verbose_name = 'RIPE Atlas Probe'
@@ -637,7 +636,8 @@ class RipeAtlasPingResult(RipeAtlasResult):
             min_rtt=min(self.rtt_min, self.rtt_min),
             max_rtt=max(self.rtt_max, self.rtt_max),
             ave_rtt=(self.rtt_average + self.rtt_average) / 2.0,
-            median_rtt=0,  # it's not possible to combine (unless we merge the samples...) #TODO store the result samples
+            median_rtt=0,
+            # it's not possible to combine (unless we merge the samples...) #TODO store the result samples
             number_probes=self.packets_sent + self.packet_loss,
             packet_loss=self.packet_loss + self.packet_loss
         )

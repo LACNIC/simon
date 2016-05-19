@@ -2,14 +2,13 @@
 
 from __future__ import division
 
-import math
 from django.contrib.gis.geoip import GeoIP
 from django.http import HttpResponse
 from django.shortcuts import redirect, render_to_response, render
 from django.views.decorators.csrf import csrf_exempt
 from lxml import etree
 
-from lib.helpers import getContext
+from lib.helpers import *
 from api_views import \
     country_latency_chart as  country_latency_chart_api, \
     region_latency_chart as region_latency_chart_api, tables as tables_api, \
@@ -458,7 +457,6 @@ def objectives(request):
 
 def participate(request):
     return render_to_response('participate.html', getContext(request))
-
 
 def reports(request):
     from reportes import ReportForm
