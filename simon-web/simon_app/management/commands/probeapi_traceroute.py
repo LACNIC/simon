@@ -1,31 +1,27 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand
-from simon_app.models import TracerouteResult, TracerouteHop
+from simon_app.models import *
+from simon_app.reportes import GMTUY
+from django.template import Template, Context
+from simon_project import passwords
+import urllib2
+import json
+import datetime
+import numpy
+from random import choice, sample
+from simon_app.api_views import getCountryFromIpAddress
 
 
 class Command(BaseCommand):
 
     import signal
 
-    def signal_term_handler(signal, frame):
-        import sys
-        sys.exit(1)
-    signal.signal(signal.SIGTERM, signal_term_handler)
-
-
     def handle(self, *args, **options):
-        from simon_app.models import ProbeApiPingResult, AS, SpeedtestTestPoint, Country
-        from simon_app.reportes import GMTUY
-        from django.template import Template, Context
-        from simon_project import passwords
-        import urllib2
-        import json
-        import datetime
-        import numpy
 
 
         ccs = Country.objects.get_region_countries().values_list('iso', flat=True)
+        ccs = sample(ccs, 10)
         origins = ""
         for c in ccs:
             origins += c + ','
@@ -61,8 +57,6 @@ class Command(BaseCommand):
             ctx = Context({'cc': origins, 'count': count, 'destination': destination_ip, 'probeslimit': 2 * len(ccs), 'timeout': timeout})
             url = t.render(ctx)
 
-            print destination_ip, url
-
             now = datetime.datetime.now(GMTUY())
 
             try:
@@ -73,8 +67,6 @@ class Command(BaseCommand):
             except Exception as e:
                 print e
                 continue
-
-            print datetime.datetime.now(GMTUY()) - now
 
             py_object = json.loads(response)
 
@@ -118,13 +110,16 @@ class Command(BaseCommand):
                             else:
                                 ip_version = 0
                                 as_destination = None
+                            cc_destination = getCountryFromIpAddress(ip_destination)
+
+                            print cc_origin, cc_destination
 
                             tr_hop = TracerouteHop(
                                 date_test=now,
                                 ip_origin=ip_origin,
                                 ip_destination=ip_destination,
                                 country_origin=cc_origin,
-                                country_destination="XX",
+                                country_destination=cc_destination,
                                 ip_version=ip_version,
                                 as_origin=as_origin.asn,
                                 as_destination=as_destination.asn,
