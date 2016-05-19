@@ -6,7 +6,7 @@
 
 from __future__ import division
 from django import forms
-from simon_app.models import Country, Images
+from models import *
 from datetime import tzinfo, timedelta
 from django.db.models import Q
 import datetime
@@ -52,34 +52,34 @@ class ASForm(forms.Form):
                                          widget=forms.Select(attrs={'class': 'form-control'}),
                                          label="Sistema autónomo")
 
-    class ReportForm(forms.Form):
-        default_country = None
+class ReportForm(forms.Form):
+    default_country = None
 
-        country1 = MyCountryModelChoiceField(queryset=Country.objects.get_region_countries().order_by('printable_name'),
-                                             widget=forms.Select(attrs={'class': 'form-control'}),
-                                             label="País de origen de las mediciones"
-        )
+    country1 = MyCountryModelChoiceField(queryset=Country.objects.get_region_countries().order_by('printable_name'),
+                                         widget=forms.Select(attrs={'class': 'form-control'}),
+                                         label="País de origen de las mediciones"
+    )
 
-        country2 = MyCountryModelChoiceField(queryset=Country.objects.get_region_countries().order_by('printable_name'),
-                                             widget=forms.Select(attrs={'class': 'form-control'}),
-                                             label="País de destino de las mediciones",
-                                             required=False
-        )
+    country2 = MyCountryModelChoiceField(queryset=Country.objects.get_region_countries().order_by('printable_name'),
+                                         widget=forms.Select(attrs={'class': 'form-control'}),
+                                         label="País de destino de las mediciones",
+                                         required=False
+    )
 
-        bidirectional = forms.NullBooleanField(
-            required=False,
-            initial=True,
-            label="Bidireccional",
-            help_text="Desmarcar esta opción si se desea filtrar mediciones en el sentido país origen --> país destino únicamente"
-        )
+    bidirectional = forms.NullBooleanField(
+        required=False,
+        initial=True,
+        label="Bidireccional",
+        help_text="Desmarcar esta opción si se desea filtrar mediciones en el sentido país origen --> país destino únicamente"
+    )
 
-        date_from = forms.DateField(
-            widget=forms.DateInput(attrs={'class': 'form-control'}),
-            label="Fecha desde"
-        )
+    date_from = forms.DateField(
+        widget=forms.DateInput(attrs={'class': 'form-control'}),
+        label="Fecha desde"
+    )
 
-        date_to = forms.DateField(
-            widget=forms.DateInput(attrs={'class': 'form-control'}),
-            label="Fecha hasta",
-            required=False
-        )
+    date_to = forms.DateField(
+        widget=forms.DateInput(attrs={'class': 'form-control'}),
+        label="Fecha hasta",
+        required=False
+    )

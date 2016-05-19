@@ -2,18 +2,14 @@
 
 from __future__ import division
 
-import math
 from django.contrib.gis.geoip import GeoIP
-from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponse
 from django.shortcuts import redirect, render_to_response, render
 from django.views.decorators.csrf import csrf_exempt
 from lxml import etree
 
-from lib.helpers import getContext
-from netaddr import IPAddress, IPNetwork
-from ntplib.ntplib import *
-from simon_app.api_views import \
+from lib.helpers import *
+from api_views import \
     country_latency_chart as  country_latency_chart_api, \
     region_latency_chart as region_latency_chart_api, tables as tables_api, \
     throughput_json as throughput_json_api, \
@@ -24,11 +20,10 @@ from simon_app.api_views import \
     ntp_points as ntp_points_api, throughput_tables as throughput_tables_api, \
     latency as latency_api, throughput as throughput_api, \
     throughput_by_country_chart as throughput_by_country_chart_api, getCountry
-from simon_app.forms import FeedbackForm
-from simon_app.functions import KMG2bps, inLACNICResources, whoIs, bps2KMG
-from simon_app.mailing import send_mail_point_offline
-from simon_app.models import *
-from simon_app.reportes import GMTUY
+from functions import *
+from mailing import send_mail_point_offline
+from models import *
+from reportes import GMTUY
 import simon_project.settings as settings
 from _socket import timeout
 from django.views.decorators.cache import cache_page
@@ -387,7 +382,6 @@ def post_xml_throughput_result(request):
 
 @csrf_exempt
 def post_offline_testpoints(request):
-    from simon_app.reportes import GMTUY
 
     if (request.method != 'POST'):  # and request.method != 'GET'
         return HttpResponse("invalid method: %s" % request.method)
@@ -464,9 +458,8 @@ def objectives(request):
 def participate(request):
     return render_to_response('participate.html', getContext(request))
 
-
 def reports(request):
-    from simon_app.reportes import ReportForm
+    from reportes import ReportForm
 
     latency_histogram_applet = latency_histogram_js = latency_histogram_probeapi = latency_histogram_ripe_atlas = cc1 = ""
     matrix_js = matrix_js_origin_cc = matrix_js_destination_cc = []
@@ -555,12 +548,8 @@ def reports(request):
 
     return render_to_response('reports.html', context)
 
-<<<<<<< e3e5ca03047a7d98af95436a3b715b2683ad4800
-# @cache_page(60 * 60 * 12)
-def charts(request):
-=======
 def reports_as(request):
-    from simon_app.reportes import ASForm
+    from reportes import ASForm
 
     context = getContext(request)
     form = ASForm()
@@ -583,8 +572,7 @@ def reports_as(request):
 
 
 
-def charts_reports(request):
->>>>>>> Bug fix
+def charts(request):
     """
         Regional Charts page.
 
@@ -592,8 +580,8 @@ def charts_reports(request):
     :return:
     """
     import datetime
-    from simon_app.reportes import CountryDropdownForm
-    from django.template import Context
+    from reportes import CountryDropdownForm
+    import json
 
     # ###########
     # DROPDOWN #
@@ -613,11 +601,6 @@ def charts_reports(request):
     except:
         countries_dropdown = CountryDropdownForm()
 
-    # ###########
-    # HEATMAPS #
-    # ###########
-
-    import json
 
     # ######
     # MAP #
