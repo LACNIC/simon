@@ -28,16 +28,16 @@ class TestPointAdmin(admin.ModelAdmin):
         queryset.update(enabled=False)
     disable.short_description = "Deshabilitar punto de prueba"
 
-    def check(modeladmin, request, queryset):
+    def check_point(modeladmin, request, queryset):
         for q in queryset:
-            q.check()
-    check.short_description = "Chequear punto de prueba"
+            q.check_point()
+    check_point.short_description = "Chequear punto de prueba"
 
     list_display = ['country', 'ip_address', 'autnum', 'city', 'date_short', 'enabled']
     # list_filter = ['country', 'ip_version']
     list_filter = ('country', )
     ordering = ['-date_created', 'enabled']
-    actions = [enable, disable, check]
+    actions = [enable, disable, check_point]
     search_fields = ['country']
 
 class RipeAtlasProbeAdmin(admin.ModelAdmin):

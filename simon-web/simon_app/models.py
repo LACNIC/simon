@@ -590,7 +590,7 @@ class TestPoint(models.Model):
     def date_short(self):
         return self.date_created.strftime("%x")
 
-    def check(self):
+    def check_point(self):
 
         from urllib2 import urlopen, HTTPError
 

@@ -26,7 +26,6 @@ class Command(BaseCommand):
 
 
         ccs = Country.objects.get_region_countries().values_list('iso', flat=True)
-
         origins = ""
         for c in ccs:
             origins += c + ','
