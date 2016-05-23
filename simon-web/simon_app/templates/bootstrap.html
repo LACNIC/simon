@@ -118,7 +118,7 @@
     {% block header %}
     {% endblock %}
 
-    <div class="row marketing">
+    <div class="row marketing" style="padding: 1em">
         {% block content %}
         {% endblock %}
     </div>
@@ -189,12 +189,10 @@
                 Gracias a tu feedback podremos realizar más mediciones, involucrar a más personas, y ofrecer mejores
                 datos y conclusiones. Tu opinión nos importa!
             </p>
-            {#        </div>#}
-            {##}
-            {#        <div class="col-md-6">#}
+
             <form class="navbar-form" action="{% url 'simon_app.views.feedbackForm' %}" method="post">
                 {% csrf_token %}
-                <div class="col-md-6">
+                <div class="col-sm-6">
 
                     {% for field in feedbackform %}
                         <div class="row">
@@ -220,7 +218,7 @@
             </form>
         </div>
 
-        <div class="col-md-6" style="padding-left: 3em; padding-right: 3em;">
+        <div class="col-sm-6" style="padding-left: 3em; padding-right: 3em;">
             <h1>
                 Nuestros sponsors
             </h1>

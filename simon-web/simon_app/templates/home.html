@@ -23,14 +23,15 @@
 {% block header %}
     <div class="jumbotron" style="background-color: #FFFDFA; margin-top: 1em;">
         <h1 style="font-family: 'HelveticaNeue-Light'">
-            <font color="orange">Proyecto</font> Simón
+            Proyecto <font color="orange">Simón</font>
         </h1>
 
         <h3>Mapa de interconexión entre redes de
             América Latina y Caribe a través de mediciones de latencia.</h3>
 
         <p>El mapa de interconexión entre redes de LAC
-            se elabora gracias a la colaboración de la comunidad de entusiastas de Internet, y se nutre de mediciones de latencia realizadas desde los medidores <code>java (ntp)</code>, <code>traceroute (icmp)</code>, y <code>javascript
+            se elabora gracias a la colaboración de la comunidad de entusiastas de Internet, y se nutre de mediciones de
+            latencia realizadas desde los medidores <code>java (ntp)</code>, <code>traceroute (icmp)</code>, y <code>javascript
                 (http)</code>.
         </p>
     </div>
@@ -40,130 +41,144 @@
 
 {% block content %}
 
-    <div class="col-lg-6">
+    <div class="row">
+        <div class="col-sm-6 col-md-4 span4">
+            <div class="homeBox">
+                <a href="{{ URL_PFX }}{% url 'simon_app.views.objectives' %}" alt="Objetivos del proyecto.">
+                    <h2>Objetivos</h2>
+                </a>
 
-        <div class="homeBox">
-            <a href="{{ URL_PFX }}{% url 'simon_app.views.objectives' %}" alt="Objetivos del proyecto.">
-                <h2>Objetivos</h2>
-            </a>
-
-            <p>El proyecto Simón tiene el objetivo de determinar la
-                interconexión entre diferentes redes de América Latina y el Caribe a
-                través de mediciones de latencia entre distintos puntos.</p>
+                <p>El proyecto Simón tiene el objetivo de determinar la
+                    interconexión entre diferentes redes de América Latina y el Caribe a
+                    través de mediciones de latencia entre distintos puntos.</p>
+            </div>
         </div>
 
-        <div class="homeBox">
-{#            {% url 'simon_app.views.traceroute' as url_tr %}#}
-            {% url 'simon_app.views.participate' as url_pr %}
-            <a href="{{ url_pr }}" alt="Información acerca de cómo ser parte de este proyecto. Hay varias formas de participar!">
-                <h2>¿Cómo Participar?</h2></a>
+        <div class="col-sm-6 col-md-4 span4">
+            <div class="homeBox">
+                {#            {% url 'simon_app.views.traceroute' as url_tr %}#}
+                {% url 'simon_app.views.participate' as url_pr %}
+                <a href="{{ url_pr }}"
+                   alt="Información acerca de cómo ser parte de este proyecto. Hay varias formas de participar!">
+                    <h2>¿Cómo Participar?</h2></a>
 
+                <p>
+                <ul>
+                    {#                <li>Corriendo el medidor de <a href="{{ url_tr }}"><code>traceroute</code></a></li>#}
+                    <li>Alojando el medidor <code>javascript</code> en tu sitio</li>
+                    <li>Alojando un <a href="https://atlas.ripe.net/apply/?source=87aa7f2c-6cac-459e-8cda-6c192911f5e2"
+                                       target="_blank"><code>RIPE Atlas probe <span
+                            class="glyphicon glyphicon-new-window"></span></code></a> en tu país
+                    </li>
+                </ul>
+                </p>
+
+                <p>Para ver más formas de participar de manera simple en el
+                    Proyecto Simón, enterate cómo <a href="{{ url_pr }}">en esta sección</a>.</p>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-md-4 span4">
+            <div class="homeBox">
+                <a href="{{ URL_PFX }}{% url 'simon_app.views.reports' %}"
+                   alt="Reportes de los resultados obtenidos, agregados a nivel de país.">
+                    <h2>Reportes por país</h2></a>
+
+                <p>Analiza los reportes de latencia y ancho de banda que hemos
+                    preparado a partir de la informacion recolectada por cientos de
+                    usuarios, desde distintos puntos de la region.</p>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-md-4 span4">
+            <div class="homeBox">
+                <a href="{{ URL_PFX }}{% url 'simon_app.views.charts' %}"
+                   alt="Gráficas de la región. Esta sección muestra las mediciones de latencia de la región LAC.">
+                    <h2>Gráficas de la región</h2></a>
+
+                <p>Si quieres observar los datos con más claridad, puedes
+                    consultar algunas gráficas de latencia que muestran informacián
+                    acerca de la calidad de Internet en toda la region.</p>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-md-4 span4">
+            <div class="homeBox">
+                <a href="{{ URL_PFX }}{% url 'simon_app.views.api' %}" alt="API para obtener los resultados.">
+
+                    <h2>API</h2></a>
+
+                <p>Si deseas consumir los datos a través de interfaces estandar,
+                    consulta nuestra API.</p>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-md-4 span4">
+            <div class="homeBox">
+                <a href="{{ URL_PFX }}{% url 'simon_app.views.atlas' %}"
+                   alt="Información acerca de la plataforma RIPE Atlas en la región LAC. Sumate a esta iniciativa!">
+                    <h2>RIPE Atlas en LAC</h2></a>
+
+                <p>¿Quieres saber más acerca del estado de la plataforma RIPE Atlas en Latinoamérica y el Caribe?
+                    Consulta esta sección!</p>
+            </div>
+        </div>
+    </div>
+
+    {#    <div class="col-sm-6 col-md-4 hidden-xs hidden-sm">#}
+    {#        <div class="homeBox" style="display: inline-block">#}
+    {#            <a class="twitter-timeline" href="https://twitter.com/proyectosimon" data-widget-id="507899035131199488"#}
+    {#               data-chrome="nofooter noheader">#}
+    {#                Tweets por @proyectosimon#}
+    {#            </a>#}
+    {#        </div>#}
+    {#    </div>#}
+
+
+    {#    <div class="col-lg-12">#}
+    {#        <div class="homeBoxMini col-lg-4 col-md-12 col-sm-12">#}
+    {#            <a href="{{ URL_PFX }}{% url 'simon_app.views.traceroute' %}">#}
+    {#                <h4>Traceroute</h4></a>#}
+    {##}
+    {#            <p>En esta sección recibimos archivos con información de#}
+    {#                traceroute. Esta información es recopilada junto con las demás#}
+    {#                fuentes de información para determinar la interconectividad.</p>#}
+    {#        </div>#}
+    {##}
+    {##}
+    {#        <div class="homeBoxMini col-lg-4 col-md-12 col-sm-12">#}
+    {#            <a href="{{ URL_PFX }}{% url 'simon_app.views.lab' %}">#}
+    {#                <h4>Latency Lab</h4></a>#}
+    {##}
+    {#            <p>Este espacio está dedicado a explorar el medidor JavaScript.#}
+    {#                Desde aquí se pueden realizar pruebas de latencia TCP hacia una#}
+    {#                dirección IP en particular, a través de IPv4 o IPv6.</p>#}
+    {#        </div>#}
+    {##}
+    {#        <div class="homeBoxMini col-lg-4 col-md-12 col-sm-12">#}
+    {#            <a href="{{ URL_PFX }}{% url 'simon_app.views.articles' %}">#}
+    {#                <h4>Artículos</h4></a>#}
+    {##}
+    {#            <p>Aquí residen algunos artículos, en fase de desarrollo, que#}
+    {#                exponen nuestro punto de vista en cuanto a los aspectos técnicos#}
+    {#                detrás de estas mediciones.</p>#}
+    {#        </div>#}
+    {#    </div>#}
+
+
+    {#    Console#}
+    <div class="row">
+        <div class="span12">
+            <h2>Consola</h2>
+
+            <div id="console" class="console">
+            </div>
             <p>
-            <ul>
-{#                <li>Corriendo el medidor de <a href="{{ url_tr }}"><code>traceroute</code></a></li>#}
-                <li>Alojando el medidor <code>javascript</code> en tu sitio</li>
-                <li>Alojando un <a href="https://atlas.ripe.net/apply/?source=87aa7f2c-6cac-459e-8cda-6c192911f5e2" target="_blank"><code>RIPE Atlas probe <span class="glyphicon glyphicon-new-window"></span></code></a> en tu país</li>
-            </ul>
+                Queres hacer ping a un sitio en particular? Te recomendamos la sección
+                <a href="{% url 'simon_app.views.lab' %}">latency lab</a>...allí puedes ver un
+                histograma en tiempo real acerca de las mediciones realizadas.
             </p>
-
-            <p>Para ver más formas de participar de manera simple en el
-                Proyecto Simón, enterate cómo <a href="{{ url_pr }}">en esta sección</a>.</p>
         </div>
-
-        <div class="homeBox">
-            <a href="{{ URL_PFX }}{% url 'simon_app.views.reports' %}" alt="Reportes de los resultados obtenidos, agregados a nivel de país.">
-                <h2>Reportes por país</h2></a>
-
-            <p>Analiza los reportes de latencia y ancho de banda que hemos
-                preparado a partir de la informacion recolectada por cientos de
-                usuarios, desde distintos puntos de la region.</p>
-        </div>
-
-        <div class="hidden-xs hidden-sm">
-            <a class="twitter-timeline" href="https://twitter.com/proyectosimon" data-widget-id="507899035131199488" data-chrome="nofooter noheader">
-                Tweets por @proyectosimon
-            </a>
-        </div>
-
-    </div>
-    <div class="col-lg-6">
-
-        <div class="homeBox">
-            <a href="{{ URL_PFX }}{% url 'simon_app.views.charts' %}" alt="Gráficas de la región. Esta sección muestra las mediciones de latencia de la región LAC.">
-                <h2>Gráficas de la región</h2></a>
-
-            <p>Si quieres observar los datos con más claridad, puedes
-                consultar algunas gráficas de latencia que muestran informacián
-                acerca de la calidad de Internet en toda la region.</p>
-        </div>
-
-        <div class="homeBox">
-            <a href="{{ URL_PFX }}{% url 'simon_app.views.api' %}" alt="API para obtener los resultados.">
-
-                <h2>API</h2></a>
-
-            <p>Si deseas consumir los datos a través de interfaces estandar,
-                consulta nuestra API.</p>
-        </div>
-
-
-        <div class="homeBox">
-            <a href="{{ URL_PFX }}{% url 'simon_app.views.atlas' %}" alt="Información acerca de la plataforma RIPE Atlas en la región LAC. Sumate a esta iniciativa!">
-                <h2>RIPE Atlas en LAC</h2></a>
-
-            <p>¿Quieres saber más acerca del estado de la plataforma RIPE Atlas en Latinoamérica y el Caribe? Consulta esta sección!</p>
-        </div>
-
-    </div>
-
-
-
-
-
-
-{#    <div class="col-lg-12">#}
-{#        <div class="homeBoxMini col-lg-4 col-md-12 col-sm-12">#}
-{#            <a href="{{ URL_PFX }}{% url 'simon_app.views.traceroute' %}">#}
-{#                <h4>Traceroute</h4></a>#}
-{##}
-{#            <p>En esta sección recibimos archivos con información de#}
-{#                traceroute. Esta información es recopilada junto con las demás#}
-{#                fuentes de información para determinar la interconectividad.</p>#}
-{#        </div>#}
-{##}
-{##}
-{#        <div class="homeBoxMini col-lg-4 col-md-12 col-sm-12">#}
-{#            <a href="{{ URL_PFX }}{% url 'simon_app.views.lab' %}">#}
-{#                <h4>Latency Lab</h4></a>#}
-{##}
-{#            <p>Este espacio está dedicado a explorar el medidor JavaScript.#}
-{#                Desde aquí se pueden realizar pruebas de latencia TCP hacia una#}
-{#                dirección IP en particular, a través de IPv4 o IPv6.</p>#}
-{#        </div>#}
-{##}
-{#        <div class="homeBoxMini col-lg-4 col-md-12 col-sm-12">#}
-{#            <a href="{{ URL_PFX }}{% url 'simon_app.views.articles' %}">#}
-{#                <h4>Artículos</h4></a>#}
-{##}
-{#            <p>Aquí residen algunos artículos, en fase de desarrollo, que#}
-{#                exponen nuestro punto de vista en cuanto a los aspectos técnicos#}
-{#                detrás de estas mediciones.</p>#}
-{#        </div>#}
-{#    </div>#}
-
-
-
-
-    <div class="col-lg-12">
-        <h2>Consola</h2>
-
-        <div id="console" class="console">
-        </div>
-        <p>
-            Queres hacer ping a un sitio en particular? Te recomendamos la sección
-            <a href="{% url 'simon_app.views.lab' %}">latency lab</a>...allí puedes ver un
-            histograma en tiempo real acerca de las mediciones realizadas.
-        </p>
     </div>
 
     <script type="application/javascript">
