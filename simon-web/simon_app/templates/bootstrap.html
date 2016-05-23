@@ -84,11 +84,11 @@
 </div>
 
 {#Segunda barra#}
-<div class="navbar visible-md visible-lg visible-xl"
-     style="background-color: #FFC285; border-radius: 0; margin: 0; text-align: right; padding-right: 1em;">
+<div class="navbar visible-md visible-lg visible-xl" style="background-color: #FFC285; border-radius: 0; margin: 0;">
 
-    <h4 style="color: #ffffff; font-family: 'HelveticaNeue-Light'">
-        Cantidad de mediciones:
+    <div style="text-align: right; padding-right: 1em;">
+        <h4 style="color: #ffffff; font-family: 'HelveticaNeue-Light'">
+        Cantidad de medissssciones:
     </h4>
     <h6 style="color: #ffffff; font-family: 'HelveticaNeue-Light'">
         Última hora: {{ HOURLY }}
@@ -99,6 +99,10 @@
     <h6 style="color: #ffffff; font-family: 'HelveticaNeue-Light'">
         Última semana: {{ WEEKLY }}
     </h6>
+    </div>
+    <div style="text-align: left; padding-left: 1em;">
+{#        Empty for now#}
+    </div>
 </div>
 
 <div class="container" style="background-color: #FFFAF2;">
