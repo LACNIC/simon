@@ -67,18 +67,9 @@ class InactiveUsersView(ChangeList):
         # filter inactive and admin users
         return qs.filter(is_staff=False, is_active=False, is_superuser=False)
 
-class RipeAtlasTokenAdmin(admin.ModelAdmin):
-    pass
-
-class RipeAtlasTokenListAdmin(admin.ModelAdmin):
-    pass
-     # def save_model(self, request, obj, form, change):
-     #     print obj
-     #     tokens = self.token_list.split(sep="\n")
-     #     for token in tokens:
-     #         print token
-     #         rat = RipeAtlasToken(token=token)
-     #         rat.save()
+class TracerouteResultAdmin(admin.ModelAdmin):
+    list_display = ['ip_origin', 'ip_destination', 'hop_count']
+    readonly_fields = ('ip_origin', 'ip_destination', 'hop_count')
 
 admin.site.register(Comment)
 
@@ -93,5 +84,5 @@ admin.site.register(RipeAtlasPingResult, ResultsAdmin)
 
 admin.site.register(RipeAtlasProbe, RipeAtlasProbeAdmin)
 
-admin.site.register(RipeAtlasToken, RipeAtlasTokenAdmin)
-admin.site.register(RipeAtlasTokenList, RipeAtlasTokenListAdmin)
+admin.site.register(TracerouteResult, TracerouteResultAdmin)
+admin.site.register(TracerouteHop, ResultsAdmin)
