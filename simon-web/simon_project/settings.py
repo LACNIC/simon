@@ -247,6 +247,8 @@ LOGGING = {
     }
 }
 
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -258,6 +260,11 @@ DATABASES = {
     }
 }
 
+PROTOCOLS = {
+    'HTTP' : 'JavaScript',
+    'ICMP' : 'probeapi',
+    'NTP' : 'Applet'
+}
 # CACHES = {
 #     'default': {
 #         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
@@ -266,6 +273,7 @@ DATABASES = {
 # }
 
 HOSTNAME = socket.gethostname()
+DEBUG = True
 if HOSTNAME == 'simon':
     DEBUG = False
     URL_PFX = ""
