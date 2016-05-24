@@ -2,13 +2,14 @@ __author__ = 'elisa'
 from simon_app.management.commands.tweet import *
 from simon_app.models import *
 from django.core.management.base import BaseCommand
+import simon_project.settings as settings
 
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
         import random
 
-        rs = Results.objects.inner('JavaScript', 12)
+        rs = Results.objects.inner(settings.PROTOCOLS['HTTP'], 12)
         top = []
         bottom = []
         i = 0
