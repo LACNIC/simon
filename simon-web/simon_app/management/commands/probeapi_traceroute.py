@@ -1,92 +1,80 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand
-from simon_app.models import TracerouteResult, TracerouteHop
-
+from simon_app.models import *
+from simon_app.reportes import GMTUY
+from django.template import Template, Context
+from simon_project import passwords
+import urllib2
+import json
+import datetime
+import numpy
+from random import sample
+from simon_app.api_views import getCountryFromIpAddress
 
 class Command(BaseCommand):
 
-    import signal
+    def get_countries(self):
+        url = "https://probeapifree.p.mashape.com/Probes.svc/GetCountries"
 
-    def signal_term_handler(signal, frame):
-        import sys
-        sys.exit(1)
-    signal.signal(signal.SIGTERM, signal_term_handler)
+        try:
+            print "Getting countries..."
+            req = urllib2.Request(url)
+            req.add_header("X-Mashape-Key", passwords.PROBEAPI)
+            req.add_header("Accept", "application/json")
+            response = urllib2.urlopen(req).read()
+            py_object = json.loads(response)
 
+            res = {}
+            ccs = Country.objects.get_region_countrycodes()
+            for p in py_object["GetCountriesResult"]:
+                cc = p["CountryCode"]
+                if cc in ccs:
+                    res[cc] = p["ProbesCount"]
+            return res
+        except Exception as e:
+            pass
 
     def handle(self, *args, **options):
-        from simon_app.models import ProbeApiPingResult, AS, SpeedtestTestPoint, Country
-        from simon_app.reportes import GMTUY
-        from django.template import Template, Context
-        from simon_project import passwords
-        import urllib2
-        import json
-        import datetime
-        import numpy
+        from threading import Thread
+        from Queue import Queue
 
-
-        ccs = Country.objects.get_region_countries().values_list('iso', flat=True)
-
-        origins = ""
-        for c in ccs:
-            origins += c + ','
-        origins = origins[0:-1]  # remove trailing comma
-
-        tps = SpeedtestTestPoint.objects.get_ipv4().distinct('country').order_by('country')  # one TP per country TODO get *really* random tests... toto get ipv6!!!
-        for tp in tps:
-
-            destination_ip = tp.ip_address
-            cc_destination = tp.country  # country['CountryCode']
-
-            count = 10
-            max_hops = 20
-            ping_time = 1000
-            sleep_time = 1000
-            tx_time = 5000
-            timeout = count * max_hops * (ping_time + sleep_time) + tx_time  # seconds
-
-
-
-            destination_ip = "216.58.221.164"
-            # origins = "BR"
-
-            t = Template(
-                "https://probeapifree.p.mashape.com/Probes.svc/StartTracertTestByCountry?"
-                "countrycode={{ cc }}&"
-                "count={{ count }}&"
-                "destination={{ destination }}&"
-                "probeslimit={{ probeslimit }}"
-                # "timeout={{ timeout }}"
-            )
-
-            ctx = Context({'cc': origins, 'count': count, 'destination': destination_ip, 'probeslimit': 2 * len(ccs), 'timeout': timeout})
-            url = t.render(ctx)
-
-            print destination_ip, url
-
-            now = datetime.datetime.now(GMTUY())
-
+        def do_work(tp, url_probeapi):
             try:
-                req = urllib2.Request(url)
-                req.add_header("X-Mashape-Key", passwords.PROBEAPI)
-                req.add_header("Accept", "application/json")
-                response = urllib2.urlopen(req).read()
+                q.put((tp, url_probeapi))
+
+                response = get_response(url_probeapi)
+                if response is not None:
+                    process_response(response, tp)
+
             except Exception as e:
-                print e
-                continue
+                # print e
+                pass
 
-            print datetime.datetime.now(GMTUY()) - now
+            finally:
+                print "%s" % (q.unfinished_tasks)
+                q.task_done()
+                return
 
-            py_object = json.loads(response)
+        def get_response(url):
+
+            req = urllib2.Request(url)
+            req.add_header("X-Mashape-Key", passwords.PROBEAPI)
+            req.add_header("Accept", "application/json")
+            response = urllib2.urlopen(req).read()
+            return response
+
+        def process_response(response, tp):
+
+            now = datetime.datetime.now()
+            py_object = json.loads(str(response))
 
             N = len(py_object['StartTracertTestByCountryResult'])
             if N <= 0:
-                continue
+                return
 
             # for each probe...
             for result in py_object['StartTracertTestByCountryResult']:
-
-                # print json.dumps(result, indent=4, separators=(',', ': '))
 
                 cc_origin = result['Country']['CountryCode']
                 asn = result['ASN']['AsnID'][2:]  # strip 'AS'
@@ -113,19 +101,21 @@ class Command(BaseCommand):
                         status = hop["Status"]
                         if status != "OK" or ip_destination is None:
 
-                            # print ip_destination, type(ip_destination)
                             if ip_destination is not None:
                                 ip_version = 6 if ':' in ip_destination else 4
                             else:
                                 ip_version = 0
                                 as_destination = None
+                            cc_destination = getCountryFromIpAddress(ip_destination)
+
+                            # print cc_origin, cc_destination
 
                             tr_hop = TracerouteHop(
                                 date_test=now,
                                 ip_origin=ip_origin,
                                 ip_destination=ip_destination,
                                 country_origin=cc_origin,
-                                country_destination="XX",
+                                country_destination=tp.country,
                                 ip_version=ip_version,
                                 as_origin=as_origin.asn,
                                 as_destination=as_destination.asn,
@@ -175,7 +165,7 @@ class Command(BaseCommand):
                             median_rtt=numpy.median(rtts),
                             packet_loss=packet_loss,
                             country_origin=cc_origin,
-                            country_destination=cc_destination,
+                            country_destination=tp.country,
                             ip_version=6 if ':' in destination_ip else 4,
                             as_origin=as_origin.asn,
                             as_destination=as_destination.asn,
@@ -188,4 +178,60 @@ class Command(BaseCommand):
                         tr.hop_count += 1
                         tr.save()
                         tr_hop.save()
-                print tr.hop_count
+                # print tr.hop_count
+                return
+
+        ccs = self.get_countries().keys()
+        # ccs = sample(ccs, 1)  # delete this (experimental)
+
+        tps = SpeedtestTestPoint.objects.get_ipv4().distinct('country').order_by(
+            'country')  # one TP per country TODO get *really* random tests... TODO get ipv6!!!
+
+        print "tps %s x ccs %s" % (len(tps), len(ccs))
+        q = Queue()
+
+        for i, tp in enumerate(tps):
+
+            print "%.1f%%" % (100.0*i / len(tps))
+
+            # sanity check
+            check = tp.check_point()
+            if not check:
+                continue
+
+            for cc in ccs:
+                destination_ip = tp.ip_address
+
+                count = 10
+                max_hops = 20
+                ping_time = 1000
+                sleep_time = 1000
+                tx_time = 5000
+                timeout = count * max_hops * (ping_time + sleep_time) + tx_time  # seconds
+
+                t = Template(
+                    "https://probeapifree.p.mashape.com/Probes.svc/StartTracertTestByCountry?"
+                    "countrycode={{ cc }}&"
+                    "count={{ count }}&"
+                    "destination={{ destination }}&"
+                    "probeslimit={{ probeslimit }}"
+                    # "timeout={{ timeout }}"
+                )
+
+                ctx = Context(
+                    {
+                        'cc': cc,
+                         'count': count,
+                         'destination': destination_ip,
+                         'probeslimit': 2 * len(ccs),
+                         'timeout': timeout})
+                url_probeapi = t.render(ctx)
+
+                t = Thread(
+                    target=do_work,
+                    args=(tp, url_probeapi)
+                )
+                t.daemon = False
+                t.start()
+
+            q.join()
