@@ -720,7 +720,7 @@ class TestPoint(models.Model):
             print e
             return False
 
-    def check_point(self, protocol="http"):
+    def check_point(self, protocol="http", save=True):
         """
             Checks and enables / disables the test point
         :return:
@@ -728,7 +728,8 @@ class TestPoint(models.Model):
         did_fetch = self.make_request(protocol)
         if self.enabled != did_fetch:
             self.enabled = did_fetch
-            self.save()
+            if save:
+                self.save()
         return self.enabled
 
     class Meta:

@@ -10,10 +10,8 @@ import json
 import datetime
 import numpy
 from random import sample
-from simon_app.api_views import getCountryFromIpAddress
 
 class Command(BaseCommand):
-
     def get_countries(self):
         url = "https://probeapifree.p.mashape.com/Probes.svc/GetCountries"
 
@@ -52,7 +50,8 @@ class Command(BaseCommand):
                 pass
 
             finally:
-                print "%s" % (q.unfinished_tasks)
+                dt = datetime.datetime.now() - then
+                # print "%s\t%s" % (q.unfinished_tasks, dt)
                 q.task_done()
                 return
 
@@ -106,9 +105,6 @@ class Command(BaseCommand):
                             else:
                                 ip_version = 0
                                 as_destination = None
-                            cc_destination = getCountryFromIpAddress(ip_destination)
-
-                            # print cc_origin, cc_destination
 
                             tr_hop = TracerouteHop(
                                 date_test=now,
@@ -178,7 +174,6 @@ class Command(BaseCommand):
                         tr.hop_count += 1
                         tr.save()
                         tr_hop.save()
-                # print tr.hop_count
                 return
 
         ccs = self.get_countries().keys()
@@ -189,20 +184,20 @@ class Command(BaseCommand):
 
         print "tps %s x ccs %s" % (len(tps), len(ccs))
         q = Queue()
-
+        then = datetime.datetime.now()
         for i, tp in enumerate(tps):
 
-            print "%.1f%%" % (100.0*i / len(tps))
+            # print "%.1f%%" % (100.0 * i / len(tps))
 
             # sanity check
-            check = tp.check_point()
+            check = tp.check_point(save=False)
             if not check:
                 continue
 
             for cc in ccs:
                 destination_ip = tp.ip_address
 
-                count = 10
+                count = 3
                 max_hops = 20
                 ping_time = 1000
                 sleep_time = 1000
@@ -221,10 +216,12 @@ class Command(BaseCommand):
                 ctx = Context(
                     {
                         'cc': cc,
-                         'count': count,
-                         'destination': destination_ip,
-                         'probeslimit': 2 * len(ccs),
-                         'timeout': timeout})
+                        'count': count,
+                        'destination': destination_ip,
+                        'probeslimit': 2 * len(ccs),
+                        'timeout': timeout
+                    }
+                )
                 url_probeapi = t.render(ctx)
 
                 t = Thread(
@@ -234,4 +231,4 @@ class Command(BaseCommand):
                 t.daemon = False
                 t.start()
 
-            q.join()
+        q.join()
