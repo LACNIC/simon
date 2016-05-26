@@ -179,7 +179,7 @@ class Command(BaseCommand):
         ccs = self.get_countries().keys()
         # ccs = sample(ccs, 1)  # delete this (experimental)
 
-        tps = SpeedtestTestPoint.objects.get_ipv4().distinct('country').order_by(
+        tps = SpeedtestTestPoint.objects.get_ipv4().filter(enabled=True).distinct('country').order_by(
             'country')  # one TP per country TODO get *really* random tests... TODO get ipv6!!!
 
         print "tps %s x ccs %s" % (len(tps), len(ccs))
@@ -190,8 +190,8 @@ class Command(BaseCommand):
             # print "%.1f%%" % (100.0 * i / len(tps))
 
             # sanity check
-            check = tp.check_point(save=False)
-            if not check:
+            online = tp.check_point()
+            if not online:
                 continue
 
             for cc in ccs:
