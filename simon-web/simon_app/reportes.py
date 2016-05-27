@@ -11,6 +11,7 @@ from datetime import tzinfo, timedelta
 from django.db.models import Q
 import datetime
 
+
 class MyImageModelMultipleChoiceField(forms.ModelMultipleChoiceField):
     def label_from_instance(self, obj):
         return "%s Bytes" % (obj.size)
@@ -23,8 +24,10 @@ class MyCountryModelChoiceField(forms.ModelChoiceField):
 
 class CountryDropdownForm(forms.Form):
     default_country = None
-    country = MyCountryModelChoiceField(queryset=Country.objects.filter(Q(region_id=1) | Q(region_id=2) | Q(region_id=3)).order_by('printable_name'), widget=forms.Select(), label='País que desea inspeccionar la latencia',
-                                        empty_label=default_country)
+    country = MyCountryModelChoiceField(
+        queryset=Country.objects.filter(Q(region_id=1) | Q(region_id=2) | Q(region_id=3)).order_by('printable_name'),
+        widget=forms.Select(), label='País que desea inspeccionar la latencia',
+        empty_label=default_country)
 
 
 class GMTUY(tzinfo):
@@ -52,19 +55,23 @@ class ASForm(forms.Form):
                                          widget=forms.Select(attrs={'class': 'form-control'}),
                                          label="Sistema autónomo")
 
+
 class ReportForm(forms.Form):
+    """
+        Form used for country-level reports.
+    """
     default_country = None
 
     country1 = MyCountryModelChoiceField(queryset=Country.objects.get_region_countries().order_by('printable_name'),
                                          widget=forms.Select(attrs={'class': 'form-control'}),
                                          label="País de origen de las mediciones"
-    )
+                                         )
 
     country2 = MyCountryModelChoiceField(queryset=Country.objects.get_region_countries().order_by('printable_name'),
                                          widget=forms.Select(attrs={'class': 'form-control'}),
                                          label="País de destino de las mediciones",
                                          required=False
-    )
+                                         )
 
     bidirectional = forms.NullBooleanField(
         required=False,

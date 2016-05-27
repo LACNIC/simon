@@ -9,7 +9,7 @@ import geoip2
 import json, requests
 from django.contrib import admin
 
-from models_management import * # External models definitions
+from models_management import *  # External models definitions
 
 
 class Region(models.Model):
@@ -21,6 +21,12 @@ class Region(models.Model):
 
 
 class CountryManager(models.Manager):
+    def get_or_none(self, *args, **kwargs):
+        try:
+            return self.get(self, *args, **kwargs)
+        except Exception as e:
+            return None
+
     def get_region_countries(self):
         return Country.objects.filter(Q(region_id=1) | Q(region_id=2) | Q(region_id=3))
 
