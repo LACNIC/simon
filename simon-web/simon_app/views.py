@@ -461,6 +461,7 @@ def participate(request):
 def reports(request):
     from reportes import ReportForm
     from api_views import get_cc_from_ip_address
+    from datetime import timedelta
 
     latency_histogram_applet = latency_histogram_js = latency_histogram_probeapi = latency_histogram_ripe_atlas = cc1 = ""
     matrix_js = matrix_js_origin_cc = matrix_js_destination_cc = []
@@ -468,9 +469,11 @@ def reports(request):
     if request.method != "POST":
         cc = get_cc_from_ip_address(request.META['REMOTE_ADDR'])
         form = ReportForm(
+            # empty_label="(Nothing)",
             initial={
                 "country1": Country.objects.get_or_none(iso=cc),
-                "date_from": datetime.now()
+                "date_from": datetime.now() - timedelta(days=365),
+                "date_to": datetime.now()
             }
         )
         context = getContext(request)

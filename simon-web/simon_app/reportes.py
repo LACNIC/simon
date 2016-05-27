@@ -60,17 +60,20 @@ class ReportForm(forms.Form):
     """
         Form used for country-level reports.
     """
-    default_country = None
+    # default_country = None
+    empty_label = "Toda la región"
 
     country1 = MyCountryModelChoiceField(queryset=Country.objects.get_region_countries().order_by('printable_name'),
                                          widget=forms.Select(attrs={'class': 'form-control'}),
-                                         label="País de origen de las mediciones"
+                                         label="País de origen de las mediciones",
+                                         empty_label=empty_label
                                          )
 
     country2 = MyCountryModelChoiceField(queryset=Country.objects.get_region_countries().order_by('printable_name'),
                                          widget=forms.Select(attrs={'class': 'form-control'}),
                                          label="País de destino de las mediciones",
-                                         required=False
+                                         required=False,
+                                         empty_label=empty_label
                                          )
 
     bidirectional = forms.NullBooleanField(
