@@ -509,32 +509,47 @@ def reports(request):
         cc2 = Country.objects.get(id=country2).iso
 
     matrix_region_js = Results.objects.results_matrix_cc(tester="JavaScript")
-    matrix_js = [(m[0], m[1], int(m[2]), int(m[3]), int(m[4])) for m in matrix_region_js if m[0] == cc1 or m[1] == cc1]
+    matrix_js = [(
+                     m[0],
+                     m[1],
+                     int(m[2]),
+                     int(m[3]),
+                     int(m[4])
+                 ) for m in matrix_region_js if m[0] == cc1 or m[1] == cc1]
     matrix_js = sorted(matrix_js, key=lambda tup: tup[2])
-    matrix_js_origin_cc = [m for m in matrix_js if m[0] == cc1] # having origin as CC
-    matrix_js_destination_cc = [m for m in matrix_js if m[1] == cc1] # having destination as CC
+    matrix_js_origin_cc = [m for m in matrix_js if m[0] == cc1]  # having origin as CC
+    matrix_js_destination_cc = [m for m in matrix_js if m[1] == cc1]  # having destination as CC
 
     # matrix_probeapi = Results.objects.results_matrix_cc(tester="probeapi")
 
-    js = Chart.objects.filterQuerySet(Results.objects.javascript(), cc1=cc1, cc2=cc2, date_from=date_from, date_to=date_to, bidirectional=bidirectional)
+    js = Chart.objects.filterQuerySet(Results.objects.javascript(), cc1=cc1, cc2=cc2, date_from=date_from,
+                                      date_to=date_to, bidirectional=bidirectional)
     _a1 = js.filter(country_origin=cc1).values_list('as_origin', flat=True)
     _a2 = js.filter(country_destination=cc1).values_list('as_destination', flat=True)
-    countries_js = js.filter(country_origin=cc1).values_list('country_destination', flat=True).distinct('country_destination')
+    countries_js = js.filter(country_origin=cc1).values_list('country_destination', flat=True).distinct(
+        'country_destination')
     ases_js = []
     [ases_js.append(a) for a in _a1 if a not in ases_js]
     [ases_js.append(a) for a in _a2 if a not in ases_js]
     v6_js = js.filter(ip_version=6)
     v6_count_js = v6_js.count()
-    latency_histogram_js = Chart.objects.asyncChart(data=js, divId="chart_js", labels=['JavaScript'], colors=['#81B3C1'])
+    latency_histogram_js = Chart.objects.asyncChart(data=js, divId="chart_js", labels=['JavaScript'],
+                                                    colors=['#81B3C1'])
 
-    applet = Chart.objects.filterQuerySet(Results.objects.applet().filter(testype='ntp'), cc1=cc1, cc2=cc2, date_from=date_from, date_to=date_to, bidirectional=bidirectional)
-    latency_histogram_applet = Chart.objects.asyncChart(data=applet, divId="chart_applet", labels=['Applet'], colors=['#77A4DD'])
+    applet = Chart.objects.filterQuerySet(Results.objects.applet().filter(testype='ntp'), cc1=cc1, cc2=cc2,
+                                          date_from=date_from, date_to=date_to, bidirectional=bidirectional)
+    latency_histogram_applet = Chart.objects.asyncChart(data=applet, divId="chart_applet", labels=['Applet'],
+                                                        colors=['#77A4DD'])
 
-    probeapi = Chart.objects.filterQuerySet(Results.objects.probeapi(), cc1=cc1, cc2=cc2, date_from=date_from, date_to=date_to, bidirectional=bidirectional)
-    latency_histogram_probeapi = Chart.objects.asyncChart(data=probeapi, divId="chart_probeapi", labels=['DOS ping'], colors=['#6F8AB7'])
+    probeapi = Chart.objects.filterQuerySet(Results.objects.probeapi(), cc1=cc1, cc2=cc2, date_from=date_from,
+                                            date_to=date_to, bidirectional=bidirectional)
+    latency_histogram_probeapi = Chart.objects.asyncChart(data=probeapi, divId="chart_probeapi", labels=['DOS ping'],
+                                                          colors=['#6F8AB7'])
 
-    ripe_atlas = Chart.objects.filterQuerySet(Results.objects.ripe_atlas(), cc1=cc1, cc2=cc2, date_from=date_from, date_to=date_to, bidirectional=bidirectional)
-    latency_histogram_ripe_atlas = Chart.objects.asyncChart(data=ripe_atlas, divId="chart_ripe_atlas", labels=['RIPE Atlas'], colors=['#615D6C'])
+    ripe_atlas = Chart.objects.filterQuerySet(Results.objects.ripe_atlas(), cc1=cc1, cc2=cc2, date_from=date_from,
+                                              date_to=date_to, bidirectional=bidirectional)
+    latency_histogram_ripe_atlas = Chart.objects.asyncChart(data=ripe_atlas, divId="chart_ripe_atlas",
+                                                            labels=['RIPE Atlas'], colors=['#615D6C'])
 
     context = getContext(request)
     context['collapse'] = "in"
