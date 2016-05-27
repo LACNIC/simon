@@ -41,8 +41,8 @@
 
 {% block content %}
 
-    <div class="row">
-        <div class="col-sm-6 col-md-4 span4">
+    <row class="row">
+        <div class="col-sm-4">
             <div class="homeBox">
                 <a href="{{ URL_PFX }}{% url 'simon_app.views.objectives' %}" alt="Objetivos del proyecto.">
                     <h2>Objetivos</h2>
@@ -54,9 +54,8 @@
             </div>
         </div>
 
-        <div class="col-sm-6 col-md-4 span4">
+        <div class="col-sm-4">
             <div class="homeBox">
-                {#            {% url 'simon_app.views.traceroute' as url_tr %}#}
                 {% url 'simon_app.views.participate' as url_pr %}
                 <a href="{{ url_pr }}"
                    alt="Información acerca de cómo ser parte de este proyecto. Hay varias formas de participar!">
@@ -78,7 +77,7 @@
             </div>
         </div>
 
-        <div class="col-sm-6 col-md-4 span4">
+        <div class="col-sm-4">
             <div class="homeBox">
                 <a href="{{ URL_PFX }}{% url 'simon_app.views.reports' %}"
                    alt="Reportes de los resultados obtenidos, agregados a nivel de país.">
@@ -89,8 +88,9 @@
                     usuarios, desde distintos puntos de la region.</p>
             </div>
         </div>
-
-        <div class="col-sm-6 col-md-4 span4">
+    </row>
+    <row class="row">
+        <div class="col-sm-4">
             <div class="homeBox">
                 <a href="{{ URL_PFX }}{% url 'simon_app.views.charts' %}"
                    alt="Gráficas de la región. Esta sección muestra las mediciones de latencia de la región LAC.">
@@ -102,18 +102,16 @@
             </div>
         </div>
 
-        <div class="col-sm-6 col-md-4 span4">
+        <div class="col-sm-4">
             <div class="homeBox">
                 <a href="{{ URL_PFX }}{% url 'simon_app.views.api' %}" alt="API para obtener los resultados.">
-
                     <h2>API</h2></a>
-
                 <p>Si deseas consumir los datos a través de interfaces estandar,
                     consulta nuestra API.</p>
             </div>
         </div>
 
-        <div class="col-sm-6 col-md-4 span4">
+        <div class="col-sm-4">
             <div class="homeBox">
                 <a href="{{ URL_PFX }}{% url 'simon_app.views.atlas' %}"
                    alt="Información acerca de la plataforma RIPE Atlas en la región LAC. Sumate a esta iniciativa!">
@@ -123,52 +121,50 @@
                     Consulta esta sección!</p>
             </div>
         </div>
-    </div>
+    </row>
+    <row class="row">
+        <div class="col-sm-4" style="display: inline-block">
+            <div class="homeBox">
+                <a class="twitter-timeline" href="https://twitter.com/proyectosimon" data-widget-id="507899035131199488"
+                   data-chrome="nofooter noheader">
+                    Tweets por @proyectosimon
+                </a>
+            </div>
+        </div>
 
-    {#    <div class="col-sm-6 col-md-4 hidden-xs hidden-sm">#}
-    {#        <div class="homeBox" style="display: inline-block">#}
-    {#            <a class="twitter-timeline" href="https://twitter.com/proyectosimon" data-widget-id="507899035131199488"#}
-    {#               data-chrome="nofooter noheader">#}
-    {#                Tweets por @proyectosimon#}
-    {#            </a>#}
-    {#        </div>#}
-    {#    </div>#}
+        {#    <div class="col-lg-12">#}
+        {#        <div class="homeBoxMini col-lg-4 col-md-12 col-sm-12">#}
+        {#            <a href="{{ URL_PFX }}{% url 'simon_app.views.traceroute' %}">#}
+        {#                <h4>Traceroute</h4></a>#}
+        {##}
+        {#            <p>En esta sección recibimos archivos con información de#}
+        {#                traceroute. Esta información es recopilada junto con las demás#}
+        {#                fuentes de información para determinar la interconectividad.</p>#}
+        {#        </div>#}
+        {##}
+        {##}
+        {#        <div class="homeBoxMini col-lg-4 col-md-12 col-sm-12">#}
+        {#            <a href="{{ URL_PFX }}{% url 'simon_app.views.lab' %}">#}
+        {#                <h4>Latency Lab</h4></a>#}
+        {##}
+        {#            <p>Este espacio está dedicado a explorar el medidor JavaScript.#}
+        {#                Desde aquí se pueden realizar pruebas de latencia TCP hacia una#}
+        {#                dirección IP en particular, a través de IPv4 o IPv6.</p>#}
+        {#        </div>#}
+        {##}
+        {#        <div class="homeBoxMini col-lg-4 col-md-12 col-sm-12">#}
+        {#            <a href="{{ URL_PFX }}{% url 'simon_app.views.articles' %}">#}
+        {#                <h4>Artículos</h4></a>#}
+        {##}
+        {#            <p>Aquí residen algunos artículos, en fase de desarrollo, que#}
+        {#                exponen nuestro punto de vista en cuanto a los aspectos técnicos#}
+        {#                detrás de estas mediciones.</p>#}
+        {#        </div>#}
+        {#    </div>#}
 
 
-    {#    <div class="col-lg-12">#}
-    {#        <div class="homeBoxMini col-lg-4 col-md-12 col-sm-12">#}
-    {#            <a href="{{ URL_PFX }}{% url 'simon_app.views.traceroute' %}">#}
-    {#                <h4>Traceroute</h4></a>#}
-    {##}
-    {#            <p>En esta sección recibimos archivos con información de#}
-    {#                traceroute. Esta información es recopilada junto con las demás#}
-    {#                fuentes de información para determinar la interconectividad.</p>#}
-    {#        </div>#}
-    {##}
-    {##}
-    {#        <div class="homeBoxMini col-lg-4 col-md-12 col-sm-12">#}
-    {#            <a href="{{ URL_PFX }}{% url 'simon_app.views.lab' %}">#}
-    {#                <h4>Latency Lab</h4></a>#}
-    {##}
-    {#            <p>Este espacio está dedicado a explorar el medidor JavaScript.#}
-    {#                Desde aquí se pueden realizar pruebas de latencia TCP hacia una#}
-    {#                dirección IP en particular, a través de IPv4 o IPv6.</p>#}
-    {#        </div>#}
-    {##}
-    {#        <div class="homeBoxMini col-lg-4 col-md-12 col-sm-12">#}
-    {#            <a href="{{ URL_PFX }}{% url 'simon_app.views.articles' %}">#}
-    {#                <h4>Artículos</h4></a>#}
-    {##}
-    {#            <p>Aquí residen algunos artículos, en fase de desarrollo, que#}
-    {#                exponen nuestro punto de vista en cuanto a los aspectos técnicos#}
-    {#                detrás de estas mediciones.</p>#}
-    {#        </div>#}
-    {#    </div>#}
-
-
-    {#    Console#}
-    <div class="row">
-        <div class="span12">
+        {#    Console#}
+        <div class="col-sm-8">
             <h2>Consola</h2>
 
             <div id="console" class="console">
@@ -179,7 +175,7 @@
                 histograma en tiempo real acerca de las mediciones realizadas.
             </p>
         </div>
-    </div>
+    </row>
 
     <script type="application/javascript">
         /*
