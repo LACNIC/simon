@@ -510,6 +510,7 @@ def reports(request):
 
     matrix_region_js = Results.objects.results_matrix_cc(tester="JavaScript")
     matrix_js = [(m[0], m[1], int(m[2]), int(m[3]), int(m[4])) for m in matrix_region_js if m[0] == cc1 or m[1] == cc1]
+    matrix_js = sorted(matrix_js, key=lambda tup: tup[2])
     matrix_js_origin_cc = [m for m in matrix_js if m[0] == cc1] # having origin as CC
     matrix_js_destination_cc = [m for m in matrix_js if m[1] == cc1] # having destination as CC
 

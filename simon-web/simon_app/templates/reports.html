@@ -3,7 +3,7 @@
 
 {% block headers %}
 
-    <meta name="description" content="Reportes de los resultados obtenidos, agregados a nivel de país." />
+    <meta name="description" content="Reportes de los resultados obtenidos, agregados a nivel de país."/>
 
     <!-- Google Charts -->
     {#    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>#}
@@ -86,21 +86,26 @@
                         <th colspan="2">Latencia <code>http</code> (min avg max)
                         </th>
 
+                        <tbody>
                         {% for m in matrix_js %}
                             <tr>
                                 <td>{{ m.0 }}</td>
                                 <td>{{ m.1 }}</td>
                                 <td class="latencias">{{ m.3 }}</td>
-                                <td>
+                                <td height=".5">
                                     <div class="bar"
-                                         style="width: {{ m.4 }}px; background-color: #144C4C; top: 0em;">{{ m.4 }}&nbsp;&nbsp;</div>
+                                         style="width: {{ m.4 }}px; background-color: #144C4C; height: 1em; overflow:hidden;  top: 0em;"
+                                         alt="Minumum latency between {{ m.0 }} and {{ m.1 }}: {{ m.4 }}">{{ m.4 }}&nbsp;&nbsp;</div>
                                     <div class="bar"
-                                         style="width: {{ m.3 }}px; background-color: #57737A; top: -1.2em;">{{ m.3 }}&nbsp;&nbsp;</div>
+                                         style="width: {{ m.3 }}px; background-color: #57737A; height: 1em; overflow:hidden;  top: -1em;"
+                                         alt="Avergae latency between {{ m.0 }} and {{ m.1 }}: {{ m.4 }}">{{ m.3 }}&nbsp;&nbsp;</div>
                                     <div class="bar"
-                                         style="width: {{ m.2 }}px; background-color: #95C1BE; top: -2.4em;">{{ m.2 }}&nbsp;&nbsp;</div>
+                                         style="width: {{ m.2 }}px; background-color: #95C1BE; height: 1em; overflow:hidden;  top: -2em;"
+                                         alt="Maximum latency between {{ m.0 }} and {{ m.1 }}: {{ m.4 }}">{{ m.2 }}&nbsp;&nbsp;</div>
                                 </td>
                             </tr>
                         {% endfor %}
+                        </tbody>
                     </table>
                 </div>
 
