@@ -45,6 +45,10 @@
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
+    <!-- GitHub buttons -->
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+
     {% block headers %}
     {% endblock %}
 
@@ -84,21 +88,25 @@
 </div>
 
 {#Segunda barra#}
-<div class="navbar visible-md visible-lg visible-xl"
-     style="background-color: #FFC285; border-radius: 0; margin: 0; text-align: right; padding-right: 1em;">
+<div class="navbar visible-md visible-lg visible-xl" style="background-color: #FFC285; border-radius: 0; margin: 0;">
 
-    <h4 style="color: #ffffff; font-family: 'HelveticaNeue-Light'">
-        Cantidad de mediciones:
-    </h4>
-    <h6 style="color: #ffffff; font-family: 'HelveticaNeue-Light'">
-        Última hora: {{ HOURLY }}
-    </h6>
-    <h6 style="color: #ffffff; font-family: 'HelveticaNeue-Light'">
-        Último día: {{ DAILY }}
-    </h6>
-    <h6 style="color: #ffffff; font-family: 'HelveticaNeue-Light'">
-        Última semana: {{ WEEKLY }}
-    </h6>
+    <div style="text-align: right; padding-right: 1em;">
+        <h4 style="color: #ffffff; font-family: 'HelveticaNeue-Light'">
+            Cantidad de mediciones:
+        </h4>
+        <h6 style="color: #ffffff; font-family: 'HelveticaNeue-Light'">
+            Última hora: {{ HOURLY }}
+        </h6>
+        <h6 style="color: #ffffff; font-family: 'HelveticaNeue-Light'">
+            Último día: {{ DAILY }}
+        </h6>
+        <h6 style="color: #ffffff; font-family: 'HelveticaNeue-Light'">
+            Última semana: {{ WEEKLY }}
+        </h6>
+    </div>
+    <div style="text-align: left; padding-left: 1em;">
+        {#        Empty for now#}
+    </div>
 </div>
 
 <div class="container" style="background-color: #FFFAF2;">
@@ -110,7 +118,7 @@
     {% block header %}
     {% endblock %}
 
-    <div class="row marketing">
+    <div class="row marketing" style="padding: 1em">
         {% block content %}
         {% endblock %}
     </div>
@@ -139,10 +147,22 @@
         </div>
     </div>
 
+{#    GitHub button#}
+    <div class="col-lg-3" style="margin-top: 1em;">
+        <div style="text-align: center">
+            <!-- Place this tag where you want the button to render. -->
+            <a class="github-button" href="https://github.com/lacnic/simon" data-icon="octicon-star" data-style="mega"
+               data-count-href="/lacnic/simon/stargazers" data-count-api="/repos/lacnic/simon#stargazers_count"
+               data-count-aria-label="# stargazers on GitHub" aria-label="Star lacnic/simon on GitHub">Like on
+                GitHub!</a>
+
+        </div>
+    </div>
+
     <!-- Begin LetsEncrypt site seal HTML -->
-    <div class="col-lg-3" data-language="en_US">
+    <div class="col-lg-3 center-block" data-language="en_US">
         <a href="https://letsencrypt.org/">
-            <img style="max-width:15em;"
+            <img class="center-block" style="max-width:15em;"
                  src="https://cdn.discourse.org/business/uploads/letsencrypt/original/1X/149e86cd7f135095e9c92f4e67a4b6a7b80a60c0.png">
         </a>
     </div>
@@ -169,12 +189,10 @@
                 Gracias a tu feedback podremos realizar más mediciones, involucrar a más personas, y ofrecer mejores
                 datos y conclusiones. Tu opinión nos importa!
             </p>
-            {#        </div>#}
-            {##}
-            {#        <div class="col-md-6">#}
+
             <form class="navbar-form" action="{% url 'simon_app.views.feedbackForm' %}" method="post">
                 {% csrf_token %}
-                <div class="col-md-6">
+                <div class="col-sm-6">
 
                     {% for field in feedbackform %}
                         <div class="row">
@@ -200,7 +218,7 @@
             </form>
         </div>
 
-        <div class="col-md-6" style="padding-left: 3em; padding-right: 3em;">
+        <div class="col-sm-6" style="padding-left: 3em; padding-right: 3em;">
             <h1>
                 Nuestros sponsors
             </h1>
