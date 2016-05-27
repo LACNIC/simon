@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load simon_extras %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -95,13 +96,13 @@
             Cantidad de mediciones:
         </h4>
         <h6 style="color: #ffffff; font-family: 'HelveticaNeue-Light'">
-            Última hora: {{ HOURLY }}
+            Última hora: {{ HOURLY | unit_shortener }}
         </h6>
         <h6 style="color: #ffffff; font-family: 'HelveticaNeue-Light'">
-            Último día: {{ DAILY }}
+            Último día: {{ DAILY | unit_shortener }}
         </h6>
         <h6 style="color: #ffffff; font-family: 'HelveticaNeue-Light'">
-            Última semana: {{ WEEKLY }}
+            Última semana: {{ WEEKLY | unit_shortener }}
         </h6>
     </div>
     <div style="text-align: left; padding-left: 1em;">
