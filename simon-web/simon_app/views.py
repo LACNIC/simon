@@ -460,12 +460,19 @@ def participate(request):
 
 def reports(request):
     from reportes import ReportForm
+    from api_views import get_cc_from_ip_address
 
     latency_histogram_applet = latency_histogram_js = latency_histogram_probeapi = latency_histogram_ripe_atlas = cc1 = ""
     matrix_js = matrix_js_origin_cc = matrix_js_destination_cc = []
 
     if request.method != "POST":
-        form = ReportForm()
+        cc = get_cc_from_ip_address(request.META['REMOTE_ADDR'])
+        form = ReportForm(
+            initial={
+                "country1": Country.objects.get_or_none(iso=cc),
+                "date_from": datetime.now()
+            }
+        )
         context = getContext(request)
         context['form'] = form
         context['collapse'] = ""
