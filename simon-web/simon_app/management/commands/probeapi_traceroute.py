@@ -10,6 +10,7 @@ import json
 import datetime
 import numpy
 from random import sample
+from multiprocessing.dummy import Pool as ThreadPool
 
 
 def get_countries():
@@ -44,29 +45,21 @@ def get_probeapi_response(url):
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        from threading import Thread
-
-        from Queue import Queue
-
-        def do_work(tp, url_probeapi):
+        def do_work(url_probeapi):
             try:
-                q.put((tp, url_probeapi))
-
                 response = get_probeapi_response(url_probeapi)
                 if response is not None:
-                    process_response(response, tp)
+                    process_response(response)
 
             except Exception as e:
-                print e
+                print e, response
                 pass
 
             finally:
                 dt = datetime.datetime.now() - then
-                # print "%s\t%s" % (q.unfinished_tasks, dt)
-                q.task_done()
                 return
 
-        def process_response(response, tp):
+        def process_response(response):
 
             now = datetime.datetime.now()
             py_object = json.loads(str(response))
@@ -178,20 +171,20 @@ class Command(BaseCommand):
                         tr.hop_count += 1
                         tr.save()
                         tr_hop.save()
+
+                    print tr
                 return
 
         ccs = get_countries().keys()
-        # ccs = sample(ccs, 1)  # delete this (experimental)
 
         tps = SpeedtestTestPoint.objects.get_ipv4().filter(enabled=True).distinct('country').order_by(
             'country')  # one TP per country TODO get *really* random tests... TODO get ipv6!!!
+        urls = []
+        thread_pool = ThreadPool(50)
 
         print "tps %s x ccs %s" % (len(tps), len(ccs))
-        q = Queue()
         then = datetime.datetime.now()
         for i, tp in enumerate(tps):
-
-            # print "%.1f%%" % (100.0 * i / len(tps))
 
             # sanity check
             online = tp.check_point()
@@ -227,12 +220,8 @@ class Command(BaseCommand):
                     }
                 )
                 url_probeapi = t.render(ctx)
+                urls.append(url_probeapi)
+        thread_pool.map(do_work, urls)
 
-                t = Thread(
-                    target=do_work,
-                    args=(tp, url_probeapi)
-                )
-                t.daemon = False
-                t.start()
-
-        q.join()
+        thread_pool.close()
+        thread_pool.join()
