@@ -445,8 +445,12 @@ class TracerouteResult(models.Model):
 
         super(TracerouteResult, self).save(*args, **kwargs)
 
-    # def __str__(self):
-    #     return self.traceroutehop_set.all()
+    def __str__(self):
+        all =  self.traceroutehop_set.all()
+        res = ""
+        for a in all:
+            res += a
+        return res
 
     def pretty_print(self):
         from geoip2.errors import AddressNotFoundError
