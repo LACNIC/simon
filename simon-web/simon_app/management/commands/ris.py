@@ -26,7 +26,7 @@ class Command(BaseCommand):
         ris_v6 = zlib.decompress(file_v6, 16+zlib.MAX_WBITS)
         asn_list = [asn.split('\t') for asn in ris_v4.split('\n')] + [asn.split('\t') for asn in ris_v6.split('\n')]
 
-        old = AS.objects.all() # Delete ALL AS-related info and make place for new information
+        old = [a for a in AS.objects.all()] # Delete ALL AS-related info and make place for new information
         internet = AS(
             asn=0,
             network="0.0.0.0/0",
@@ -67,6 +67,5 @@ class Command(BaseCommand):
                 continue
 
         print "Deleting old records..."
-        old.delete()
-
-        # caching.set("as-cached", AS.objects.all())
+        for o in old:
+            o.delete()
