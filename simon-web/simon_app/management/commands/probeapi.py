@@ -13,9 +13,6 @@ import json
 import datetime
 import numpy
 from probeapi_traceroute import get_countries, get_probeapi_response
-from threading import Thread, Lock
-from Queue import Queue
-
 from multiprocessing.dummy import Pool as ThreadPool
 
 
@@ -125,10 +122,8 @@ class Command(BaseCommand):
         tps = SpeedtestTestPoint.objects.get_ipv4().filter(enabled=True).distinct('country').order_by(
             'country')
 
-        # q = Queue()
-        # threads = []
         urls = []
-        thread_pool = ThreadPool(5)
+        thread_pool = ThreadPool(50)
 
         then = datetime.datetime.now()
 
