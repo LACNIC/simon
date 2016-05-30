@@ -66,7 +66,6 @@ class Command(BaseCommand):
 
             N = len(py_object['StartTracertTestByCountryResult'])
             if N <= 0:
-                print py_object
                 return
 
             # for each probe...
@@ -172,7 +171,6 @@ class Command(BaseCommand):
                         tr.save()
                         tr_hop.save()
 
-                    print tr
                 return
 
         ccs = get_countries().keys()
