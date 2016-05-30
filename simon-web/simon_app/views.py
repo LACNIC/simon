@@ -297,15 +297,14 @@ def post_xml_result(request):
                 result.user_agent = simon.find('user_agent').text
                 result.url = simon.find('url').text
 
-                print result.url
-
                 result.save()
         except etree.XMLSyntaxError as e:
             # this exception is thrown on schema validation error
             exception = "XML syntax error. exception: %s" % (e)
             logger.error(exception)
         except Exception as e:
-            print e
+            exception = "Error at POST endpoint: %s" % (e)
+            logger.error(exception)
 
     return HttpResponse("END")
 
@@ -386,6 +385,9 @@ def post_xml_throughput_result(request):
 
 @csrf_exempt
 def post_offline_testpoints(request):
+    import logging
+
+    logger = logging.getLogger(__name__)
 
     if (request.method != 'POST'):  # and request.method != 'GET'
         return HttpResponse("invalid method: %s" % request.method)
@@ -419,16 +421,18 @@ def post_offline_testpoints(request):
                     # new report
                     offlineReport = OfflineReport()
                     offlineReport.ip_address = point.find('destination_ip').text
-                    offlineReport.date_reported = datetime.datetime.now(GMTUY())
+                    offlineReport.date_reported = datetime.now(GMTUY())
                     offlineReport.report_count = 1
                     offlineReport.save()
 
         except etree.XMLSyntaxError as e:
             # this exception is thrown on schema validation error
-            print 'Error when matching with schema.'
-            print e
+            exception = "Error when matching with schema. Exception: %s" % (e)
+            logger.error(exception)
         except Exception as e:
-            print e
+            exception = "Error at offline endpoint. Exception: %s" % (e)
+            logger.error(exception)
+            print exception
 
     return HttpResponse("END")
 

@@ -694,10 +694,11 @@ class TestPoint(models.Model):
     def date_short(self):
         return self.date_created.strftime("%x")
 
-    def make_request(self, protocol="http"):
+    def make_request(self, protocol="http", timeout=5):
         """
-            Make an HTTP request to the TestPoint address
+
         :param protocol:
+        :param timeout:
         :return:
         """
 
@@ -716,7 +717,7 @@ class TestPoint(models.Model):
             else:
                 url = "%s://%s/" % (protocol, endpoint)
 
-            response = get(url, timeout=5)
+            response = get(url, timeout=timeout)
             if response.status_code != 200:
                 return False
             else:
@@ -726,12 +727,12 @@ class TestPoint(models.Model):
             print e
             return False
 
-    def check_point(self, protocol="http", save=True):
+    def check_point(self, protocol="http", save=True, timeout=5):
         """
             Checks and enables / disables the test point
         :return:
         """
-        did_fetch = self.make_request(protocol)
+        did_fetch = self.make_request(protocol=protocol, timeout=timeout)
         if self.enabled != did_fetch:
             self.enabled = did_fetch
             if save:
