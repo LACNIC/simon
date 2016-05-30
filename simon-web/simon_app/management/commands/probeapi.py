@@ -1,7 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand
-from simon_app.models import ProbeApiPingResult, AS, SpeedtestTestPoint, Country
+from newrelic.core import thread_utilization
+
+from simon_app.models import *
 from simon_app.models_management import CommandAudit
 from simon_app.reportes import GMTUY
 from django.template import Template, Context
@@ -10,44 +12,40 @@ import urllib2
 import json
 import datetime
 import numpy
-from probeapi_traceroute import get_countries, get_response
-from threading import Thread
+from probeapi_traceroute import get_countries, get_probeapi_response
+from threading import Thread, Lock
 from Queue import Queue
+
+from multiprocessing.dummy import Pool as ThreadPool
 
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
         command = "ProbeAPI Measurements"
 
-        def do_work(tp, url_probeapi):
+        def do_work(url):
             try:
-                dt = datetime.datetime.now() - then
-                q.put((tp, url_probeapi))
-                # print "%s\t%s" % (q.unfinished_tasks, dt)
-
-                response = get_response(url_probeapi)
+                response = get_probeapi_response(url)
                 if response is not None:
-                    process_response(response, tp)
+                    process_response(response, url)
 
             except Exception as e:
-                print e
+                print e, response
                 pass
 
             finally:
                 dt = datetime.datetime.now() - then
-                q.task_done()
+                # q.task_done()
                 # print "%s\t%s" % (q.unfinished_tasks, dt)
                 return
 
-        def process_response(response, tp):
+        def process_response(response, url_probeapi):
             py_object = json.loads(response, parse_int=int)
 
             if len(py_object['StartPingTestByCountryResult']) <= 0:
                 return
 
             for result in py_object['StartPingTestByCountryResult']:
-
-                # print json.dumps(result, indent=4, separators=(',', ': '))
 
                 cc_origin = result['Country']['CountryCode']
                 asn = result['ASN']['AsnID'][2:]  # strip 'AS'
@@ -62,6 +60,7 @@ class Command(BaseCommand):
                         except Exception as e:
                             packet_loss += 1
                             continue
+                    destination_ip = ping_["IP"]
 
                     try:
                         empty_ass = AS.objects.filter(network__isnull=True,
@@ -96,13 +95,13 @@ class Command(BaseCommand):
                         continue
 
                     as_destination = AS.objects.get_as_by_ip(destination_ip)
-                    cc_destination = tp.country  # country['CountryCode']
+                    cc_destination = TestPoint.objects.get(ip_address=destination_ip).country
 
                     std_dev = numpy.std(rtts)
                     ProbeApiPingResult(
                         date_test=datetime.datetime.now(),
                         ip_origin='',
-                        ip_destination=tp.ip_address,
+                        ip_destination=destination_ip,
                         min_rtt=numpy.amin(rtts),
                         max_rtt=numpy.amax(rtts),
                         ave_rtt=numpy.mean(rtts),
@@ -110,11 +109,11 @@ class Command(BaseCommand):
                         median_rtt=numpy.median(rtts),
                         packet_loss=packet_loss,
                         country_origin=cc_origin,
-                        country_destination=tp.country,
-                        ip_version=6 if ':' in tp.ip_address else 4,
+                        country_destination=cc_destination,
+                        ip_version=6 if ':' in destination_ip else 4,
                         as_origin=as_origin.asn,
                         as_destination=as_destination.asn,
-                        url=tp.url,
+                        url="",
                         number_probes=len(rtts)
                     ).save()
 
@@ -126,14 +125,19 @@ class Command(BaseCommand):
         tps = SpeedtestTestPoint.objects.get_ipv4().filter(enabled=True).distinct('country').order_by(
             'country')
 
-        q = Queue(50)
+        # q = Queue()
+        # threads = []
+        urls = []
+        thread_pool = ThreadPool(5)
 
         then = datetime.datetime.now()
 
+        print "tps %s x ccs %s" % (len(tps), len(ccs))
+
         for tp in tps:
 
-            # sanity check
-            online = tp.check_point(timeout=10)
+            # sanity check before building URLs
+            online = tp.check_point(timeout=10, save=False)
             if not online:
                 print "Skipping %s" % (tp)
                 continue
@@ -143,19 +147,13 @@ class Command(BaseCommand):
                 destination_ip = tp.ip_address
                 count = 10
 
-                opener = urllib2.build_opener()
-                opener.addheaders = [
-                    ("X-Mashape-Key", passwords.PROBEAPI),
-                    ("Accept", "application/json")
-                ]
-
                 t = Template("https://probeapifree.p.mashape.com/Probes.svc/StartPingTestByCountry?"
                              "countrycode={{ cc }}&"
                              "count={{ count }}&"
                              "destination={{ destination }}&"
                              "probeslimit={{ probeslimit }}"
                              # "timeout={{ timeout }}"
-                )
+                             )
 
                 ctx = Context(
                     {
@@ -163,20 +161,13 @@ class Command(BaseCommand):
                         'count': count,
                         'destination': destination_ip,
                         'probeslimit': 10,
-                        'timeout': 120000
+                        'timeout': 10000
                     }
                 )
-                probeapi_url = t.render(ctx)
+                url_probeapi = t.render(ctx)
+                urls.append(url_probeapi)
 
-                t = Thread(
-                    target=do_work,
-                    args=(tp, probeapi_url)
-                )
-                t.daemon = False
+        thread_pool.map(do_work, urls)
 
-                if q.full():
-                    q.join()
-                else:
-                    t.start()
-
-        q.join()
+        thread_pool.close()
+        thread_pool.join()

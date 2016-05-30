@@ -34,7 +34,7 @@ def get_countries():
         pass
 
 
-def get_response(url):
+def get_probeapi_response(url):
     req = urllib2.Request(url)
     req.add_header("X-Mashape-Key", passwords.PROBEAPI)
     req.add_header("Accept", "application/json")
@@ -52,12 +52,12 @@ class Command(BaseCommand):
             try:
                 q.put((tp, url_probeapi))
 
-                response = get_response(url_probeapi)
+                response = get_probeapi_response(url_probeapi)
                 if response is not None:
                     process_response(response, tp)
 
             except Exception as e:
-                # print e
+                print e
                 pass
 
             finally:
@@ -73,6 +73,7 @@ class Command(BaseCommand):
 
             N = len(py_object['StartTracertTestByCountryResult'])
             if N <= 0:
+                print py_object
                 return
 
             # for each probe...
