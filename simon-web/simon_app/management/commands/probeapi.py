@@ -126,16 +126,22 @@ class Command(BaseCommand):
         tps = SpeedtestTestPoint.objects.get_ipv4().filter(enabled=True).distinct('country').order_by(
             'country')
 
-        q = Queue(250)
+        q = Queue(50)
 
         then = datetime.datetime.now()
 
         for tp in tps:
 
+            # sanity check
+            online = tp.check_point(timeout=10)
+            if not online:
+                print "Skipping %s" % (tp)
+                continue
+
             for cc in ccs:
 
                 destination_ip = tp.ip_address
-                count = 15
+                count = 10
 
                 opener = urllib2.build_opener()
                 opener.addheaders = [
@@ -147,16 +153,17 @@ class Command(BaseCommand):
                              "countrycode={{ cc }}&"
                              "count={{ count }}&"
                              "destination={{ destination }}&"
-                             "probeslimit={{ probeslimit }}&"
-                             "timeout={{ timeout }}")
+                             "probeslimit={{ probeslimit }}"
+                             # "timeout={{ timeout }}"
+                )
 
                 ctx = Context(
                     {
                         'cc': cc,
                         'count': count,
                         'destination': destination_ip,
-                        'probeslimit': 10 * len(ccs),
-                        'timeout': 30000
+                        'probeslimit': 10,
+                        'timeout': 120000
                     }
                 )
                 probeapi_url = t.render(ctx)

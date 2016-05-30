@@ -11,30 +11,41 @@ import datetime
 import numpy
 from random import sample
 
+
+def get_countries():
+    url = "https://probeapifree.p.mashape.com/Probes.svc/GetCountries"
+
+    try:
+        print "Getting countries..."
+        req = urllib2.Request(url)
+        req.add_header("X-Mashape-Key", passwords.PROBEAPI)
+        req.add_header("Accept", "application/json")
+        response = urllib2.urlopen(req).read()
+        py_object = json.loads(response)
+
+        res = {}
+        ccs = Country.objects.get_region_countrycodes()
+        for p in py_object["GetCountriesResult"]:
+            cc = p["CountryCode"]
+            if cc in ccs:
+                res[cc] = p["ProbesCount"]
+        return res
+    except Exception as e:
+        pass
+
+
+def get_response(url):
+    req = urllib2.Request(url)
+    req.add_header("X-Mashape-Key", passwords.PROBEAPI)
+    req.add_header("Accept", "application/json")
+    response = urllib2.urlopen(req).read()
+    return response
+
+
 class Command(BaseCommand):
-    def get_countries(self):
-        url = "https://probeapifree.p.mashape.com/Probes.svc/GetCountries"
-
-        try:
-            print "Getting countries..."
-            req = urllib2.Request(url)
-            req.add_header("X-Mashape-Key", passwords.PROBEAPI)
-            req.add_header("Accept", "application/json")
-            response = urllib2.urlopen(req).read()
-            py_object = json.loads(response)
-
-            res = {}
-            ccs = Country.objects.get_region_countrycodes()
-            for p in py_object["GetCountriesResult"]:
-                cc = p["CountryCode"]
-                if cc in ccs:
-                    res[cc] = p["ProbesCount"]
-            return res
-        except Exception as e:
-            pass
-
     def handle(self, *args, **options):
         from threading import Thread
+
         from Queue import Queue
 
         def do_work(tp, url_probeapi):
@@ -54,14 +65,6 @@ class Command(BaseCommand):
                 # print "%s\t%s" % (q.unfinished_tasks, dt)
                 q.task_done()
                 return
-
-        def get_response(url):
-
-            req = urllib2.Request(url)
-            req.add_header("X-Mashape-Key", passwords.PROBEAPI)
-            req.add_header("Accept", "application/json")
-            response = urllib2.urlopen(req).read()
-            return response
 
         def process_response(response, tp):
 
@@ -176,7 +179,7 @@ class Command(BaseCommand):
                         tr_hop.save()
                 return
 
-        ccs = self.get_countries().keys()
+        ccs = get_countries().keys()
         # ccs = sample(ccs, 1)  # delete this (experimental)
 
         tps = SpeedtestTestPoint.objects.get_ipv4().filter(enabled=True).distinct('country').order_by(
