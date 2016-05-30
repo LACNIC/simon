@@ -260,6 +260,9 @@ def post_xml_result(request):
     """
         View que recibe los datos de las mediciones
     """
+    import logging
+
+    logger = logging.getLogger(__name__)
 
     if (request.method != 'POST'):  # and request.method != 'GET'
         return HttpResponse("invalid method: %s" % request.method)
@@ -299,7 +302,8 @@ def post_xml_result(request):
                 result.save()
         except etree.XMLSyntaxError as e:
             # this exception is thrown on schema validation error
-            print e
+            exception = "XML syntax error. exception: %s" % (e)
+            logger.error(exception)
         except Exception as e:
             print e
 
