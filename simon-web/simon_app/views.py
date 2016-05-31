@@ -562,7 +562,7 @@ def reports(request):
     v6 = int(100.0 * v6_count_js / len(js))
     v4 = int(100.0 - v6)
     print v6, v4
-    pie_chart = Chart.objects.asyncPieChart(labels=["IPv4", "IPv6"], divId="pie_chart", data=[["IPv4", "IPv6"], [v4, v6]], colors=["#C53425", "#009DCA"])
+    pie_chart = Chart.objects.asyncPieChart(labels=["IPv4", "IPv6"], divId="pie_chart", data=[["IPv4", "IPv6"], [v4, v6]], colors=["#615D6C", "#77A4DD"])
 
     context = getContext(request)
     context['collapse'] = "in"
