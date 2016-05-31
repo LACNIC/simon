@@ -477,7 +477,6 @@ def reports(request):
     if request.method != "POST":
         cc = get_cc_from_ip_address(request.META['REMOTE_ADDR'])
         form = ReportForm(
-            # empty_label="(Nothing)",
             initial={
                 "country1": Country.objects.get_or_none(iso=cc),
                 "date_from": datetime.now() - timedelta(days=365),

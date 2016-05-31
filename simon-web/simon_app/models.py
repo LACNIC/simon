@@ -23,7 +23,7 @@ class Region(models.Model):
 class CountryManager(models.Manager):
     def get_or_none(self, *args, **kwargs):
         try:
-            return self.get(self, *args, **kwargs)
+            return self.get(*args, **kwargs)
         except Exception as e:
             return None
 
