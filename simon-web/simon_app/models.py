@@ -858,7 +858,7 @@ class ChartManager(models.Manager):
                     colors=json.dumps(['orange']))
         return requests.post(self.url, data=data).text
 
-    def asyncChart(self, data, divId, labels, colors, kind="ColumnChart", xAxis="number"):
+    def asyncChart(self, data, divId, labels, colors, kind="ColumnChart", xAxis="number", my_options={}):
         from django.template import Context
         from django.template.loader import get_template
 
@@ -870,12 +870,13 @@ class ChartManager(models.Manager):
             'colors': colors,
             'charts_url': settings.CHARTS_URL,
             'kind': kind,
-            'xAxis': xAxis
+            'xAxis': xAxis,
+            'my_options': str(my_options)
         })
         return t.render(ctx)
 
-    def asyncPieChart(self, data, divId, labels, colors):
-        return self.asyncChart(data, divId, labels, colors, kind="PieChart", xAxis="string")
+    def asyncPieChart(self, data, divId, labels, colors, my_options = {}):
+        return self.asyncChart(data, divId, labels, colors, kind="PieChart", xAxis="string", my_options=my_options)
 
     def filterQuerySet(self, queryset, cc1, date_from, date_to, cc2=None, bidirectional=True):
         """

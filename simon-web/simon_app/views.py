@@ -547,22 +547,21 @@ def reports(request):
     applet = Chart.objects.filterQuerySet(Results.objects.applet().filter(testype='ntp'), cc1=cc1, cc2=cc2,
                                           date_from=date_from, date_to=date_to, bidirectional=bidirectional)
     latency_histogram_applet = Chart.objects.asyncChart(data=[list(applet)], divId="chart_applet", labels=['Applet'],
-                                                        colors=['#77A4DD'])
+                                                        colors=['#77A4DD'], my_options={"hAxis": {"maxValue": 800.0}})
 
     probeapi = Chart.objects.filterQuerySet(Results.objects.probeapi(), cc1=cc1, cc2=cc2, date_from=date_from,
                                             date_to=date_to, bidirectional=bidirectional)
     latency_histogram_probeapi = Chart.objects.asyncChart(data=[list(probeapi)], divId="chart_probeapi", labels=['DOS ping'],
-                                                          colors=['#6F8AB7'])
+                                                          colors=['#6F8AB7'], my_options={"hAxis": {"maxValue": 800.0}})
 
     ripe_atlas = Chart.objects.filterQuerySet(Results.objects.ripe_atlas(), cc1=cc1, cc2=cc2, date_from=date_from,
                                               date_to=date_to, bidirectional=bidirectional)
     latency_histogram_ripe_atlas = Chart.objects.asyncChart(data=[list(ripe_atlas)], divId="chart_ripe_atlas",
-                                                            labels=['RIPE Atlas'], colors=['#615D6C'])
+                                                            labels=['RIPE Atlas'], colors=['#615D6C'], my_options={"hAxis": {"maxValue": 800.0}})
 
     v6 = int(100.0 * v6_count_js / len(js))
     v4 = int(100.0 - v6)
-    print v6, v4
-    pie_chart = Chart.objects.asyncPieChart(labels=["IPv4", "IPv6"], divId="pie_chart", data=[["IPv4", "IPv6"], [v4, v6]], colors=["#615D6C", "#77A4DD"])
+    pie_chart = Chart.objects.asyncPieChart(labels=["IPv4", "IPv6"], divId="pie_chart", data=[["IPv4", "IPv6"], [v4, v6]], colors=["#615D6C", "#77A4DD"], my_options={"pieHole": 0.5})
 
     context = getContext(request)
     context['collapse'] = "in"
