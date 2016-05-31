@@ -36,9 +36,10 @@ MANAGERS = ADMINS
 
 # application version
 APP_VERSION = "1.4"
-# out = check_output(["git", "log", "-1"])
-DATE_UPDATED = "22nd Feb 2016" # out.split("\n")[2]
-LATEST_COMMIT = "" # out.split("\n")[0].split(" ")[1]
+import requests, json
+r = requests.get("https://api.github.com/repos/LACNIC/simon/commits").text
+DATE_UPDATED = json.loads(r)[0]["commit"]["author"]["date"]
+LATEST_COMMIT = json.loads(r)[0]["sha"]
 
 PROJECT_ROOT = os.path.abspath(os.path.pardir)
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
