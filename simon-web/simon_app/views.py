@@ -541,23 +541,28 @@ def reports(request):
     [ases_js.append(a) for a in _a2 if a not in ases_js]
     v6_js = js.filter(ip_version=6)
     v6_count_js = v6_js.count()
-    latency_histogram_js = Chart.objects.asyncChart(data=js, divId="chart_js", labels=['JavaScript'],
+    latency_histogram_js = Chart.objects.asyncChart(data=[list(js)], divId="chart_js", labels=['JavaScript'],
                                                     colors=['#81B3C1'])
 
     applet = Chart.objects.filterQuerySet(Results.objects.applet().filter(testype='ntp'), cc1=cc1, cc2=cc2,
                                           date_from=date_from, date_to=date_to, bidirectional=bidirectional)
-    latency_histogram_applet = Chart.objects.asyncChart(data=applet, divId="chart_applet", labels=['Applet'],
+    latency_histogram_applet = Chart.objects.asyncChart(data=[list(applet)], divId="chart_applet", labels=['Applet'],
                                                         colors=['#77A4DD'])
 
     probeapi = Chart.objects.filterQuerySet(Results.objects.probeapi(), cc1=cc1, cc2=cc2, date_from=date_from,
                                             date_to=date_to, bidirectional=bidirectional)
-    latency_histogram_probeapi = Chart.objects.asyncChart(data=probeapi, divId="chart_probeapi", labels=['DOS ping'],
+    latency_histogram_probeapi = Chart.objects.asyncChart(data=[list(probeapi)], divId="chart_probeapi", labels=['DOS ping'],
                                                           colors=['#6F8AB7'])
 
     ripe_atlas = Chart.objects.filterQuerySet(Results.objects.ripe_atlas(), cc1=cc1, cc2=cc2, date_from=date_from,
                                               date_to=date_to, bidirectional=bidirectional)
-    latency_histogram_ripe_atlas = Chart.objects.asyncChart(data=ripe_atlas, divId="chart_ripe_atlas",
+    latency_histogram_ripe_atlas = Chart.objects.asyncChart(data=[list(ripe_atlas)], divId="chart_ripe_atlas",
                                                             labels=['RIPE Atlas'], colors=['#615D6C'])
+
+    v6 = int(100.0 * v6_count_js / len(js))
+    v4 = int(100.0 - v6)
+    print v6, v4
+    pie_chart = Chart.objects.asyncPieChart(labels=["IPv4", "IPv6"], divId="pie_chart", data=[["IPv4", "IPv6"], [v4, v6]], colors=["#C53425", "#009DCA"])
 
     context = getContext(request)
     context['collapse'] = "in"
@@ -578,6 +583,7 @@ def reports(request):
     context['date_from'] = date_from
     context['ases_js'] = ases_js
     context['countries_js'] = countries_js
+    context['pie_chart'] = pie_chart
     context['v6_count_js'] = "%.1f" % (100.0 * v6_count_js / len(js))
 
     return render_to_response('reports.html', context)

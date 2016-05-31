@@ -31,18 +31,27 @@
 
     };
 
-    function loadAsyncChart(d, s, divId, data, labels, colors) {
+    function loadAsyncChart(d, s, divId, data, labels, colors, kind, xAxis) {
 
         var payload = {
             "data": data,
             "divId": divId,
             "labels": labels,
-            "colors": colors
+            "colors": colors,
+            "kind": kind,
+            "xAxis": xAxis
         };
+
+        var uri = "";
+        if (kind != "ColumnChart") {
+            uri = "/code";
+        } else {
+            uri = "/hist/code";
+        }
 
         $.ajax({
             type: 'POST',
-            url: "{{ charts_url }}/hist/code",
+            url: "{{ charts_url }}" + uri,
             data: payload,
             traditional: true,
             success: function (code) {
@@ -97,7 +106,7 @@
 <script type="application/javascript">
     google.load('visualization', '1.0', {'packages': ['table', 'corechart']});
     google.setOnLoadCallback(
-            loadAsyncChart(document, "script", "{{ divId }}", "[[{% for d in data %}{{ d }},{% endfor %}]]", "{{ labels | safe }}", "{{ colors | safe }}")
+            loadAsyncChart(document, "script", "{{ divId }}", "{{ data|safe }}", "{{ labels | safe }}", "{{ colors | safe }}", "{{ kind | safe }}", "{{ xAxis | safe }}")
     );
 </script>
 
