@@ -82,7 +82,14 @@
                             height: .75em;
                             vertical-align: middle;
                             vertical-align: middle;
+                            padding: 0px;
                         }
+
+                        .mybar {
+                            text-align: right;
+                            padding-right: 3px;
+                        }
+
                     </style>
 
 
@@ -90,29 +97,29 @@
                         Ordenar
                     </button>
 
-                    <table class="table" style="border-width: 0px">
+                    <table class="table" style="padding: 0px;">
                         <th>Origen</th>
                         <th>Destino</th>
-                        <th colspan="2">Latencia <code>http</code> (min avg max)
+                        <th>
+                            Latencia <code>http</code> (min avg max)
                         </th>
 
                         <tbody>
                         {% for m in matrix_js %}
-                            <tr>
-                                <td class="myrow" style="padding:0px; margin:0px;">{{ m.0 }}</td>
-                                <td class="myrow" style="padding:0px; margin:0px;">{{ m.1 }}</td>
-                                <td class="latencias myrow" style="padding:0px; margin:0px;">{{ m.3 }}</td>
-                                <td>
-                                    <div class="progress" style="width: {{ m.4|percentage:400|unlocalize }}%">
-                                        <div class="progress-bar" role="progressbar"
+                            <tr style="padding: 0px;">
+                                <td class="myrow" style="padding: 0px;">{{ m.0 }}</td>
+                                <td class="myrow" style="padding: 0px;">{{ m.1 }}</td>
+                                <td class="myrow" style="padding: 0px;">
+                                    <div class="progress" style="width: {{ m.4|percentage:400|unlocalize }}%; margin-bottom: 3px;">
+                                        <div class="progress-bar mybar" role="progressbar"
                                              style="width: {{ m.2|percentage:m.4|unlocalize }}%; background-image: none; background-color: #95C1BE;">
                                             {{ m.2 }}
                                         </div>
-                                        <div class="progress-bar" role="progressbar"
+                                        <div class="progress-bar mybar" role="progressbar"
                                              style="width: {{ m.3|substract:m.2|percentage:m.4|unlocalize }}%; background-image: none; background-color: #144C4C;">
                                             {{ m.3 }}
                                         </div>
-                                        <div class="progress-bar" role="progressbar"
+                                        <div class="progress-bar mybar" role="progressbar"
                                              style="width: {{ m.4|substract:m.3|percentage:m.4|unlocalize }}%; background-image: none; background-color: #57737A;">
                                             {{ m.4 }}
                                         </div>
