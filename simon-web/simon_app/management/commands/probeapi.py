@@ -1,22 +1,24 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand
-from newrelic.core import thread_utilization
 
 from simon_app.models import *
-from simon_app.models_management import CommandAudit
-from simon_app.reportes import GMTUY
 from django.template import Template, Context
-from simon_project import passwords
-import urllib2
+from random import shuffle
 import json
 import datetime
 import numpy
 from probeapi_traceroute import get_countries, get_probeapi_response
 from multiprocessing.dummy import Pool as ThreadPool
-
+from simon_app.reportes import GMTUY
 
 class Command(BaseCommand):
+
+    threads = 50
+    max_job_queue_size = 0 # 0 for limitless
+    max_points = 0 # 0 for limitless
+    ping_count = 10 # amount of ICMP pings performed per test
+
     def handle(self, *args, **options):
         command = "ProbeAPI Measurements"
 
@@ -31,9 +33,6 @@ class Command(BaseCommand):
                 pass
 
             finally:
-                dt = datetime.datetime.now() - then
-                # q.task_done()
-                # print "%s\t%s" % (q.unfinished_tasks, dt)
                 return
 
         def process_response(response, url_probeapi):
@@ -96,7 +95,7 @@ class Command(BaseCommand):
 
                     std_dev = numpy.std(rtts)
                     ProbeApiPingResult(
-                        date_test=datetime.datetime.now(),
+                        date_test=datetime.datetime.now(tz=GMTUY()),
                         ip_origin='',
                         ip_destination=destination_ip,
                         min_rtt=numpy.amin(rtts),
@@ -123,16 +122,24 @@ class Command(BaseCommand):
             'country')
 
         urls = []
-        thread_pool = ThreadPool(50)
+        thread_pool = ThreadPool(self.threads)
 
-        then = datetime.datetime.now()
+        then = datetime.datetime.now(tz=GMTUY())
 
-        print "tps %s x ccs %s" % (len(tps), len(ccs))
+
+        if self.max_points > 1:
+            tps = tps[:self.max_points]
+        elif self.max_points == 1:
+            tps = [tps[0]]
+
+
+        tps = list(tps)
+        shuffle(tps) # shuffle in case the script get aborted (do not run only the small alphanumeric tps only)
 
         for tp in tps:
 
             # sanity check before building URLs
-            online = tp.check_point(timeout=10, save=False)
+            online = tp.check_point(timeout=10, save=False, protocol="icmp")
             if not online:
                 print "Skipping %s" % (tp)
                 continue
@@ -140,29 +147,40 @@ class Command(BaseCommand):
             for cc in ccs:
 
                 destination_ip = tp.ip_address
-                count = 10
+                ping_count = self.ping_count
+
+                round_trip = 2
+                time_for_each_ping = 1000
+                tx_time = 10000
+                timeout = ping_count * round_trip * time_for_each_ping + tx_time
 
                 t = Template("https://probeapifree.p.mashape.com/Probes.svc/StartPingTestByCountry?"
                              "countrycode={{ cc }}&"
                              "count={{ count }}&"
                              "destination={{ destination }}&"
-                             "probeslimit={{ probeslimit }}"
-                             # "timeout={{ timeout }}"
+                             "probeslimit={{ probeslimit }}&"
+                             "timeout={{ timeout }}"
                              )
 
                 ctx = Context(
                     {
                         'cc': cc,
-                        'count': count,
+                        'count': ping_count,
                         'destination': destination_ip,
                         'probeslimit': 10,
-                        'timeout': 10000
+                        'timeout': timeout
                     }
                 )
                 url_probeapi = t.render(ctx)
-                urls.append(url_probeapi)
+                if self. max_job_queue_size == 0 or len(urls) <= self.max_job_queue_size:
+                    urls.append(url_probeapi)
 
+        print "TPs %s x CCs %s" % (len(tps), len(ccs))
+        print "Launching %.0f worker threads on a %.0f jobs queue" % (self.threads, len(urls))
         thread_pool.map(do_work, urls)
 
         thread_pool.close()
         thread_pool.join()
+
+        print "Command ended with %.0f worker threads on a %.0f jobs queue" % (self.threads, len(urls))
+        print "Command took %s" % (datetime.datetime.now(tz=GMTUY()) - then)

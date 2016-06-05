@@ -706,6 +706,12 @@ class TestPoint(models.Model):
         :return:
         """
 
+        if protocol == "icmp":
+            import pyping
+            response = pyping.ping(self.ip_address)
+            return response.ret_code == 0
+
+
         from requests import get
         from socket import gethostbyaddr
 
