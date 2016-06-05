@@ -1,12 +1,32 @@
-<script src="https://www.google.com/jsapi" type="text/javascript"></script>
-<script src="https://fgnass.github.io/spin.js/spin.min.js" type="text/javascript"></script>
+<div id="{{ divId }}" style="font-family: 'Helvetica'; color: grey; min-height: 10em; margin: auto; text-align: center"
+     class="center-block">
+    <div>
+        <progress id="progress-{{ divId }}" value="0" max="100"></progress>
+    </div>
+    <div id="console-{{ divId }}" style="text-align: center; font-size: .75em"></div>
+</div>
 
-<script type="application/javascript">
+<script async src="https://www.google.com/jsapi" type="text/javascript"></script>
+
+<script async type="application/javascript">
 
     LOGGER = {
         enabled: true,
+        debug: true,
         log: function (txt) {
-            console.log(txt);
+            if (!LOGGER.debug) {
+                console.log(txt);
+            }
+            document.getElementById("console-{{ divId }}").innerText = txt;
+        },
+        messages: {
+            /*
+            Messages to be displayed in the LOGGER console
+            */
+            error: "Ups, something went wrong.",
+            charts_service_down: "Looks like the charts service is down :(",
+            charts_service_sending_data: "Sending data to charts service...",
+            charts_service_chart_received: "Async chart received..."
         }
     };
 
@@ -32,6 +52,8 @@
 
     function loadAsyncChart(d, s, divId, data, labels, colors, kind, xAxis, my_options) {
 
+        d.getElementById("progress-{{ divId }}").value = "10"
+
         var payload = {
             "data": data,
             "divId": divId,
@@ -39,7 +61,7 @@
             "colors": colors,
             "kind": kind,
             "xAxis": xAxis,
-            "my_options" : my_options
+            "my_options": my_options
         };
 
         var uri = "";
@@ -49,69 +71,54 @@
             uri = "/hist/code";
         }
 
+        var onSuccess = function (code) {
+            LOGGER.log(LOGGER.messages.charts_service_chart_received);
+
+            d.getElementById("progress-{{ divId }}").value = "100";
+
+            var js = d.createElement(s), sc = d.getElementsByTagName(s)[0];
+            js.innerHTML = code;
+            js.type = "text/javascript";
+            sc.parentNode.insertBefore(js, sc);
+        }
+
         $.ajax({
             type: 'POST',
             url: "{{ charts_url }}" + uri,
             data: payload,
             traditional: true,
+            beforeSend: function (jqXHR, settings) {
+                /*
+                 Progress bars update
+                 */
+                d.getElementById("progress-{{ divId }}").value = "10";
+                LOGGER.log(LOGGER.messages.charts_service_sending_data);
+            },
+
             success: function (code) {
 
-                LOGGER.log("Got async chart from LACNIC charts service");
-
-                var js = d.createElement(s), sc = d.getElementsByTagName(s)[0];
-                js.innerHTML = code;
-                js.type = "text/javascript";
-                sc.parentNode.insertBefore(js, sc);
-
+                setTimeout(onSuccess(code), 10);
             },
             error: function (ok, status) {
 
+                d.getElementById("progress-{{ divId }}").value = "100";
+                LOGGER.log(LOGGER.messages.charts_service_down);
+
+            },
+            complete: function () {
+
+                d.getElementById("progress-{{ divId }}").value = "75";
             },
             dataType: "text",
             async: false
         });
     }
     ;
-
-    /*
-     to be called when the Spinner libraries are already loaded.
-     */
-    afterSpinnerLoad = function () {
-
-        var opts = {
-            lines: 8, // The number of lines to draw
-            length: 1, // The length of each line
-            width: 8, // The line thickness
-            radius: 20, // The radius of the inner circle
-            corners: 0.6, // Corner roundness (0..1)
-            rotate: 0, // The rotation offset
-            direction: 1, // 1: clockwise, -1: counterclockwise
-            color: '#000', // #rgb or #rrggbb or array of colors
-            speed: 0.8, // Rounds per second
-            trail: 19, // Afterglow percentage
-            shadow: false, // Whether to render a shadow
-            hwaccel: false, // Whether to use hardware acceleration
-            className: 'spinner', // The CSS class to assign to the spinner
-            zIndex: 2e9, // The z-index (defaults to 2000000000)
-            top: '50%', // Top position relative to parent
-            left: '50%' // Left position relative to parent
-        };
-
-        var target = document.getElementById('{{ divId }}');
-        var spinner = new Spinner(opts).spin(target);
-    };
-
 </script>
 
-<script type="application/javascript">
+<script async type="application/javascript">
     google.load('visualization', '1.0', {'packages': ['table', 'corechart']});
     google.setOnLoadCallback(
             loadAsyncChart(document, "script", "{{ divId }}", "{{ data|safe }}", "{{ labels | safe }}", "{{ colors | safe }}", "{{ kind | safe }}", "{{ xAxis | safe }}", "{{ my_options | safe }}")
     );
 </script>
-<script type="application/javascript">
-{#    loadExternalScript("http://spin.js.org/spin.min.js", afterSpinnerLoad);#}
-</script>
-
-<div id="{{ divId }}" style="font-family: Lato" class="center-block">
-</div>
