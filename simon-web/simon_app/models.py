@@ -1,13 +1,11 @@
 from django.db.models import Q
 from django.db import models, connection
 from django.db.models.fields import CharField, IntegerField
-from django.db.models.fields.related import ForeignKey
 from datetime import datetime, timedelta
 import trparse
 import simon_project.settings as settings
-import geoip2
 import json, requests
-from django.contrib import admin
+# from reportes import GMTUY
 
 from models_management import *  # External models definitions
 
@@ -718,7 +716,8 @@ class TestPoint(models.Model):
         try:
 
             if protocol == "https":
-                endpoint = gethostbyaddr(self.ip_address)[0]
+                endpoint = self.url.replace("http://", "").replace("https://", "")
+                # endpoint = gethostbyaddr(self.ip_address)[0]
             else:
                 endpoint = self.ip_address
 
@@ -758,9 +757,30 @@ class SpeedtestTestPoint(TestPoint):
     speedtest_url = models.TextField(null=True)
     objects = TestPointManager()
 
+    def get_latest_https_check(self):
+        by = self.httpscheck_set.order_by("date")
+        if len(by) > 0:
+            return by[0]
+        else:
+            return None
+
     class Meta:
         verbose_name = 'Punto de prueba de Speedtest.com'
         verbose_name_plural = 'Puntos de prueba de Speedtest.com'
+
+
+class HttpsCheck(models.Model):
+    """
+        HTTPS checks for Speedtest points
+    """
+
+    date = models.DateTimeField(default=datetime.now())
+    status = models.NullBooleanField(default=False)
+    test_point = models.ForeignKey(SpeedtestTestPoint)
+
+    class Meta:
+        verbose_name = 'Chequeo HTTPS'
+        verbose_name_plural = 'Chequeos HTTPS'
 
 
 class Images(models.Model):

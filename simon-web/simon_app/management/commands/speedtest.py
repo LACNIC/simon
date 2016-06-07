@@ -98,7 +98,15 @@ class Command(BaseCommand):
                                 longitude=longitude
                             )
 
+
                             tp.save()
+                            https_check = HttpsCheck(
+                                test_point=tp,
+                                status=tp.make_request(protocol="https")
+                            )
+                            https_check.save()
+                            tp.httpscheck_set.add(https_check)
+
                             nuevos.append(tp)
 
             except AddrFormatError:

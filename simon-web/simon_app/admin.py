@@ -108,6 +108,9 @@ class ASAdmin(SimonGenericAdmin):
     list_display = ['asn', 'network', 'pfx_length', 'date_updated', 'regional']
     search_fields = ['asn', 'network']
 
+class HttpsCheckAdmin(SimonGenericAdmin):
+    list_display = ['date', 'status', 'test_point']
+
 admin.site.register(Comment)
 
 admin.site.register(Results, ResultsAdmin)
@@ -132,3 +135,5 @@ admin.site.register(RipeAtlasMonitoredIds)
 admin.site.register(CommandAudit, CommandAuditAdmin)
 
 admin.site.register(AS, ASAdmin)
+
+admin.site.register(HttpsCheck, HttpsCheckAdmin)
