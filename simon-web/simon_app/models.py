@@ -445,10 +445,7 @@ class TracerouteResult(models.Model):
 
     def __str__(self):
         all =  self.traceroutehop_set.all()
-        res = ""
-        for a in all:
-            res += a
-        return res
+        return "%s (AS%s) --> %s (AS%s) (%.0f hops)" % (self.country_origin, self.as_origin, self.country_destination, self.as_destination, len(all))
 
     def pretty_print(self):
         from geoip2.errors import AddressNotFoundError

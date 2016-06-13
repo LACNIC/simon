@@ -11,6 +11,7 @@ import datetime
 import numpy
 from random import sample
 from multiprocessing.dummy import Pool as ThreadPool
+from simon_app.api_views import get_cc_from_ip_address
 
 
 def get_countries():
@@ -44,19 +45,26 @@ def get_probeapi_response(url):
 
 
 class Command(BaseCommand):
+    threads = 50
+    max_job_queue_size = 0  # 0 for limitless
+    max_points = 0  # 0 for limitless
+    ping_count = 3  # amount of ICMP pings performed per test
+
     def handle(self, *args, **options):
         def do_work(url_probeapi):
+            print url_probeapi
+
             try:
                 response = get_probeapi_response(url_probeapi)
+                print response
                 if response is not None:
+                    print response
                     process_response(response)
-
             except Exception as e:
-                print e, response
+                print e
                 pass
 
             finally:
-                dt = datetime.datetime.now() - then
                 return
 
         def process_response(response):
@@ -86,16 +94,20 @@ class Command(BaseCommand):
 
                     ip_origin = traceroute["IP"]
 
-                    tr = TracerouteResult()
+                    tr = TracerouteResult(
+                        # ip_origin=ip_origin,
+                        # country_origin=cc_origin
+                    )
                     tr.save()
 
                     for hop in traceroute["Tracert"]:
                         ip_destination = hop['IP']
                         as_destination = AS.objects.get_as_by_ip(destination_ip)
-
+                        cc_destination = get_cc_from_ip_address(ip_destination)
                         status = hop["Status"]
-                        if status != "OK" or ip_destination is None:
 
+                        if status != "OK" or ip_destination is None:
+                        # Timed out hops
                             if ip_destination is not None:
                                 ip_version = 6 if ':' in ip_destination else 4
                             else:
@@ -107,7 +119,7 @@ class Command(BaseCommand):
                                 ip_origin=ip_origin,
                                 ip_destination=ip_destination,
                                 country_origin=cc_origin,
-                                country_destination=tp.country,
+                                country_destination=cc_destination,
                                 ip_version=ip_version,
                                 as_origin=as_origin.asn,
                                 as_destination=as_destination.asn,
@@ -117,9 +129,9 @@ class Command(BaseCommand):
                                 tester_version="1",
                                 traceroute_result=tr
                             )
+                            tr.traceroutehop_set.add(tr_hop)
                             tr.hop_count += 1
                             tr.save()
-                            tr_hop.save()
                             continue
 
                         rtts = []
@@ -157,7 +169,7 @@ class Command(BaseCommand):
                             median_rtt=numpy.median(rtts),
                             packet_loss=packet_loss,
                             country_origin=cc_origin,
-                            country_destination=tp.country,
+                            country_destination=cc_destination,
                             ip_version=6 if ':' in destination_ip else 4,
                             as_origin=as_origin.asn,
                             as_destination=as_destination.asn,
@@ -167,9 +179,14 @@ class Command(BaseCommand):
                             tester_version="1",
                             traceroute_result=tr
                         )
+                        tr.traceroutehop_set.add(tr_hop)
                         tr.hop_count += 1
                         tr.save()
-                        tr_hop.save()
+                    tr.country_destination = tr.traceroutehop_set.last().country_destination
+                    tr.country_origin = tr.traceroutehop_set.last().country_origin
+                    tr.as_destination = tr.traceroutehop_set.last().as_destination
+                    tr.as_origin = tr.traceroutehop_set.last().as_origin
+                    tr.save()
 
                 return
 
@@ -177,32 +194,40 @@ class Command(BaseCommand):
 
         tps = SpeedtestTestPoint.objects.get_ipv4().filter(enabled=True).distinct('country').order_by(
             'country')  # one TP per country TODO get *really* random tests... TODO get ipv6!!!
-        urls = []
-        thread_pool = ThreadPool(50)
 
-        print "tps %s x ccs %s" % (len(tps), len(ccs))
-        then = datetime.datetime.now()
+        urls = []
+        thread_pool = ThreadPool(self.threads)
+
+        then = datetime.datetime.now(tz=GMTUY())
+
+        if self.max_points > 1:
+            tps = tps[:self.max_points]
+        elif self.max_points == 1:
+            tps = [tps[0]]
+
+        print "TPs %s x CCs %s" % (len(tps), len(ccs))
+        then = datetime.datetime.now(tz=GMTUY())
         for i, tp in enumerate(tps):
 
             # sanity check
-            online = tp.check_point()
+            online = tp.check_point(protocol="icmp")
             if not online:
                 continue
 
             for cc in ccs:
                 destination_ip = tp.ip_address
+                ping_count = self.ping_count
 
-                count = 3
-                max_hops = 20
+                max_hops = 50
                 ping_time = 1000
                 sleep_time = 1000
-                tx_time = 5000
-                timeout = count * max_hops * (ping_time + sleep_time) + tx_time  # seconds
+                tx_time = 10000
+                timeout = ping_count * max_hops * (ping_time + sleep_time) + tx_time  # seconds
 
                 t = Template(
                     "https://probeapifree.p.mashape.com/Probes.svc/StartTracertTestByCountry?"
                     "countrycode={{ cc }}&"
-                    "count={{ count }}&"
+                    # "count={{ count }}&"
                     "destination={{ destination }}&"
                     "probeslimit={{ probeslimit }}"
                     # "timeout={{ timeout }}"
@@ -211,15 +236,22 @@ class Command(BaseCommand):
                 ctx = Context(
                     {
                         'cc': cc,
-                        'count': count,
+                        # 'count': ping_count,
                         'destination': destination_ip,
-                        'probeslimit': 2 * len(ccs),
-                        'timeout': timeout
+                        'probeslimit': 2 * len(ccs)
+                        # 'timeout': timeout
                     }
                 )
                 url_probeapi = t.render(ctx)
-                urls.append(url_probeapi)
+                if self.max_job_queue_size == 0 or len(urls) <= self.max_job_queue_size:
+                    urls.append(url_probeapi)
+
+        print "TPs %s x CCs %s" % (len(tps), len(ccs))
+        print "Launching %.0f worker threads on a %.0f jobs queue" % (self.threads, len(urls))
         thread_pool.map(do_work, urls)
 
         thread_pool.close()
         thread_pool.join()
+
+        print "Command ended with %.0f worker threads on a %.0f jobs queue" % (self.threads, len(urls))
+        print "Command took %s" % (datetime.datetime.now(tz=GMTUY()) - then)
