@@ -423,10 +423,28 @@ class TracerouteResult(models.Model):
     as_destination = models.IntegerField(null=True)
     country_origin = models.CharField(max_length=2)
     country_destination = models.CharField(max_length=2)
-    hop_count = models.IntegerField(default=0)
+    # hop_count = models.IntegerField(default=0)
 
     output = models.TextField(max_length=2000, default='')
     objects = TracerouteResultManager()
+
+    @property
+    def hop_count(self):
+        return len(self.traceroutehop_set.all())
+
+    @property
+    def country_count(self):
+        origin = self.traceroutehop_set.all().values_list("country_origin", flat=True)
+        destination = self.traceroutehop_set.all().values_list("country_destination", flat=True)
+        set_ = set(list(origin) + list(destination))
+        return len(set_)
+
+    @property
+    def as_count(self):
+        origin = self.traceroutehop_set.all().values_list("as_origin", flat=True)
+        destination = self.traceroutehop_set.all().values_list("as_destination", flat=True)
+        set_ = set(list(origin) + list(destination))
+        return len(set_)
 
     def save(self, *args, **kwargs):
         from geoip2.errors import AddressNotFoundError

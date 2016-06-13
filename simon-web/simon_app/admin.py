@@ -29,7 +29,7 @@ class TracerouteResultAdmin(SimonGenericAdmin):
     def get_readonly_fields(self, request, obj=None):
         return [f.name for f in self.model._meta.fields]
 
-    list_display = ['country_origin', 'country_destination', 'as_origin', 'as_destination', 'hop_count']
+    list_display = ['country_origin', 'country_destination', 'as_origin', 'as_destination', 'hop_count', 'country_count', 'as_count']
     search_fields = ['country_origin', 'country_destination', 'as_origin', 'as_destination']
 
 class TracerouteHopAdmin(SimonGenericAdmin):
