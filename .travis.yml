@@ -1,4 +1,4 @@
-language: python, node_js
+language: python
 sudo: required
 
 python:
@@ -17,7 +17,7 @@ addons:
     - python-psycopg2
 
 install:
-#  - pip install -r requirements.txt --allow-external ripe.atlas.sagan ripe.atlas.cousteau
+  - pip install -r requirements.txt --allow-external ripe.atlas.sagan ripe.atlas.cousteau
   - pip install coveralls
 
 before_script:
@@ -32,12 +32,3 @@ after_success: coveralls
 
 notifications:
   slack: lacnic-eng:jSDKPP0pyOgA5JV4lsQTGtuP
-
-node_js:
-    - "0.10"
-script: simon-javascript/node_modules/karma/bin/karma start simon-javascript/my.conf.js --single-run
-before_install:
-    - export DISPLAY=:99.0
-    - sh -e /etc/init.d/xvfb start
-before_script:
-    - npm install
