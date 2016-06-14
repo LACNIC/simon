@@ -17,7 +17,7 @@ addons:
     - python-psycopg2
 
 install:
-  - pip install -r requirements.txt --allow-external ripe.atlas.sagan ripe.atlas.cousteau
+#  - pip install -r requirements.txt --allow-external ripe.atlas.sagan ripe.atlas.cousteau
   - pip install coveralls
 
 before_script:
