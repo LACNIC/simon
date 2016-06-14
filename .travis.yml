@@ -16,6 +16,10 @@ addons:
     - python-dev
     - python-psycopg2
 
+before_install:
+    - export DISPLAY=:99.0
+    - sh -e /etc/init.d/xvfb start
+
 install:
   - pip install -r requirements.txt --allow-external ripe.atlas.sagan ripe.atlas.cousteau
   - pip install coveralls
@@ -23,10 +27,12 @@ install:
 before_script:
   - mv simon-web/simon_project/passwords_dummy.py simon-web/simon_project/passwords.py
   - psql -c 'create database simon;' -U postgres
+  - npm install
 
 script:
   - python simon-web/manage.py test
   - coverage run simon-web/manage.py test
+  - simon-javascript/node_modules/karma/bin/karma start simon-javascript/my.conf.js --single-run
 
 after_success: coveralls
 
