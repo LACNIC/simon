@@ -28,27 +28,33 @@ import simon_project.settings as settings
 from _socket import timeout
 from django.views.decorators.cache import cache_page
 
+
 @cache_page(60 * 60 * 24)
 def lab(request):
     """
     """
     return render_to_response('lab.html')
 
+
 @cache_page(60 * 60 * 24)
 def thanks(request):
     return render_to_response('thanks.html', getContext(request))
+
 
 @cache_page(60 * 60 * 24)
 def about(request):
     return render_to_response('about.html', getContext(request))
 
+
 @cache_page(60 * 60 * 24)
 def browserstack(request):
     return render_to_response('browserstack.html', getContext(request))
 
+
 @cache_page(60 * 15)
 def articles(request):
     return render_to_response('articles.html', getContext(request))
+
 
 # ##################
 # TRACEROUTE FORM #
@@ -208,6 +214,7 @@ def web_configs(request):
     response = web_configs_api(request)
     return HttpResponse(response)
 
+
 @cache_page(60 * 60 * 24)
 def api(request):
     return render_to_response('api.html', getContext(request))
@@ -237,8 +244,12 @@ def throughput(request, country='all', ip_version=4, year=2009, month=01):
 
 
 def tables(request, country_iso, ip_version, year, month, tester, tester_version):  # , test_type):
-    table_json, ip_version, country_name, date, now, tester, tester_version = tables_api(request, country_iso, ip_version, year, month, tester, tester_version)
-    return render_to_response('table.html', {'json': table_json, 'ip_version': ip_version, 'country': country_name, 'date': date, 'now': now, 'tester': tester, 'tester_version': tester_version}, getContext(request))
+    table_json, ip_version, country_name, date, now, tester, tester_version = tables_api(request, country_iso,
+                                                                                         ip_version, year, month,
+                                                                                         tester, tester_version)
+    return render_to_response('table.html',
+                              {'json': table_json, 'ip_version': ip_version, 'country': country_name, 'date': date,
+                               'now': now, 'tester': tester, 'tester_version': tester_version}, getContext(request))
 
 
 def throughput_json(request, country_iso, ip_version, year, month, tester, tester_version):  # , test_type):
@@ -247,8 +258,12 @@ def throughput_json(request, country_iso, ip_version, year, month, tester, teste
 
 
 def throughput_tables(request, country_iso, ip_version, year, month, tester, tester_version):  # , test_type):
-    json, ip_version, country_name, date, now, tester, tester_version = throughput_tables_api(request, country_iso, ip_version, year, month, tester, tester_version)
-    return render_to_response('table.html', {'json': json, 'ip_version': ip_version, 'country': country_name, 'date': date, 'now': now, 'tester': tester, 'tester_version': tester_version}, getContext(request))
+    json, ip_version, country_name, date, now, tester, tester_version = throughput_tables_api(request, country_iso,
+                                                                                              ip_version, year, month,
+                                                                                              tester, tester_version)
+    return render_to_response('table.html',
+                              {'json': json, 'ip_version': ip_version, 'country': country_name, 'date': date,
+                               'now': now, 'tester': tester, 'tester_version': tester_version}, getContext(request))
 
 
 def err404(request):
@@ -415,7 +430,7 @@ def post_offline_testpoints(request):
                     tp.enabled = False
                     tp.save()
 
-                    send_mail_point_offline(ctx={'point':tp})
+                    send_mail_point_offline(ctx={'point': tp})
 
                 except OfflineReport.DoesNotExist:
                     # new report
@@ -436,6 +451,7 @@ def post_offline_testpoints(request):
 
     return HttpResponse("END")
 
+
 @cache_page(60 * 60 * 24)
 def home(request):
     return render_to_response('home.html', getContext(request))
@@ -444,6 +460,7 @@ def home(request):
 def prueba(request):
     context = getContext(request)
     return render_to_response('prueba.html', context)
+
 
 def speedtest(request):
     context = getContext(request)
@@ -465,6 +482,7 @@ def objectives(request):
 
 def participate(request):
     return render_to_response('participate.html', getContext(request))
+
 
 def reports(request):
     from reportes import ReportForm
@@ -590,6 +608,7 @@ def reports(request):
 
     return render_to_response('reports.html', context)
 
+
 def reports_as(request):
     from reportes import ASForm
 
@@ -610,8 +629,6 @@ def reports_as(request):
     context['as'] = as_
 
     return render_to_response('reports_as.html', context)
-
-
 
 
 def charts(request):
@@ -642,7 +659,6 @@ def charts(request):
         countries_dropdown = CountryDropdownForm()
     except:
         countries_dropdown = CountryDropdownForm()
-
 
     # ######
     # MAP #
@@ -701,18 +717,22 @@ def charts(request):
     ###################
 
 
-    latency_histogram_probeapi = Chart.objects.asyncChart(data=rtts_probeapi, divId="latency_histogram_probeapi", labels=['NTP'], colors=['#608BC4'])
+    latency_histogram_probeapi = Chart.objects.asyncChart(data=rtts_probeapi, divId="latency_histogram_probeapi",
+                                                          labels=['NTP'], colors=['#608BC4'])
 
-    latency_histogram_js = Chart.objects.asyncChart(data=rtts_js, divId="latency_histogram_js", labels=['HTTP'], colors=['#608BC4'])
+    latency_histogram_js = Chart.objects.asyncChart(data=rtts_js, divId="latency_histogram_js", labels=['HTTP'],
+                                                    colors=['#608BC4'])
 
     url = settings.CHARTS_URL + "/code"
 
-    data = dict(data=json.dumps([list(d[0].strftime("%d/%m/%Y") for d in results_timeline), [r[1] for r in results_timeline], [r[2] for r in results_timeline]]),
-                divId='results_timeline',
-                labels=json.dumps(['HTTP', 'ICMP']),
-                colors=json.dumps(['#144C4C', '#57737A']),
-                kind='AreaChart',
-                xAxis='date')
+    data = dict(data=json.dumps(
+        [list(d[0].strftime("%d/%m/%Y") for d in results_timeline), [r[1] for r in results_timeline],
+         [r[2] for r in results_timeline]]),
+        divId='results_timeline',
+        labels=json.dumps(['HTTP', 'ICMP']),
+        colors=json.dumps(['#144C4C', '#57737A']),
+        kind='AreaChart',
+        xAxis='date')
 
     results_timeline = requests.post(url, data=data, headers={'Connection': 'close'}).text
 
@@ -734,7 +754,7 @@ def charts(request):
     inner_count = len(inner_isos)
 
     avg_list = [a - m for a, m in zip(list(inner_lats), list(inner_lats_min))]
-    max_list = [max - avg for avg, max in zip(list(inner_lats), list(inner_lats_max))]
+    max_list = [max_ - avg for avg, max_ in zip(list(inner_lats), list(inner_lats_max))]
 
     data = dict(data=json.dumps([list(inner_isos), list(inner_lats_min), avg_list, max_list]),
                 divId='inner_latency',
@@ -744,6 +764,49 @@ def charts(request):
                 stacked=True,
                 xAxis='string')
     inner_latency = requests.post(url, data=data, headers={'Connection': 'close'}).text
+
+    # Country information
+    from collections import defaultdict
+    from operator import itemgetter
+
+    inner_area = []
+    inner = Results.objects.inner(tester=settings.PROTOCOLS["HTTP"], months=6)
+    ccs = Country.objects.get_region_countrycodes()
+    restcountries = json.loads(requests.get("http://restcountries.eu/rest/v1/all").text)
+    for c in restcountries:
+        alpha2Code = c["alpha2Code"]
+        if alpha2Code not in ccs:
+            continue
+        latency_ = 0.0
+        for i in inner:
+            if i[0] == alpha2Code:
+                latency_ = float(i[1])
+        area = c["area"]
+        if area == None: continue
+
+        latency_per_area = 1.0 * latency_ / area
+        if latency_per_area > 0.02: continue
+
+        inner_area.append(dict(alpha2Code=alpha2Code, area=area, borders=borders, latency=latency_,
+                               latency_per_area=latency_per_area))
+
+    inner_area = sorted(inner_area, key=itemgetter("latency_per_area"))  # order
+    inner_area_max = max(list((k["latency_per_area"]) for k in inner_area))
+    data = dict(data=json.dumps([
+        list(k["alpha2Code"] for k in inner_area),
+        list((k["latency_per_area"] / inner_area_max) for k in inner_area)
+    ]),
+        divId='inner_latency_area',
+        labels=json.dumps(['Min RTT per square km']),
+        colors=json.dumps(['#144C4C']),
+        kind='BarChart',
+        stacked=True,
+        xAxis='string',
+        my_options=json.dumps(
+            {'chartArea': {'width': '50%'}}
+        )
+    )
+    inner_latency_area = requests.post(url, data=data, headers={'Connection': 'close'}).text
 
     ############
     # RESPONSE #
@@ -759,6 +822,7 @@ def charts(request):
         'ipv6_penetration': ipv6_penetration,
         'results_timeline': results_timeline,
         'inner_latency': inner_latency,
+        'inner_latency_area': inner_latency_area,
         'inner_count': inner_count * 2
     }, processors=[simon_processor])
 
@@ -830,15 +894,16 @@ def atlas(request):
     disconnected_timeline = [conn[0] / conn[1] for conn in disconnected_timeline]
     abandoned_timeline = [conn[0] / conn[1] for conn in abandoned_timeline]
     never_timeline = [conn[0] / conn[1] for conn in never_timeline]
-    data = dict(data=json.dumps([list(d[0].strftime("%d/%m/%Y") for d in rs), connected_timeline, disconnected_timeline, abandoned_timeline, never_timeline]),
-                divId='statuses_timeline',
-                labels=json.dumps(['Connected', 'Disconnected', 'Abandoned', 'Never Connected']),
-                colors=json.dumps(['#9BC53D', '#C3423F', '#FDE74C', 'darkgray']),
-                kind='AreaChart',
-                xAxis='date')
+    data = dict(data=json.dumps(
+        [list(d[0].strftime("%d/%m/%Y") for d in rs), connected_timeline, disconnected_timeline, abandoned_timeline,
+         never_timeline]),
+        divId='statuses_timeline',
+        labels=json.dumps(['Connected', 'Disconnected', 'Abandoned', 'Never Connected']),
+        colors=json.dumps(['#9BC53D', '#C3423F', '#FDE74C', 'darkgray']),
+        kind='AreaChart',
+        xAxis='date')
     url = settings.CHARTS_URL + "/code"
     statuses_timeline = requests.post(url, data=data, headers={'Connection': 'close'}).text
-
 
     # Basic Atlas stats
 
@@ -864,7 +929,8 @@ def atlas(request):
 
     probes_all = RipeAtlasProbe.objects.all().order_by('country_code')
     countries_with_probes = probes_all.values_list('country_code', flat=True)
-    countries_without_probes = [{'iso': c.iso, 'printable_name': c.printable_name} for c in Country.objects.get_region_countries() if c.iso not in countries_with_probes]
+    countries_without_probes = [{'iso': c.iso, 'printable_name': c.printable_name} for c in
+                                Country.objects.get_region_countries() if c.iso not in countries_with_probes]
     counter = Counter(countries_with_probes)
 
     # Dict for the map
@@ -880,10 +946,14 @@ def atlas(request):
         country_statuses = RipeAtlasProbeStatus.objects.filter(probe__country_code=cc)
         counter[cc] = dict()
 
-        country_connected = len(country_statuses.filter(status="Connected").order_by('probe', '-date').distinct('probe'))
-        country_disconnected = len(country_statuses.filter(status="Disconnected").order_by('probe', '-date').distinct('probe'))
-        country_abandoned = len(country_statuses.filter(status="Abandoned").order_by('probe', '-date').distinct('probe'))
-        country_never = len(country_statuses.filter(status="Never Connected").order_by('probe', '-date').distinct('probe'))
+        country_connected = len(
+            country_statuses.filter(status="Connected").order_by('probe', '-date').distinct('probe'))
+        country_disconnected = len(
+            country_statuses.filter(status="Disconnected").order_by('probe', '-date').distinct('probe'))
+        country_abandoned = len(
+            country_statuses.filter(status="Abandoned").order_by('probe', '-date').distinct('probe'))
+        country_never = len(
+            country_statuses.filter(status="Never Connected").order_by('probe', '-date').distinct('probe'))
         country_all_count = country_connected + country_disconnected + country_abandoned + country_never
 
         counter[cc]['connected_count'] = country_connected

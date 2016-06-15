@@ -174,20 +174,45 @@
 
 
         <h3 class="page-header">Latencia desde un país hacia él mismo</h3>
+        <div class="row">
+            <div class="col-sm-6">
+                <h4 class="page-header">
+                    Latencia interna en milisegundos
+                </h4>
+                <p>La gráfica a continuación representa la latencia interna de un
+                    país, basada en los resultados <code>HTTP</code> de los últimos 6 meses. Cuanto mayor la latencia,
+                    peor
+                    la
+                    calidad de la red. Si la
+                    latencia resulta ser excesivamente alta, entonces se puede suponer que
+                    el tráfico interno en un país está siendo enrutado hacia afuera, y
+                    luego hacia adentro. Una causa de esto es la falta de IXP regionales y
+                    locales. Para países pequeños, este valor debería ser menor que para
+                    países grandes.</p>
 
-        <p>La gráfica a continuación representa la latencia interna de un
-            país, basada en los resultados <code>HTTP</code> de los últimos 6 meses. Cuanto mayor la latencia, peor la
-            calidad de la red. Si la
-            latencia resulta ser excesivamente alta, entonces se puede suponer que
-            el tráfico interno en un país está siendo enrutado hacia afuera, y
-            luego hacia adentro. Una causa de esto es la falta de IXP regionales y
-            locales. Para países pequeños, este valor debería ser menor que para
-            países grandes.</p>
+                <script type="text/javascript">
+                    {{ inner_latency | safe }}
+                </script>
+                <div id="inner_latency" style="min-height: 35em;"></div>
 
-        <script type="text/javascript">
-            {{ inner_latency | safe }}
-        </script>
-        <div id="inner_latency" style="min-height: 35em;"></div>
+            </div>
+            <div class="col-sm-6">
+                <h4 class="page-header">Latencia interna ponderada por superficie</h4>
+                <p>
+                    La siguiente gráfica muestra la latencia interna relativa de cada país, dividido la superficie total
+                    de ese
+                    país, en km^2. este indicador soluciona el problema de la latencia en interna en ms, ya que ese
+                    indicador perjudica a países de grandes superficies y beneficia a los más pequeños. Por ende, en el
+                    extremo "bueno" de la escala se ubicarán países con baja latencia y gran superficie y en el extremo
+                    "malo" de la escala se ubicarán países con mucha latencia y poca superficie.
+                </p>
+                <script type="text/javascript">
+                    {{ inner_latency_area | safe }}
+                </script>
+                <div id="inner_latency_area" style="min-height: 40em;"></div>
+
+            </div>
+        </div>
 
 
         <div class="chartdiv">
