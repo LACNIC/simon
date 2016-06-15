@@ -768,7 +768,6 @@ def charts(request):
     inner_latency = requests.post(url, data=data, headers={'Connection': 'close'}).text
 
     # Country information
-    from collections import defaultdict
     from operator import itemgetter
 
     inner_area = []
@@ -783,6 +782,9 @@ def charts(request):
         for i in inner:
             if i[0] == alpha2Code:
                 latency_ = float(i[1])
+
+        borders = c["borders"]
+
         area = c["area"]
         if area == None: continue
 
@@ -792,7 +794,11 @@ def charts(request):
         inner_area.append(dict(alpha2Code=alpha2Code, area=area, borders=borders, latency=latency_,
                                latency_per_area=latency_per_area))
 
-    inner_area = sorted(inner_area, key=itemgetter("latency_per_area"))  # order
+    inner_area = sorted([i for i in inner_area if i["latency"] > 0], key=itemgetter("latency_per_area"), reverse=True)  # order
+    for i, v in enumerate(inner_area):
+        new_key = "%02d - %s" % (i, v["alpha2Code"])
+        print new_key
+        inner_area[i]["alpha2Code"] = new_key
     inner_area_max = max(list((k["latency_per_area"]) for k in inner_area))
     data = dict(data=json.dumps([
         list(k["alpha2Code"] for k in inner_area),
