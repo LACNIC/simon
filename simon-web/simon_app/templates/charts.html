@@ -177,7 +177,7 @@
         <div class="row">
             <div class="col-sm-6">
                 <h4 class="page-header">
-                    Latencia interna en milisegundos
+                    Latencia interna en <code>milisegundos</code>
                 </h4>
                 <p>La gráfica a continuación representa la latencia interna de un
                     país, basada en los resultados <code>HTTP</code> de los últimos 6 meses. Cuanto mayor la latencia,
@@ -193,15 +193,16 @@
                 <script type="text/javascript">
                     {{ inner_latency | safe }}
                 </script>
-                <div id="inner_latency" style="min-height: 35em;"></div>
+                <div id="inner_latency" style="min-height: 40em;"></div>
 
             </div>
             <div class="col-sm-6">
                 <h4 class="page-header">Latencia interna ponderada por superficie</h4>
                 <p>
-                    La siguiente gráfica muestra la latencia interna relativa de cada país, dividido la superficie total
+                    La siguiente gráfica muestra la latencia interna de cada país, dividido la superficie total
                     de ese
-                    país, en km^2. este indicador soluciona el problema de la latencia en interna en ms, ya que ese
+                    país, en km^2, en valores relativos (comparado frente al *peor* país). Este indicador soluciona el
+                    problema de la latencia en interna en <code>ms</code>, ya que ese
                     indicador perjudica a países de grandes superficies y beneficia a los más pequeños. Por ende, en el
                     extremo "bueno" de la escala se ubicarán países con baja latencia y gran superficie y en el extremo
                     "malo" de la escala se ubicarán países con mucha latencia y poca superficie.
