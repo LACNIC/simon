@@ -698,19 +698,21 @@ def charts(request):
     results_timeline = Results.objects.get_results_timeline()
 
     # Inner Latency Chart
+    from operator import itemgetter
     inners = Results.objects.inner(tester=settings.PROTOCOLS["HTTP"], months=6)
+    inners = sorted([i for i in inners], key=itemgetter(1), reverse=True) # ordered by min RTT
     inner_isos = []
     inner_lats = []
     inner_lats_min = []
     inner_lats_max = []
-    for i in inners:
-        if i[1] is None: continue
+    for i, v in enumerate(inners):
+        if v[1] is None: continue
 
-        iso = "(%.0f muestras) %s" % (float(i[4]), str(i[0]))
+        iso = "%02d - %s" % (i, str(v[0]))
         inner_isos.append(iso)
-        inner_lats_min.append(float(i[1]))
-        inner_lats.append(float(i[2]))
-        inner_lats_max.append(float(i[3]))
+        inner_lats_min.append(float(v[1]))
+        inner_lats.append(float(v[2]))
+        inner_lats_max.append(float(v[3]))
 
     ###################
     # Charts Services #
