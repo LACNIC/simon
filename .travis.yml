@@ -27,7 +27,7 @@ install:
 before_script:
   - mv simon-web/simon_project/passwords_dummy.py simon-web/simon_project/passwords.py
   - psql -c 'create database simon;' -U postgres
-  - npm install
+  - npm install karma
 
 script:
   - python simon-web/manage.py test
