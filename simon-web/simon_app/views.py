@@ -682,7 +682,7 @@ def charts(request):
     results_timeline = Results.objects.get_results_timeline()
 
     # Inner Latency Chart
-    inners = Results.objects.inner('JavaScript', 6)
+    inners = Results.objects.inner(tester=settings.PROTOCOLS["HTTP"], months=6)
     inner_isos = []
     inner_lats = []
     inner_lats_min = []
