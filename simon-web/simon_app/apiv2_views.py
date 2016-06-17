@@ -140,18 +140,32 @@ urlpatterns = patterns('',
 def latency(request):
 
     country='all'
-    ip_version='all'
+    ip_ver='all'
     year=2009
     month=01
     n=50
+
+    year_from = request.GET.get("year_from")
+    year_to = request.GET.get("year_to")
+    month_from = request.GET.get("month_from")
+    month_to =request.GET.get("month_to")
+    day_from = request.GET.get("day_from")
+    day_to =request.GET.get("day_to")
+    country_origin = request.GET.get("country_origin")
+    country_destination = request.GET.get("country_dest")
+    ip_version = request.GET.get("ip_version")
+    tester = request.GET.get("protocol")
+    as_origin =  request.GET.get("as_origin")
+    as_destination = request.GET.get("as_dest")
+    url = request.GET.get("url")
 
     # print request.GET.get("country")
 
     date_from = datetime.date(int(year), int(month), 1)
     results = Results.objects.filter(Q(date_test__gt=date_from))
 
-    if ip_version is not 'all':
-        results = results.filter(Q(ip_version=ip_version))
+    if ip_ver is not 'all':
+        results = results.filter(Q(ip_version=ip_ver))
 
     if country is not 'all':
         results = results.filter(Q(country_origin=country) | Q(country_destination=country))
