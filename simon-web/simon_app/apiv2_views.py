@@ -20,6 +20,7 @@ import simon_project.settings as settings
 from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render
+from django.core import serializers
 
 def ntp_points(request):
     points = TestPoint.objects.filter(testtype='ntp', enabled=True)
@@ -132,11 +133,11 @@ from django.conf.urls import patterns, include, url
 
 # Final URLs object
 urlpatterns = patterns('',
-                       url(r'^$', 'simon_app.apiv2_views.latencyv2')
+                       url(r'^$', 'simon_app.apiv2_views.latency')
 )
 
 
-def latencyv2(request, country='all', ip_version='all', year=2009, month=01):
+def latency(request, country='all', ip_version='all', year=2009, month=01):
     """
     API View in charge of returning Latency queries
 
@@ -159,8 +160,20 @@ def latencyv2(request, country='all', ip_version='all', year=2009, month=01):
     if country is not 'all':
         results = results.filter(Q(country_origin=country) | Q(country_destination=country))
 
-    response = []
-    for result in results:
+    paginator = Paginator(results, 50)
+
+    page = request.GET.get('page')
+    try:
+        res = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        res = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        res = paginator.page(paginator.num_pages)
+
+    results_list = []
+    for result in res.object_list:
         row = {}
         row['min_rtt'] = result.min_rtt
         row['max_rtt'] = result.max_rtt
@@ -174,23 +187,27 @@ def latencyv2(request, country='all', ip_version='all', year=2009, month=01):
         row['date_test'] = str(result.date_test)
         row['ip_version'] = str(result.ip_version)
         row['tester'] = str(result.tester)
-        response.append(row)
+        results_list.append(row)
 
+    if res.has_next():
+        next = settings.SIMON_URL+"/apiv2/?page="+str(res.next_page_number())
+    else:
+        next = ""
 
-    paginator = Paginator(response, 50)
+    if res.has_previous():
+        prev = settings.SIMON_URL+"/apiv2/?page="+str(res.previous_page_number())
+    else:
+        prev = ""
 
-    try:
-        page = int(request.POST.get('page','1'))
-    except ValueError:
-        page = 1
-    try:
-        res = paginator.page(page)
-    except EmptyPage:
-        res = paginator.page(paginator.num_pages)
+    response = {
+        "results": results_list,
+        "next": next,
+        "previous": prev,
+        "pages": str(paginator.num_pages)
+    }
 
-    json_response = json.dumps(res.object_list, sort_keys=True, indent=4, separators=(',', ': '))
+    json_response = json.dumps(response, sort_keys=True, indent=4, separators=(',', ': '))
     return HttpResponse(json_response , mimetype='application/json')
-    # return render(request, 'list.html', {'res': res})
 
 
 def ases(request, asn_origin, asn_destination):
