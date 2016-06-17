@@ -137,19 +137,15 @@ urlpatterns = patterns('',
 )
 
 
-def latency(request, country='all', ip_version='all', year=2009, month=01):
-    """
-    API View in charge of returning Latency queries
+def latency(request):
 
-    :param request:
-    :param country:
-    :param ip_version:
-    :param year:
-    :param month:
-    :return:
-    """
+    country='all'
+    ip_version='all'
+    year=2009
+    month=01
+    n=50
 
-    # if request.GET.get('year') is not None:
+    # print request.GET.get("country")
 
     date_from = datetime.date(int(year), int(month), 1)
     results = Results.objects.filter(Q(date_test__gt=date_from))
@@ -160,7 +156,7 @@ def latency(request, country='all', ip_version='all', year=2009, month=01):
     if country is not 'all':
         results = results.filter(Q(country_origin=country) | Q(country_destination=country))
 
-    paginator = Paginator(results, 50)
+    paginator = Paginator(results, n)
 
     page = request.GET.get('page')
     try:
@@ -203,7 +199,12 @@ def latency(request, country='all', ip_version='all', year=2009, month=01):
         "results": results_list,
         "next": next,
         "previous": prev,
-        "pages": str(paginator.num_pages)
+        "pages": str(paginator.num_pages),
+        "current": str(res.number),
+        "per_page": str(paginator.per_page),
+        "total_results": str(paginator.count),
+        "start_index": str(res.start_index()),
+        "end_index": str(res.end_index())
     }
 
     json_response = json.dumps(response, sort_keys=True, indent=4, separators=(',', ': '))
