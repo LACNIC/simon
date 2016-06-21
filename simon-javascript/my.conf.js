@@ -15,7 +15,8 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      'simon_probe_plugin.js'
+      'simon_probe_plugin.js',
+      'https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js'
     ],
 
 
