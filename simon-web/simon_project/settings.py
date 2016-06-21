@@ -290,3 +290,5 @@ else:
     NEWRELIC = "newrelic.ini"
 
 TEMPLATE_DEBUG = DEBUG
+
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
