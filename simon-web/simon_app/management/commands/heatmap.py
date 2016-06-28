@@ -5,7 +5,6 @@ from __future__ import division
 from django.core.management.base import BaseCommand
 from simon_app.models import Country, Params
 from django.db.models import Q
-from simon_app.functions import meanLatency
 from simon_app.models import Results, AS
 import json, sys
 
