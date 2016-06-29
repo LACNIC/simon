@@ -10,9 +10,11 @@ urls = patterns('',
                 # API urls
                 url(r'api/', include('simon_app.urls_api')),
 
+                url(r'apiv2/', include('simon_app.apiv2_views')),
+
                 # Common urls
                 url(r'', include('simon_app.urls'))
-)
+                )
 
 # The /simon tree root in Apache
 urlpatterns = patterns('',
