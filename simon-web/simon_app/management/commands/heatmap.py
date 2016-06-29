@@ -150,7 +150,7 @@ def build_dict(results):
 
         cc_dict = defaultdict(None)
         for cc_d in ccs:
-            rtts = rs.filter(country_destination=cc_d).values_list('ave_rtt', flat=True)
+            rtts = rs.filter(country_destination=cc_d).values_list('min_rtt', flat=True)
             if len(rtts) > 0:
                 rtt = sum(rtts) / len(rtts)
             # else:
