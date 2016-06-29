@@ -156,7 +156,7 @@ def latency(request):
     protocol = request.GET.get("protocol")
     as_origin =  request.GET.get("as_origin")
     as_destination = request.GET.get("as_dest")
-    n = request.GET.get("n")
+    item_nums = request.GET.get("number_of_items")
     # url = request.GET.get("url")
 
     # Date filters
@@ -215,8 +215,8 @@ def latency(request):
     results = Results.objects.filter(date_filter, country_filter, as_filter, ip_version_filter, tester_filter)
 
     # number of items per page
-    if n == None:
-        n = 50
+    if item_nums == None:
+        item_nums = 50
 
     # date_from = datetime.date(int(year), int(month), 1)
     # results = Results.objects.filter(Q(date_test__gt=date_from))
@@ -231,9 +231,9 @@ def latency(request):
     #
     # results = results.filter(ip_filter, country_filter) # All filters are applied
 
-    paginator = Paginator(results, n)
+    paginator = Paginator(results, item_nums)
 
-    page = request.GET.get('page')
+    page = request.GET.get('page_number')
     try:
         res = paginator.page(page)
     except PageNotAnInteger:
@@ -283,7 +283,7 @@ def latency(request):
     }
 
     json_response = json.dumps(response, sort_keys=True, indent=4, separators=(',', ': '))
-    return HttpResponse(json_response , mimetype='application/json')
+    return HttpResponse(json_response , content_type='application/json')
 
 
 def ases(request, asn_origin, asn_destination):
