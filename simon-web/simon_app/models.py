@@ -329,6 +329,7 @@ class Results(models.Model):
     as_destination = models.IntegerField(null=True)
     user_agent = models.CharField(max_length=2000, default='')
     url = models.CharField(max_length=2083, default='', null=True)
+    url_host = models.CharField(max_length=2083, default='', null=True)
     objects = ResultsManager()
 
     def __unicode__(self):
