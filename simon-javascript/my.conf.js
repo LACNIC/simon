@@ -73,8 +73,8 @@ module.exports = function(config) {
      */
 
     browserStack: {
-      username: 'jamesbond',
-      accessKey: '007'
+      username: process.env.BS_USERNAME,
+      accessKey: process.env.BS_ACCESS_KEY
     },
 
     // define browsers
