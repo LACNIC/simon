@@ -37,6 +37,12 @@ def unit_shortener(value):
         Unit converter
     """
 
+    try:
+        int(value)
+        float(value)
+    except:
+        return "N/A"
+
     K = 1000
     M = K * K
     G = K * M
