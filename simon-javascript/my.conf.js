@@ -15,6 +15,7 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
+      'jquery1.8.0.js',
       'simon_probe_plugin.js',
       'https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js'
     ],
@@ -56,7 +57,7 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Chrome', 'Firefox', 'Safari', 'Opera', 'IE'],
+    browsers: ['Chrome', 'Firefox'],//, 'Safari', 'Opera', 'IE'],
 
 
     // Continuous Integration mode
