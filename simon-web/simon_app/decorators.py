@@ -1,25 +1,22 @@
-from simon_app.mailing import send_mail
-
 """
     Decorator definitions file
 """
 
-from simon_app.mailing import *
 
-def command(command=""):
-    def decorator(function_to_decorate):
+def chatty_command(command=""):
+    """
+
+    :return: Print exception to stdout
+
+    """
+
+    def real_decorator(function):
         def wrapper(*args, **kw):
+            try:
+                function(*args, **kw)
+            except Exception as e:
+                print command, e, e.message
 
-            print "ANTES"
-
-            # Calling your function
-            output = function_to_decorate(*args, **kw)
-            print "INMEDIATAMENTE DESPUES"
-            print output
-            send_mail_on_command_failed(command=command)
-
-            print "DESPUES"
-
-            return output
         return wrapper
-    return decorator
+
+    return real_decorator

@@ -1,16 +1,15 @@
 from django.core.management.base import BaseCommand
 from simon_app.models import SpeedtestTestPoint
-from urllib2 import urlopen, HTTPError
 from sys import stdout
-from simon_app.decorators import *
+from simon_app.decorators import chatty_command
 
 __author__ = 'agustin'
 
 
 class Command(BaseCommand):
-    def handle(self, *args, **options):
-        command = "Clean Test Points"
 
+    @chatty_command(command="Clean Test Points")
+    def handle(self, *args, **options):
         tps = SpeedtestTestPoint.objects.filter(enabled=True)
         N = len(tps)
         disabled = []
@@ -20,5 +19,4 @@ class Command(BaseCommand):
 
             tp.check()
 
-        print ""
-        print "The following points have been disabled ", disabled
+        return "The following points have been disabled %s" % (disabled)
