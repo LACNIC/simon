@@ -66,6 +66,34 @@ module.exports = function(config) {
 
     // Concurrency level
     // how many browser should be started simultaneous
-    concurrency: Infinity
+    concurrency: Infinity,
+
+    /*
+     * global config of your BrowserStack account
+     */
+
+    browserStack: {
+      username: 'jamesbond',
+      accessKey: '007'
+    },
+
+    // define browsers
+    customLaunchers: {
+      bs_firefox_mac: {
+        base: 'BrowserStack',
+        browser: 'firefox',
+        browser_version: '21.0',
+        os: 'OS X',
+        os_version: 'Mountain Lion'
+      },
+      bs_iphone5: {
+        base: 'BrowserStack',
+        device: 'iPhone 5',
+        os: 'ios',
+        os_version: '6.0'
+      }
+    },
+
+    browsers: ['bs_firefox_mac', 'bs_iphone5']
   })
 }
