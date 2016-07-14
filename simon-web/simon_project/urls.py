@@ -10,7 +10,7 @@ urls = patterns('',
                 # API urls
                 url(r'api/', include('simon_app.urls_api')),
 
-                url(r'apiv2/', include('simon_app.apiv2_views')),
+                url(r'apiv2/', include('simon_app.views_apiv2')),
 
                 # Common urls
                 url(r'', include('simon_app.urls'))
