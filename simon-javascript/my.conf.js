@@ -79,21 +79,35 @@ module.exports = function(config) {
 
     // define browsers
     customLaunchers: {
+        bs_chrome_windows10: {
+        base: 'BrowserStack',
+        browser: 'chrome',
+        browser_version: '51',
+        os: 'windows',
+        os_version: '10'
+      },
+      bs_safari_mac: {
+        base: 'BrowserStack',
+        browser: 'safari',
+        browser_version: '9.1',
+        os: 'OS X',
+        os_version: 'El Capitan'
+      },
       bs_firefox_mac: {
         base: 'BrowserStack',
         browser: 'firefox',
-        browser_version: '21.0',
+        browser_version: '46.0',
         os: 'OS X',
-        os_version: 'Mountain Lion'
+        os_version: 'El Capitan'
       },
-      bs_iphone5: {
+      bs_iphone6: {
         base: 'BrowserStack',
-        device: 'iPhone 5',
+        device: 'iPhone 6',
         os: 'ios',
-        os_version: '6.0'
+        os_version: '8.3'
       }
     },
 
-    browsers: ['bs_firefox_mac', 'bs_iphone5']
+    browsers: ['bs_safari_mac', 'bs_chrome_windows10', 'bs_firefox_mac', 'bs_iphone6']
   })
 }
