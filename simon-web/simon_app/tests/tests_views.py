@@ -30,5 +30,5 @@ class ViewTestCase(TestCase):
     def test_reports(self):
         return self.get_section(reverse("simon_app.views.reports"), self.OK)
 
-    def test_reports(self):
-        return self.get_section(reverse("simon_app.views.charts"), self.OK)
+    # def test_reports(self):
+    #     return self.get_section(reverse("simon_app.views.charts"), self.OK)
