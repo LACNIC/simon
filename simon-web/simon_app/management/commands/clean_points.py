@@ -17,6 +17,6 @@ class Command(BaseCommand):
             stdout.write("\r%.2f%%" % (100.0 * i / N))
             stdout.flush()
 
-            tp.check()
+            tp.check_point()
 
         return "The following points have been disabled %s" % (disabled)
