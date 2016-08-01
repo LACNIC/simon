@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 
     <!-- Prettify -->
-    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+    {#    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>#}
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -34,7 +34,10 @@
 
     <meta http-equiv="content-type" content="text/html;charset=utf-8">
 
-    <link rel="stylesheet" type="text/css" href="{% static 'simon_app/css/simon2.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'simon_app/css/simon.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'simon_app/css/lacniclabs-portales-negro.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'simon_app/css/lacniclabs-override.css' %}">
+
     <link type="image/x-icon" href="{% static 'simon_app/imgs/logos/favicon.ico' %}" rel="shortcut icon">
     <link rel="apple-touch-icon" href="{% static 'simon_app/imgs/logos/favicon.png' %}">
 
@@ -67,7 +70,7 @@
 <body style="background-color: #FFF5E6">
 
 {#Barra anaranjada#}
-<div class="navbar" style="background-color: #FF9900; border-radius: 0; margin: 0">
+<div id="barra-primaria" class="navbar">
 
     <a href="https://www.labs.lacnic.net" title="LACNIC labs" class="pull-left">
         <img src="{% static 'simon_app/imgs/logos/logo_labs.png' %}" border="0" class="hidden-xs hidden-sm"
@@ -76,38 +79,28 @@
              alt="LACNIC Labs"/>
     </a>
 
-    <a class="navbar-brand pull-right" href="{% url 'simon_app.views.home' %}">
-        <h2 style="color: #ffffff; font-family: 'HelveticaNeue-Light'">
-            <span class="hidden-xs hidden-sm">
-                Proyecto Simón
-            </span>
-            <span class="visible-xs visible-sm">
-                Simón
-            </span>
+    <a id="titulo-primario" class="navbar-brand pull-right" href="{% url 'simon_app.views.home' %}">
+        <h2>
+            Proyecto Simón
         </h2>
     </a>
 </div>
 
 {#Segunda barra#}
-<div class="navbar visible-md visible-lg visible-xl" style="background-color: #FFC285; border-radius: 0; margin: 0;">
+<div id="barra-secundaria" class="navbar visible-md visible-lg visible-xl">
 
-    <div style="text-align: right; padding-right: 1em;">
-        <h4 style="color: #ffffff; font-family: 'HelveticaNeue-Light'">
-            Cantidad de mediciones:
-        </h4>
-        <h6 style="color: #ffffff; font-family: 'HelveticaNeue-Light'">
-            Última hora: {{ HOURLY | unit_shortener }}
-        </h6>
-        <h6 style="color: #ffffff; font-family: 'HelveticaNeue-Light'">
-            Último día: {{ DAILY | unit_shortener }}
-        </h6>
-        <h6 style="color: #ffffff; font-family: 'HelveticaNeue-Light'">
-            Última semana: {{ WEEKLY | unit_shortener }}
-        </h6>
-    </div>
-    <div style="text-align: left; padding-left: 1em;">
-        {#        Empty for now#}
-    </div>
+    <p>
+        Cantidad de mediciones:
+    </p>
+    <p>
+        Última hora: {{ HOURLY | unit_shortener }}
+    </p>
+    <p>
+        Último día: {{ DAILY | unit_shortener }}
+    </p>
+    <p>
+        Última semana: {{ WEEKLY | unit_shortener }}
+    </p>
 </div>
 
 <div class="container" style="background-color: #FFFAF2;">
@@ -148,7 +141,7 @@
         </div>
     </div>
 
-{#    GitHub button#}
+    {#    GitHub button#}
     <div class="col-lg-3" style="margin-top: 1em;">
         <div style="text-align: center">
             <!-- Place this tag where you want the button to render. -->
