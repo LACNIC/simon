@@ -1,14 +1,17 @@
 from models import *
 from django.contrib import admin
 
-class SimonGenericAdmin(admin.ModelAdmin):
+class SimonAdmin(admin.ModelAdmin):
+    pass
+
+class SimonReadOnlyAdmin(SimonAdmin):
     """
         Generic admin covering admin-wide
     """
     def get_readonly_fields(self, request, obj=None):
         return [f.name for f in self.model._meta.fields]
 
-class ResultsAdmin(SimonGenericAdmin):
+class ResultsAdmin(SimonReadOnlyAdmin):
     fields = ()
     list_display = ['country_origin', 'country_destination', 'as_origin', 'as_destination', 'ave_rtt', 'dev_rtt', 'date_short', 'protocol']
     ordering = ['-date_test', 'country_origin', 'country_destination']
@@ -24,7 +27,7 @@ class ResultsAdmin(SimonGenericAdmin):
         )
 
 
-class TracerouteResultAdmin(SimonGenericAdmin):
+class TracerouteResultAdmin(SimonReadOnlyAdmin):
 
     def get_readonly_fields(self, request, obj=None):
         return [f.name for f in self.model._meta.fields]
@@ -32,7 +35,7 @@ class TracerouteResultAdmin(SimonGenericAdmin):
     list_display = ['country_origin', 'country_destination', 'as_origin', 'as_destination', 'hop_count', 'country_count', 'as_count']
     search_fields = ['country_origin', 'country_destination', 'as_origin', 'as_destination']
 
-class TracerouteHopAdmin(SimonGenericAdmin):
+class TracerouteHopAdmin(SimonReadOnlyAdmin):
 
     def get_readonly_fields(self, request, obj=None):
         return [f.name for f in self.model._meta.fields]
@@ -40,7 +43,7 @@ class TracerouteHopAdmin(SimonGenericAdmin):
     list_display = ['country_origin', 'country_destination', 'as_origin', 'as_destination', 'ip_origin', 'ip_destination', 'ave_rtt', 'dev_rtt', 'date_short', 'protocol']
     search_fields = ['country_origin', 'country_destination', 'as_origin', 'as_destination', 'ip_origin', 'ip_destination']
 
-class TestPointAdmin(SimonGenericAdmin):
+class TestPointAdmin(SimonReadOnlyAdmin):
 
     def enable(modeladmin, request, queryset):
         queryset.update(enabled=True)
@@ -61,7 +64,7 @@ class TestPointAdmin(SimonGenericAdmin):
     actions = [enable, disable, check_point]
     search_fields = ['country']
 
-class RipeAtlasProbeAdmin(SimonGenericAdmin):
+class RipeAtlasProbeAdmin(SimonReadOnlyAdmin):
     list_display = ['country_code', 'asn_v4', 'asn_v6', 'prefix_v4', 'prefix_v6']
     search_fields = ['country_code']
 
@@ -88,10 +91,10 @@ class InactiveUsersView(ChangeList):
         # filter inactive and admin users
         return qs.filter(is_staff=False, is_active=False, is_superuser=False)
 
-class RipeAtlasTokenAdmin(SimonGenericAdmin):
+class RipeAtlasTokenAdmin(SimonReadOnlyAdmin):
     pass
 
-class RipeAtlasTokenListAdmin(SimonGenericAdmin):
+class RipeAtlasTokenListAdmin(SimonReadOnlyAdmin):
     pass
      # def save_model(self, request, obj, form, change):
      #     print obj
@@ -101,15 +104,18 @@ class RipeAtlasTokenListAdmin(SimonGenericAdmin):
      #         rat = RipeAtlasToken(token=token)
      #         rat.save()
 
-class CommandAuditAdmin(SimonGenericAdmin):
+class CommandAuditAdmin(SimonReadOnlyAdmin):
     list_display = ['command', 'date', 'status']
 
-class ASAdmin(SimonGenericAdmin):
+class ASAdmin(SimonReadOnlyAdmin):
     list_display = ['asn', 'network', 'pfx_length', 'date_updated', 'regional']
     search_fields = ['asn', 'network']
 
-class HttpsCheckAdmin(SimonGenericAdmin):
+class HttpsCheckAdmin(SimonReadOnlyAdmin):
     list_display = ['date', 'status', 'test_point']
+
+class RegionAdmin(SimonAdmin):
+    list_display = ['name', 'numcode']
 
 admin.site.register(Comment)
 
@@ -137,3 +143,5 @@ admin.site.register(CommandAudit, CommandAuditAdmin)
 admin.site.register(AS, ASAdmin)
 
 admin.site.register(HttpsCheck, HttpsCheckAdmin)
+
+admin.site.register(Region, RegionAdmin)
