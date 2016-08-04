@@ -47,7 +47,6 @@ class Command(BaseCommand):
             #Get the IP address and match it against LACNIC resources
             long_url = server.get('url')
             url = urlparse(long_url)[1]
-            # 		print str(long_url)
 
             country = server.get('cc').upper()
             city = server.get('name')
@@ -59,7 +58,6 @@ class Command(BaseCommand):
             date_created = strftime(timeFormat, gmtime())
 
             try:
-                #could be done with DNSpython
                 ok = False
 
                 if country not in ccs:
@@ -71,19 +69,25 @@ class Command(BaseCommand):
                     try:
                         TestPoint.objects.get(ip_address=str(ip_address))
                     except TestPoint.DoesNotExist:
-                        # Si es nuevo...
 
-                        if ip_address.version == 4:
-                            for resource in settings.v4resources:
-                                if ip_address in IPNetwork(resource):
-                                    ok = True
-                                    break
-                        elif ip_address.version == 6:
-                            for resource in settings.v6resources:
-                                if ip_address in IPNetwork(resource):
-                                    ok = True
-                                    break
-                        if ok is True:
+                        ok = True
+                        # if new...or same with new address
+
+                        # ccs = Country.objects.get_region_countrycodes()
+                        # if ccs:
+
+                        # if ip_address.version == 4:
+                        #     for resource in settings.v4resources:
+                        #         if ip_address in IPNetwork(resource):
+                        #             ok = True
+                        #             break
+                        # elif ip_address.version == 6:
+                        #     for resource in settings.v6resources:
+                        #         if ip_address in IPNetwork(resource):
+                        #             ok = True
+                        #             break
+
+                        if ok:
                             tp = SpeedtestTestPoint(
                                 description=description,
                                 testtype=testtype,
