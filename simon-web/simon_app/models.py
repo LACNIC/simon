@@ -14,9 +14,6 @@ class Region(models.Model):
     name = models.CharField(max_length=80)
     numcode = models.IntegerField(null=True)
 
-    def __unicode__(self):
-        return self.printable_name
-
 
 class CountryManager(models.Manager):
     def get_or_none(self, *args, **kwargs):
@@ -25,20 +22,41 @@ class CountryManager(models.Manager):
         except Exception as e:
             return None
 
-    def get_region_countries(self):
-        return Country.objects.filter(Q(region_id=1) | Q(region_id=2) | Q(region_id=3))
+    def get_countries_from_region(self, region=[1, 2, 3]):
+        """
 
-    def get_region_countrycodes(self):
-        return self.get_region_countries().values_list('iso', flat=True)
+        :param region: defaults to regions 1, 2, OR 3
+        :return: Country QuerySet
+        """
+
+        sub_queries = [Q(region_id=r) for r in region]
+        query = Q()
+        for sq in sub_queries:
+            query |= sq
+        return Country.objects.filter(query)
+
+    def get_lacnic_countries(self):
+        regs = Region.objects.filter(Q(name="South America") | Q(name="Central America") | Q(name="Caribbean"))
+        return self.get_countries_from_region(region=[r.id for r in regs])
+
+    def get_afrinic_countries(self):
+        regs = Region.objects.filter(Q(name="Southern Africa") | Q(name="Eastern Africa") | Q(name="Middle Africa") | Q(name="Western Africa") | Q(name="Northern Africa"))
+        return self.get_countries_from_region(region=[r.id for r in regs])
+
+    def get_lacnic_countrycodes(self):
+        return self.get_lacnic_countries().values_list('iso', flat=True)
+
+    def get_afrinic_countrycodes(self):
+        return self.get_afrinic_countries().values_list('iso', flat=True)
 
     def get_countries_with_no_testpoints(self):
-        return self.get_region_countries().exclude(iso__in=TestPoint.objects.values_list('country', flat=True))
+        return self.get_lacnic_countries().exclude(iso__in=TestPoint.objects.values_list('country', flat=True))
 
     def get_countries_with_testpoints(self):
-        return self.get_region_countries().filter(iso__in=TestPoint.objects.values_list('country', flat=True))
+        return self.get_lacnic_countries().filter(iso__in=TestPoint.objects.values_list('country', flat=True))
 
     def get_countries_with_speedtest_testpoints(self):
-        return self.get_region_countries().filter(iso__in=SpeedtestTestPoint.objects.values_list('country', flat=True))
+        return self.get_lacnic_countries().filter(iso__in=SpeedtestTestPoint.objects.values_list('country', flat=True))
 
     def get_country_with_least_results(self, ip_version, test_type='tcp_web', amount=1, days=7, country_origin=''):
         """
@@ -52,7 +70,7 @@ class CountryManager(models.Manager):
             return None
 
         # First check those countries without any tests in the last 'days' days
-        # cc_all = Country.objects.get_region_countries().values_list('iso', flat=True)
+        # cc_all = Country.objects.get_lacnic_countries().values_list('iso', flat=True)
         # cc_with =  Results.objects.filter(date_test__gte=datetime.now() - timedelta(days), testype = test_type).values_list('country_destination', flat=True)
         # cc_without_testpoints = Country.objects.get_countries_with_no_testpoints().values_list('iso', flat=True)
         # cc_without = list(set(cc_all) - set(set(cc_without_testpoints)) - set(cc_with))
@@ -93,6 +111,10 @@ class Country(models.Model):
 
     def __unicode__(self):
         return self.printable_name
+
+    class Meta:
+        verbose_name = 'Pais'
+        verbose_name_plural = 'Paises'
 
 
 class ThroughputResults(models.Model):
@@ -141,7 +163,8 @@ class ASManager(models.Manager):
     def get_as_by_ip(self, ip_address):
         try:
             return AS.objects.raw(
-                "SELECT * FROM simon_app_as WHERE INET(network) >>= inet '%s' ORDER BY pfx_length DESC LIMIT 1" % ip_address)[0]
+                "SELECT * FROM simon_app_as WHERE INET(network) >>= inet '%s' ORDER BY pfx_length DESC LIMIT 1" % ip_address)[
+                0]
         except IndexError:
             return AS.objects.filter(pfx_length=0).filter(asn=0)[0]
 
@@ -207,31 +230,33 @@ class ResultsManager(models.Manager):
         from django.db import connection
 
         cursor = connection.cursor()
-        cursor.execute("SELECT date_trunc('day', date_test), SUM(case when ip_version=4 then 1 else 0 end) AS v4 , SUM(case when ip_version=6 then 1 else 0 end) AS v6 " \
-                       "FROM simon_app_results " \
-                       "WHERE date_test > date '%s' - interval '%s months' " \
-                       "AND date_test < now() " \
-                       "GROUP BY 1 " \
-                       "ORDER BY 1; " % (date, months))
+        cursor.execute(
+            "SELECT date_trunc('day', date_test), SUM(case when ip_version=4 then 1 else 0 end) AS v4 , SUM(case when ip_version=6 then 1 else 0 end) AS v6 " \
+            "FROM simon_app_results " \
+            "WHERE date_test > date '%s' - interval '%s months' " \
+            "AND date_test < now() " \
+            "GROUP BY 1 " \
+            "ORDER BY 1; " % (date, months))
         return cursor.fetchall()
 
     def get_results_timeline(self):
         from django.db import connection
 
         cursor = connection.cursor()
-        cursor.execute("SELECT date_trunc('day', date_test), SUM(case when testype='tcp_web' then 1 else 0 end) AS http , SUM(case when testype='ping' then 1 else 0 end) AS icmp " \
-                       "FROM simon_app_results " \
-                       "WHERE date_test > now() - interval '2 months' " \
-                       "AND date_test < now() " \
-                       "GROUP BY 1 " \
-                       "ORDER BY 1; ")
+        cursor.execute(
+            "SELECT date_trunc('day', date_test), SUM(case when testype='tcp_web' then 1 else 0 end) AS http , SUM(case when testype='ping' then 1 else 0 end) AS icmp " \
+            "FROM simon_app_results " \
+            "WHERE date_test > now() - interval '2 months' " \
+            "AND date_test < now() " \
+            "GROUP BY 1 " \
+            "ORDER BY 1; ")
 
         return cursor.fetchall()
 
     def results_matrix_cc(self, date=datetime.now(), months=12, tester="probeapi", ip_version=4):
         from django.db import connection
 
-        date_string = date#.strftime("%Y-%d-%m %H:%M:%S")
+        date_string = date  # .strftime("%Y-%d-%m %H:%M:%S")
 
         cursor = connection.cursor()
         cursor.execute("SELECT country_origin, country_destination, AVG(min_rtt), AVG(ave_rtt), AVG(max_rtt), COUNT(*) "
@@ -463,8 +488,9 @@ class TracerouteResult(models.Model):
         super(TracerouteResult, self).save(*args, **kwargs)
 
     def __str__(self):
-        all =  self.traceroutehop_set.all()
-        return "%s (AS%s) --> %s (AS%s) (%.0f hops)" % (self.country_origin, self.as_origin, self.country_destination, self.as_destination, len(all))
+        all = self.traceroutehop_set.all()
+        return "%s (AS%s) --> %s (AS%s) (%.0f hops)" % (
+            self.country_origin, self.as_origin, self.country_destination, self.as_destination, len(all))
 
     def pretty_print(self):
         from geoip2.errors import AddressNotFoundError
@@ -519,14 +545,14 @@ class RipeAtlasResult(Results):
     type = CharField(max_length=100)
     oneoff = models.BooleanField(default=False)
 
-class RipeAtlasProbeManager(models.Manager):
 
+class RipeAtlasProbeManager(models.Manager):
     def connected_now(self):
         return RipeAtlasProbe.objects.filter(ripeatlasprobestatus__status="Connected")
 
     def connected_now_region(self):
         connected_now = self.connected_now()
-        ccs = Country.objects.get_region_countries().values_list('iso', flat=True)
+        ccs = Country.objects.get_lacnic_countries().values_list('iso', flat=True)
         return [_c for _c in connected_now if _c.country_code in ccs]
 
 
@@ -597,12 +623,13 @@ class RipeAtlasProbeStatusManager(models.Manager):
         from django.db import connection
 
         cursor = connection.cursor()
-        cursor.execute("SELECT date_trunc('day', date), SUM(case when status='Connected' then 1 else 0 end) AS connected , SUM(case when status='Disconnected' then 1 else 0 end) AS disconnected , SUM(case when status='Abandoned' then 1 else 0 end) AS abandoned , SUM(case when status='Never Connected' then 1 else 0 end) AS never " \
-                       "FROM simon_app_ripeatlasprobestatus " \
-                       "WHERE date > now() - interval '2 months' " \
-                       "AND date < now() " \
-                       "GROUP BY 1 " \
-                       "ORDER BY 1; ")
+        cursor.execute(
+            "SELECT date_trunc('day', date), SUM(case when status='Connected' then 1 else 0 end) AS connected , SUM(case when status='Disconnected' then 1 else 0 end) AS disconnected , SUM(case when status='Abandoned' then 1 else 0 end) AS abandoned , SUM(case when status='Never Connected' then 1 else 0 end) AS never " \
+            "FROM simon_app_ripeatlasprobestatus " \
+            "WHERE date > now() - interval '2 months' " \
+            "AND date < now() " \
+            "GROUP BY 1 " \
+            "ORDER BY 1; ")
 
         return cursor.fetchall()
 
@@ -610,17 +637,18 @@ class RipeAtlasProbeStatusManager(models.Manager):
         from django.db import connection
 
         cursor = connection.cursor()
-        sql = "SELECT date_trunc('day', date), COUNT(*) AS count "\
-        "FROM simon_app_ripeatlasprobestatus "\
-        "WHERE date > now() - interval '2 months' "\
-        "AND date < now() "\
-        "AND probe_id = 648 "\
-        "GROUP BY 1 "\
-        "ORDER BY 1;"
+        sql = "SELECT date_trunc('day', date), COUNT(*) AS count " \
+              "FROM simon_app_ripeatlasprobestatus " \
+              "WHERE date > now() - interval '2 months' " \
+              "AND date < now() " \
+              "AND probe_id = 648 " \
+              "GROUP BY 1 " \
+              "ORDER BY 1;"
 
         cursor.execute(sql)
 
         return cursor.fetchall()
+
 
 class RipeAtlasProbeStatus(models.Model):
     probe = models.ForeignKey(RipeAtlasProbe)
@@ -647,7 +675,7 @@ class RipeAtlasPingResult(RipeAtlasResult):
         else:
             return False
 
-        ccs = Country.objects.get_region_countrycodes()
+        ccs = Country.objects.get_lacnic_countrycodes()
         return self.country_origin in ccs and self.country_destination in ccs
 
     def merge(self, ripeAtlasPingResult):
@@ -725,9 +753,7 @@ class TestPoint(models.Model):
             response = pyping.ping(self.ip_address)
             return response.ret_code == 0
 
-
         from requests import get
-        from socket import gethostbyaddr
 
         try:
 
@@ -749,7 +775,6 @@ class TestPoint(models.Model):
                 return True
 
         except Exception as e:
-            print e
             return False
 
     def check_point(self, protocol="http", save=True, timeout=5):
@@ -758,6 +783,7 @@ class TestPoint(models.Model):
         :return:
         """
         did_fetch = self.make_request(protocol=protocol, timeout=timeout)
+
         if self.enabled != did_fetch:
             self.enabled = did_fetch
             if save:
@@ -883,7 +909,8 @@ class ChartManager(models.Manager):
     url = settings.CHARTS_URL + "/hist/code"
 
     def javascriptChart(self, cc1, divId, date_from, date_to, cc2=None, bidirectional=True):
-        rtts = self.filterQuerySet(Results.objects.javascript(), cc1=cc1, cc2=cc2, date_from=date_from, date_to=date_to, bidirectional=bidirectional)
+        rtts = self.filterQuerySet(Results.objects.javascript(), cc1=cc1, cc2=cc2, date_from=date_from, date_to=date_to,
+                                   bidirectional=bidirectional)
 
         data = dict(data=json.dumps([list(rtts)]),
                     divId=divId,
@@ -892,7 +919,8 @@ class ChartManager(models.Manager):
         return requests.post(self.url, data=data).text
 
     def appletChart(self, cc1, divId, date_from, date_to, cc2=None, bidirectional=True):
-        rtts = self.filterQuerySet(Results.objects.applet(), cc1=cc1, cc2=cc2, date_from=date_from, date_to=date_to, bidirectional=bidirectional)
+        rtts = self.filterQuerySet(Results.objects.applet(), cc1=cc1, cc2=cc2, date_from=date_from, date_to=date_to,
+                                   bidirectional=bidirectional)
 
         data = dict(data=json.dumps([list(rtts)]),
                     divId=divId,
@@ -917,7 +945,7 @@ class ChartManager(models.Manager):
         })
         return t.render(ctx)
 
-    def asyncPieChart(self, data, divId, labels, colors, my_options = {}):
+    def asyncPieChart(self, data, divId, labels, colors, my_options={}):
         return self.asyncChart(data, divId, labels, colors, kind="PieChart", xAxis="string", my_options=my_options)
 
     def filterQuerySet(self, queryset, cc1, date_from, date_to, cc2=None, bidirectional=True):

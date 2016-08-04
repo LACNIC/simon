@@ -1,11 +1,12 @@
-__author__ = 'agustin'
-
 from django.template import Context
 from django.core.mail import EmailMessage
 from django.template.loader import get_template
 from time import sleep
 from django.contrib.auth.models import User
+from simon_project.settings import DEBUG
 import logging
+
+__author__ = 'agustin'
 
 
 def send_mail_new_probes_found(subject="Nuevas probes", ctx={}, from_email="agustin@lacnic.net"):
@@ -46,7 +47,6 @@ def send_mail_test(subject="Testing the mailing system", command="[command]", fr
 
 def send_mail(subject="", template_filename="emails/pretty.html", ctx={}, from_email="agustin@lacnic.net",
               recipient_list=["agustin@lacnic.net"]):
-    from settings import DEBUG
     if DEBUG:
         recipient_list = ["agustin@lacnic.net"]
 

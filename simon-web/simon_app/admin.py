@@ -117,6 +117,9 @@ class HttpsCheckAdmin(SimonReadOnlyAdmin):
 class RegionAdmin(SimonAdmin):
     list_display = ['name', 'numcode']
 
+class CountryAdmin(SimonReadOnlyAdmin):
+    list_display = ['printable_name', 'iso']
+
 admin.site.register(Comment)
 
 admin.site.register(Results, ResultsAdmin)
@@ -145,3 +148,4 @@ admin.site.register(AS, ASAdmin)
 admin.site.register(HttpsCheck, HttpsCheckAdmin)
 
 admin.site.register(Region, RegionAdmin)
+admin.site.register(Country, CountryAdmin)

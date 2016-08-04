@@ -1,27 +1,32 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from django.core.management.base import BaseCommand
+from django.template import Template, Context
 
 from simon_app.models import *
-from django.template import Template, Context
+from simon_app.reportes import GMTUY
+from probeapi_traceroute import get_countries, get_probeapi_response
+
+from multiprocessing.dummy import Pool as ThreadPool
 from random import shuffle
 import json
 import datetime
 import numpy
-from probeapi_traceroute import get_countries, get_probeapi_response
-from multiprocessing.dummy import Pool as ThreadPool
-from simon_app.reportes import GMTUY
 
-class Command(BaseCommand):
+
+class ProbeApiMeasurement():
+    """
+        Class that holds the logic to perform a ProbeAPI measurement
+    """
+
+    def __init__(self):
+        pass
 
     threads = 50
-    max_job_queue_size = 0 # 0 for limitless
-    max_points = 0 # 0 for limitless
-    ping_count = 10 # amount of ICMP pings performed per test
+    max_job_queue_size = 0  # 0 for limitless
+    max_points = 0  # 0 for limitless
+    ping_count = 10  # amount of ICMP pings performed per test
 
-    def handle(self, *args, **options):
-        command = "ProbeAPI Measurements"
-
+    def init(self, tps=[], ccs=[]):
         def do_work(url):
             try:
                 response = get_probeapi_response(url)
@@ -116,25 +121,20 @@ class Command(BaseCommand):
                     print "ICMP ping from %s to %s is %.0f ms (%s samples, +- %.0f ms, %.0f samples stripped)" % (
                         cc_origin, cc_destination, numpy.mean(rtts), len(rtts), 2 * std_dev, _n - len(rtts))
 
-        ccs = get_countries().keys()
-
-        tps = SpeedtestTestPoint.objects.get_ipv4().filter(enabled=True).distinct('country').order_by(
-            'country')
+        ccs = get_countries(ccs=ccs).keys()  # get countries with running probes...
 
         urls = []
         thread_pool = ThreadPool(self.threads)
 
         then = datetime.datetime.now(tz=GMTUY())
 
-
         if self.max_points > 1:
             tps = tps[:self.max_points]
         elif self.max_points == 1:
             tps = [tps[0]]
 
-
         tps = list(tps)
-        shuffle(tps) # shuffle in case the script get aborted (do not run only the small alphanumeric tps only)
+        shuffle(tps)  # shuffle in case the script get aborted (do not run only the small alphanumeric tps only)
 
         for tp in tps:
 
@@ -172,7 +172,7 @@ class Command(BaseCommand):
                     }
                 )
                 url_probeapi = t.render(ctx)
-                if self. max_job_queue_size == 0 or len(urls) <= self.max_job_queue_size:
+                if self.max_job_queue_size == 0 or len(urls) <= self.max_job_queue_size:
                     urls.append(url_probeapi)
 
         print "TPs %s x CCs %s" % (len(tps), len(ccs))

@@ -14,7 +14,7 @@ from multiprocessing.dummy import Pool as ThreadPool
 from simon_app.api_views import get_cc_from_ip_address
 
 
-def get_countries():
+def get_countries(ccs=[]):
     url = "https://probeapifree.p.mashape.com/Probes.svc/GetCountries"
 
     try:
@@ -26,7 +26,6 @@ def get_countries():
         py_object = json.loads(response)
 
         res = {}
-        ccs = Country.objects.get_region_countrycodes()
         for p in py_object["GetCountriesResult"]:
             cc = p["CountryCode"]
             if cc in ccs:

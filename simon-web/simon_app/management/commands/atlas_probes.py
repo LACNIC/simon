@@ -27,7 +27,7 @@ class Command(BaseCommand):
             new_probes = []  # stores probe and status objects
 
             base_url = "https://atlas.ripe.net"
-            ccs = Country.objects.get_region_countries().values_list('iso', flat=True)
+            ccs = Country.objects.get_lacnic_countries().values_list('iso', flat=True)
             anchor = 0
 
             anchor_count = anchor

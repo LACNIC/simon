@@ -772,7 +772,7 @@ def charts(request):
 
     inner_area = []
     inner = Results.objects.inner(tester=settings.PROTOCOLS["HTTP"], months=6)
-    ccs = Country.objects.get_region_countrycodes()
+    ccs = Country.objects.get_lacnic_countrycodes()
     restcountries = json.loads(requests.get("http://restcountries.eu/rest/v1/all").text)
     for c in restcountries:
         alpha2Code = c["alpha2Code"]
@@ -938,7 +938,7 @@ def atlas(request):
     probes_all = RipeAtlasProbe.objects.all().order_by('country_code')
     countries_with_probes = probes_all.values_list('country_code', flat=True)
     countries_without_probes = [{'iso': c.iso, 'printable_name': c.printable_name} for c in
-                                Country.objects.get_region_countries() if c.iso not in countries_with_probes]
+                                Country.objects.get_lacnic_countries() if c.iso not in countries_with_probes]
     counter = Counter(countries_with_probes)
 
     # Dict for the map

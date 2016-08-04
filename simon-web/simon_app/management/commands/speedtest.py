@@ -18,7 +18,8 @@ class Command(BaseCommand):
         from sys import stdout
         from simon_app.reportes import GMTUY
 
-        ccs = [c.iso for c in Country.objects.get_region_countries()]
+        ccs_lacnic = [c.iso for c in Country.objects.get_lacnic_countries()]
+        ccs_afrinic = [c.iso for c in Country.objects.get_afrinic_countries()]
         tz = GMTUY()
 
         # Enable cookies
@@ -33,8 +34,7 @@ class Command(BaseCommand):
         data = r.text
         timeFormat = "%Y-%m-%d %H:%M:%S"
 
-
-        #Add new registers in the Test Points table
+        # Add new registers in the Test Points table
         print "Parsing XML file..."
         xml_ = etree.fromstring(data.encode('utf-8'))
         servers = xml_[0]
@@ -44,7 +44,7 @@ class Command(BaseCommand):
             stdout.write("\r%.2f%%" % (100.0 * i / N))
             stdout.flush()
 
-            #Get the IP address and match it against LACNIC resources
+            # Get the IP address
             long_url = server.get('url')
             url = urlparse(long_url)[1]
 
@@ -60,7 +60,7 @@ class Command(BaseCommand):
             try:
                 ok = False
 
-                if country not in ccs:
+                if country not in ccs_lacnic and country not in ccs_afrinic:
                     continue
 
                 for ip_address in socket.getaddrinfo(url, 80, 0, 0, socket.SOL_TCP):
@@ -73,8 +73,8 @@ class Command(BaseCommand):
                         ok = True
                         # if new...or same with new address
 
-                        # ccs = Country.objects.get_region_countrycodes()
-                        # if ccs:
+                        # ccs_lacnic = Country.objects.get_lacnic_countrycodes()
+                        # if ccs_lacnic:
 
                         # if ip_address.version == 4:
                         #     for resource in settings.v4resources:
@@ -102,13 +102,12 @@ class Command(BaseCommand):
                                 longitude=longitude
                             )
 
-
                             tp.save()
                             https_check = HttpsCheck(
                                 test_point=tp,
                                 status=tp.make_request(protocol="https")
                             )
-                            https_check.save()
+                            # https_check.save()
                             tp.httpscheck_set.add(https_check)
 
                             nuevos.append(tp)
@@ -121,7 +120,7 @@ class Command(BaseCommand):
                 pass
 
         if len(nuevos) > 0:
-            print "The following Test Points have been added:"
+            print "The following Test Points have been added (%.0f):" % (len(nuevos))
             for tp in nuevos:
                 print str(tp.ip_address)
-            send_mail_new_points_found(ctx={'points':nuevos})
+            send_mail_new_points_found(ctx={'points': nuevos})

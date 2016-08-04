@@ -6,9 +6,10 @@
 
 from __future__ import division
 from django import forms
-from models import *
+# from models import *
 from datetime import tzinfo, timedelta
-from django.db.models import Q
+# from django.db.models import Q
+from simon_app.models import *
 import datetime
 
 
@@ -63,13 +64,16 @@ class ReportForm(forms.Form):
     # default_country = None
     empty_label = "Toda la región"
 
-    country1 = MyCountryModelChoiceField(queryset=Country.objects.get_region_countries().order_by('printable_name'),
+    region_objects_filter = Region.objects.filter(Q(name="South America") | Q(name="Central America") | Q(name="Caribbean"))
+    countries_from_region = Country.objects.get_countries_from_region()
+    countries = Country.objects.get_lacnic_countries()
+    country1 = MyCountryModelChoiceField(queryset=countries.order_by('printable_name'),
                                          widget=forms.Select(attrs={'class': 'form-control'}),
                                          label="País de origen de las mediciones",
                                          empty_label=empty_label
                                          )
 
-    country2 = MyCountryModelChoiceField(queryset=Country.objects.get_region_countries().order_by('printable_name'),
+    country2 = MyCountryModelChoiceField(queryset=countries.order_by('printable_name'),
                                          widget=forms.Select(attrs={'class': 'form-control'}),
                                          label="País de destino de las mediciones",
                                          required=False,

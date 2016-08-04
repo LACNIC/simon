@@ -14,7 +14,7 @@ class Command(BaseCommand):
 
         now = datetime.datetime.now(GMTUY())
 
-        ccs = Country.objects.get_region_countries().values_list('iso', flat=True)
+        ccs = Country.objects.get_lacnic_countries().values_list('iso', flat=True)
 
         opener = urllib2.build_opener()
         opener.addheaders = [

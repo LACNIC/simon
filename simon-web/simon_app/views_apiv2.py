@@ -68,7 +68,7 @@ def latency(request):
     date_filter = Q(date_test__gte = date_from) & Q(date_test__lte = date_to)
 
     #Verifying country codes
-    cc = Country.objects.get_region_countrycodes()
+    cc = Country.objects.get_lacnic_countrycodes()
 
     if str(country_origin) in cc and str(country_destination) in cc:
         country_filter = Q(country_origin = country_origin) & Q(country_destination = country_destination)
