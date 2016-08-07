@@ -20,6 +20,7 @@ class Command(BaseCommand):
 
         ccs_lacnic = [c.iso for c in Country.objects.get_lacnic_countries()]
         ccs_afrinic = [c.iso for c in Country.objects.get_afrinic_countries()]
+        ccs_apnic = [c.iso for c in Country.objects.get_apnic_countries()]
         tz = GMTUY()
 
         # Enable cookies
@@ -60,7 +61,7 @@ class Command(BaseCommand):
             try:
                 ok = False
 
-                if country not in ccs_lacnic and country not in ccs_afrinic:
+                if country not in ccs_lacnic and country not in ccs_afrinic and country not in ccs_apnic:
                     continue
 
                 for ip_address in socket.getaddrinfo(url, 80, 0, 0, socket.SOL_TCP):

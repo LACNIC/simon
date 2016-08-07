@@ -35,19 +35,42 @@ class CountryManager(models.Manager):
             query |= sq
         return Country.objects.filter(query)
 
+    def get_afrinic_countries(self):
+        regs = Region.objects.filter(
+            Q(name="Southern Africa") |
+            Q(name="Eastern Africa") |
+            Q(name="Middle Africa") |
+            Q(name="Western Africa") |
+            Q(name="Northern Africa")
+        )
+        return self.get_countries_from_region(region=[r.id for r in regs])
+
+    def get_apnic_countries(self):
+        regs = Region.objects.filter(
+            Q(name="Central Asia") |
+            Q(name="Eastern Asia") |
+            Q(name="Southern Asia") |
+            Q(name="South-Eastern Asia") |
+            Q(name="Western Asia") |
+            Q(name="Australia and New Zeland") |
+            Q(name="Melanesia") |
+            Q(name="Micronesia") |
+            Q(name="Polynesia")
+        )
+        return self.get_countries_from_region(region=[r.id for r in regs])
+
     def get_lacnic_countries(self):
         regs = Region.objects.filter(Q(name="South America") | Q(name="Central America") | Q(name="Caribbean"))
         return self.get_countries_from_region(region=[r.id for r in regs])
 
-    def get_afrinic_countries(self):
-        regs = Region.objects.filter(Q(name="Southern Africa") | Q(name="Eastern Africa") | Q(name="Middle Africa") | Q(name="Western Africa") | Q(name="Northern Africa"))
-        return self.get_countries_from_region(region=[r.id for r in regs])
+    def get_afrinic_countrycodes(self):
+        return self.get_afrinic_countries().values_list('iso', flat=True)
+
+    def get_apnic_countrycodes(self):
+        return self.get_apnic_countries().values_list('iso', flat=True)
 
     def get_lacnic_countrycodes(self):
         return self.get_lacnic_countries().values_list('iso', flat=True)
-
-    def get_afrinic_countrycodes(self):
-        return self.get_afrinic_countries().values_list('iso', flat=True)
 
     def get_countries_with_no_testpoints(self):
         return self.get_lacnic_countries().exclude(iso__in=TestPoint.objects.values_list('country', flat=True))

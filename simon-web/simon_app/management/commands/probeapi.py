@@ -144,36 +144,38 @@ class ProbeApiMeasurement():
                 print "Skipping %s" % (tp)
                 continue
 
+            cc_list = ""
             for cc in ccs:
+                cc_list += cc + ","
 
-                destination_ip = tp.ip_address
-                ping_count = self.ping_count
+            destination_ip = tp.ip_address
+            ping_count = self.ping_count
 
-                round_trip = 2
-                time_for_each_ping = 1000
-                tx_time = 10000
-                timeout = ping_count * round_trip * time_for_each_ping + tx_time
+            round_trip = 2
+            time_for_each_ping = 1000
+            tx_time = 10000
+            timeout = ping_count * round_trip * time_for_each_ping + tx_time
 
-                t = Template("https://probeapifree.p.mashape.com/Probes.svc/StartPingTestByCountry?"
-                             "countrycode={{ cc }}&"
-                             "count={{ count }}&"
-                             "destination={{ destination }}&"
-                             "probeslimit={{ probeslimit }}&"
-                             "timeout={{ timeout }}"
-                             )
+            t = Template("https://probeapifree.p.mashape.com/Probes.svc/StartPingTestByCountry?"
+                         "countrycode={{ cc }}&"
+                         "count={{ count }}&"
+                         "destination={{ destination }}&"
+                         "probeslimit={{ probeslimit }}&"
+                         "timeout={{ timeout }}"
+                         )
 
-                ctx = Context(
-                    {
-                        'cc': cc,
-                        'count': ping_count,
-                        'destination': destination_ip,
-                        'probeslimit': 10,
-                        'timeout': timeout
-                    }
-                )
-                url_probeapi = t.render(ctx)
-                if self.max_job_queue_size == 0 or len(urls) <= self.max_job_queue_size:
-                    urls.append(url_probeapi)
+            ctx = Context(
+                {
+                    'cc': cc_list,
+                    'count': ping_count,
+                    'destination': destination_ip,
+                    'probeslimit': 10,
+                    'timeout': timeout
+                }
+            )
+            url_probeapi = t.render(ctx)
+            if self.max_job_queue_size == 0 or len(urls) <= self.max_job_queue_size:
+                urls.append(url_probeapi)
 
         print "TPs %s x CCs %s" % (len(tps), len(ccs))
         print "Launching %.0f worker threads on a %.0f jobs queue" % (self.threads, len(urls))
