@@ -1,7 +1,31 @@
 #barra-primaria {
-    background-color: #FF9900;
+    background-color: #FAA918;
 }
 
 #barra-secundaria {
-    background-color: #FFC285;
+    background-color: #FDE384;
+}
+
+.jumbotron {
+	background-color: #EFFCF3;
+}
+
+#fondo {
+	background-color: #CEE5D5;
+}
+
+body {
+	background-color: #B2DBBF;
+}
+
+.footer {
+  background-color: #4C3307;
+}
+
+.footer-secundario {
+  background-color: #332205;
+}
+
+#highlight {
+	color: #FF1654;
 }
