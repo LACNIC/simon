@@ -60,7 +60,20 @@ class CountryManager(models.Manager):
         return self.get_countries_from_region(region=[r.id for r in regs])
 
     def get_lacnic_countries(self):
-        regs = Region.objects.filter(Q(name="South America") | Q(name="Central America") | Q(name="Caribbean"))
+        regs = Region.objects.filter(
+            Q(name="South America") |
+            Q(name="Central America") |
+            Q(name="Caribbean")
+        )
+        return self.get_countries_from_region(region=[r.id for r in regs])
+
+    def get_ripencc_countries(self):
+        regs = Region.objects.filter(
+            Q(name="Northern Europe") |
+            Q(name="Western Europe") |
+            Q(name="Eastern Europe") |
+            Q(name="Southern Europe")
+        )
         return self.get_countries_from_region(region=[r.id for r in regs])
 
     def get_afrinic_countrycodes(self):
@@ -71,6 +84,9 @@ class CountryManager(models.Manager):
 
     def get_lacnic_countrycodes(self):
         return self.get_lacnic_countries().values_list('iso', flat=True)
+
+    def get_ripencc_countrycodes(self):
+        return self.get_ripencc_countries().values_list('iso', flat=True)
 
     def get_countries_with_no_testpoints(self):
         return self.get_lacnic_countries().exclude(iso__in=TestPoint.objects.values_list('country', flat=True))
