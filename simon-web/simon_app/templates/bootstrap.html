@@ -91,14 +91,8 @@
 
     <p>
         Cantidad de mediciones:
-    </p>
-    <p>
-        Última hora: {{ HOURLY | unit_shortener }}
-    </p>
-    <p>
-        Último día: {{ DAILY | unit_shortener }}
-    </p>
-    <p>
+        Última hora: {{ HOURLY | unit_shortener }} |
+        Último día: {{ DAILY | unit_shortener }} |
         Última semana: {{ WEEKLY | unit_shortener }}
     </p>
 </div>
@@ -120,9 +114,9 @@
 
 </div>
 
-<footer class="row" style="background-color: #D4CAC1 ; padding: 1em;">
+<footer class="footer" style="height: 10em;">
 
-    <div class="col-lg-3">
+    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
         <a href="https://www.labs.lacnic.net/">
             <img src="{% static 'simon_app/imgs/logos/logo_labs_foot.png' %}" class="hidden-xs hidden-sm center-block"
                  title="LACNIC labs"/>
@@ -131,18 +125,8 @@
         </a>
     </div>
 
-    {#    Django logo#}
-    <div class="col-lg-3" style="margin-top: 1em;">
-        <div>
-            <a href="https://www.djangoproject.com/">
-                <img class="center-block" src="https://www.djangoproject.com/m/img/badges/djangomade124x25_grey.gif"
-                     border="0" alt="Made with Django." title="Made with Django."/>
-            </a>
-        </div>
-    </div>
-
     {#    GitHub button#}
-    <div class="col-lg-3" style="margin-top: 1em;">
+    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
         <div style="text-align: center">
             <!-- Place this tag where you want the button to render. -->
             <a class="github-button" href="https://github.com/lacnic/simon" data-icon="octicon-star" data-style="mega"
@@ -154,92 +138,78 @@
     </div>
 
     <!-- Begin LetsEncrypt site seal HTML -->
-    <div class="col-lg-3 center-block" data-language="en_US">
+    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3 center-block" data-language="en_US">
         <a href="https://letsencrypt.org/">
             <img class="center-block" style="max-width:15em;"
                  src="https://cdn.discourse.org/business/uploads/letsencrypt/original/1X/149e86cd7f135095e9c92f4e67a4b6a7b80a60c0.png">
         </a>
-    </div>
-    <!-- End LetsEncrypt site seal HTML -->
+        {#    </div>#}
+        <!-- End LetsEncrypt site seal HTML -->
 
-    <div class="col-lg-3" style="margin-top: 1em;">
-        <p class="center-block" style="text-align: center; font-family: monospace; color: #808080">
+        <p class="center-block" style="text-align: center;">
             Application Version: {{ APP_VERSION }}<br/>
             Last Updated {{ DATE_UPDATED }}<br/>
             Latest Commit {{ LATEST_COMMIT }} (<a href="https://github.com/LACNIC/simon/commit/"{{ LATEST_COMMIT }}>GitHub</a>)
         </p>
     </div>
 
+    {#    <div class="col-sm-6" style="padding-left: 3em; padding-right: 3em;">#}
+    {#        <h2>#}
+    {#            Nuestros sponsors#}
+    {#        </h2>#}
+    {##}
+    {#        <p>#}
+    {#            Tu también puedes colaborar! Fíjate en las mejores formas de colaborar en la sección de <a#}
+    {#                href="{% url 'simon_app.views.participate' %}">Colaboración</a>!#}
+    {#        </p>#}
+    {##}
+    {#        <p>#}
+    {#            La siguiente es una lista de organizaciones que colabora con el Proyecto Simón.#}
+    {#        <ul>#}
+    {#            <li><a href="https://www.caida.org/home/" style="color: #ffffff">CAIDA Archipiélago</a></li>#}
+    {#            <li><a href="https://atlas.ripe.net" style="color: #ffffff">RIPE Atlas</a></li>#}
+    {#            <li><a href="https://www.probeapi.com" style="color: #ffffff">Probe API</a></li>#}
+    {#        </ul>#}
+    {#        </p>#}
+    {##}
+    {##}
+    {#        <p>#}
+    {#                <img src="{% static 'simon_app/imgs/logos/logo_RIPE_NCC.png' %}" class="col-lg-3" />#}
+    {#                <img src="{% static 'simon_app/imgs/logos/logo_caida_ark.png' %}" class="col-lg-3" />#}
+    {#                <img src="{% static 'simon_app/imgs/logos/logo_probeapi.png' %}" class="col-lg-3" />#}
+    {#        </p>#}
+    {#    </div>#}
+
+
 </footer>
-<footer style="background-color: #A18276; font-family: 'Lato'; color: #d3d3d3">
-    <div class="row">
 
-        <div class="col-md-6" style="padding-left: 3em; padding-right: 3em;">
-            <h1>
-                Agradecemos tu feedback!
-            </h1>
+<footer class="footer-secundario" style="overflow: auto">
+    <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+        <h3 style="color: #FFFFFF">
+            Agradecemos tu feedback!
+        </h3>
 
-            <p>
-                Gracias a tu feedback podremos realizar más mediciones, involucrar a más personas, y ofrecer mejores
-                datos y conclusiones. Tu opinión nos importa!
-            </p>
+        <p>
+            Gracias a tu feedback podremos realizar más mediciones, involucrar a más personas, y ofrecer mejores
+            datos y conclusiones. Tu opinión nos importa!
+        </p>
+    </div>
 
-            <form class="navbar-form" action="{% url 'simon_app.views.feedbackForm' %}" method="post">
-                {% csrf_token %}
-                <div class="col-sm-6">
+    <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+        <form class="navbar-form" action="{% url 'simon_app.views.feedbackForm' %}" method="post">
+            {% csrf_token %}
+            <div>
 
-                    {% for field in feedbackform %}
-                        <div class="row">
-                            <h4>
-                                <label for="{{ field.label }}">
-                                    {{ field.label_tag }}
+                {{ feedbackform.remitente }}
 
-                                </label>
-                            </h4>
+                {{ feedbackform.mensaje }}
 
-                            <p>
-                                {{ field }}
-                            </p>
-                        </div>
-                    {% endfor %}
-                    <div class="row"><input type="submit" value="Enviar comentarios" id="submit"
-                                            class="btn btn-default navbar-btn pull-left"
-                                            style="background: #715B53; text-shadow: none; color: #ffffff; font-size: 1.3em;"/>
-                    </div>
+                <input type="submit" value="Enviar comentarios" id="submit"
+                       class="btn btn-default navbar-btn pull-left"/>
 
 
-                </div>
-            </form>
-        </div>
-
-        <div class="col-sm-6" style="padding-left: 3em; padding-right: 3em;">
-            <h1>
-                Nuestros sponsors
-            </h1>
-
-            <p>
-                Tu también puedes colaborar! Fíjate en las mejores formas de colaborar en la sección de <a
-                    href="{% url 'simon_app.views.participate' %}">Colaboración</a>!
-            </p>
-
-            <p>
-                La siguiente es una lista de organizaciones que colabora con el Proyecto Simón.
-            <ul>
-                <li><a href="https://www.caida.org/home/" style="color: #ffffff">CAIDA Archipiélago</a></li>
-                <li><a href="https://atlas.ripe.net" style="color: #ffffff">RIPE Atlas</a></li>
-                <li><a href="https://www.probeapi.com" style="color: #ffffff">Probe API</a></li>
-            </ul>
-            </p>
-
-
-            <p>
-                {#                <img src="{% static 'simon_app/imgs/logos/logo_RIPE_NCC.png' %}" class="col-lg-3" />#}
-                {#                <img src="{% static 'simon_app/imgs/logos/logo_caida_ark.png' %}" class="col-lg-3" />#}
-                {#                <img src="{% static 'simon_app/imgs/logos/logo_probeapi.png' %}" class="col-lg-3" />#}
-            </p>
-        </div>
-
-
+            </div>
+        </form>
     </div>
 </footer>
 

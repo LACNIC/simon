@@ -3,7 +3,8 @@
 
 {% block headers %}
 
-    <meta name="description" content="Información acerca de la plataforma RIPE Atlas en la región LAC. Sumate a esta iniciativa!" />
+    <meta name="description"
+          content="Información acerca de la plataforma RIPE Atlas en la región LAC. Sumate a esta iniciativa!"/>
 
     <!-- Google Charts -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
@@ -162,12 +163,14 @@
                 var options = {
                     region: '029',
                     colorAxis: {
-                        colors: ['white', 'orange'],
+                        colors: ['white', '#FF9900'],
                         maxValue: 10
                     },
                     backgroundColor: {
                         fill: '#FFFAF2'
-                    }
+                    },
+                    datalessRegionColor: '#FFFAF2',
+                    defaultColor: '#FFFAF2'
                 };
                 var chart = new google.visualization.GeoChart(document.getElementById('map_caribbean'));
                 chart.draw(data, options);
@@ -185,21 +188,21 @@
         </script>
 
         <div class="col-lg-12">
-            <div class="col-lg-4">
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                 <div>
                     <h4 class="caption">Caribe</h4>
 
                     <div id="map_caribbean" style="margin-left: auto; margin-right: auto;"></div>
                 </div>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                 <div>
                     <h4 class="caption">América Central</h4>
 
                     <div id="map_central" style="margin-left: auto; margin-right: auto;"></div>
                 </div>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
                 <div>
                     <h4 class="caption">América del Sur</h4>
 
@@ -210,73 +213,84 @@
         </div>
 
 
-        <h2 class="page-header">Listado por país</h2>
+        <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <h2 class="page-header">Listado por país</h2>
 
-        <p>A continuación se muestra una lista con información a nivel de país. De forma similar a los datos regionales,
-            se muestra información acerca de <code style="color: black">cantidad total</code> y porcentaje de probes
-            <code
-                    style="color: #9BC53D">conectadas</code>, <code
-                    style="color: #C3423F">desconectadas</code>, <code style="color: #FDE74C">abandonadas</code>, y
-            <code style="color: darkgray">jamás conectadas</code>.</p>
+                <p>A continuación se muestra una lista con información a nivel de país. De forma similar a los datos
+                    regionales,
+                    se muestra información acerca de <code style="color: black">cantidad total</code> y porcentaje de
+                    probes
+                    <code
+                            style="color: #9BC53D">conectadas</code>, <code
+                            style="color: #C3423F">desconectadas</code>, <code style="color: #FDE74C">abandonadas</code>,
+                    y
+                    <code style="color: darkgray">jamás conectadas</code>.</p>
 
-        <div id="countries-list">
-            <ul class="list">
-                {% for c, val in counter.items %}
+                <div id="countries-list">
+                    <ul class="list">
+                        {% for c, val in counter.items %}
 
-                    <li id="country-detail-{{ c }}">
-                        <div class="codigo-pais-atlas">{{ val.country_name }} ({{ c }})
+                            <li id="country-detail-{{ c }}">
+                                <div class="codigo-pais-atlas">{{ val.country_name }} ({{ c }})
 
-                            <code style="color: black">{{ val.country_all_count }}</code>
-                            <code style="color: #9BC53D">{{ val.connected_count }}</code>
-                            <code style="color: #C3423F">{{ val.disconnected_count }}</code>
-                            <code style="color: #FDE74C">{{ val.abandoned_count }}</code>
-                            <code style="color: darkgray">{{ val.never_count }}</code>
-                        </div>
+                                    <code style="color: black">{{ val.country_all_count }}</code>
+                                    <code style="color: #9BC53D">{{ val.connected_count }}</code>
+                                    <code style="color: #C3423F">{{ val.disconnected_count }}</code>
+                                    <code style="color: #FDE74C">{{ val.abandoned_count }}</code>
+                                    <code style="color: darkgray">{{ val.never_count }}</code>
+                                </div>
 
-                        <div class="progress" style="max-height: 3px">
-                            <div class="progress-bar"
-                                 style="width: {{ val.connected }}; background-image: none; background-color: #9BC53D">
-                                <span class="sr-only"></span>
-                            </div>
-                            <div class="progress-bar"
-                                 style="width: {{ val.disconnected }}; background-image: none; background-color: #C3423F">
-                                <span class="sr-only"></span>
-                            </div>
-                            <div class="progress-bar"
-                                 style="width: {{ val.abandoned }}; background-image: none; background-color: #FDE74C">
-                                <span class="sr-only"></span>
-                            </div>
-                            <div class="progress-bar"
-                                 style="width: {{ val.never }}; background-image: none; background-color: darkgray">
-                                <span class="sr-only"></span>
-                            </div>
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
-            <div class="center-block">
-                <ul class="pagination"></ul>
+                                <div class="progress" style="max-height: 3px">
+                                    <div class="progress-bar"
+                                         style="width: {{ val.connected }}; background-image: none; background-color: #9BC53D">
+                                        <span class="sr-only"></span>
+                                    </div>
+                                    <div class="progress-bar"
+                                         style="width: {{ val.disconnected }}; background-image: none; background-color: #C3423F">
+                                        <span class="sr-only"></span>
+                                    </div>
+                                    <div class="progress-bar"
+                                         style="width: {{ val.abandoned }}; background-image: none; background-color: #FDE74C">
+                                        <span class="sr-only"></span>
+                                    </div>
+                                    <div class="progress-bar"
+                                         style="width: {{ val.never }}; background-image: none; background-color: darkgray">
+                                        <span class="sr-only"></span>
+                                    </div>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <div class="center-block">
+                        <ul class="pagination"></ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <h2 id="countries-without-probes" class="page-header">Países sin RIPE Atlas probes</h2>
+
+                <p>El proyecto RIPE Atlas busca expandirse a todos los lugares donde aún no ha llegado. Si tienes una
+                    conexión a
+                    Internet en alguno de los siguientes paises, no dudes en ponerte en contacto para solicitar un RIPE
+                    Atlas
+                    probe.
+                    Necesitamos pioneros que lleven esta plataforma a lugares donde aún no ha llegado!</p>
+
+                <p>
+                    <a type="button" class="btn btn-default" target="_blank"
+                       href="https://atlas.ripe.net/apply/?source=87aa7f2c-6cac-459e-8cda-6c192911f5e2">Solicita tu RIPE
+                        Atlas
+                        probe!</a>
+                </p>
+                <ul>
+                    {% for c in countries_without_probes %}
+                        <li>{{ c.printable_name }} ({{ c.iso }})</li>
+                    {% endfor %}
+                </ul>
             </div>
         </div>
-
-
-        <h2 id="countries-without-probes" class="page-header">Países sin RIPE Atlas probes</h2>
-
-        <p>El proyecto RIPE Atlas busca expandirse a todos los lugares donde aún no ha llegado. Si tienes una conexión a
-            Internet en alguno de los siguientes paises, no dudes en ponerte en contacto para solicitar un RIPE Atlas
-            probe.
-            Necesitamos pioneros que lleven esta plataforma a lugares donde aún no ha llegado!</p>
-
-        <p>
-            <a type="button" class="btn btn-default" target="_blank"
-               href="https://atlas.ripe.net/apply/?source=87aa7f2c-6cac-459e-8cda-6c192911f5e2">Solicita tu RIPE Atlas
-                probe!</a>
-        </p>
-        <ul>
-            {% for c in countries_without_probes %}
-                <li>{{ c.printable_name }} ({{ c.iso }})</li>
-            {% endfor %}
-        </ul>
 
 
         <h2 class="page-header">Listado completo de probes en LAC</h2>
