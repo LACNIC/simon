@@ -14,8 +14,6 @@ from simon_app.decorators import chatty_command
 def heatmap(start, end):
     print "Generating heatmap for %s - %s" % (start.year, end.year)
 
-    spinner = spinning_cursor()
-
     countries_iso = list(
         Country.objects.filter(Q(region_id=1) | Q(region_id=2) | Q(region_id=3)).order_by('printable_name').values_list(
             'iso', flat=True))
@@ -81,7 +79,7 @@ def build_dict(results, ccs=Country.objects.get_lacnic_countrycodes()):
     N = len(ccs)
     region_dict = defaultdict(None)
     for i, cc_o in enumerate(ccs):
-        stdout.write("\r%.2f%%" % (100.0 * i / N))
+        stdout.write("\rBuilding regional dict %.2f%%" % (100.0 * i / N))
         stdout.flush()
         rs = results.filter(country_origin=cc_o)
 
@@ -143,7 +141,7 @@ class Command(BaseCommand):
         build_heatmap(dictionary, filename)
 
 
-def build_heatmap(dictionary, filename, plot_text=True):
+def build_heatmap(dictionary, filename, plot_text=True, figsize=(10, 10)):
     import matplotlib
     from simon_project.settings import STATIC_ROOT, DEBUG
     if not DEBUG:
@@ -151,6 +149,7 @@ def build_heatmap(dictionary, filename, plot_text=True):
     from matplotlib import pyplot as plt
     import numpy as np
 
+    # build an empty matrix first
     origins = []
     destinations = []
     n = 0
@@ -160,8 +159,6 @@ def build_heatmap(dictionary, filename, plot_text=True):
         for d in sorted(dictionary[o]):
             if d not in destinations:
                 destinations.append(d)
-
-            res = []
 
         n += 1
         sys.stdout.write("\r Preparing Data (1/3) %.1f%%" % (100 * float(n / len(dictionary))))
@@ -176,6 +173,7 @@ def build_heatmap(dictionary, filename, plot_text=True):
     # origins = sorted(origins, key=cluster_sort)
     # destinations = sorted(destinations, key=cluster_sort)
 
+    res = []
     n = 0
     N = len(origins) * len(destinations)
     for o in origins:
@@ -192,7 +190,7 @@ def build_heatmap(dictionary, filename, plot_text=True):
     print "Painting matrix (3/3)"
 
     data = np.reshape(res, (len(origins), len(destinations)))
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=figsize)
 
     heatmap = ax.pcolor(data, cmap=plt.cm.Blues)
 
@@ -217,16 +215,8 @@ def build_heatmap(dictionary, filename, plot_text=True):
     ax.set_xticklabels(destinations, minor=False)
     ax.set_yticklabels(origins, minor=False)
 
-    # ax_ = plt.gca()
-    # x, y, z = ax_.get_children()[2]
-    # plt.colorbar(z, ax=ax_)
     plt.colorbar(heatmap)
+    plt.figure(figsize=(40, 40))
+
     plt.show()
 
-    # plt.savefig("%s/simon_app/imgs/%s" % (STATIC_ROOT, filename), transparent=True)
-
-
-def spinning_cursor():
-    while True:
-        for cursor in '|/-\\':
-            yield cursor
