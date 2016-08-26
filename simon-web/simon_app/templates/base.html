@@ -16,15 +16,6 @@
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>{% block title %}Inicio{% endblock %} - Proyecto Simón</title>
 
-    <!-- Google Fonts -->
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lato:100">
-
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-
-    <!-- Prettify -->
-    {#    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>#}
-
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -34,20 +25,29 @@
 
     <meta http-equiv="content-type" content="text/html;charset=utf-8">
 
+    <link type="image/x-icon" href="{% static 'simon_app/imgs/logos/favicon.ico' %}" rel="shortcut icon">
+    <link rel="apple-touch-icon" href="{% static 'simon_app/imgs/logos/favicon.ico' %}">
+    <link rel="mask-icon" href="{% static 'simon_app/imgs/logos/favicon.ico' %}" color="red">
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+
+    <!-- Extended Bootstrap (Jasny) -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.3/css/jasny-bootstrap.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.1.3/js/jasny-bootstrap.min.js"></script>
+    <link rel="stylesheet" href="{% static 'simon_app/css/navmenu-push.css' %}">
+
+    <!-- Optional Bootstrap theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+
+    <!-- LACNIC Styles -->
     <link rel="stylesheet" type="text/css" href="{% static 'simon_app/css/simon.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'simon_app/css/lacniclabs-portales-negro.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'simon_app/css/lacniclabs-override.css' %}">
-
-    <link type="image/x-icon" href="{% static 'simon_app/imgs/logos/favicon.ico' %}" rel="shortcut icon">
-    <link rel="apple-touch-icon" href="{% static 'simon_app/imgs/logos/favicon.png' %}">
-
-    <!-- Optional theme -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
-
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 
     <!-- GitHub buttons -->
     <!-- Place this tag in your head or just before your close body tag. -->
@@ -67,16 +67,16 @@
     </style>
 
 </head>
-<body style="background-color: #FFF5E6">
+<body>
 
 {#Barra anaranjada#}
 <div id="barra-primaria" class="navbar">
 
     <a href="https://www.labs.lacnic.net" title="LACNIC labs" class="pull-left">
-        <img src="{% static 'simon_app/imgs/logos/logo_labs.png' %}" border="0" class="hidden-xs hidden-sm"
-             alt="LACNIC Labs"/>
-        <img src="{% static 'simon_app/imgs/logos/logo_labs_small.png' %}" border="0" class="visible-xs visible-sm"
-             alt="LACNIC Labs"/>
+        <img src="{% static 'simon_app/imgs/logos/logo_labs_dark.png' %}" border="0" class="hidden-xs hidden-sm"
+             alt="LACNIC Labs" style="max-height: 5em;"/>
+        <img src="{% static 'simon_app/imgs/logos/logo_labs_dark_small.png' %}" border="0" class="visible-xs visible-sm"
+             alt="LACNIC Labs" style="max-height: 3em;"/>
     </a>
 
     <a id="titulo-primario" class="navbar-brand pull-right" href="{% url 'simon_app.views.home' %}">
@@ -97,16 +97,15 @@
     </p>
 </div>
 
-<div class="container" style="background-color: #FFFAF2;">
+<div class="container">
     <div class="header clearfix">
         {#        Nada#}
     </div>
 
-
     {% block header %}
     {% endblock %}
 
-    <div class="row marketing" style="padding: 1em">
+    <div id="fondo" class="row marketing">
         {% block content %}
         {% endblock %}
     </div>

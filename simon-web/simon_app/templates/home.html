@@ -1,4 +1,4 @@
-{% extends 'bootstrap.html' %}
+{% extends 'base.html' %}
 {% load staticfiles %}
 
 {% block javascript %}
@@ -21,9 +21,15 @@
 {% endblock %}
 
 {% block header %}
-    <div class="jumbotron" style="background-color: #FFFDFA; margin-top: 1em;">
-        <h1 style="font-family: 'HelveticaNeue-Light'">
-            Proyecto <font color="orange">Simón</font>
+{% endblock %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+    <div class="jumbotron">
+        <h1>
+            Proyecto <font id="highlight">Simón</font>
         </h1>
 
         <h3>Mapa de interconexión entre redes de
@@ -35,11 +41,6 @@
                 (http)</code>.
         </p>
     </div>
-{% endblock %}
-
-{% block title %}Home{% endblock %}
-
-{% block content %}
 
     <div class="col-sm-4">
         <div class="">

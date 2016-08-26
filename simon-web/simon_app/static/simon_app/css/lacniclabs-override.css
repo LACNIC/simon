@@ -1,31 +1,34 @@
 #barra-primaria {
     background-color: #FF9900;
 }
+#titulo-primario > h2 {
+    color: #FFFFFF;
+}
 
-#barra-secundaria {
+#barra-secundaria, .icon-bar, #menu-lateral {
     background-color: #FFC285;
 }
 
 .jumbotron {
-	background-color: #EFFCF3;
+	background-color: #FCFCFC;
 }
 
 #fondo {
-	background-color: #CEE5D5;
+	background-color: #F7F7F7;
 }
 
 body {
-	background-color: #B2DBBF;
+	background-color: #E6E6E6;
 }
 
-.footer {
+#highlight {
+	color: #FF9900;
+}
+
+footer {
   background-color: #4C3307;
 }
 
 .footer-secundario {
   background-color: #332205;
-}
-
-#highlight {
-	color: #FF1654;
 }
