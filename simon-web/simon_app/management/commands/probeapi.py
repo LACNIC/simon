@@ -34,7 +34,7 @@ class ProbeApiMeasurement():
                     process_response(response, url)
 
             except Exception as e:
-                print e, response
+                print e
                 pass
 
             finally:
@@ -99,27 +99,27 @@ class ProbeApiMeasurement():
                     cc_destination = TestPoint.objects.get(ip_address=destination_ip).country
 
                     std_dev = numpy.std(rtts)
-                    ProbeApiPingResult(
-                        date_test=datetime.datetime.now(tz=GMTUY()),
-                        ip_origin='',
-                        ip_destination=destination_ip,
-                        min_rtt=numpy.amin(rtts),
-                        max_rtt=numpy.amax(rtts),
-                        ave_rtt=numpy.mean(rtts),
-                        dev_rtt=std_dev,
-                        median_rtt=numpy.median(rtts),
-                        packet_loss=packet_loss,
-                        country_origin=cc_origin,
-                        country_destination=cc_destination,
-                        ip_version=6 if ':' in destination_ip else 4,
-                        as_origin=as_origin.asn,
-                        as_destination=as_destination.asn,
-                        url="",
+                    result = ProbeApiPingResult(
+                        date_test=datetime.datetime.now(tz=GMTUY()), \
+                        ip_origin='', \
+                        ip_destination=destination_ip, \
+                        min_rtt=numpy.amin(rtts), \
+                        max_rtt=numpy.amax(rtts), \
+                        ave_rtt=numpy.mean(rtts), \
+                        dev_rtt=std_dev, \
+                        median_rtt=numpy.median(rtts), \
+                        packet_loss=packet_loss, \
+                        country_origin=cc_origin, \
+                        country_destination=cc_destination, \
+                        ip_version=6 if ':' in destination_ip else 4, \
+                        as_origin=as_origin.asn, \
+                        as_destination=as_destination.asn, \
+                        url="", \
                         number_probes=len(rtts)
-                    ).save()
+                    )
+                    result.save()
 
-                    print "ICMP ping from %s to %s is %.0f ms (%s samples, +- %.0f ms, %.0f samples stripped)" % (
-                        cc_origin, cc_destination, numpy.mean(rtts), len(rtts), 2 * std_dev, _n - len(rtts))
+                    print "ICMP ping from %s to %s is %.0f ms (%s samples, +- %.0f ms, %.0f samples stripped)" % (cc_origin, cc_destination, numpy.mean(rtts), len(rtts), 2 * std_dev, _n - len(rtts))
 
         ccs = get_countries(ccs=ccs).keys()  # get countries with running probes...
 
@@ -144,38 +144,36 @@ class ProbeApiMeasurement():
                 print "Skipping %s" % (tp)
                 continue
 
-            cc_list = ""
-            for cc in ccs:
-                cc_list += cc + ","
-
             destination_ip = tp.ip_address
             ping_count = self.ping_count
 
-            round_trip = 2
-            time_for_each_ping = 1000
-            tx_time = 10000
-            timeout = ping_count * round_trip * time_for_each_ping + tx_time
+            for cc in ccs:
 
-            t = Template("https://probeapifree.p.mashape.com/Probes.svc/StartPingTestByCountry?"
-                         "countrycode={{ cc }}&"
-                         "count={{ count }}&"
-                         "destination={{ destination }}&"
-                         "probeslimit={{ probeslimit }}&"
-                         "timeout={{ timeout }}"
-                         )
+                round_trip = 2
+                time_for_each_ping = 1000
+                tx_time = 10000
+                timeout = ping_count * round_trip * time_for_each_ping + tx_time
 
-            ctx = Context(
-                {
-                    'cc': cc_list,
-                    'count': ping_count,
-                    'destination': destination_ip,
-                    'probeslimit': 10,
-                    'timeout': timeout
-                }
-            )
-            url_probeapi = t.render(ctx)
-            if self.max_job_queue_size == 0 or len(urls) <= self.max_job_queue_size:
-                urls.append(url_probeapi)
+                t = Template("https://probeapifree.p.mashape.com/Probes.svc/StartPingTestByCountry?"
+                             "countrycode={{ cc }}&"
+                             "count={{ count }}&"
+                             "destination={{ destination }}&"
+                             "probeslimit={{ probeslimit }}&"
+                             "timeout={{ timeout }}"
+                             )
+
+                ctx = Context(
+                    {
+                        'cc': cc,
+                        'count': ping_count,
+                        'destination': destination_ip,
+                        'probeslimit': 10,
+                        'timeout': timeout
+                    }
+                )
+                url_probeapi = t.render(ctx)
+                if self.max_job_queue_size == 0 or len(urls) <= self.max_job_queue_size:
+                    urls.append(url_probeapi)
 
         print "TPs %s x CCs %s" % (len(tps), len(ccs))
         print "Launching %.0f worker threads on a %.0f jobs queue" % (self.threads, len(urls))
