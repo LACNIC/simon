@@ -170,7 +170,7 @@ h4 {
     margin-top: 0pt;
 }
 
-footer > div > p {
+footer * {
     padding: 1em;
     color: #ffffff;
     font-family: 'foundrymonolinelight';
