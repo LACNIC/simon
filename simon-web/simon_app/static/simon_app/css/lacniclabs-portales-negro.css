@@ -21,6 +21,25 @@ LACNIC - css portales genéricos - martin@lacnic.net 2016
     font-style: normal;
 }
 
+/* -- estilos Background -- */
+{
+    background-color: #e87e1f
+;
+
+    background-color: #faa61a
+;
+
+    background-color: #ffe17f
+;
+
+/* -- colores Pie -- */
+
+    background-color: #404041
+;
+
+    background-color: #7f7f7f
+;
+}
 /* -- generales -- */
 strong, b {
     font-weight: bold;
@@ -78,7 +97,7 @@ h1 {
     padding: 5px 0;
     margin: 0 0 15px 0;
     text-align: left;
-    color: #4c4c4e;
+    color: #faa61a;
 }
 
 h2 {
@@ -86,9 +105,9 @@ h2 {
     font-size: 24pt;
     padding: 5px 0;
     margin: 10px 0;
-    border-bottom: 1px dashed #4c4c4e;
+    border-bottom: 1px dashed #faa61a;
     text-align: left;
-    color: #4c4c4e;
+    color: #faa61a;
 }
 
 h3 {
@@ -116,7 +135,8 @@ h4 {
     padding: 15px;
 }
 
-#titulo-primario > h2 {
+#barra-primaria > #titulo-primario > h2 {
+    color: #FFFFFF;
     font-family: 'foundrymonolinelight';
     text-decoration: none;
     border-bottom: 0px;
@@ -131,9 +151,19 @@ h4 {
     padding-right: 1em;
 }
 
+#barra-secundaria > ul > li > a, #barra-secundaria > ul > li > a:visited {
+    color: #EFEFEF;
+    text-shadow: 0 0;
+    font-family: 'foundrymonolinebold';
+}
+
+#barra-secundaria > ul > li > a:hover {
+    color: #FFFFFF;
+    background-color: transparent;
+}
+
 #barra-secundaria {
     border-radius: 0;
-    color: #000000;
 }
 
 #fondo {
@@ -141,9 +171,9 @@ h4 {
 }
 
 footer > div > p {
-  padding: 1em;
-  color: #ffffff;
-  font-family: 'foundrymonolinelight';
+    padding: 1em;
+    color: #ffffff;
+    font-family: 'foundrymonolinelight';
 }
 
 .jumbotron {
@@ -161,4 +191,14 @@ footer > div > p {
     margin: 0 0 15px 0;
     text-align: left;
     color: #4c4c4e;
+}
+
+.navbar-nav {
+    width: 100%;
+    text-align: center;
+}
+
+.navbar-nav > li {
+    float: none;
+    display: inline-block;
 }
