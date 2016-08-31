@@ -285,8 +285,8 @@ else:
     # Developer mode
     DEBUG = True
     URL_PFX = ""
-    SIMON_URL = 'http://127.0.0.1:8000'
-    CHARTS_URL = "https://simon.lacnic.net/charts"
+    SIMON_URL = "http://127.0.0.1:8000"
+    CHARTS_URL = "https://simon.lacnic.net/charts/charts"
     NEWRELIC = "newrelic.ini"
 
 TEMPLATE_DEBUG = DEBUG
