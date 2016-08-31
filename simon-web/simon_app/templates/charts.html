@@ -131,14 +131,36 @@
         </p>
 
         <h4>Medidor: Javascript (<code>HTTP</code>)</h4>
-
-        <div id="latency_histogram_js"></div>
-        {{ latency_histogram_js | safe }}
+        <div class="row">
+            <div class="col-sm-4 col-md-4 col-lg-4">
+                <h5>Acerca de las mediciones (<code>HTTP</code>)</h5>
+                <p>
+                    El protocolo HTTP es el que mejor refleja la experiencia de usuario, debido a que es el mismo
+                    protocolo que se utiliza para la navegación web y web services en general. Esta métrica puede dar
+                    una idea de cómo los usuarios finales de la región se conectan a través de la Web.
+                </p>
+            </div>
+            <div class="col-sm-8 col-md-8 col-lg-8">
+                <h5>Histograma</h5>
+                {{ latency_histogram_js | safe }}
+            </div>
+        </div>
 
         <h4>Medidor: ProbeAPI (<code>ICMP</code>)</h4>
-
-        <div id="latency_histogram_probeapi"></div>
-        {{ latency_histogram_probeapi | safe }}
+        <div class="row">
+            <div class="col-sm-4 col-md-4 col-lg-4">
+                <h5>Acerca de las mediciones (<code>ICMP</code>)</h5>
+                <p>
+                    El protocolo ICMP está más vinculado a la infraestructura de Internet. Las siglas Internet Control
+                    Messaging Protocol son suficientemente explicativas como para dar a entender que no se trata de un
+                    protocolo para uso en los usurios finales, sino para control y monitoreo de conectividad.
+                </p>
+            </div>
+            <div class="col-sm-8 col-md-8 col-lg-8">
+                <h5>Histograma</h5>
+                {{ latency_histogram_probeapi | safe }}
+            </div>
+        </div>
 
 
         <h3 class="page-header">Porcentaje de mediciones por IPv6</h3>
@@ -205,7 +227,8 @@
                     problema de la latencia en interna en <code>ms</code>, ya que ese
                     indicador perjudica a países de grandes superficies y beneficia a los más pequeños. Por ende, en el
                     extremo "bueno" de la escala se ubicarán países con baja latencia y gran superficie y en el extremo
-                    "malo" de la escala se ubicarán países con mucha latencia y poca superficie. Country information from <a href="https://restcountries.eu" target="_blank">RESTcountries</a>.
+                    "malo" de la escala se ubicarán países con mucha latencia y poca superficie. Country information
+                    from <a href="https://restcountries.eu" target="_blank">RESTcountries</a>.
                 </p>
                 <script type="text/javascript">
                     {{ inner_latency_area | safe }}

@@ -10,6 +10,12 @@
 
 <script async type="application/javascript">
 
+    UI = {
+        console: $("#console-{{ divId }}"),
+        progress: $("#progress-{{ divId }}"),
+        chart: $("#{{ divId }}")
+    };
+
     LOGGER = {
         enabled: true,
         debug: true,
@@ -17,12 +23,12 @@
             if (!LOGGER.debug) {
                 console.log(txt);
             }
-            document.getElementById("console-{{ divId }}").innerText = txt;
+            UI.console.text(txt);// = txt;
         },
         messages: {
             /*
-            Messages to be displayed in the LOGGER console
-            */
+             Messages to be displayed in the LOGGER console
+             */
             error: "Ups, something went wrong.",
             charts_service_down: "Looks like the charts service is down :(",
             charts_service_sending_data: "Sending data to charts service...",
@@ -52,7 +58,7 @@
 
     function loadAsyncChart(d, s, divId, data, labels, colors, kind, xAxis, my_options) {
 
-        d.getElementById("progress-{{ divId }}").value = "10"
+        UI.progress.val("10");
 
         var payload = {
             "data": data,
@@ -74,12 +80,18 @@
         var onSuccess = function (code) {
             LOGGER.log(LOGGER.messages.charts_service_chart_received);
 
-            d.getElementById("progress-{{ divId }}").value = "100";
+            UI.progress.val("100");
 
             var js = d.createElement(s), sc = d.getElementsByTagName(s)[0];
             js.innerHTML = code;
             js.type = "text/javascript";
             sc.parentNode.insertBefore(js, sc);
+
+            UI.progress.remove();
+            UI.console.remove();
+{#            UI.chart.css("margin", 0);#}
+{#            UI.chart.css("padding", 0);#}
+
         }
 
         $.ajax({
@@ -91,7 +103,7 @@
                 /*
                  Progress bars update
                  */
-                d.getElementById("progress-{{ divId }}").value = "10";
+                UI.progress.val("10");
                 LOGGER.log(LOGGER.messages.charts_service_sending_data);
             },
 
@@ -101,13 +113,13 @@
             },
             error: function (ok, status) {
 
-                d.getElementById("progress-{{ divId }}").value = "100";
+                UI.progress.val("100");
                 LOGGER.log(LOGGER.messages.charts_service_down);
 
             },
             complete: function () {
 
-                d.getElementById("progress-{{ divId }}").value = "75";
+                UI.progress.val("75");
             },
             dataType: "text",
             async: false
