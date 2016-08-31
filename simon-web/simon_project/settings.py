@@ -279,7 +279,7 @@ if HOSTNAME == 'simon':
     DEBUG = False
     URL_PFX = ""
     SIMON_URL = 'https://simon.lacnic.net'
-    CHARTS_URL = "https://simon.lacnic.net/charts"
+    CHARTS_URL = "https://simon.lacnic.net/charts/charts"
     NEWRELIC = "/home/agustin/newrelic.ini"
 else:
     # Developer mode
