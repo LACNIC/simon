@@ -719,11 +719,23 @@ def charts(request):
     ###################
 
 
-    latency_histogram_probeapi = Chart.objects.asyncChart(data=rtts_probeapi, divId="latency_histogram_probeapi",
-                                                          labels=['NTP'], colors=['#608BC4'])
+    # Async Charts
 
-    latency_histogram_js = Chart.objects.asyncChart(data=rtts_js, divId="latency_histogram_js", labels=['HTTP'],
-                                                    colors=['#608BC4'])
+    latency_histogram_probeapi = Chart.objects.asyncChart(
+        data=[rtt for rtt in rtts_probeapi],
+        divId="latency_histogram_probeapi",
+        labels=['ICMP'],
+        colors=['#608BC4']
+    )
+
+    latency_histogram_js = Chart.objects.asyncChart(
+        data=rtts_js,
+        divId="latency_histogram_js",
+        labels=['HTTP'],
+        colors=['#608BC4']
+    )
+
+    # Sync Charts
 
     url = settings.CHARTS_URL + "/code"
 
@@ -737,13 +749,6 @@ def charts(request):
         xAxis='date')
 
     results_timeline = requests.post(url, data=data, headers={'Connection': 'close'}).text
-
-    # ipv6_penetration = Chart.objects.asyncChart(data=json.dumps([list((d[0].strftime("%d/%m/%Y") for d in rs)), list(ipv6_penetration_ratios)]),
-    #                                             divId="ipv6_penetration",
-    #                                             labels=["IPv6 sample ratio"],
-    #                                             colors=['#608BC4'],
-    #                                             kind='LineChart',
-    #                                             xAxis='date')
 
     data = dict(data=json.dumps([list((d[0].strftime("%d/%m/%Y") for d in rs)), list(ipv6_penetration_ratios)]),
                 divId='ipv6_penetration',
