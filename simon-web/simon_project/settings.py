@@ -28,6 +28,20 @@ ADMINS = (
 NEWRELIC = ""
 
 DEBUG = True
+HOSTNAME = socket.gethostname()
+if HOSTNAME == 'simon':
+    DEBUG = False
+    URL_PFX = ""
+    SIMON_URL = 'https://simon.lacnic.net'
+    CHARTS_URL = "https://simon.lacnic.net/charts/charts"
+    LOGS = "/var/log/apache2/simon/error.log"
+else:
+    # Developer mode
+    DEBUG = True
+    URL_PFX = ""
+    SIMON_URL = "http://127.0.0.1:8000"
+    CHARTS_URL = "https://simon.lacnic.net/charts/charts"
+    LOGS = "/Users/agustin/git/simon/simon-web/logs/production.log"
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.lacnic.net', '*']
 CORS_ORIGIN_ALLOW_ALL = True
@@ -210,45 +224,50 @@ INSTALLED_APPS = (
     'django_extensions'
 )
 
+
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
 # the site admins on every HTTP 500 error when DEBUG=False.
 # See http://docs.djangoproject.com/en/dev/topics/logging for
 # more details on how to customize your logging configuration.
+class LoggingConstants():
+
+    location = LOGS
+
+    class DebugLevel():
+        information = "INFO"
+        warning = "WARN"
+        error = "ERROR"
+        critical = "CRITICAL"
+
+    class Handlers():
+        from logging import StreamHandler, FileHandler
+        stream = StreamHandler.__module__ + "." + StreamHandler.__name__
+        file = FileHandler.__module__ + "." + FileHandler.__name__
+
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    # 'filters': {
-    # 'require_debug_false': {
-    # '()': 'django.utils.log.RequireDebugFalse'
-    #        }
-    #    },
     'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            # 'filters': ['require_debug_false'],
-            'class': 'django.utils.log.AdminEmailHandler'
-        },
         'console': {
-            'level': 'INFO',
-            'class': 'logging.StreamHandler'
+            'level': LoggingConstants.DebugLevel.information,
+            'class': LoggingConstants.Handlers.stream
+        },
+        'file': {
+            'level': LoggingConstants.DebugLevel.information,
+            'class': LoggingConstants.Handlers.file,
+            'filename': LoggingConstants.location,
         },
     },
     'loggers': {
         '': {
-            'handlers': ['console'],
+            'handlers': ['console', 'file'],
             'level': 'INFO',
             'propagate': True,
-        },
-        'django.request': {
-            'handlers': ['mail_admins'],
-            'level': 'ERROR',
-            'propagate': True,
-        },
+        }
     }
 }
-
-
 
 DATABASES = {
     'default': {
@@ -262,9 +281,9 @@ DATABASES = {
 }
 
 PROTOCOLS = {
-    'HTTP' : 'JavaScript',
-    'ICMP' : 'probeapi',
-    'NTP' : 'Applet'
+    'HTTP': 'JavaScript',
+    'ICMP': 'probeapi',
+    'NTP': 'Applet'
 }
 # CACHES = {
 #     'default': {
@@ -272,22 +291,6 @@ PROTOCOLS = {
 #         'LOCATION': '127.0.0.1:11211',
 #     }
 # }
-
-HOSTNAME = socket.gethostname()
-DEBUG = True
-if HOSTNAME == 'simon':
-    DEBUG = False
-    URL_PFX = ""
-    SIMON_URL = 'https://simon.lacnic.net'
-    CHARTS_URL = "https://simon.lacnic.net/charts/charts"
-    NEWRELIC = "/home/agustin/newrelic.ini"
-else:
-    # Developer mode
-    DEBUG = True
-    URL_PFX = ""
-    SIMON_URL = "http://127.0.0.1:8000"
-    CHARTS_URL = "https://simon.lacnic.net/charts/charts"
-    NEWRELIC = "newrelic.ini"
 
 TEMPLATE_DEBUG = DEBUG
 

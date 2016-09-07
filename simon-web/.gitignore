@@ -6,4 +6,5 @@ normalization-tests/
 .idea/
 node_modules/
 stunnel/
+logs/
 *.pyc
