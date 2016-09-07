@@ -28,6 +28,8 @@ import simon_project.settings as settings
 from _socket import timeout
 from django.views.decorators.cache import cache_page
 
+from django.http import UnreadablePostError
+
 
 @cache_page(60 * 60 * 24)
 def lab(request):
@@ -279,7 +281,7 @@ def post_xml_result(request):
 
     logger = logging.getLogger(__name__)
 
-    if (request.method != 'POST'):  # and request.method != 'GET'
+    if request.method != 'POST':
         return HttpResponse("invalid method: %s" % request.method)
 
     schema_file = '%s/SimonXMLSchema.xsd' % settings.STATIC_ROOT
@@ -289,7 +291,10 @@ def post_xml_result(request):
         schema = etree.XMLSchema(schema_doc)
         parser = etree.XMLParser(schema=schema)
 
-        f_source = request.body
+        try:
+            f_source = request.body
+        except UnreadablePostError as upe:
+            logger.error("UnreadablePostError: %s" % (upe))
 
         try:
             simon = etree.fromstring(str(f_source), parser)
@@ -700,7 +705,7 @@ def charts(request):
     # Inner Latency Chart
     from operator import itemgetter
     inners = Results.objects.inner(tester=settings.PROTOCOLS["HTTP"], months=6)
-    inners = sorted([i for i in inners], key=itemgetter(1), reverse=True) # ordered by min RTT
+    inners = sorted([i for i in inners], key=itemgetter(1), reverse=True)  # ordered by min RTT
     inner_isos = []
     inner_lats = []
     inner_lats_min = []
@@ -799,7 +804,8 @@ def charts(request):
         inner_area.append(dict(alpha2Code=alpha2Code, area=area, borders=borders, latency=latency_,
                                latency_per_area=latency_per_area))
 
-    inner_area = sorted([i for i in inner_area if i["latency"] > 0], key=itemgetter("latency_per_area"), reverse=True)  # order
+    inner_area = sorted([i for i in inner_area if i["latency"] > 0], key=itemgetter("latency_per_area"),
+                        reverse=True)  # order
     for i, v in enumerate(inner_area):
         new_key = "%02d - %s" % (i, v["alpha2Code"])
         print new_key
