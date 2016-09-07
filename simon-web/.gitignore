@@ -4,4 +4,6 @@ htmlcov/
 normalization-tests/
 .coverage
 .idea/
+node_modules/
+stunnel/
 *.pyc
