@@ -945,7 +945,7 @@ class Error(Notification):
 
 
 class ChartManager(models.Manager):
-    url = settings.CHARTS_URL + "/hist/code"
+    url = settings.CHARTS_URL + "/hist/code/"
 
     def javascriptChart(self, cc1, divId, date_from, date_to, cc2=None, bidirectional=True):
         rtts = self.filterQuerySet(Results.objects.javascript(), cc1=cc1, cc2=cc2, date_from=date_from, date_to=date_to,

@@ -633,7 +633,7 @@ def charts(request):
     :param request:
     :return:
     """
-    import datetime, json, logging
+    import datetime, json, logging, requests
 
     # ###########
     # DROPDOWN #
@@ -669,7 +669,6 @@ def charts(request):
     # #############
     # Histograms #
     ##############
-    import requests
 
     now = datetime.datetime.now()
     a_month_ago = now - datetime.timedelta(days=30)
@@ -722,7 +721,7 @@ def charts(request):
 
     # Sync Charts
 
-    url = settings.CHARTS_URL + "/code"
+    url = settings.CHARTS_URL + "/code/"
 
     data = dict(data=json.dumps(
         [list(d[0].strftime("%d/%m/%Y") for d in results_timeline), [r[1] for r in results_timeline],
@@ -788,7 +787,6 @@ def charts(request):
                         reverse=True)  # order
     for i, v in enumerate(inner_area):
         new_key = "%02d - %s" % (i, v["alpha2Code"])
-        print new_key
         inner_area[i]["alpha2Code"] = new_key
     inner_area_max = max(list((k["latency_per_area"]) for k in inner_area))
     data = dict(data=json.dumps([
