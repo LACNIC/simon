@@ -72,9 +72,9 @@
 
         var uri = "";
         if (kind != "ColumnChart") {
-            uri = "/code";
+            uri = "/code/";  // Last slash *is* important
         } else {
-            uri = "/hist/code";
+            uri = "/hist/code/";
         }
 
         var onSuccess = function (code) {
@@ -89,8 +89,6 @@
 
             UI.progress.remove();
             UI.console.remove();
-{#            UI.chart.css("margin", 0);#}
-{#            UI.chart.css("padding", 0);#}
 
         }
 
