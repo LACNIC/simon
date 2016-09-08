@@ -34,8 +34,8 @@ DEBUG = True
 HOSTNAME = socket.gethostname()
 if HOSTNAME == 'simon':
     DEBUG = False
-    SIMON_URL = 'https://simon.lacnic.net'
-    CHARTS_URL = "https://charts.dev.lacnic.net/"
+    SIMON_URL = 'https://simon.lacnic.net'  # *no* trailing slash
+    CHARTS_URL = "https://charts.dev.lacnic.net"  # *no* trailing slash
     LOGS = "/var/log/apache2/simon/error.log"
 else:
     # Developer mode
