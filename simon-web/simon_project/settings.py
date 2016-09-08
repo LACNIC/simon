@@ -31,14 +31,12 @@ DEBUG = True
 HOSTNAME = socket.gethostname()
 if HOSTNAME == 'simon':
     DEBUG = False
-    URL_PFX = ""
     SIMON_URL = 'https://simon.lacnic.net'
     CHARTS_URL = "https://simon.lacnic.net/charts/charts"
     LOGS = "/var/log/apache2/simon/error.log"
 else:
     # Developer mode
     DEBUG = True
-    URL_PFX = ""
     SIMON_URL = "http://127.0.0.1:8000"
     CHARTS_URL = "https://simon.lacnic.net/charts/charts"
     LOGS = "/Users/agustin/git/simon/simon-web/logs/production.log"
@@ -59,7 +57,6 @@ LATEST_COMMIT = ""  # json.loads(r)[0]["sha"]
 PROJECT_ROOT = os.path.abspath(os.path.pardir)
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
-URL_PFX = '/simon'
 v6_URL = ''
 v4_URL = ''
 # LACNIC's resources
@@ -244,7 +241,7 @@ STATIC_ROOT = '%s/simon_app/static' % (PROJECT_ROOT)
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-STATIC_URL = URL_PFX + '/static/'
+STATIC_URL = '/static/'
 
 # Path to the geolocation files
 GEOIP_PATH = '%s/geolocation' % (STATIC_ROOT)

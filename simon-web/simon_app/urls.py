@@ -15,8 +15,7 @@ urlpatterns = patterns('',
                        url(r'^about/$', 'simon_app.views.about'),
                        url(r'^applet/$', 'simon_app.views.applet'),
                        url(r'^articles/$', 'simon_app.views.articles'),  # Articles
-                       url(r'^atlas/$', 'simon_app.views.atlas') \
-                       + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT),  # RIPE Atlas
+                       url(r'^atlas/$', 'simon_app.views.atlas'),  # RIPE Atlas
                        url(r'^charts/$', 'simon_app.views.charts'),
                        url(r'^country_latency_chart/([A-Z]{2})/$', 'simon_app.views.country_latency_chart'),
                        url(r'^country_latency_chart/([0-9]{1,3})/$', 'simon_app.views.country_latency_chart'),
@@ -42,7 +41,7 @@ urlpatterns = patterns('',
                        url(r'^web_points/$', 'simon_app.views.web_points', {'amount': 1, 'ip_version': 4}),
                        url(r'^web_points/(?P<amount>\d+)/$', 'simon_app.views.web_points', {'ip_version': 4}),
                        url(r'^web_points/(?P<amount>\d+)/(?P<ip_version>\d+)/$', 'simon_app.views.web_points')
-                       )
+                       ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 # Traceroute
 # url(r'^post/traceroute/$', 'simon_app.views.post_traceroute', name='post_traceroute'),  # Traceroute Donation Program
