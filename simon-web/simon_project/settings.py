@@ -35,13 +35,13 @@ HOSTNAME = socket.gethostname()
 if HOSTNAME == 'simon':
     DEBUG = False
     SIMON_URL = 'https://simon.lacnic.net'
-    CHARTS_URL = "https://simon.lacnic.net/charts/charts"
+    CHARTS_URL = "https://charts.dev.lacnic.net/"
     LOGS = "/var/log/apache2/simon/error.log"
 else:
     # Developer mode
     DEBUG = True
     SIMON_URL = "http://127.0.0.1:8000"
-    CHARTS_URL = "https://simon.lacnic.net/charts/charts"
+    CHARTS_URL = "http://127.0.0.1:8001"
     LOGS = PROJECT_ROOT + "/logs/debug.log"
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.lacnic.net', '*']
