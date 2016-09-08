@@ -24,6 +24,8 @@ install:
   - pip install setuptools==26.1.1
   - pip install -r requirements.txt --allow-external ripe.atlas.sagan ripe.atlas.cousteau
   - pip install coveralls
+  - mkdir simon-web/logs
+  - touch simon-web/logs/debug.log
 
 before_script:
   - mv simon-web/simon_project/passwords_dummy.py simon-web/simon_project/passwords.py
