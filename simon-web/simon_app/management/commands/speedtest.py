@@ -11,12 +11,13 @@ import socket
 import simon_project.settings as settings
 from urllib2 import urlopen, build_opener, HTTPCookieProcessor
 from lxml import etree
+import logging
+from sys import stdout
+from simon_app.reportes import GMTUY
 
 
 class Command(BaseCommand):
     def handle(self, *args, **options):
-        from sys import stdout
-        from simon_app.reportes import GMTUY
 
         ccs_lacnic = [c.iso for c in Country.objects.get_lacnic_countries()]
         ccs_afrinic = [c.iso for c in Country.objects.get_afrinic_countries()]
@@ -28,7 +29,7 @@ class Command(BaseCommand):
         cookie_jar = CookieJar()
 
         # Read the XML XMLfile
-        print "Fetching XML file..."
+        logging.info("Fetching XML file...")
         url = "http://www.speedtest.net/speedtest-servers.php"
 
         import requests
@@ -37,7 +38,8 @@ class Command(BaseCommand):
         timeFormat = "%Y-%m-%d %H:%M:%S"
 
         # Add new registers in the Test Points table
-        print "Parsing XML file..."
+
+        logging.info("Parsing XML file...")
         xml_ = etree.fromstring(data.encode('utf-8'))
         servers = xml_[0]
         N = len(servers)
@@ -115,14 +117,14 @@ class Command(BaseCommand):
                             nuevos.append(tp)
 
             except AddrFormatError:
-                print 'Address Format Error'
+                logging.warning("Address Format Error")
                 pass
             except socket.gaierror:
-                print "No address associated with hostname"
+                logging.warning("No address associated with hostname")
                 pass
 
         if len(nuevos) > 0:
-            print "The following Test Points have been added (%.0f):" % (len(nuevos))
+            logging.info("The following Test Points have been added (%.0f):" % (len(nuevos)))
             for tp in nuevos:
-                print str(tp.ip_address)
+                logging.info(str(tp.ip_address))
             send_mail_new_points_found(ctx={'points': nuevos})

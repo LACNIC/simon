@@ -1,6 +1,7 @@
 """
     Decorator definitions file
 """
+import logging
 
 
 def chatty_command(command=""):
@@ -15,7 +16,7 @@ def chatty_command(command=""):
             try:
                 function(*args, **kw)
             except Exception as e:
-                print command, e, e.message
+                logging.error("Command: %s \n Excepption thrown: %s \n Exception message: %s" % (command, e, e.message))
 
         return wrapper
 

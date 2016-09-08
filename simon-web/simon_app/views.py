@@ -189,17 +189,17 @@ def saveTracerouteResults(request, fileName):
 
 def servers_locations_maps(request):
     result = servers_locations_maps_api(request)
-    return HttpResponse(result, mimetype="application/json")
+    return HttpResponse(result, content_type="application/json")
 
 
 def region_throughput_chart(request):
     result = region_throughput_chart_api(request)
-    return HttpResponse(result, mimetype="application/json")
+    return HttpResponse(result, content_type="application/json")
 
 
 def throughput_by_country_chart(request):
     result = throughput_by_country_chart_api(request)
-    return HttpResponse(result, mimetype="application/json")
+    return HttpResponse(result, content_type="application/json")
 
 
 def web_points(request, amount, ip_version):
@@ -209,7 +209,7 @@ def web_points(request, amount, ip_version):
 
 def ntp_points(request):
     result = ntp_points_api(request)
-    return HttpResponse(result, mimetype="application/json")
+    return HttpResponse(result, content_type="application/json")
 
 
 def web_configs(request):
@@ -224,17 +224,17 @@ def api(request):
 
 def country_latency_chart(request, country):
     result = country_latency_chart_api(request, country)
-    return HttpResponse(result, mimetype="application/json")
+    return HttpResponse(result, content_type="application/json")
 
 
 def region_latency_chart(request):
     result = region_latency_chart_api(request)
-    return HttpResponse(result, mimetype="application/json")
+    return HttpResponse(result, content_type="application/json")
 
 
 def inner_latency_chart(request):
     result = inner_latency_chart_api(request)
-    return HttpResponse(result, mimetype="application/json")
+    return HttpResponse(result, content_type="application/json")
 
 
 def latency(request, country='all', ip_version=4, year=2009, month=01):
@@ -245,18 +245,9 @@ def throughput(request, country='all', ip_version=4, year=2009, month=01):
     return throughput_api(request, country, ip_version, year, month)
 
 
-def tables(request, country_iso, ip_version, year, month, tester, tester_version):  # , test_type):
-    table_json, ip_version, country_name, date, now, tester, tester_version = tables_api(request, country_iso,
-                                                                                         ip_version, year, month,
-                                                                                         tester, tester_version)
-    return render_to_response('table.html',
-                              {'json': table_json, 'ip_version': ip_version, 'country': country_name, 'date': date,
-                               'now': now, 'tester': tester, 'tester_version': tester_version}, getContext(request))
-
-
 def throughput_json(request, country_iso, ip_version, year, month, tester, tester_version):  # , test_type):
     json = throughput_json_api(request, country_iso, ip_version, year, month, tester, tester_version)
-    return HttpResponse(json, mimetype="application/json")
+    return HttpResponse(json, content_type="application/json")
 
 
 def throughput_tables(request, country_iso, ip_version, year, month, tester, tester_version):  # , test_type):
@@ -409,8 +400,8 @@ def post_offline_testpoints(request):
 
     logger = logging.getLogger(__name__)
 
-    if (request.method != 'POST'):  # and request.method != 'GET'
-        return HttpResponse("invalid method: %s" % request.method)
+    if request.method != 'POST':
+        return HttpResponse("Invalid method: %s" % request.method)
 
     schema_file = '%s/SimonXMLSchemaOfflinePoint.xsd' % settings.STATIC_ROOT
 
@@ -420,39 +411,38 @@ def post_offline_testpoints(request):
         parser = etree.XMLParser(schema=schema)
 
         f_source = request.body
+
         try:
             report = etree.fromstring(f_source, parser)
-
             points = report.xpath("point")
 
             for point in points:
+                offline_ip = point.find('destination_ip').text
                 try:
                     # match
-                    offlineReport = OfflineReport.objects.get(ip_address=point.find('destination_ip').text)
-                    offlineReport.report_count += 1
+                    offline_report = OfflineReport.objects.get(ip_address=offline_ip)
+                    offline_report.report_count += 1
 
-                    tp = TestPoint.objects.get(ip_address=tp.ip_address)
+                    tp = TestPoint.objects.get(ip_address=offline_ip)
                     tp.enabled = False
                     tp.save()
 
                     send_mail_point_offline(ctx={'point': tp})
 
                 except OfflineReport.DoesNotExist:
-                    # new report
-                    offlineReport = OfflineReport()
-                    offlineReport.ip_address = point.find('destination_ip').text
-                    offlineReport.date_reported = datetime.now(GMTUY())
-                    offlineReport.report_count = 1
-                    offlineReport.save()
+                    # New report
+                    offline_report = OfflineReport()
+                    offline_report.ip_address = offline_ip
+                    offline_report.date_reported = datetime.now(GMTUY())
+                    offline_report.report_count = 1
+                    offline_report.save()
 
         except etree.XMLSyntaxError as e:
-            # this exception is thrown on schema validation error
             exception = "Error when matching with schema. Exception: %s" % (e)
             logger.error(exception)
         except Exception as e:
             exception = "Error at offline endpoint. Exception: %s" % (e)
             logger.error(exception)
-            print exception
 
     return HttpResponse("END")
 
@@ -643,27 +633,20 @@ def charts(request):
     :param request:
     :return:
     """
-    import datetime
-    from reportes import CountryDropdownForm
-    import json
+    import datetime, json, logging
 
     # ###########
     # DROPDOWN #
     # ###########
 
-    ip = request.META.get('REMOTE_ADDR', None)
-    g = GeoIP()
 
     try:
+        ip = request.META.get('REMOTE_ADDR', None)
+        g = GeoIP()
         cc = g.country(ip)['country_code']
-        print "Accediendo desde %s" % cc
-        id_country = Country.objects.get(iso=cc)
-        countries_dropdown = CountryDropdownForm(initial={'country': id_country})
-    except (Country.DoesNotExist, TypeError):
-        # IP is probably a local address
-        countries_dropdown = CountryDropdownForm()
-    except:
-        countries_dropdown = CountryDropdownForm()
+        logging.info("Accessing from %s" % cc)
+    except Exception:
+        logging.warning("Error at getting geo information for %s" % ip)
 
     # ######
     # MAP #
@@ -682,9 +665,6 @@ def charts(request):
     countries = ""
     for i in items:
         countries += "%s," % (str(list(i)))
-
-    year = datetime.datetime.now().year
-    years = range(2009, year + 1)
 
     # #############
     # Histograms #
