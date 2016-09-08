@@ -20,4 +20,5 @@ newrelic<=2.50.0.39
 numpy==1.11.0
 psycopg2<=2.5.1
 pyping>=0.0.4
+setuptools==26.1.1
 trparse<=0.1.0
