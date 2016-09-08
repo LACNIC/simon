@@ -34,7 +34,7 @@ before_script:
 script:
   - python simon-web/manage.py test
   - coverage run simon-web/manage.py test
-  - simon-javascript/node_modules/karma/bin/karma start simon-javascript/my.conf.js --single-run
+  - simon-javascript/node_modules/karma/bin/karma start simon-javascript/karma.conf.js --single-run
 
 after_success: coveralls
 
