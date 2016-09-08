@@ -6,6 +6,9 @@ from datetime import datetime
 import passwords
 from subprocess import check_output
 
+PROJECT_ROOT = os.path.abspath(os.path.pardir)
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+
 # Passwords stored in env. variables or passwords.py file
 # Env. variable syntax: SIMON_<variable>
 try:
@@ -39,7 +42,7 @@ else:
     DEBUG = True
     SIMON_URL = "http://127.0.0.1:8000"
     CHARTS_URL = "https://simon.lacnic.net/charts/charts"
-    LOGS = "/Users/agustin/git/simon/simon-web/logs/production.log"
+    LOGS = PROJECT_ROOT + "/logs/debug.log"
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.lacnic.net', '*']
 CORS_ORIGIN_ALLOW_ALL = True
