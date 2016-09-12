@@ -93,3 +93,9 @@ ENV/
 .idea/
 
 node_modules/
+
+# Vagrant
+.vagrant/
+
+# Python Notebook
+*.ipynb
