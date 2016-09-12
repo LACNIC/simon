@@ -11,6 +11,7 @@ from random import shuffle
 import json
 import datetime
 import numpy
+import logging
 
 
 class ProbeApiMeasurement():
@@ -20,6 +21,8 @@ class ProbeApiMeasurement():
 
     def __init__(self):
         pass
+
+    logger = logging.getLogger(__name__)
 
     threads = 50
     max_job_queue_size = 0  # 0 for limitless
@@ -38,6 +41,7 @@ class ProbeApiMeasurement():
                 pass
 
             finally:
+                del response
                 return
 
         def process_response(response, url_probeapi):
@@ -118,8 +122,11 @@ class ProbeApiMeasurement():
                         number_probes=len(rtts)
                     )
                     result.save()
+                    del result
 
-                    print "ICMP ping from %s to %s is %.0f ms (%s samples, +- %.0f ms, %.0f samples stripped)" % (cc_origin, cc_destination, numpy.mean(rtts), len(rtts), 2 * std_dev, _n - len(rtts))
+                    self.logger.info("ICMP ping from %s to %s is %.0f ms (%s samples, +- %.0f ms, %.0f samples stripped)" % (cc_origin, cc_destination, numpy.mean(rtts), len(rtts), 2 * std_dev, _n - len(rtts)))
+
+            del py_object
 
         ccs = get_countries(ccs=ccs).keys()  # get countries with running probes...
 
@@ -175,12 +182,15 @@ class ProbeApiMeasurement():
                 if self.max_job_queue_size == 0 or len(urls) <= self.max_job_queue_size:
                     urls.append(url_probeapi)
 
-        print "TPs %s x CCs %s" % (len(tps), len(ccs))
-        print "Launching %.0f worker threads on a %.0f jobs queue" % (self.threads, len(urls))
+        self.logger.info("TPs %s x CCs %s" % (len(tps), len(ccs)))
+        self.logger.info("Launching %.0f worker threads on a %.0f jobs queue" % (self.threads, len(urls)))
         thread_pool.map(do_work, urls)
 
         thread_pool.close()
         thread_pool.join()
 
-        print "Command ended with %.0f worker threads on a %.0f jobs queue" % (self.threads, len(urls))
-        print "Command took %s" % (datetime.datetime.now(tz=GMTUY()) - then)
+        self.logger.info("Command ended with %.0f worker threads on a %.0f jobs queue" % (self.threads, len(urls)))
+        self.logger.info("Command took %s" % (datetime.datetime.now(tz=GMTUY()) - then))
+
+        del tps
+        del ccs
