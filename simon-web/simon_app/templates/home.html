@@ -73,27 +73,23 @@
         </div>
     </div>
 
-    <div class="col-sm-4" style="float: right;">
-        <div class="">
-            <a href="{% url 'simon_app.views.reports' %}"
-               alt="Reportes de los resultados obtenidos, agregados a nivel de país.">
-                <h2>Reportes por país</h2></a>
-
-            <p>Analiza los reportes de latencia y ancho de banda que hemos
-                preparado a partir de la informacion recolectada por cientos de
-                usuarios, desde distintos puntos de la region.</p>
-        </div>
-    </div>
     <div class="col-sm-4" style="float: left;">
-        <div class="">
-            <a href="{% url 'simon_app.views.charts' %}"
-               alt="Gráficas de la región. Esta sección muestra las mediciones de latencia de la región LAC.">
-                <h2>Gráficas de la región</h2></a>
+        <h2>Reportes</h2>
+        <a href="{% url 'simon_app.views.charts' %}"
+           alt="Gráficas de la región. Esta sección muestra las mediciones de latencia de la región LAC.">
+            <h3>Regionales</h3></a>
 
-            <p>Si quieres observar los datos con más claridad, puedes
-                consultar algunas gráficas de latencia que muestran informacián
-                acerca de la calidad de Internet en toda la region.</p>
-        </div>
+        <p>Si quieres observar los datos con más claridad, puedes
+            consultar algunas gráficas de latencia que muestran informacián
+            acerca de la calidad de Internet en toda la region.</p>
+
+        <a href="{% url 'simon_app.views.reports' %}"
+           alt="Reportes de los resultados obtenidos, agregados a nivel de país.">
+            <h3>Por país</h3></a>
+
+        <p>Analiza los reportes de latencia y ancho de banda que hemos
+            preparado a partir de la informacion recolectada por cientos de
+            usuarios, desde distintos puntos de la region.</p>
     </div>
 
     <div class="col-sm-4">
@@ -167,14 +163,5 @@
             histograma en tiempo real acerca de las mediciones realizadas.
         </p>
     </div>
-
-    <script type="application/javascript">
-        /*
-         Trigger the SIMON object by adding an event listener
-         */
-        window.addEventListener("load", function () {
-            SIMON.init()
-        });
-    </script>
 
 {% endblock %}
