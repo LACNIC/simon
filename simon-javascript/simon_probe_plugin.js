@@ -23,7 +23,7 @@ SIMON = {
         offline: SIMON.debug && "http://127.0.0.1:8000/postxmlresult/offline/" || "https://simon.lacnic.net/postxmlresult/offline/",
         post: SIMON.debug && "http://127.0.0.1:8000/postxmlresult/latency/" || "https://simon.lacnic.net/postxmlresult/latency/",
         country: "https://simon.lacnic.net/getCountry/",
-        ipv6ResolveURL: "http://simon.v6.labs.lacnic.net/cemd/getip/jsonp/",
+        ipv6ResolveURL: "https://simon.v6.labs.lacnic.net/cemd/getip/jsonp/",
         ipv4ResolveURL: "https://simon.v4.labs.lacnic.net/cemd/getip/jsonp/"
     },
 
