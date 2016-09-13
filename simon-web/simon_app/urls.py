@@ -38,9 +38,7 @@ urlpatterns = patterns('',
                        url(r'^speedtest/$', 'simon_app.views.speedtest'),
                        url(r'^thanks/$', 'simon_app.views.thanks'),
                        url(r'^web_configs/$', 'simon_app.views.web_configs'),
-                       url(r'^web_points/$', 'simon_app.views.web_points', {'amount': 1, 'ip_version': 4}),
-                       url(r'^web_points/(?P<amount>\d+)/$', 'simon_app.views.web_points', {'ip_version': 4}),
-                       url(r'^web_points/(?P<amount>\d+)/(?P<ip_version>\d+)/$', 'simon_app.views.web_points')
+                       url(r'^web_points/$', 'simon_app.views.web_points'),
                        ) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 # Traceroute

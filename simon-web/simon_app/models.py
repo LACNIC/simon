@@ -834,9 +834,31 @@ class TestPoint(models.Model):
         verbose_name_plural = 'Puntos de prueba'
 
 
+class SpeedTestPointManager(TestPointManager):
+
+    def get_https_enabled(self):
+        """
+        :return: A list of those  SpeedtestTestPoint that are enaled and have a proven HTTPs support
+        """
+        tps = SpeedtestTestPoint.objects.filter(enabled=True)
+        res = []
+        for tp in tps:
+            if tp.has_http_support:
+                res.append(tp)
+        return res
+
+
 class SpeedtestTestPoint(TestPoint):
     speedtest_url = models.TextField(null=True)
-    objects = TestPointManager()
+    objects = SpeedTestPointManager()
+
+    @property
+    def has_http_support(self):
+        latest_https_check = self.get_latest_https_check()
+        if latest_https_check is None:
+            return False
+
+        return latest_https_check.status
 
     def get_latest_https_check(self):
         by = self.httpscheck_set.order_by("date")

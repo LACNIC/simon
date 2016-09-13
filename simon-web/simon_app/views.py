@@ -202,9 +202,9 @@ def throughput_by_country_chart(request):
     return HttpResponse(result, content_type="application/json")
 
 
-def web_points(request, amount, ip_version):
-    result = web_points_api(request, amount, ip_version)
-    return HttpResponse(result)
+def web_points(request):
+    result = web_points_api(request)
+    return HttpResponse(result, content_type="application/json")
 
 
 def ntp_points(request):

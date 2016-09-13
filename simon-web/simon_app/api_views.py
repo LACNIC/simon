@@ -5,6 +5,8 @@ Created on 12/11/2012
 '''
 # -*- encoding: utf-8 -*-
 from __future__ import division
+
+from cryptography import exceptions
 from django.db.models import Q
 from django.http import HttpResponse
 from simon_app.functions import bps2KMG, whoIs
@@ -16,8 +18,10 @@ import math
 import psycopg2
 import random
 import re
+import logging
 import simon_project.settings as settings
 from django.views.decorators.csrf import csrf_exempt
+from collections import defaultdict
 
 
 def ntp_points(request):
@@ -37,64 +41,67 @@ def ntp_points(request):
     return response
 
 
-def web_points(request, amount, ip_version):
+def web_points(request):
     """
         Returns a JSONP array containing the WEB points
     """
-    callback = request.GET.get('callback')
 
-    points = []
+    try:
+        callback = str(request.GET.get('callback', "callback"))
+        amount = int(request.GET.get('amount', 2))
+        ip_version = int(request.GET.get('ip_version', 4))
+        countrycode = str(request.GET.get('countrycode', "XX"))
+        protocol = str(request.GET.get('protocol', "http"))
+    except:
+        logging.error("Error while parsing request %s" % request.GET)
+
+    points = SpeedtestTestPoint.objects.filter(enabled=True)
     if int(ip_version) == 6:
-        points = SpeedtestTestPoint.objects.get_ipv6()
+        points = points.filter(ip_address__contains=":")
     elif int(ip_version) == 4:
-        points = SpeedtestTestPoint.objects.get_ipv4()
+        points = points.filter(ip_address__contains=".")
 
-    country = Country.objects.get_countries_with_testpoints().order_by('?')[0]
-    #     points = points.filter(testtype='tcp_web', country=country.iso, enabled=True).order_by('?')[:int(amount)]
-    points = points.filter(testtype='tcp_web', enabled=True).order_by('?')[:int(amount)]
+    user_country = Country.objects.get(iso=countrycode)
+    user_region = user_country.region
+    same_user_country = points.filter(country=user_country.iso).order_by("?")[:1]
+    same_user_region = points.filter(country__in=[c.iso for c in Country.objects.filter(region__id=user_region.id)]).order_by("?")[:1]
 
-    countries = Country.objects.all()
+    # Convert the QueySet into a list at the end of filtering operations
+    if protocol == "https":
+        points = [p for p in points if p.has_http_support]
 
-    all_images_in_testpoints = Images_in_TestPoints.objects.all()
-    all_images = Images.objects.all()
+    points = [p for p in points]
+    same_user_region = [sur for sur in same_user_region]
+    same_user_country = [suc for suc in same_user_country]
+    random.shuffle(points)  # shuffles *in place*
+    points = points[:1]  # then strip
+
+    points = same_user_country + points
+    points = same_user_region + points
+
+    points = points[:int(amount)]
+
     json_points = []
-
     for point in points:
-
-        point_dict = {'ip': '', 'url': '', 'country': '', 'region': '', 'countryName': '', 'images': ''}
+        country = Country.objects.get(iso=point.country)
+        point_dict = defaultdict(str)
         point_dict['ip'] = point.ip_address
         point_dict['url'] = point.url
         point_dict['country'] = point.country
-        point_dict['countryName'] = countries.get(iso=point.country).printable_name
+        point_dict['countryName'] = country.printable_name
 
         try:
-            point_dict['region'] = countries.get(iso=point.country).region.numcode
-            # city = whoIs(point.ip_address)['operator']['city']
-            # city = whoIs(point.ip_address)['entities'][0]['postalAddress'][2]
-            #             city = whoIs(point.ip_address)['entities'][0]['vcardArray'][1][2][3][3]
-            city = point.city
-            point_dict['city'] = city
-        except (TypeError, HTTPError):
+            point_dict['region'] = country.region.numcode
+            point_dict['city'] = point.city
+        except TypeError:
             # IP is probably a local address
             print 'Error retrieving test point city'
         except Region.DoesNotExist:
-            # Extreme cases (Antartica?)
+            # Extreme cases (Antarctica?)
             print 'Error retrieving test point region'
 
-        pointImages = all_images_in_testpoints.filter(testPoint_id=point.id)
-
-        imagesList = []
-        for pointImage in pointImages:
-            image = all_images.get(pk=pointImage.image_id)
-            image_dict = {'path': pointImage.local_path, 'size': image.size, 'width': image.width,
-                          'height': image.height, 'type': image.type, 'timeout': image.timeout, 'name': image.name}
-
-            imagesList.append(image_dict)
-
-        point_dict['images'] = json.dumps(imagesList)
+        point_dict['images'] = []
         json_points.append(point_dict)
-
-    random.shuffle(json_points)  # Randomize points to give an illusion of parallelism to the user
 
     response = json.dumps(json_points)
     response = "{ \"points\": " + response + " }"
@@ -428,10 +435,10 @@ def country_latency_chart(request, country):
         date_from = datetime.date(year, 01, 01)
         date_to = datetime.date(year + 1, 01, 01)
         probes = "%s muestras" % (
-        str(len(results_country.filter(Q(date_test__gt=date_from) & Q(date_test__lt=date_to)))))
+            str(len(results_country.filter(Q(date_test__gt=date_from) & Q(date_test__lt=date_to)))))
         description['latency_%s' % (year)] = ("number", '%s (%s)' % (year, probes))
 
-    #     description = {"category": ("number", "Latencia"),
+    # description = {"category": ("number", "Latencia"),
     #                    "latency_2009": ("number", "2009 (%)"),
     #                    "latency_2010": ("number", "2010 (%)"),
     #                    "latency_2011": ("number", "2011 (%)"),
@@ -515,8 +522,8 @@ def region_throughput_chart(request):
         m = len(categorized_bandwidth)
         if len(categorized_bandwidth) > 0:
             row.append(float("%0.2f" % (
-            (categorized_bandwidth[len(categorized_bandwidth) - 1] + categorized_bandwidth[0]) / (
-            2 * M))))  # Display in Mbps
+                (categorized_bandwidth[len(categorized_bandwidth) - 1] + categorized_bandwidth[0]) / (
+                    2 * M))))  # Display in Mbps
         else:
             row.append(0)
         row.append(float("%0.2f" % (100 * (m / n))))
@@ -553,7 +560,7 @@ def throughput_by_country_chart(request):
             for result in results:
                 if result['time'] is not 0:
                     throughput_results.append(result['size'] * 8000 / (
-                    result['time'] * M))  # list of throughput (bps), not {{size, time},{size, time},....}
+                        result['time'] * M))  # list of throughput (bps), not {{size, time},{size, time},....}
 
             average = float("%0.2f" % (sum(throughput_results) / len(throughput_results)))
             #        else:
