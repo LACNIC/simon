@@ -1,16 +1,16 @@
-#!/usr/bin/python
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand
 
 from simon_app.models import *
 from random import shuffle
-import datetime, logging
+import datetime
+import logging
 from multiprocessing.dummy import Pool as ThreadPool
 from simon_app.reportes import GMTUY
 from simon_app.decorators import chatty_command
 
 
-@chatty_command(command="HTTPS Check")
+# @chatty_command(command="HTTPS Check")
 class Command(BaseCommand):
     threads = 10
     max_job_queue_size = 500  # 0 for limitless
