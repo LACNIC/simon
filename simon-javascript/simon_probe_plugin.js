@@ -11,17 +11,18 @@ SIMON = {
         amount: 5,// amount of points
         numTests: 10,// amount of tests per point. Greater numTests --> less
         // error
+        protocol: location.protocol === 'https:' && "https" || "http",
         post: true,
         print: true,
         console: 'console'
     },
 
     urls: {
-        home: SIMON.debug && "http://127.0.0.1:8000/" || "https://simon.lacnic.net/simon/",
-        configs: SIMON.debug && "http://127.0.0.1:8000/web_configs/" || "https://simon.lacnic.net/simon/web_configs/",
-        offline: SIMON.debug && "http://127.0.0.1:8000/postxmlresult/offline/" || "https://simon.lacnic.net/simon/postxmlresult/offline/",
-        post: SIMON.debug && "http://127.0.0.1:8000/postxmlresult/latency/" || "https://simon.lacnic.net/simon/postxmlresult/latency/",
-        country: "https://simon.lacnic.net/simon/getCountry/",
+        home: SIMON.debug && "http://127.0.0.1:8000/" || "https://simon.lacnic.net/",
+        configs: SIMON.debug && "http://127.0.0.1:8000/web_configs/" || "https://simon.lacnic.net/web_configs/",
+        offline: SIMON.debug && "http://127.0.0.1:8000/postxmlresult/offline/" || "https://simon.lacnic.net/postxmlresult/offline/",
+        post: SIMON.debug && "http://127.0.0.1:8000/postxmlresult/latency/" || "https://simon.lacnic.net/postxmlresult/latency/",
+        country: "https://simon.lacnic.net/getCountry/",
         ipv6ResolveURL: "http://simon.v6.labs.lacnic.net/cemd/getip/jsonp/",
         ipv4ResolveURL: "https://simon.v4.labs.lacnic.net/cemd/getip/jsonp/"
     },
@@ -33,7 +34,7 @@ SIMON = {
 
     points: [],
 
-    running: true,
+    running: false,
 
     siteOnLineTimeout: 6000,
     latencyTimeout: 1000,
@@ -65,12 +66,12 @@ SIMON = {
 
     init: function () {
 
-        if (Math.random() < SIMON.params.percentage) {
+        if (Math.random() < SIMON.params.percentage && SIMON.running == false) {
             SIMON.running = true;
             SIMON.before_start();
             return SIMON.getCountry();
         } else {
-            SIMON.printr("N/A");
+            SIMON.log("N/A");
         }
     },
 
@@ -142,8 +143,11 @@ SIMON = {
 
         $.ajax(
             {
-                url: SIMON.urls.home + "web_points/" + SIMON.params.amount
-                    + "/" + ipVersion,
+                url: SIMON.urls.home + "web_points?" +
+                                        "amount=" + SIMON.params.amount +
+                                        "&ip_version=" + ipVersion +
+                                        "&countrycode=" + SIMON.countryCode +
+                                        "&protocol=" + SIMON.params.protocol,
                 dataType: 'jsonp',
                 crossDomain: true,
                 context: this
@@ -164,34 +168,11 @@ SIMON = {
                         "countryName": jsonPoint.countryName,
                         "city": jsonPoint.city,
                         "region": jsonPoint.region,
-                        /*
-                         * holds the results of latency tests
-                         */
-                        "results": [],
+                        "results": [],  // holds the results of latency tests
                         "throughputResults": [],
                         "online": false,
                         "onlineFinished": false
                     };
-
-                    var jsonImages = $.parseJSON(jsonPoint.images);
-                    for (j in jsonImages) {
-                        var jsonImage = jsonImages[j];
-                        var image = {
-                            "path": jsonImage.path,
-                            "width": jsonImage.width,
-                            "height": jsonImage.height,
-                            "byteSize": jsonImage.size,
-                            "name": jsonImage.name,
-                            "timeout": jsonImage.timeout,
-                            "type": jsonImage.type,
-                            /*
-                             * holds the results of throughput tests
-                             */
-                            "time": SIMON.DEFAULT_TIME
-                        };
-
-                        testPoint.throughputResults.push(image);
-                    }
 
                     SIMON.points.push(testPoint);
                 }
@@ -212,9 +193,9 @@ SIMON = {
          */
         var url;
         if (this.getIPversion(testPoint.ip) == 4)
-            url = "http://" + testPoint.ip + "/";
+            url = SIMON.params.protocol + "://" + testPoint.ip + "/";
         else if (this.getIPversion(testPoint.ip) == 6)
-            url = "http://[" + testPoint.ip + "]/";
+            url = SIMON.params.protocol + "://[" + testPoint.ip + "]/";
 
         $.ajax({
             url: url,
@@ -286,9 +267,9 @@ SIMON = {
 
         var url;
         if (this.getIPversion(testPoint.ip) == '6') {
-            url = "http://[" + testPoint.ip + "]/" + Math.random();
+            url = SIMON.params.protocol + "://[" + testPoint.ip + "]/" + Math.random();
         } else {
-            url = "http://" + testPoint.ip + "/" + Math.random();
+            url = SIMON.params.protocol + "://" + testPoint.ip + "/" + Math.random();
         }
 
         SIMON.before_each();
