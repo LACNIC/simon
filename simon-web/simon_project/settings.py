@@ -36,16 +36,31 @@ if HOSTNAME == 'simon':
     DEBUG = False
     SIMON_URL = 'https://simon.lacnic.net'  # *no* trailing slash
     CHARTS_URL = "https://charts.dev.lacnic.net"  # *no* trailing slash
-    LOGS = "/var/log/apache2/simon/error.log"
+    LOGS = "/var/log/apache2/simon/production.log"
+    # ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.lacnic.net', '*']
+    # CORS_ORIGIN_ALLOW_ALL = True
+    CORS_ORIGIN_WHITELIST = (
+        'simon.lacnic.net',
+        'labs.lacnic.net',
+        'natmeter.labs.lacnic.net',
+        'warp.lacnic.net',
+        'lacnic.net'
+    )
+    CORS_ALLOW_HEADERS = (
+        'x-requested-with',
+        'content-type',
+        'accept',
+        'origin',
+        'authorization',
+        'x-csrftoken',
+        'Access-Control-Allow-Origin'
+    )
 else:
     # Developer mode
     DEBUG = True
     SIMON_URL = "http://127.0.0.1:8000"
-    CHARTS_URL = "http://127.0.0.1:8001"
-    LOGS = PROJECT_ROOT + "/logs/debug.log"
-
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.lacnic.net', '*']
-CORS_ORIGIN_ALLOW_ALL = True
+    CHARTS_URL = "https://charts.dev.lacnic.net"
+    LOGS = PROJECT_ROOT + "logs/debug.log"
 
 MANAGERS = ADMINS
 
