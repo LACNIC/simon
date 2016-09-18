@@ -60,7 +60,7 @@ else:
     DEBUG = True
     SIMON_URL = "http://127.0.0.1:8000"
     CHARTS_URL = "https://charts.dev.lacnic.net"
-    LOGS = PROJECT_ROOT + "logs/debug.log"
+    LOGS = PROJECT_ROOT + "/logs/debug.log"
 
 MANAGERS = ADMINS
 
