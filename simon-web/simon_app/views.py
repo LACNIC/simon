@@ -27,6 +27,7 @@ from reportes import GMTUY
 import simon_project.settings as settings
 from _socket import timeout
 from django.views.decorators.cache import cache_page
+import custom_logging.simon_logging as logging
 
 from django.http import UnreadablePostError
 
@@ -268,7 +269,6 @@ def post_xml_result(request):
     """
         View que recibe los datos de las mediciones
     """
-    import logging
 
     logger = logging.getLogger(__name__)
 
@@ -396,7 +396,6 @@ def post_xml_throughput_result(request):
 
 @csrf_exempt
 def post_offline_testpoints(request):
-    import logging
 
     logger = logging.getLogger(__name__)
 
@@ -633,7 +632,7 @@ def charts(request):
     :param request:
     :return:
     """
-    import datetime, json, logging, requests
+    import datetime, json, requests
 
     # ###########
     # DROPDOWN #
