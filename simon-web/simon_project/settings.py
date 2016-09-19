@@ -37,7 +37,7 @@ if HOSTNAME == 'simon':
     SIMON_URL = 'https://simon.lacnic.net'  # *no* trailing slash
     CHARTS_URL = "https://charts.dev.lacnic.net"  # *no* trailing slash
     LOGS = "/var/log/apache2/simon/production.log"
-    # ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.lacnic.net', '*']
+    ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.lacnic.net', '*']
     # CORS_ORIGIN_ALLOW_ALL = True
     CORS_ORIGIN_WHITELIST = (
         'simon.lacnic.net',
