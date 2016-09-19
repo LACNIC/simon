@@ -26,4 +26,5 @@ urls = patterns('',
 urlpatterns = patterns('',
                        url(r'', include(urls)),
                        url(r'admin/', include(admin.site.urls)),
+                       url(r'api/', include('simon_app.urls_api'))
                        )
