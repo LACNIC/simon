@@ -18,7 +18,7 @@ You can also help the project just by adding our JavaScript probe in your own we
         var js = d.createElement(s),
                 sc = d.getElementsByTagName(s)[0];
 
-        js.src = "https://simon.lacnic.net/simon/static/simon_app/js/simon_probe_plugin.js";
+        js.src = "https://simon.lacnic.net/static/simon_app/js/simon_probe_plugin.js";
         js.type = "text/javascript";
         sc.parentNode.insertBefore(js, sc);
 
