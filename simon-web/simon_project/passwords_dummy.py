@@ -21,6 +21,7 @@ DBHOST = '127.0.0.1'
 DBPORT = '5432'
 
 PROBEAPI = ""
+KONG_API_KEY = ""
 
 TWITTER = {
            'consumer_key' : '',
