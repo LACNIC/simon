@@ -11,11 +11,24 @@ If you have not visited [the site](http://simon.lacnic.net "Proyecto Simón"), c
 You can also help the project just by adding our JavaScript probe in your own website. It's dead simple, just include the following:
 ```
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+<!-- SIMON script async loading -->
+<script type="application/javascript">
 
-<script type="text/javascript" src="http://simon.lacnic.net/static/js/simon_min.js"></script><script type="text/javascript">
-  $(document).ready(function() {
-   SIMON.init();
-  });
+    (function (d, s) {
+        var js = d.createElement(s),
+                sc = d.getElementsByTagName(s)[0];
+
+        js.src = "https://simon.lacnic.net/simon/static/simon_app/js/simon_probe_plugin.js";
+        js.type = "text/javascript";
+        sc.parentNode.insertBefore(js, sc);
+
+
+        js.onload = js.onreadystatechange = function () {
+            SIMON.init();  // call init to run the script.
+        };
+
+    }(document, "script"));
+
 </script>
 ```
 
