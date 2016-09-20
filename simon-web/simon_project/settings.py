@@ -17,6 +17,7 @@ try:
     DBPASSWORD = os.environ.get("SIMON_%s" % 'DBPASSWORD', passwords.DBPASSWORD)
     DBHOST = os.environ.get("SIMON_%s" % 'DBHOST', passwords.DBHOST)
     DBPORT = os.environ.get("SIMON_%s" % 'DBPORT', passwords.DBPORT)
+    KONG_API_KEY = os.environ.get("SIMON_%s" % 'KONG_API_KEY', passwords.KONG_API_KEY)
 except ImportError:
     DBNAME = ""
     DBUSER = ""
@@ -27,6 +28,8 @@ except ImportError:
 ADMINS = (
     ('Agustin Formoso', 'agustin@lacnic.net')
 )
+
+PROBEAPI_ENDPOINT = "https://kong.speedcheckerapi.com:8443/ProbeAPIService/Probes.svc"
 
 NEWRELIC = ""
 

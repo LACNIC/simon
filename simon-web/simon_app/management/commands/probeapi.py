@@ -161,7 +161,7 @@ class ProbeApiMeasurement():
                 tx_time = 10000
                 timeout = ping_count * round_trip * time_for_each_ping + tx_time
 
-                t = Template("https://probeapifree.p.mashape.com/Probes.svc/StartPingTestByCountry?"
+                t = Template(settings.PROBEAPI_ENDPOINT + "/StartPingTestByCountry?"
                              "countrycode={{ cc }}&"
                              "count={{ count }}&"
                              "destination={{ destination }}&"

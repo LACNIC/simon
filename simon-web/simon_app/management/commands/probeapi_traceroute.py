@@ -15,16 +15,12 @@ from simon_app.api_views import get_cc_from_ip_address
 
 
 def get_countries(ccs=[]):
-    url = "https://probeapifree.p.mashape.com/Probes.svc/GetCountries"
+    url = settings.PROBEAPI_ENDPOINT + "/GetCountries"
 
     try:
         print "Getting countries..."
-        req = urllib2.Request(url)
-        req.add_header("X-Mashape-Key", passwords.PROBEAPI)
-        req.add_header("Accept", "application/json")
-        response = urllib2.urlopen(req).read()
+        response = get_probeapi_response(url)
         py_object = json.loads(response)
-
         res = {}
         for p in py_object["GetCountriesResult"]:
             cc = p["CountryCode"]
@@ -37,7 +33,7 @@ def get_countries(ccs=[]):
 
 def get_probeapi_response(url):
     req = urllib2.Request(url)
-    req.add_header("X-Mashape-Key", passwords.PROBEAPI)
+    req.add_header("apikey", settings.KONG_API_KEY)
     req.add_header("Accept", "application/json")
     response = urllib2.urlopen(req).read()
     return response
