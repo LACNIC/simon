@@ -9,8 +9,9 @@ Visit [the site](http://simon.lacnic.net "Proyecto Simón")! By visiting the sit
 If you have not visited [the site](http://simon.lacnic.net "Proyecto Simón"), check it out now!
 
 You can also help the project just by adding our JavaScript probe in your own website. It's dead simple, just include the following:
-```
+```javascript
 <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+
 <!-- SIMON script async loading -->
 <script type="application/javascript">
 

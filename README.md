@@ -9,19 +9,25 @@ The project aims to provide enough information about regional connectivity in or
 By hosting the following JavaScript in your site, your visitors will start generating measurements automatically!
 
 ```javascript
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
 
-<script async type="application/javascript">
+<!-- SIMON script async loading -->
+<script type="application/javascript">
 
-(function (f, b) {
-    var c = f.createElement(b), e = f.getElementsByTagName(b)[0];
-    c.src = "http://simon.lacnic.net/simon/static/simon_app/js/simon_probe_plugin.js";
-    c.type = "text/javascript";
-    e.parentNode.insertBefore(c, e);
-    c.onload = c.onreadystatechange = function () {
-        SIMON.init()
-    }
-}(document, "script"));
+    (function (d, s) {
+        var js = d.createElement(s),
+                sc = d.getElementsByTagName(s)[0];
+
+        js.src = "https://simon.lacnic.net/static/simon_app/js/simon_probe_plugin.js";
+        js.type = "text/javascript";
+        sc.parentNode.insertBefore(js, sc);
+
+
+        js.onload = js.onreadystatechange = function () {
+            SIMON.init();  // call init to run the script.
+        };
+
+    }(document, "script"));
 
 </script>
 ```
