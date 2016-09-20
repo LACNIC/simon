@@ -27,7 +27,7 @@ from reportes import GMTUY
 import simon_project.settings as settings
 from _socket import timeout
 from django.views.decorators.cache import cache_page
-import custom_logging.simon_logging as logging
+import logging
 
 from django.http import UnreadablePostError
 
