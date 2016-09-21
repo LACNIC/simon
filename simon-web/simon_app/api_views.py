@@ -177,7 +177,7 @@ def latency(request, country='all', ip_version='all', year=2009, month=01):
 
     json_response = json.dumps(response, sort_keys=True, indent=4, separators=(',', ': '))
 
-    return HttpResponse(json_response, mimetype="application/json")
+    return HttpResponse(json_response, content_type="application/json")
 
 
 def ases(request, asn_origin, asn_destination):
@@ -209,7 +209,7 @@ def ases(request, asn_origin, asn_destination):
 
     json_response = json.dumps(response, sort_keys=True, indent=4, separators=(',', ': '))
 
-    return HttpResponse(json_response, mimetype="application/json")
+    return HttpResponse(json_response, content_type="application/json")
 
 
 def throughput(request, country='all', ip_version='all', year=2009, month=01):
@@ -238,7 +238,7 @@ def throughput(request, country='all', ip_version='all', year=2009, month=01):
 
     json_response = json.dumps(response)
 
-    return HttpResponse(json_response, mimetype="application/json")
+    return HttpResponse(json_response, content_type="application/json")
 
     ##########
     # CHARTS #
@@ -914,7 +914,7 @@ def getCountry(request):
         else:
             httpResponse = '%s({ cc : "%s"});' % (callback, cc)
 
-        return HttpResponse(httpResponse, mimetype="application/json")
+        return HttpResponse(httpResponse, content_type="application/json")
 
     if (request.method != 'GET'):
         return HttpResponse("Invalid method: %s" % request.method)
