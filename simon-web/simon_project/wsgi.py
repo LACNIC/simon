@@ -13,18 +13,17 @@ middleware here, or combine a Django application with an application of another
 framework.
 
 """
-import os, sys
+import newrelic.agent
+import os
+import sys
+
+newrelic.agent.initialize()
+
 sys.path.append('/opt/django/simon/simon-web')
 sys.path.append('/Users/agustin/git/simon/simon-web/simon_project')
 
 # os.environ.setdefault("DJANGO_SETTINGS_MODULE", "simon_project.settings")
 os.environ['DJANGO_SETTINGS_MODULE'] = 'simon_project.settings'
-
-
-# from simon_project.settings import NEWRELIC
-# import newrelic.agent
-# newrelic.agent.initialize(NEWRELIC)
-
 
 # This application object is used by any WSGI server configured to use this
 # file. This includes Django's development server, if the WSGI_APPLICATION
