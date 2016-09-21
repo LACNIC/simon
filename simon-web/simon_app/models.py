@@ -843,7 +843,7 @@ class SpeedTestPointManager(TestPointManager):
         tps = SpeedtestTestPoint.objects.filter(enabled=True)
         res = []
         for tp in tps:
-            if tp.has_http_support:
+            if tp.has_https_support:
                 res.append(tp)
         return res
 
@@ -853,7 +853,7 @@ class SpeedtestTestPoint(TestPoint):
     objects = SpeedTestPointManager()
 
     @property
-    def has_http_support(self):
+    def has_https_support(self):
         latest_https_check = self.get_latest_https_check()
         if latest_https_check is None:
             return False

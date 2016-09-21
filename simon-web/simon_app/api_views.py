@@ -68,7 +68,7 @@ def web_points(request):
 
     # Convert the QueySet into a list at the end of filtering operations
     if protocol == "https":
-        points = [p for p in points if p.has_http_support]
+        points = [p for p in points if p.has_https_support]
 
     points = [p for p in points]
     same_user_region = [sur for sur in same_user_region]
