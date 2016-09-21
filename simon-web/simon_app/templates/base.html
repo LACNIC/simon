@@ -109,10 +109,10 @@
 
 </div>
 
-<footer class="footer">
+<div class="footer">
 
-
-    <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+    <!-- Feedback test -->
+    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
         <h3>
             Agradecemos tu feedback!
         </h3>
@@ -123,7 +123,8 @@
         </p>
     </div>
 
-    <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+    <!-- Feedback form -->
+    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
         <form class="navbar-form" action="{% url 'simon_app.views.feedbackForm' %}" method="post">
             {% csrf_token %}
             <div>
@@ -139,17 +140,21 @@
             </div>
         </form>
     </div>
+
+    <!-- LACNIC Labs logo -->
     <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
         <a href="https://www.labs.lacnic.net/">
             <img src="{% static 'simon_app/imgs/logos/logo_labs_foot.png' %}"
-                 class="hidden-xs hidden-sm center-block"
-                 title="LACNIC labs"/>
+                 class="center-block"
+                 title="LACNIC labs"
+                 style="max-height: 75px;"
+            />
         </a>
     </div>
 
-    {#    GitHub button#}
+    <!-- GitHub button -->
     <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
-        <div style="text-align: center">
+        <div style="text-align: center; margin-top: 1.5em;">
             <!-- Place this tag where you want the button to render. -->
             <a class="github-button" href="https://github.com/lacnic/simon" data-icon="octicon-star"
                data-style="mega"
@@ -161,22 +166,22 @@
 
         <!-- Begin LetsEncrypt site seal HTML -->
         <a href="https://letsencrypt.org/">
-            <img class="center-block" style="max-width:15em;"
+            <img class="center-block" style="max-width:10em; margin-top: 1.5em;"
                  src="https://cdn.discourse.org/business/uploads/letsencrypt/original/1X/149e86cd7f135095e9c92f4e67a4b6a7b80a60c0.png">
         </a>
         {#    </div>#}
         <!-- End LetsEncrypt site seal HTML -->
 
-        <p class="center-block" style="text-align: center;">
+        <p class="center-block" style="text-align: center; margin-top: 1.5em;">
             Application Version: {{ APP_VERSION }}<br/>
             Last Updated {{ DATE_UPDATED }}<br/>
             Latest Commit {{ LATEST_COMMIT }} (<a href="https://github.com/LACNIC/simon/commit/"{{ LATEST_COMMIT }}>GitHub</a>)
         </p>
     </div>
 
-</footer>
+</div>
 
-{#<script data-main="{% static 'simon_app/js/simon_probe_plugin.js' %}/main" src="{% static 'simon_app/js/require.js' %}"></script>#}
+<script data-main="{% static 'simon_app/js/simon_probe_plugin.js' %}/main" src="{% static 'simon_app/js/require.js' %}"></script>
 
 <!-- 		Analytics -->
 <script>
