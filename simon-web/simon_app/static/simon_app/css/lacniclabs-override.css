@@ -1,6 +1,7 @@
 #barra-primaria {
     background-color: #e87e1f;
 }
+
 #titulo-primario > h2 {
     color: #FFFFFF;
 }
@@ -13,31 +14,37 @@
 #barra-secundaria > div > ul > li > a {
     color: #E6E6E6;
 }
+
 #barra-secundaria > div > ul > li > a:hover {
     color: #FFFFFF;
 }
 
 .jumbotron {
-	background-color: #FCFCFC;
+    background-color: #FCFCFC;
 }
 
 #fondo {
-	background-color: #F7F7F7;
+    background-color: #F7F7F7;
 }
 
 body {
-	background-color: #E6E6E6;
+    background-color: #E6E6E6;
 }
 
 #highlight {
-	color: #FF9900;
+    color: #FF9900;
 }
 
-footer {
-  background-color: #4C3307;
-  padding: 15px;
+.footer {
+    background-color: #4C3307;
+    padding: 1em;
+    display: inline-block;
+}
+
+.footer * {
+    color: #E6E6E6;
 }
 
 .footer-secundario {
-  background-color: #332205;
+    background-color: #332205;
 }
