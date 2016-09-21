@@ -1,5 +1,7 @@
 from models import *
 from django.contrib import admin
+from django.contrib.admin.views.main import ChangeList
+from django.contrib.admin import SimpleListFilter
 
 
 class SimonAdmin(admin.ModelAdmin):
@@ -21,8 +23,6 @@ class ResultsAdmin(SimonReadOnlyAdmin):
                     'date_short', 'protocol']
     ordering = ['-date_test', 'country_origin', 'country_destination']
     search_fields = ['country_origin', 'country_destination', 'as_origin', 'as_destination']
-
-    # list_filter = ('enabled',)
 
     class Media:
         js = (
@@ -52,23 +52,27 @@ class TracerouteHopAdmin(SimonReadOnlyAdmin):
 
 
 class TestPointAdmin(SimonReadOnlyAdmin):
-    def enable(modeladmin, request, queryset):
+    """
+        Admin in charge of TestPoint administrative operations
+    """
+
+    def enable(self, request, queryset):
         queryset.update(enabled=True)
 
     enable.short_description = "Habilitar punto de prueba"
 
-    def disable(modeladmin, request, queryset):
+    def disable(self, request, queryset):
         queryset.update(enabled=False)
 
     disable.short_description = "Deshabilitar punto de prueba"
 
-    def check_point(modeladmin, request, queryset):
+    def check_point(self, request, queryset):
         for q in queryset:
             q.check_point(protocol="http")
 
     check_point.short_description = "Chequear punto de prueba (HTTP)"
 
-    def check_point_https(modeladmin, request, queryset):
+    def check_point_https(self, request, queryset):
         for q in queryset:
             q.check_point(protocol="https")
 
@@ -81,9 +85,14 @@ class TestPointAdmin(SimonReadOnlyAdmin):
     search_fields = ['country']
 
 
+class SpeedtestTestPointListFilter(SimpleListFilter):
+    pass
+
+
 class SpeedtestTestPointAdmin(TestPointAdmin):
-    list_display = ['country', 'ip_address', 'autnum', 'city', 'date_short', 'enabled', 'has_https_support']
-    search_fields = ['country','has_https_support']
+    import copy
+    display = copy.deepcopy(TestPointAdmin.list_display)
+    list_display = display + ['has_https_support']
 
 
 class RipeAtlasProbeAdmin(SimonReadOnlyAdmin):
@@ -100,9 +109,6 @@ class ConfigsAdmin(admin.ModelAdmin):
 
     list_display = ['config_name', 'config_value', 'config_description']
     actions = [enable, disable]
-
-
-from django.contrib.admin.views.main import ChangeList
 
 
 class InactiveUsersView(ChangeList):
