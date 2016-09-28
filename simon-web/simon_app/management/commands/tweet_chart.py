@@ -5,7 +5,6 @@ from scipy.stats import gaussian_kde
 import numpy as np
 
 
-
 class Command(BaseCommand):
     def handle(self, *args, **options):
         import twitter, random
@@ -18,10 +17,13 @@ class Command(BaseCommand):
         from matplotlib import pyplot as plt
 
         week = Results.objects.get_weekly_results().exclude(country_origin="", country_destination="")
+        ccs = Country.objects.get_lacnic_countrycodes()
+        week = [w for w in week if w.country_origin in ccs and w.country_destination in ccs]
         origin = random.choice(week).country_origin
         fixed_origin = week.filter(Q(country_origin=origin))
         destination = random.choice(fixed_origin).country_destination
-        rs = week.filter(Q(country_origin=origin) & Q(country_destination=destination)).values_list('ave_rtt', flat=True)
+        rs = week.filter(Q(country_origin=origin) & Q(country_destination=destination)).values_list('ave_rtt',
+                                                                                                    flat=True)
 
         if len(rs) <= 1:
             exit(1)
@@ -34,7 +36,6 @@ class Command(BaseCommand):
 
         fig = plt.figure()
         ax = fig.add_subplot(111)
-
 
         plt.xlabel("RTT latency (ms)")
         title = "Results from %s to %s" % (origin, destination)
