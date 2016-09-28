@@ -103,6 +103,7 @@
 
     <div id="fondo" class="row marketing">
         {% block content %}
+            {#                Every child's content will get rendered in here.#}
         {% endblock %}
     </div>
 
@@ -181,7 +182,8 @@
 
 </div>
 
-<script data-main="{% static 'simon_app/js/simon_probe_plugin.js' %}/main" src="{% static 'simon_app/js/require.js' %}"></script>
+<script data-main="{% static 'simon_app/js/simon_probe_plugin.js' %}/main"
+        src="{% static 'simon_app/js/require.js' %}"></script>
 
 <!-- 		Analytics -->
 <script>
