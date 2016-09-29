@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 import trparse
 import simon_project.settings as settings
 import json, requests
+import logging
 # from reportes import GMTUY
 
 from models_management import *  # External models definitions
@@ -793,6 +794,7 @@ class TestPoint(models.Model):
         from requests import get
 
         try:
+            logging.getLogger("requests").setLevel(logging.WARNING)  # silence GETs
 
             if protocol == "https":
                 endpoint = self.url.replace("http://", "").replace("https://", "")
