@@ -193,6 +193,7 @@ admin.site.register(RipeAtlasTokenList, RipeAtlasTokenListAdmin)
 admin.site.register(RipeAtlasMonitoredIds)
 
 admin.site.register(CommandAudit, CommandAuditAdmin)
+admin.site.register(ProbeApiAudit, CommandAuditAdmin)
 
 admin.site.register(AS, ASAdmin)
 

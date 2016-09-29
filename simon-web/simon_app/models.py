@@ -24,7 +24,6 @@ class CountryManager(models.Manager):
 
     def get_countries_from_region(self, region=[1, 2, 3]):
         """
-
         :param region: defaults to regions 1, 2, OR 3
         :return: Country QuerySet
         """
@@ -835,7 +834,6 @@ class TestPoint(models.Model):
 
 
 class SpeedTestPointManager(TestPointManager):
-
     def get_https_enabled(self):
         """
         :return: A list of those  SpeedtestTestPoint that are enaled and have a proven HTTPs support

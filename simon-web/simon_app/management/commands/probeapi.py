@@ -7,6 +7,7 @@ from simon_app.reportes import GMTUY
 from probeapi_traceroute import get_countries, get_probeapi_response
 
 from multiprocessing.dummy import Pool as ThreadPool
+from threading import Lock
 from random import shuffle
 import json
 import datetime
@@ -19,19 +20,29 @@ class ProbeApiMeasurement():
         Class that holds the logic to perform a ProbeAPI measurement
     """
 
+    # import guppy
+    # heapy = guppy.hpy()
+
     def __init__(self):
         pass
 
     logger = logging.getLogger(__name__)
 
+    lock = Lock()
+
     threads = 50
-    max_job_queue_size = 0  # 0 for limitless
+    max_job_queue_size = 200  # 0 for limitless
     max_points = 0  # 0 for limitless
     ping_count = 10  # amount of ICMP pings performed per test
+
+    results = []
 
     def init(self, tps=[], ccs=[]):
         def do_work(url):
             try:
+
+                # print self.heapy.heap().get_rp(), self.heapy.setref()
+
                 response = get_probeapi_response(url)
                 if response is not None:
                     process_response(response, url)
@@ -41,10 +52,10 @@ class ProbeApiMeasurement():
                 pass
 
             finally:
-                del response
                 return
 
         def process_response(response, url_probeapi):
+
             py_object = json.loads(response, parse_int=int)
 
             if len(py_object['StartPingTestByCountryResult']) <= 0:
@@ -122,11 +133,14 @@ class ProbeApiMeasurement():
                         number_probes=len(rtts)
                     )
                     result.save()
-                    del result
 
-                    self.logger.info("ICMP ping from %s to %s is %.0f ms (%s samples, +- %.0f ms, %.0f samples stripped)" % (cc_origin, cc_destination, numpy.mean(rtts), len(rtts), 2 * std_dev, _n - len(rtts)))
+                    self.lock.acquire()
+                    self.results.append(result)
+                    self.lock.release()
 
-            del py_object
+                    self.logger.info(
+                        "ICMP ping from %s to %s is %.0f ms (%s samples, +- %.0f ms, %.0f samples stripped)" % (
+                            cc_origin, cc_destination, numpy.mean(rtts), len(rtts), 2 * std_dev, _n - len(rtts)))
 
         ccs = get_countries(ccs=ccs).keys()  # get countries with running probes...
 
@@ -161,25 +175,26 @@ class ProbeApiMeasurement():
                 tx_time = 10000
                 timeout = ping_count * round_trip * time_for_each_ping + tx_time
 
-                t = Template(settings.PROBEAPI_ENDPOINT + "/StartPingTestByCountry?"
-                             "countrycode={{ cc }}&"
-                             "count={{ count }}&"
-                             "destination={{ destination }}&"
-                             "probeslimit={{ probeslimit }}&"
-                             "timeout={{ timeout }}"
-                             )
+                t = Template(
+                    settings.PROBEAPI_ENDPOINT + "/StartPingTestByCountry?"
+                                                 "countrycode={{ cc }}&"
+                                                 "count={{ count }}&"
+                                                 "destination={{ destination }}&"
+                                                 "probeslimit={{ probeslimit }}&"
+                                                 "timeout={{ timeout }}"
+                )
 
                 ctx = Context(
                     {
                         'cc': cc,
                         'count': ping_count,
                         'destination': destination_ip,
-                        'probeslimit': 10,
+                        'probeslimit': 3,  # 10 (probes per CC)
                         'timeout': timeout
                     }
                 )
                 url_probeapi = t.render(ctx)
-                if self.max_job_queue_size == 0 or len(urls) <= self.max_job_queue_size:
+                if self.max_job_queue_size == 0 or len(urls) < self.max_job_queue_size:
                     urls.append(url_probeapi)
 
         self.logger.info("TPs %s x CCs %s" % (len(tps), len(ccs)))
@@ -192,5 +207,4 @@ class ProbeApiMeasurement():
         self.logger.info("Command ended with %.0f worker threads on a %.0f jobs queue" % (self.threads, len(urls)))
         self.logger.info("Command took %s" % (datetime.datetime.now(tz=GMTUY()) - then))
 
-        del tps
-        del ccs
+        return self.results
