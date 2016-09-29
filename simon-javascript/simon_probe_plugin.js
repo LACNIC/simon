@@ -112,7 +112,7 @@ SIMON = {
             context: this
         }).success(function (data) {
 
-            if(data.configs.run == 1) {
+            if (data.configs.run == 1) {
                 SIMON.workflow.run = true;
             } else {
                 SIMON.printr("Stopping script execution...");
@@ -144,58 +144,59 @@ SIMON = {
         $.ajax(
             {
                 url: SIMON.urls.home + "web_points?" +
-                                        "amount=" + SIMON.params.amount +
-                                        "&ip_version=" + ipVersion +
-                                        "&countrycode=" + SIMON.countryCode +
-                                        "&protocol=" + SIMON.params.protocol,
+                "amount=" + SIMON.params.amount +
+                "&ip_version=" + ipVersion +
+                "&countrycode=" + SIMON.countryCode +
+                "&protocol=" + SIMON.params.protocol,
                 dataType: 'jsonp',
                 crossDomain: true,
                 context: this
             }).success(function (data) {
 
-                SIMON.points = new Array();
+            SIMON.points = new Array();
 
-                /*
-                 * callback when the points are loaded from the server
-                 */
+            /*
+             * callback when the points are loaded from the server
+             */
 
-                for (i in data.points) {
-                    var jsonPoint = data.points[i];
-                    var testPoint = {
-                        "ip": jsonPoint.ip,
-                        "url": jsonPoint.url,
-                        "country": jsonPoint.country,
-                        "countryName": jsonPoint.countryName,
-                        "city": jsonPoint.city,
-                        "region": jsonPoint.region,
-                        "results": [],  // holds the results of latency tests
-                        "throughputResults": [],
-                        "online": false,
-                        "onlineFinished": false
-                    };
+            for (i in data.points) {
+                var jsonPoint = data.points[i];
+                var testPoint = {
+                    "ip": jsonPoint.ip,
+                    "url": jsonPoint.url,
+                    "country": jsonPoint.country,
+                    "countryName": jsonPoint.countryName,
+                    "city": jsonPoint.city,
+                    "region": jsonPoint.region,
+                    "results": [],  // holds the results of latency tests
+                    "throughputResults": [],
+                    "online": false,
+                    "onlineFinished": false
+                };
 
-                    SIMON.points.push(testPoint);
-                }
+                SIMON.points.push(testPoint);
+            }
 
-                SIMON.after_points();
-                SIMON.siteOnLine(SIMON.points[0]);
+            SIMON.after_points();
+            SIMON.siteOnLine(SIMON.points[0]);
 
-            }).complete();
+        }).complete();
     },
 
     siteOnLine: function (testPoint) {
 
-        SIMON.printr("Checking site " + testPoint.ip + " (" + testPoint.country
-            + ")");
+        const endpoint = SIMON.params.protocol == "https" && testPoint.url.split("://")[1].split("/")[0] || testPoint.ip;
+
+        SIMON.printr("Checking site " + endpoint + " (" + testPoint.country + ") via " + SIMON.params.protocol.toUpperCase());
 
         /*
          * get the '/' directory
          */
         var url;
         if (this.getIPversion(testPoint.ip) == 4)
-            url = SIMON.params.protocol + "://" + testPoint.ip + "/";
+            url = SIMON.params.protocol + "://" + endpoint + "/";
         else if (this.getIPversion(testPoint.ip) == 6)
-            url = SIMON.params.protocol + "://[" + testPoint.ip + "]/";
+            url = SIMON.params.protocol + "://[" + endpoint + "]/";
 
         $.ajax({
             url: url,
@@ -266,10 +267,13 @@ SIMON = {
         var ts, rtt;
 
         var url;
+
+        const endpoint = SIMON.params.protocol == "https" && testPoint.url.split("://")[1].split("/")[0] || testPoint.ip;
+
         if (this.getIPversion(testPoint.ip) == '6') {
-            url = SIMON.params.protocol + "://[" + testPoint.ip + "]/" + Math.random();
+            url = SIMON.params.protocol + "://[" + endpoint + "]/" + Math.random();
         } else {
-            url = SIMON.params.protocol + "://" + testPoint.ip + "/" + Math.random();
+            url = SIMON.params.protocol + "://" + endpoint + "/" + Math.random();
         }
 
         SIMON.before_each();
@@ -649,7 +653,7 @@ SIMON = {
             dataSet.sort(function (a, b) {
                 return a - b;
             });
-            return dataSet[ Math.floor(0.75 * dataSet.length)];
+            return dataSet[Math.floor(0.75 * dataSet.length)];
         },
 
         iqr: function (dataSet) {
@@ -841,7 +845,7 @@ SIMON = {
         J || p || (c += (/\?/.test(c) ? "&" : "?") + "_" + (new Date).getTime() + "=");
         c = c.replace(/=\?(&|$)/, "=" + B + "$1");
         p && (r = w[c]) ? r.s ? k(r.s[0]) : u(r) : (F[B] = I, b = d("<script>")[0], b.id = "_jqjsp" + K++, C && (b.charset = C), G && 11.6 >
-            G.version() ? (l = d("<script>")[0]).text = "document.getElementById('" + b.id + "').onerror()" : b.async = "async", "onreadystatechange"in b && (b.htmlFor = b.id, b.event = "onclick"), b.onload = b.onerror = b.onreadystatechange = function (a) {
+        G.version() ? (l = d("<script>")[0]).text = "document.getElementById('" + b.id + "').onerror()" : b.async = "async", "onreadystatechange" in b && (b.htmlFor = b.id, b.event = "onclick"), b.onload = b.onerror = b.onreadystatechange = function (a) {
             if (!b.readyState || !/i/.test(b.readyState)) {
                 try {
                     b.onclick && b.onclick()
@@ -858,12 +862,15 @@ SIMON = {
             l && h.removeChild(l)
         }, h.insertBefore(b, q = h.firstChild), l && h.insertBefore(l,
             q), x = 0 < D && setTimeout(function () {
-            u("timeout")
-        }, D));
+                u("timeout")
+            }, D));
         return a
     }
 
-    var F = window, E = d.Deferred, h = d("head")[0] || document.documentElement, w = {}, K = 0, t, A = {callback: "_jqjsp", url: location.href}, G = F.opera;
+    var F = window, E = d.Deferred, h = d("head")[0] || document.documentElement, w = {}, K = 0, t, A = {
+        callback: "_jqjsp",
+        url: location.href
+    }, G = F.opera;
     k.setup = function (a) {
         d.extend(A, a)
     };
@@ -883,15 +890,58 @@ var dateFormat = function () {
         if (isNaN(a))throw SyntaxError("invalid date");
         c = String(f.masks[c] || c || f.masks["default"]);
         "UTC:" == c.slice(0, 4) && (c = c.slice(4), h = !0);
-        var b = h ? "getUTC" : "get", g = a[b + "Date"](), p = a[b + "Day"](), k = a[b + "Month"](), q = a[b + "FullYear"](), e = a[b + "Hours"](), r = a[b + "Minutes"](), t = a[b + "Seconds"](), b = a[b + "Milliseconds"](), n = h ? 0 : a.getTimezoneOffset(), u = {d: g, dd: d(g), ddd: f.i18n.dayNames[p], dddd: f.i18n.dayNames[p + 7], m: k + 1, mm: d(k + 1), mmm: f.i18n.monthNames[k], mmmm: f.i18n.monthNames[k + 12], yy: String(q).slice(2), yyyy: q, h: e % 12 || 12, hh: d(e % 12 || 12), H: e, HH: d(e), M: r, MM: d(r), s: t,
-            ss: d(t), l: d(b, 3), L: d(99 < b ? Math.round(b / 10) : b), t: 12 > e ? "a" : "p", tt: 12 > e ? "am" : "pm", T: 12 > e ? "A" : "P", TT: 12 > e ? "AM" : "PM", Z: h ? "UTC" : (String(a).match(m) || [""]).pop().replace(v, ""), o: (0 < n ? "-" : "+") + d(100 * Math.floor(Math.abs(n) / 60) + Math.abs(n) % 60, 4), S: ["th", "st", "nd", "rd"][3 < g % 10 ? 0 : (10 != g % 100 - g % 10) * g % 10]};
+        var b = h ? "getUTC" : "get", g = a[b + "Date"](), p = a[b + "Day"](), k = a[b + "Month"](), q = a[b + "FullYear"](), e = a[b + "Hours"](), r = a[b + "Minutes"](), t = a[b + "Seconds"](), b = a[b + "Milliseconds"](), n = h ? 0 : a.getTimezoneOffset(), u = {
+            d: g,
+            dd: d(g),
+            ddd: f.i18n.dayNames[p],
+            dddd: f.i18n.dayNames[p + 7],
+            m: k + 1,
+            mm: d(k + 1),
+            mmm: f.i18n.monthNames[k],
+            mmmm: f.i18n.monthNames[k + 12],
+            yy: String(q).slice(2),
+            yyyy: q,
+            h: e % 12 || 12,
+            hh: d(e % 12 || 12),
+            H: e,
+            HH: d(e),
+            M: r,
+            MM: d(r),
+            s: t,
+            ss: d(t),
+            l: d(b, 3),
+            L: d(99 < b ? Math.round(b / 10) : b),
+            t: 12 > e ? "a" : "p",
+            tt: 12 > e ? "am" : "pm",
+            T: 12 > e ? "A" : "P",
+            TT: 12 > e ? "AM" : "PM",
+            Z: h ? "UTC" : (String(a).match(m) || [""]).pop().replace(v, ""),
+            o: (0 < n ? "-" : "+") + d(100 * Math.floor(Math.abs(n) / 60) + Math.abs(n) % 60, 4),
+            S: ["th", "st", "nd", "rd"][3 < g % 10 ? 0 : (10 != g % 100 - g % 10) * g % 10]
+        };
         return c.replace(l, function (a) {
             return a in u ? u[a] : a.slice(1, a.length - 1)
         })
     }
 }();
-dateFormat.masks = {"default": "ddd mmm dd yyyy HH:MM:ss", shortDate: "m/d/yy", mediumDate: "mmm d, yyyy", longDate: "mmmm d, yyyy", fullDate: "dddd, mmmm d, yyyy", shortTime: "h:MM TT", mediumTime: "h:MM:ss TT", longTime: "h:MM:ss TT Z", isoDate: "yyyy-mm-dd", isoTime: "HH:MM:ss", isoDateTime: "yyyy-mm-dd'T'HH:MM:ss", isoUtcDateTime: "UTC:yyyy-mm-dd'T'HH:MM:ss'Z'"};
-dateFormat.i18n = {dayNames: "Sun Mon Tue Wed Thu Fri Sat Sunday Monday Tuesday Wednesday Thursday Friday Saturday".split(" "), monthNames: "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec January February March April May June July August September October November December".split(" ")};
+dateFormat.masks = {
+    "default": "ddd mmm dd yyyy HH:MM:ss",
+    shortDate: "m/d/yy",
+    mediumDate: "mmm d, yyyy",
+    longDate: "mmmm d, yyyy",
+    fullDate: "dddd, mmmm d, yyyy",
+    shortTime: "h:MM TT",
+    mediumTime: "h:MM:ss TT",
+    longTime: "h:MM:ss TT Z",
+    isoDate: "yyyy-mm-dd",
+    isoTime: "HH:MM:ss",
+    isoDateTime: "yyyy-mm-dd'T'HH:MM:ss",
+    isoUtcDateTime: "UTC:yyyy-mm-dd'T'HH:MM:ss'Z'"
+};
+dateFormat.i18n = {
+    dayNames: "Sun Mon Tue Wed Thu Fri Sat Sunday Monday Tuesday Wednesday Thursday Friday Saturday".split(" "),
+    monthNames: "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec January February March April May June July August September October November December".split(" ")
+};
 Date.prototype.format = function (l, m) {
     return dateFormat(this, l, m)
 };
