@@ -426,7 +426,7 @@ def post_offline_testpoints(request):
                     tp.enabled = False
                     tp.save()
 
-                    send_mail_point_offline(ctx={'point': tp})
+                    # send_mail_point_offline(ctx={'point': tp})
 
                 except OfflineReport.DoesNotExist:
                     # New report
