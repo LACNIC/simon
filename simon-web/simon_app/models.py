@@ -780,10 +780,9 @@ class TestPoint(models.Model):
 
     def make_request(self, protocol="http", timeout=5):
         """
-
         :param protocol:
         :param timeout:
-        :return:
+        :return: True or False
         """
 
         if protocol == "icmp":

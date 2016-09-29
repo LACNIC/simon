@@ -8,20 +8,24 @@ import logging
 from multiprocessing.dummy import Pool as ThreadPool
 from simon_app.reportes import GMTUY
 from simon_app.decorators import chatty_command
+from random import shuffle
 
 
 # @chatty_command(command="HTTPS Check")
 class Command(BaseCommand):
     threads = 10
-    max_job_queue_size = 500  # 0 for limitless
+    max_job_queue_size = 200  # 0 for limitless
     max_points = 100  # 0 for limitless
 
     def handle(self, *args, **options):
         def do_work(tp):
             try:
-                online = tp.check_point(timeout=10, save=False, protocol="https")
-                if tp.get_latest_https_check != online:
-                    check = HttpsCheck(test_point=tp, status=online)
+                current_check = tp.check_point(timeout=10, save=False, protocol="https")
+                latest_https_check = tp.get_latest_https_check()
+                if latest_https_check is None or latest_https_check.status != current_check:
+                    print latest_https_check
+                    # persist on change
+                    check = HttpsCheck(test_point=tp, status=current_check)
                     tp.httpscheck_set.add(check)
 
             except Exception as e:
@@ -31,7 +35,8 @@ class Command(BaseCommand):
             finally:
                 return
 
-        tps = SpeedtestTestPoint.objects.all()
+        tps = [tp for tp in SpeedtestTestPoint.objects.all()]
+        shuffle(tps)
 
         thread_pool = ThreadPool(self.threads)
 
