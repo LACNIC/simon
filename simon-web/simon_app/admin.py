@@ -2,6 +2,7 @@ from models import *
 from django.contrib import admin
 from django.contrib.admin.views.main import ChangeList
 from django.contrib.admin import SimpleListFilter
+from datetime import datetime, timedelta
 
 
 class SimonAdmin(admin.ModelAdmin):
@@ -145,6 +146,32 @@ class CommandAuditAdmin(SimonReadOnlyAdmin):
     list_display = ['command', 'date', 'status']
 
 
+class ProbeApiAuditAdmin(CommandAuditAdmin):
+    list_display = ['command', 'date', 'status', 'week', 'month']
+
+    def week(self, obj):
+        now = datetime.now()
+        a_week_ago = now - timedelta(days=7)
+        audits = ProbeApiAudit.objects.filter(date__gt=a_week_ago)
+        count = 0
+        for audit in audits:
+            count += audit.count
+        return count
+
+    week.short_description = "Week count"
+
+    def month(self, obj):
+        now = datetime.now()
+        a_week_ago = now - timedelta(days=30)
+        audits = ProbeApiAudit.objects.filter(date__gt=a_week_ago)
+        count = 0
+        for audit in audits:
+            count += audit.count
+        return count
+
+    month.short_description = "Month count"
+
+
 class ASAdmin(SimonReadOnlyAdmin):
     list_display = ['asn', 'network', 'pfx_length', 'date_updated', 'regional']
     search_fields = ['asn', 'network']
@@ -193,7 +220,7 @@ admin.site.register(RipeAtlasTokenList, RipeAtlasTokenListAdmin)
 admin.site.register(RipeAtlasMonitoredIds)
 
 admin.site.register(CommandAudit, CommandAuditAdmin)
-admin.site.register(ProbeApiAudit, CommandAuditAdmin)
+admin.site.register(ProbeApiAudit, ProbeApiAuditAdmin)
 
 admin.site.register(AS, ASAdmin)
 
