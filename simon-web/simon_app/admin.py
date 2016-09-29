@@ -147,11 +147,15 @@ class CommandAuditAdmin(SimonReadOnlyAdmin):
 
 
 class ProbeApiAuditAdmin(CommandAuditAdmin):
-    list_display = ['command', 'date', 'status', 'week', 'month']
+    list_display = ['command', 'date', 'status', 'this', 'week', 'month']
+
+    def this(self, obj):
+        return obj.count
+
+    this.short_description = "Results count"
 
     def week(self, obj):
-        now = datetime.now()
-        a_week_ago = now - timedelta(days=7)
+        a_week_ago = obj.date - timedelta(days=7)
         audits = ProbeApiAudit.objects.filter(date__gt=a_week_ago)
         count = 0
         for audit in audits:
@@ -161,8 +165,7 @@ class ProbeApiAuditAdmin(CommandAuditAdmin):
     week.short_description = "Week count"
 
     def month(self, obj):
-        now = datetime.now()
-        a_week_ago = now - timedelta(days=30)
+        a_week_ago = obj.date - timedelta(days=30)
         audits = ProbeApiAudit.objects.filter(date__gt=a_week_ago)
         count = 0
         for audit in audits:
