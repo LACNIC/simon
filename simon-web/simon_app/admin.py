@@ -147,7 +147,9 @@ class CommandAuditAdmin(SimonReadOnlyAdmin):
 
 
 class ProbeApiAuditAdmin(CommandAuditAdmin):
-    list_display = ['command', 'date', 'status', 'this', 'week', 'month']
+
+    rate = .001
+    list_display = ['command', 'date', 'status', 'this', 'week', 'month', 'billed']
 
     def this(self, obj):
         return obj.count
@@ -173,6 +175,9 @@ class ProbeApiAuditAdmin(CommandAuditAdmin):
         return count
 
     month.short_description = "Month count"
+
+    def billed(self, obj):
+        return float(self.month(obj)*self.rate)
 
 
 class ASAdmin(SimonReadOnlyAdmin):

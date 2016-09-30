@@ -5,6 +5,9 @@ __author__ = 'agustin'
 
 
 class CommandAudit(models.Model):
+    """
+        Class in charge of general command auditing
+    """
     command = models.CharField(max_length=100)
     description = models.TextField(max_length=10240, default="Everything OK")
     date = models.DateTimeField(default=datetime.now())
