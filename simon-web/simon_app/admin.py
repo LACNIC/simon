@@ -179,6 +179,8 @@ class ProbeApiAuditAdmin(CommandAuditAdmin):
     def billed(self, obj):
         return float(self.month(obj)*self.rate)
 
+    month.short_description = "Expected invoice (EUR)"
+
 
 class ASAdmin(SimonReadOnlyAdmin):
     list_display = ['asn', 'network', 'pfx_length', 'date_updated', 'regional']
