@@ -872,9 +872,8 @@ def applet_run(request):
 
 def v6perf(request):
 
-    v6_perfs = V6Perf.objects.filter(country__in=Country.objects.get_lacnic_countrycodes()).order_by('-date')
     ctx = getContext(request)
-    ctx['v6_perfs'] = v6_perfs
+    ctx['v6_perfs'] = V6Perf.objects.latest_measurements()
     return render_to_response('v6perf.html', ctx)
 
 
