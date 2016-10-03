@@ -99,3 +99,4 @@ node_modules/
 
 # Python Notebook
 *.ipynb
+simon-web/simon_app/migrations
