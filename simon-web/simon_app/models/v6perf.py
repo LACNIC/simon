@@ -13,5 +13,4 @@ class V6Perf(models.Model):
     country = models.CharField(max_length=2)
 
     class Meta:
-        app_label = "simon_app"
-        managed = True
+        managed = False
