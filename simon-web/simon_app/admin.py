@@ -1,8 +1,11 @@
-from models import *
+from simon_app.models.models import *
+from simon_app.models.v6perf import *
+from models.management import *
 from django.contrib import admin
 from django.contrib.admin.views.main import ChangeList
 from django.contrib.admin import SimpleListFilter
 from datetime import datetime, timedelta
+
 
 
 class SimonAdmin(admin.ModelAdmin):
@@ -207,6 +210,9 @@ class RegionAdmin(SimonAdmin):
         CountryInline,
     ]
 
+class V6PerfAdmin(SimonReadOnlyAdmin):
+    pass
+
 
 admin.site.register(Comment)
 
@@ -238,3 +244,5 @@ admin.site.register(HttpsCheck, HttpsCheckAdmin)
 
 admin.site.register(Region, RegionAdmin)
 admin.site.register(Country, CountryAdmin)
+
+admin.site.register(V6Perf, V6PerfAdmin)

@@ -1,4 +1,6 @@
 from django import template
+from datetime import datetime
+from simon_app.reportes import GMTUY
 
 """
     Module that holds the Simon
@@ -57,3 +59,20 @@ def unit_shortener(value):
     if value > K:
         return "%.1f %s" % (1.0 * value / K, 'K')
     return value
+
+
+@register.filter(name="time_since")
+def time_since(value):
+    """
+    :param now:
+    :return:
+    """
+    td = datetime.now(GMTUY()) - value
+    if td.seconds > 3600:
+        mins = "%.0f minutos" % ((td.seconds % 3600) / 60)
+        horas = "%.0f %s" % (td.seconds / 3600, "horas" if td.seconds / 3600 > 1 else "hora")
+        return "%s %s" % (horas, mins)
+    elif td.seconds > 60:
+        return "%.0f minutos" % (td.seconds / 60)
+    else:
+        return "%.0f segundos" % td.seconds

@@ -6,10 +6,8 @@
 
 from __future__ import division
 from django import forms
-# from models import *
 from datetime import tzinfo, timedelta
-# from django.db.models import Q
-from simon_app.models import *
+from simon_app.models.models import *
 import datetime
 
 

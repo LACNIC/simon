@@ -2,7 +2,7 @@
     Decorator definitions file
 """
 import logging
-from simon_app.models import ProbeApiAudit
+from simon_app.models.management import ProbeApiAudit
 
 
 def chatty_command(command=""):

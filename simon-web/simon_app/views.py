@@ -396,7 +396,6 @@ def post_xml_throughput_result(request):
 
 @csrf_exempt
 def post_offline_testpoints(request):
-
     logger = logging.getLogger(__name__)
 
     if request.method != 'POST':
@@ -869,6 +868,14 @@ def applet(request):
 def applet_run(request):
     # return render(request, 'applet.html')
     return render_to_response('applet_run.html', getContext(request))
+
+
+def v6perf(request):
+
+    v6_perfs = V6Perf.objects.filter(country__in=Country.objects.get_lacnic_countrycodes()).order_by('-date')
+    ctx = getContext(request)
+    ctx['v6_perfs'] = v6_perfs
+    return render_to_response('v6perf.html', ctx)
 
 
 @cache_page(60 * 60 * 24)

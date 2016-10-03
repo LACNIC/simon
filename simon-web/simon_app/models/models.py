@@ -1,14 +1,18 @@
+from datetime import timedelta
+from django.db import models
+from django.db import connection
 from django.db.models import Q
-from django.db import models, connection
 from django.db.models.fields import CharField, IntegerField
-from datetime import datetime, timedelta
-import trparse
-import simon_project.settings as settings
-import json, requests
+import json
 import logging
+import requests
+import trparse
+import datetime
+
+import simon_project.settings as settings
 # from reportes import GMTUY
 
-from models_management import *  # External models definitions
+from simon_app.models.management import *  # External models definitions
 
 
 class Region(models.Model):
@@ -75,6 +79,10 @@ class CountryManager(models.Manager):
             Q(name="Southern Europe")
         )
         return self.get_countries_from_region(region=[r.id for r in regs])
+
+    def get_all_countrycodes(self):
+        return list(self.get_afrinic_countrycodes()) + list(self.get_apnic_countrycodes()) + list(
+            self.get_lacnic_countrycodes()) + list(self.get_ripencc_countrycodes())
 
     def get_afrinic_countrycodes(self):
         return self.get_afrinic_countries().values_list('iso', flat=True)
@@ -631,7 +639,7 @@ class RipeAtlasProbe(models.Model):
         :return:
         """
         from simon_app.reportes import GMTUY
-        from datetime import datetime, timedelta
+        from datetime import datetime
         now = datetime.now(tz=GMTUY())
         td = self.last_check_timedelta(now)
         return td

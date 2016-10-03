@@ -10,7 +10,7 @@ import json as json
 import urllib2
 from urllib2 import URLError
 from django.db.models import Q
-from simon_app.models import Results
+from simon_app.models.models import Results
 
 
 def whoIs(address):

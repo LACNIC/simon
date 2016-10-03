@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load simon_extras %}
+
+{% block headers %}
+
+    <!-- Google Charts -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>
+    <script src="https://www.google.com/jsapi" type="text/javascript"></script>
+
+    <script>
+        google.load("visualization", "1", {packages: ["geochart"]});
+        google.setOnLoadCallback(drawRegionsMap);
+
+        function drawRegionsMap() {
+
+            var data = google.visualization.arrayToDataTable([
+                ['Country', 'RTT difference (v4 - v6)'],
+                {% for v6 in v6_perfs %}
+                    ['{{ v6.country }}', {{ v6.diff | safe }}],
+                {% endfor %}
+            ]);
+
+            var options = {
+                region: '005',
+                colorAxis: {
+                    colors: ['#4ECDC4', '#C4F2D2', '#FF5454'],
+                    values: [-100, 0, 100]
+                },
+                backgroundColor: {
+                    fill: '#F7F7F7'
+                }
+            };
+
+            new google.visualization.GeoChart(document.getElementById('sa-map')).draw(data, options);
+
+            options.region = '013';
+            new google.visualization.GeoChart(document.getElementById('ac-map')).draw(data, options);
+
+            options.region = '029';
+            new google.visualization.GeoChart(document.getElementById('car-map')).draw(data, options);
+        }
+    </script>
+
+{% endblock %}
+
+{% block title %}IPv6 Performance{% endblock %}
+
+{% block content %}
+
+
+    <div class="col-lg-12">
+
+        <h1 class="page-header">IPv6 Performance</h1>
+
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+
+            <h3>Performance</h3>
+            <p>
+                Una característica que hay que monitorear cuando se despliega un nuevo protocolo es su desempeño. En los
+                casos en que un nuevo protocolo pretende reemplazar a un protocolo existente, conviene compararlo
+                con su antecesor para analizar si están obteniendo resultados de igual o mejor desempeño. Una métrica
+                útil es medir qué tan rápido el nuevo protocolo es frente a su antecesor. Esto se puede hacer midiendo
+                la diferencia en los RTTs que se obtienen desde el mismo origen, hacia el mismo destino, al mismo
+                tiempo.
+            </p>
+
+            <h3>El experimento</h3>
+            <p>
+                Uno de los experimentos que se llevan a cabo para medir el desempeño de <code>IPv6</code> es <a
+                    href="http://stats.labs.apnic.net/v6perf">el
+                conducido por APNIC</a>. Desde ya hace algunos años, se realizan mediciones desde los end-users, a
+                través de
+                sondas (ingeniosamente) distribuídas por Google AdWords, que permiten saber cómo el usuario final
+                percibe sus conexiones de red.
+            </p>
+        </div>
+
+
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+
+            <h3>El mapa</h3>
+            <p>
+                El siguiente mapa muestra la diferencia de RTT obtenido entre IPv4 e IPv6, haciendo la resta RTT<sub>IPv6</sub>
+                - RTT<sub>IPv4</sub>. Cuando IPv6 es mejor, es decir RTT<sub>IPv6</sub> es menor, el resultado es
+                negativo y se muestra en verde en el mapa. Caso contrario, se muestra en rojo.
+            </p>
+
+            <ul class="nav nav-tabs" style="background-color: transparent">
+                <li class="active" style="background-color: transparent"><a data-toggle="tab" href="#sa-map-wrapper">América
+                    del Sur</a></li>
+                <li style="background-color: transparent"><a data-toggle="tab" href="#ac-map-wrapper">América
+                    Central</a></li>
+                <li style="background-color: transparent"><a data-toggle="tab" href="#car-map-wrapper">Caribe</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div id="sa-map-wrapper" class="tab-pane fade in active">
+                    <div id="sa-map" style=""></div>
+                </div>
+                <div id="ac-map-wrapper" class="tab-pane fade">
+                    <div id="ac-map" style=""></div>
+                </div>
+                <div id="car-map-wrapper" class="tab-pane fade">
+                    <div id="car-map" style=""></div>
+                </div>
+            </div>
+        </div>
+
+        <table class="table">
+            <thead>
+            <th>País</th>
+            <th>Porcentaje IPv6</th>
+            <th>Porcentaje Dualstack</th>
+            <th>Diff (RTT)</th>
+            <th>Último chequeo (hace)</th>
+            </thead>
+            <tbody class="list">
+            {% for v6 in v6_perfs %}
+                <tr>
+                    <td>{{ v6.country }}</td>
+                    <td>{{ v6.v6_rate }} %</td>
+                    <td>{{ v6.dualstack }} %</td>
+                    <td>{{ v6.diff }} ms</td>
+                    <td>{{ v6.date | time_since }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+{% endblock %}

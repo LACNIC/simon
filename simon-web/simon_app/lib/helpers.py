@@ -1,5 +1,5 @@
 from simon_project import settings
-from simon_app.models import Results
+from simon_app.models.models import Results
 from django.template import *
 from simon_app.forms import FeedbackForm
 
