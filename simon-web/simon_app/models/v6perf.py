@@ -11,6 +11,3 @@ class V6Perf(models.Model):
     dualstack = models.FloatField(default=0.0)
     v6_rate = models.FloatField(default=0.0)
     country = models.CharField(max_length=2)
-
-    class Meta:
-        managed = False
