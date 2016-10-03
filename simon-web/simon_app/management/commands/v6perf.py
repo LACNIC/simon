@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand
 from simon_app.models.models import Country
 from simon_app.models.v6perf import *
+from simon_project import passwords
 import datetime
 import StringIO
 import requests
@@ -21,9 +22,9 @@ class Command(BaseCommand):
         DUALSTACK_ = 14
         V6USERRATE = 15
 
-        APIKEY = "0857f45cdfd84d5089acbd8a50f39895655317f534d5aa3f51dabdf96894ea128aa9ef69c044086350c5c6448d807c3a02c198e8ab7b892393bf2a631018f5b1b60951f8838670f27c2bd69b6b81b6fc"
-        daily = "6016e9a1-d86c-4490-bb63-f6f4909ff395/csv/latest?_apikey=%s" % APIKEY
-        url = "https://data.import.io/extractor/%s" % daily
+        APIKEY = passwords.IMPORTIO_API_KEY
+        daily = "4beced29-001e-4320-8c03-351d560ba2b8"
+        url = "https://data.import.io/extractor/%s/csv/latest?_apikey=%s" % (daily, APIKEY)
         data = requests.get(url).content
         csv_data = StringIO.StringIO(data)
         reader = csv.reader(csv_data)

@@ -2,9 +2,9 @@ EMAIL_USE_TLS = True
 
 # EMAIL_HOST = 'mail.lacnic.net.uy'
 # EMAIL_PORT = 993
-# EMAIL_HOST_USER = 'authusr'
-# EMAIL_HOST_PASSWORD = 'rew4ud3wum'
-# SERVER_EMAIL = 'agustin@lacnic.net'
+# EMAIL_HOST_USER = ''
+# EMAIL_HOST_PASSWORD = ''
+# SERVER_EMAIL = '@lacnic.net'
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
@@ -22,6 +22,7 @@ DBPORT = '5432'
 
 PROBEAPI = ""
 KONG_API_KEY = ""
+IMPORTIO_API_KEY = ""
 
 TWITTER = {
            'consumer_key' : '',
