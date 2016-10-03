@@ -1,5 +1,4 @@
 from simon_app.models import *
-from models.management import *
 from django.contrib import admin
 from django.contrib.admin.views.main import ChangeList
 from django.contrib.admin import SimpleListFilter
