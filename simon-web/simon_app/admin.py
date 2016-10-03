@@ -1,5 +1,4 @@
-from simon_app.models.models import *
-from simon_app.models.v6perf import *
+from simon_app.models import *
 from models.management import *
 from django.contrib import admin
 from django.contrib.admin.views.main import ChangeList
