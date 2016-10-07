@@ -159,7 +159,7 @@ class ProbeApiAuditAdmin(CommandAuditAdmin):
 
     def week(self, obj):
         a_week_ago = obj.date - timedelta(days=7)
-        audits = ProbeApiAudit.objects.filter(date__gt=a_week_ago)
+        audits = ProbeApiAudit.objects.filter(date__gt=a_week_ago).filter(date__lte=obj.date)
         count = 0
         for audit in audits:
             count += audit.count
@@ -168,8 +168,8 @@ class ProbeApiAuditAdmin(CommandAuditAdmin):
     week.short_description = "Week count"
 
     def month(self, obj):
-        a_week_ago = obj.date - timedelta(days=30)
-        audits = ProbeApiAudit.objects.filter(date__gt=a_week_ago)
+        a_month_ago = obj.date - timedelta(days=30)
+        audits = ProbeApiAudit.objects.filter(date__gt=a_month_ago).filter(date__lte=obj.date)
         count = 0
         for audit in audits:
             count += audit.count
