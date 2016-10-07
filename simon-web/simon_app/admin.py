@@ -178,7 +178,7 @@ class ProbeApiAuditAdmin(CommandAuditAdmin):
     month.short_description = "Month count"
 
     def billed(self, obj):
-        return ".0f EUR" % float(self.month(obj)*self.rate)
+        return "%.0f EUR" % float(self.month(obj)*self.rate)
 
     billed.short_description = "Expected invoice"
 
