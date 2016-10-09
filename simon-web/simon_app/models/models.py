@@ -879,6 +879,17 @@ class SpeedtestTestPoint(TestPoint):
         verbose_name_plural = 'Puntos de prueba de Speedtest.com'
 
 
+class MajesticMillionTestPoint(TestPoint):
+    """
+        Class that represent Test Points obtained from the Majestic Million list
+    """
+    objects = TestPointManager()
+
+    class Meta:
+        verbose_name = 'Punto de prueba de Majestic Million'
+        verbose_name_plural = 'Puntos de prueba de Majestic Million'
+
+
 class HttpsCheck(models.Model):
     """
         HTTPS checks for Speedtest points
