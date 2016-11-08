@@ -9,7 +9,7 @@ from probeapi import ProbeApiMeasurement
 class Command(BaseCommand):
     @probeapi(command="ProbeAPI RIPE NCC")
     def handle(self, *args, **options):
-        msm = ProbeApiMeasurement()
+        msm = ProbeApiMeasurement(max_job_queue_size=50, max_points=20)
         ripencc_countrycodes = Country.objects.get_ripencc_countrycodes()
         results = msm.init(
             tps=SpeedtestTestPoint.objects.get_ipv4().

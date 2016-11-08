@@ -9,7 +9,7 @@ from probeapi import ProbeApiMeasurement
 class Command(BaseCommand):
     @probeapi(command="ProbeAPI AFRINIC")
     def handle(self, *args, **options):
-        msm = ProbeApiMeasurement()
+        msm = ProbeApiMeasurement(max_job_queue_size=50, max_points=20)
         afrinic_countrycodes = Country.objects.get_afrinic_countrycodes()
 
         results = msm.init(

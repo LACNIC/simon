@@ -23,17 +23,20 @@ class ProbeApiMeasurement():
     # import guppy
     # heapy = guppy.hpy()
 
-    def __init__(self):
-        pass
+    def __init__(self, threads=50, max_job_queue_size=200, max_points=0, ping_count=10):
+        self.threads = threads
+        self.max_job_queue_size = max_job_queue_size  # 0 for limitless
+        self.max_points = max_points  # 0 for limitless
+        self.ping_count = ping_count  # amount of ICMP pings performed per test
 
     logger = logging.getLogger(__name__)
 
     lock = Lock()
 
-    threads = 50
-    max_job_queue_size = 200  # 0 for limitless
-    max_points = 0  # 0 for limitless
-    ping_count = 10  # amount of ICMP pings performed per test
+    # threads = 50
+    # max_job_queue_size = 200  # 0 for limitless
+    # max_points = 0  # 0 for limitless
+    # ping_count = 10  # amount of ICMP pings performed per test
 
     results = []
 
