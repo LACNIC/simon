@@ -30,7 +30,7 @@ from django.views.decorators.cache import cache_page
 import logging
 
 from django.http import UnreadablePostError
-
+import operator
 
 @cache_page(60 * 60 * 24)
 def lab(request):
@@ -462,10 +462,7 @@ def speedtest(request):
 
 def prueba_rt(request):
     context = getContext(request)
-
     response = render_to_response('prueba_rt.html', context)
-    response["Timing-Allow-Origin"] = "*"
-
     return response
 
 
@@ -871,10 +868,20 @@ def applet_run(request):
 
 
 def v6perf(request):
+    ctx = getContext(request)
 
+    latest_v6_perfs = V6Perf.objects.latest_measurements()
+    latest_v6_perfs_sorted = sorted(latest_v6_perfs, key=operator.attrgetter('diff'))
+
+    ctx['v6_perfs'] = latest_v6_perfs_sorted
+
+    return render_to_response('v6perf.html', ctx)
+
+
+def v6adoption(request):
     ctx = getContext(request)
     ctx['v6_perfs'] = V6Perf.objects.latest_measurements()
-    return render_to_response('v6perf.html', ctx)
+    return render_to_response('v6adoption.html', ctx)
 
 
 @cache_page(60 * 60 * 24)

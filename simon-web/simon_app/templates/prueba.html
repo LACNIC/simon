@@ -1,65 +1,24 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load l10n %}
+{% load staticfiles %}
+{% load simon_extras %}
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+{% block headers %}
+{% endblock %}
 
-<!-- SIMON script async loading -->
-<script type="application/javascript">
+{% block title %}Prueba{% endblock %}
 
-    (function (d, s) {
-        var js = d.createElement(s),
-                sc = d.getElementsByTagName(s)[0];
+{% block content %}
+<script>
+    var req = new XMLHttpRequest();
+    req.open('HEAD', 'http://simon.lacnic.net/prueba', true);
 
-        js.src = "http://127.0.0.1:8000/simon/static/simon_app/js/simon_probe_plugin.js";//http://simon.lacnic.net/simon/static/simon_app/js/simon_probe_plugin.js";
-        js.type = "text/javascript";
-        sc.parentNode.insertBefore(js, sc);
+    const t0 = new Date();
+    req.send();
+    alert(new Date() - t0);
 
-
-        js.onload = js.onreadystatechange = function () {
-
-            SIMON.after_points = function () {
-                var testPoint = {
-                    "ip": '200.3.14.147',
-                    "url": 'prueba-001',
-                    "country": 'UY',
-                    "countryName": 'Uruguay',
-                    "city": 'Montevideo',
-                    "region": 'S-A',
-                    "results": [],
-                    "throughputResults": [],
-                    "online": false,
-                    "onlineFinished": false
-                };
-
-                SIMON.points = [testPoint];
-            };
-
-            SIMON.after_each = function() {};
-            SIMON.print = false;
-
-            SIMON.after_end = function() {
-                for(t in SIMON.points) {
-                    cur_html = $("#output").html();
-                    $("#output").html(cur_html + SIMON.points[t].results + "<br>");
-                }
-            }
-
-            SIMON.params.numTests = 1000;
-
-            SIMON.init();
-        };
-
-    }(document, "script"));
-
+    if(req.status == 200) {
+        alert(req.responseText);
+    }
 </script>
-
-<div id="output" class="row">
-</div>
-
-</body>
-</html>
+{% endblock %}

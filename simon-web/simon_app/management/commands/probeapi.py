@@ -20,9 +20,6 @@ class ProbeApiMeasurement():
         Class that holds the logic to perform a ProbeAPI measurement
     """
 
-    # import guppy
-    # heapy = guppy.hpy()
-
     def __init__(self, threads=50, max_job_queue_size=200, max_points=0, ping_count=10):
         self.threads = threads
         self.max_job_queue_size = max_job_queue_size  # 0 for limitless
@@ -33,25 +30,20 @@ class ProbeApiMeasurement():
 
     lock = Lock()
 
-    # threads = 50
-    # max_job_queue_size = 200  # 0 for limitless
-    # max_points = 0  # 0 for limitless
-    # ping_count = 10  # amount of ICMP pings performed per test
-
     results = []
 
     def init(self, tps=[], ccs=[]):
+        EMPTY_RESULTS = []
+
         def do_work(url):
             try:
 
-                # print self.heapy.heap().get_rp(), self.heapy.setref()
-
                 response = get_probeapi_response(url)
+
                 if response is not None:
                     process_response(response, url)
 
             except Exception as e:
-                print e
                 pass
 
             finally:
@@ -145,7 +137,12 @@ class ProbeApiMeasurement():
                         "ICMP ping from %s to %s is %.0f ms (%s samples, +- %.0f ms, %.0f samples stripped)" % (
                             cc_origin, cc_destination, numpy.mean(rtts), len(rtts), 2 * std_dev, _n - len(rtts)))
 
-        ccs = get_countries(ccs=ccs).keys()  # get countries with running probes...
+        ccs = get_countries(ccs=ccs)
+
+        if ccs is None:
+            return EMPTY_RESULTS
+
+        ccs = ccs.keys()  # get countries with running probes...
 
         urls = []
         thread_pool = ThreadPool(self.threads)
@@ -158,50 +155,30 @@ class ProbeApiMeasurement():
             tps = [tps[0]]
 
         tps = list(tps)
-        shuffle(tps)  # shuffle in case the script get aborted (do not run only the small alphanumeric tps only)
+        shuffle(tps)  # shuffle in case the script gets aborted (do not run only the small alphanumeric tps only)
 
         for tp in tps:
 
-            # sanity check before building URLs
-            online = tp.check_point(timeout=10, save=False, protocol="icmp")
-            if not online:
-                print "Skipping %s" % (tp)
-                continue
+            if isinstance(tp, SpeedtestTestPoint) or isinstance(tp, TestPoint):
+                # normal flux... skip if targetting rotating domain
 
-            destination_ip = tp.ip_address
-            ping_count = self.ping_count
+                # sanity check before building URLs
+                online = tp.check_point(timeout=10, save=False, protocol="icmp")
+                if not online:
+                    print "Skipping %s" % (tp)
+                    continue
 
-            for cc in ccs:
+                destination_ip = tp.ip_address
+            else:
+                destination_ip = tp  # the domain itself
 
-                round_trip = 2
-                time_for_each_ping = 1000
-                tx_time = 10000
-                timeout = ping_count * round_trip * time_for_each_ping + tx_time
-
-                t = Template(
-                    settings.PROBEAPI_ENDPOINT + "/StartPingTestByCountry?"
-                                                 "countrycode={{ cc }}&"
-                                                 "count={{ count }}&"
-                                                 "destination={{ destination }}&"
-                                                 "probeslimit={{ probeslimit }}&"
-                                                 "timeout={{ timeout }}"
-                )
-
-                ctx = Context(
-                    {
-                        'cc': cc,
-                        'count': ping_count,
-                        'destination': destination_ip,
-                        'probeslimit': 3,  # 10 (probes per CC)
-                        'timeout': timeout
-                    }
-                )
-                url_probeapi = t.render(ctx)
-                if self.max_job_queue_size == 0 or len(urls) < self.max_job_queue_size:
-                    urls.append(url_probeapi)
+            urls += self.build_url_for_tp(ccs, destination_ip, self.ping_count)
 
         self.logger.info("TPs %s x CCs %s" % (len(tps), len(ccs)))
         self.logger.info("Launching %.0f worker threads on a %.0f jobs queue" % (self.threads, len(urls)))
+        for u in urls:
+            print u
+
         thread_pool.map(do_work, urls)
 
         thread_pool.close()
@@ -211,3 +188,38 @@ class ProbeApiMeasurement():
         self.logger.info("Command took %s" % (datetime.datetime.now(tz=GMTUY()) - then))
 
         return self.results
+
+    def build_url_for_tp(self, ccs, destination_ip, ping_count):
+
+        urls = []
+
+        for cc in ccs:
+
+            round_trip = 2
+            time_for_each_ping = 1000
+            tx_time = 10000
+            timeout = ping_count * round_trip * time_for_each_ping + tx_time
+
+            t = Template(
+                settings.PROBEAPI_ENDPOINT + "/StartPingTestByCountry?"
+                                             "countrycode={{ cc }}&"
+                                             "count={{ count }}&"
+                                             "destination={{ destination }}&"
+                                             "probeslimit={{ probeslimit }}&"
+                                             "timeout={{ timeout }}"
+            )
+
+            ctx = Context(
+                {
+                    'cc': cc,
+                    'count': ping_count,
+                    'destination': destination_ip,
+                    'probeslimit': 10,  # 10 (probes per CC)
+                    'timeout': timeout
+                }
+            )
+            url_probeapi = t.render(ctx)
+            if self.max_job_queue_size == 0 or len(urls) < self.max_job_queue_size:
+                urls.append(url_probeapi)
+
+        return urls

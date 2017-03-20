@@ -225,7 +225,7 @@ admin.site.register(TracerouteResult, TracerouteResultAdmin)
 admin.site.register(TracerouteHop, TracerouteHopAdmin)
 
 admin.site.register(SpeedtestTestPoint, SpeedtestTestPointAdmin)
-admin.site.register(MajesticMillionTestPoint, TestPointAdmin)
+admin.site.register(MajesticMillionTestPoint, SpeedtestTestPointAdmin)
 
 admin.site.register(RipeAtlasPingResult, ResultsAdmin)
 

@@ -1,6 +1,7 @@
 from django import template
 from datetime import datetime
 from simon_app.reportes import GMTUY
+import operator
 
 """
     Module that holds the Simon
@@ -76,3 +77,44 @@ def time_since(value):
         return "%.0f minutos" % (td.seconds / 60)
     else:
         return "%.0f segundos" % td.seconds
+
+
+@register.filter(name="max")
+def max_(value, arg):
+    """
+    :param value:
+    :param arg:
+    :return:
+    """
+    if arg == 'v6_rate':
+        return str(max([v.v6_rate for v in value]))
+    return "%s %s" % (value, arg)
+
+
+@register.filter(name="get_by_attribute")
+def get_by_attribute(objects, raw_args):
+
+    print raw_args
+
+    key, value = raw_args.split(' ')
+
+    print key, value
+
+    func = operator.attrgetter(key)
+
+    for o in objects:
+        if func(o) == value:
+            return o
+
+    class Object():
+        pass
+
+    a = Object()
+    setattr(a, key, 0)
+    return a
+
+
+@register.filter(name="get_attribute")
+def get_attribute(object, attr):
+    func = operator.attrgetter(attr)
+    return func(object)

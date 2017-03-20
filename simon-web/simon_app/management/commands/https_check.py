@@ -15,7 +15,7 @@ from random import shuffle
 class Command(BaseCommand):
     threads = 10
     max_job_queue_size = 200  # 0 for limitless
-    max_points = 100  # 0 for limitless
+    max_points = 20  # 0 for limitless
 
     def handle(self, *args, **options):
         def do_work(tp):

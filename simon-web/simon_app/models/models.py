@@ -771,7 +771,7 @@ class TestPoint(models.Model):
     ip_address = models.GenericIPAddressField(null=True)
     country = models.CharField(max_length=2, null=True)
     enabled = models.BooleanField(default=False)
-    date_created = models.DateTimeField('Date added', default=datetime.now(), null=True)
+    date_created = models.DateTimeField(help_text='Date added', default=datetime.now, null=True)
     url = models.TextField(null=True)
     city = models.CharField(max_length=100, null=True)
     latitude = models.FloatField(default=0.0, null=True)
@@ -799,23 +799,20 @@ class TestPoint(models.Model):
             response = pyping.ping(self.ip_address)
             return response.ret_code == 0
 
-        from requests import get
+        from requests import get, head
 
         try:
-            logging.getLogger("requests").setLevel(logging.WARNING)  # silence GETs
+            logging.getLogger("requests").setLevel(logging.CRITICAL)  # silence GETs
+            logging.getLogger("urllib3").setLevel(logging.CRITICAL)  # silence GETs
+            # logging.getLogger("requests").disable(logging.CRITICAL)
+            # logging.getLogger("urllib3").disable(logging.CRITICAL)
 
-            if protocol == "https":
-                endpoint = self.url.replace("http://", "").replace("https://", "")
-                # endpoint = gethostbyaddr(self.ip_address)[0]
-            else:
-                endpoint = self.ip_address
+            endpoint = self.url.replace("http://", "").replace("https://", "").split("/")[0]
+            url = "%s://%s/" % (protocol, endpoint)
 
-            if ':' in self.ip_address:
-                url = "%s://[%s]/" % (protocol, endpoint)
-            else:
-                url = "%s://%s/" % (protocol, endpoint)
+            print url
 
-            response = get(url, timeout=timeout)
+            response = head(url, timeout=timeout)
             if response.status_code != 200:
                 return False
             else:
@@ -859,7 +856,7 @@ class SpeedtestTestPoint(TestPoint):
     speedtest_url = models.TextField(null=True)
     objects = SpeedTestPointManager()
 
-    @property
+    # @property
     def has_https_support(self):
         latest_https_check = self.get_latest_https_check()
         if latest_https_check is None:
@@ -879,11 +876,13 @@ class SpeedtestTestPoint(TestPoint):
         verbose_name_plural = 'Puntos de prueba de Speedtest.com'
 
 
-class MajesticMillionTestPoint(TestPoint):
+class MajesticMillionTestPoint(SpeedtestTestPoint):
     """
         Class that represent Test Points obtained from the Majestic Million list
     """
-    objects = TestPointManager()
+
+    url_majestic = models.TextField(null=True)
+    objects = SpeedTestPointManager()
 
     class Meta:
         verbose_name = 'Punto de prueba de Majestic Million'

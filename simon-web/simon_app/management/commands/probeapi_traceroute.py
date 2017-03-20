@@ -28,14 +28,15 @@ def get_countries(ccs=[]):
                 res[cc] = p["ProbesCount"]
         return res
     except Exception as e:
-        pass
+        return None
 
 
 def get_probeapi_response(url):
     req = urllib2.Request(url)
     req.add_header("apikey", settings.KONG_API_KEY)
     req.add_header("Accept", "application/json")
-    response = urllib2.urlopen(req).read()
+    urlopen = urllib2.urlopen(req)
+    response = urlopen.read()
     return response
 
 
@@ -51,12 +52,9 @@ class Command(BaseCommand):
 
             try:
                 response = get_probeapi_response(url_probeapi)
-                print response
                 if response is not None:
-                    print response
                     process_response(response)
             except Exception as e:
-                print e
                 pass
 
             finally:
@@ -102,7 +100,7 @@ class Command(BaseCommand):
                         status = hop["Status"]
 
                         if status != "OK" or ip_destination is None:
-                        # Timed out hops
+                            # Timed out hops
                             if ip_destination is not None:
                                 ip_version = 6 if ':' in ip_destination else 4
                             else:
