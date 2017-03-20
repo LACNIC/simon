@@ -7,7 +7,7 @@ from probeapi import ProbeApiMeasurement
 
 
 class Command(BaseCommand):
-    @probeapi(command="Africa Connectivity UTC")
+    @probeapi(command="Africa Connectivity UTC+02:00")
     def handle(self, *args, **options):
         msm = ProbeApiMeasurement(max_job_queue_size=50, max_points=20)
         ccs = ['BW','BI', 'EG', 'LS', 'MW', 'MZ', 'RW', 'ZA', 'SZ', 'ZM', 'ZW']
