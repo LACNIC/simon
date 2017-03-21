@@ -14,7 +14,7 @@ class Command(BaseCommand):
                'SL', 'TG']
 
         results = msm.init(
-            tps=['africa-connectivity.exp.dev.lacnic.net'],
+            tps=['africa-connectivity.exp.dev.lacnic.net']*10,
             ccs=ccs
         )
 

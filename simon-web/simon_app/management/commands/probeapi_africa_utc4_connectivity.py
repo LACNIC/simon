@@ -13,7 +13,7 @@ class Command(BaseCommand):
         ccs = ['RE', 'MU', 'SC']
 
         results = msm.init(
-            tps=['africa-connectivity.exp.dev.lacnic.net'],
+            tps=['africa-connectivity.exp.dev.lacnic.net']*10,
             ccs=ccs
         )
 
