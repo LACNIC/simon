@@ -3,6 +3,7 @@ from django.db import models
 from django.db import connection
 from django.db.models import Q
 from django.db.models.fields import CharField, IntegerField
+from ipaddr import IPv6Address, IPv4Address
 import json
 import logging
 import requests
@@ -377,6 +378,28 @@ class ResultsManager(models.Manager):
         from itertools import chain
 
         return list(chain(self.get_results_by_as_origin(as_number), self.get_results_by_as_destination(as_number)))
+
+    @classmethod
+    def show_address_to_the_world(cls, address):
+        """
+            Strips part of the address to make it public to anyone (for sharing data for example)
+            :return: Stripped address
+        """
+
+        res = ""
+        if ':' in address:
+            add = IPv6Address(address=address).exploded.split(':')[:4]
+            for a in add:
+                res += "%s:" % a
+            res += 3 * '0000:'
+            res += '0000'
+        else:
+            add = IPv4Address(address=address).exploded.split('.')[:3]
+            for a in add:
+                res += "%s." % a
+            res += '0'
+
+        return res
 
 
 class Results(models.Model):
