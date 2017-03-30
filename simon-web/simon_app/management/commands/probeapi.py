@@ -41,7 +41,7 @@ class ProbeApiMeasurement():
                 response = get_probeapi_response(url)
 
                 if response is not None:
-                    process_response(response, url)
+                    process_response(response)
 
             except Exception as e:
                 print e
