@@ -49,8 +49,8 @@ class Command(BaseCommand):
                 asn = line[0]
                 pfx_length = ip.split('/')[1]
 
-                if not networkInLACNICResources(ip):
-                    continue
+                # if not networkInLACNICResources(ip):
+                #     continue
 
                 as_object = AS(
                     asn=asn,
