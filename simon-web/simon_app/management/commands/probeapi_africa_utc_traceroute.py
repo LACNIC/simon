@@ -6,7 +6,7 @@ from probeapi_traceroute import ProbeApiTraceroute
 
 
 class Command(BaseCommand):
-    @probeapi(command="Africa Connectivity UTC")
+    @probeapi(command="Africa Connectivity UTC [traceroute]")
     def handle(self, *args, **options):
         msm = ProbeApiTraceroute(
             max_job_queue_size=50,
