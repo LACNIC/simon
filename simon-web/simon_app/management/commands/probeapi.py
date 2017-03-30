@@ -4,7 +4,7 @@ from django.template import Template, Context
 
 from simon_app.models import *
 from simon_app.reportes import GMTUY
-from probeapi_traceroute import get_countries, get_probeapi_response
+from probeapi_libs import get_countries, get_probeapi_response
 
 from multiprocessing.dummy import Pool as ThreadPool
 from threading import Lock
@@ -33,7 +33,7 @@ class ProbeApiMeasurement():
     results = []
 
     def init(self, tps=[], ccs=[]):
-        EMPTY_RESULTS = []
+        empty_results = []
 
         def do_work(url):
             try:
@@ -44,12 +44,12 @@ class ProbeApiMeasurement():
                     process_response(response, url)
 
             except Exception as e:
-                pass
+                print e
 
             finally:
                 return
 
-        def process_response(response, url_probeapi):
+        def process_response(response):
 
             py_object = json.loads(response, parse_int=int)
 
@@ -140,7 +140,7 @@ class ProbeApiMeasurement():
         ccs = get_countries(ccs=ccs)
 
         if ccs is None:
-            return EMPTY_RESULTS
+            return empty_results
 
         ccs = ccs.keys()  # get countries with running probes...
 

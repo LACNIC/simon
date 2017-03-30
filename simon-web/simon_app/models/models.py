@@ -9,6 +9,7 @@ import logging
 import requests
 import trparse
 import datetime
+import pytz
 
 import simon_project.settings as settings
 # from reportes import GMTUY
@@ -208,7 +209,13 @@ class ThroughputResults(models.Model):
 
 
 class ASManager(models.Manager):
+
     def get_as_by_ip(self, ip_address):
+        """
+
+        :param ip_address:
+        :return: Existing AS object which has a net containing the ip_address, or a generic AS (AS0)
+        """
         try:
             return AS.objects.raw(
                 "SELECT * FROM simon_app_as WHERE INET(network) >>= inet '%s' ORDER BY pfx_length DESC LIMIT 1" % ip_address)[

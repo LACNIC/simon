@@ -1,140 +1,109 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from django.core.management.base import BaseCommand
+from django.template import Template, Context
+
 from simon_app.models import *
 from simon_app.reportes import GMTUY
-from django.template import Template, Context
-from simon_project import passwords
-import urllib2
+from simon_app.api_views import get_cc_from_ip_address
+from probeapi_libs import get_countries, get_probeapi_response
+
+from multiprocessing.dummy import Pool as ThreadPool
+from threading import Lock
+from random import shuffle
 import json
 import datetime
 import numpy
-from random import sample
-from multiprocessing.dummy import Pool as ThreadPool
-from simon_app.api_views import get_cc_from_ip_address
+import logging
+import urlparse
 
+class ProbeApiTraceroute():
+    """
+        Class that holds the logic to perform a ProbeAPI measurement
+    """
 
-def get_countries(ccs=[]):
-    url = settings.PROBEAPI_ENDPOINT + "/GetCountries"
+    def __init__(self, threads=50, max_job_queue_size=200, max_points=0, ping_count=10):
+        self.threads = threads
+        self.max_job_queue_size = max_job_queue_size  # 0 for limitless
+        self.max_points = max_points  # 0 for limitless
+        self.ping_count = ping_count  # amount of ICMP pings performed per test
 
-    try:
-        print "Getting countries..."
-        response = get_probeapi_response(url)
-        py_object = json.loads(response)
-        res = {}
-        for p in py_object["GetCountriesResult"]:
-            cc = p["CountryCode"]
-            if cc in ccs:
-                res[cc] = p["ProbesCount"]
-        return res
-    except Exception as e:
-        return None
+    logger = logging.getLogger(__name__)
 
+    lock = Lock()
 
-def get_probeapi_response(url):
-    req = urllib2.Request(url)
-    req.add_header("apikey", settings.KONG_API_KEY)
-    req.add_header("Accept", "application/json")
-    urlopen = urllib2.urlopen(req)
-    response = urlopen.read()
-    return response
+    results = []
 
+    def init(self, tps=[], ccs=[]):
+        EMPTY_RESULTS = []
 
-class Command(BaseCommand):
-    threads = 50
-    max_job_queue_size = 0  # 0 for limitless
-    max_points = 0  # 0 for limitless
-    ping_count = 3  # amount of ICMP pings performed per test
-
-    def handle(self, *args, **options):
-        def do_work(url_probeapi):
-            print url_probeapi
-
+        def do_work(url):
             try:
-                response = get_probeapi_response(url_probeapi)
+
+                response = get_probeapi_response(url)
+
                 if response is not None:
                     process_response(response)
+
             except Exception as e:
+                print e
                 pass
 
             finally:
                 return
 
         def process_response(response):
+            now = datetime.datetime.now(tz=GMTUY())
 
-            now = datetime.datetime.now()
-            py_object = json.loads(str(response))
+            py_object = json.loads(response, parse_int=int)['StartTracertTestByCountryResult']
 
-            N = len(py_object['StartTracertTestByCountryResult'])
-            if N <= 0:
+            # py_object is a list
+            if len(py_object) <= 0:
                 return
 
-            # for each probe...
-            for result in py_object['StartTracertTestByCountryResult']:
+            for probe_target_result in py_object:
 
-                cc_origin = result['Country']['CountryCode']
-                asn = result['ASN']['AsnID'][2:]  # strip 'AS'
-                empty_ass = AS.objects.filter(network__isnull=True, asn=asn)  # get the asn with no network associated
-                if len(empty_ass) <= 0:
-                    as_origin = AS(asn=asn)  # create the empty-network AS
-                    as_origin.save()
-                elif len(empty_ass) > 1:
-                    continue
+                cc_origin = probe_target_result['Country']['CountryCode']
+                print "cc origin '%s'" % cc_origin
+
+                as_string = probe_target_result['ASN']['AsnID']
+                if len(as_string) > 2:
+                    as_origin = as_string[2:]  # strip 'AS'
                 else:
-                    as_origin = empty_ass[0]
+                    as_origin = 0
 
-                for traceroute in result["TRACERoute"]:
+                packet_loss = 0
 
-                    ip_origin = traceroute["IP"]
+                for traceroute in probe_target_result['TRACERoute']:
 
-                    tr = TracerouteResult(
-                        # ip_origin=ip_origin,
-                        # country_origin=cc_origin
+                    destination_ip = traceroute['IP']
+
+                    traceroute_result = TracerouteResult(
+                        # ip_origin=
+                        ip_destination=destination_ip,
+                        as_origin=as_origin,
+                        as_destination=AS.objects.get_as_by_ip(destination_ip).asn,
+                        country_origin=cc_origin,
+                        country_destination=TestPoint.objects.get(ip_address=destination_ip).country
                     )
-                    tr.save()
 
-                    for hop in traceroute["Tracert"]:
-                        ip_destination = hop['IP']
-                        as_destination = AS.objects.get_as_by_ip(destination_ip)
-                        cc_destination = get_cc_from_ip_address(ip_destination)
-                        status = hop["Status"]
+                    traceroute_result.save()
 
-                        if status != "OK" or ip_destination is None:
-                            # Timed out hops
-                            if ip_destination is not None:
-                                ip_version = 6 if ':' in ip_destination else 4
-                            else:
-                                ip_version = 0
-                                as_destination = None
+                    for hop in traceroute['Tracert']:
 
-                            tr_hop = TracerouteHop(
-                                date_test=now,
-                                ip_origin=ip_origin,
-                                ip_destination=ip_destination,
-                                country_origin=cc_origin,
-                                country_destination=cc_destination,
-                                ip_version=ip_version,
-                                as_origin=as_origin.asn,
-                                as_destination=as_destination.asn,
-                                number_probes=0,
+                        hop_destination_ip = hop['IP']
 
-                                tester="probeapi",
-                                tester_version="1",
-                                traceroute_result=tr
-                            )
-                            tr.traceroutehop_set.add(tr_hop)
-                            tr.hop_count += 1
-                            tr.save()
-                            continue
+                        voided = False
 
                         rtts = []
-                        packet_loss = 0
                         for r in hop['PingTimeArray']:
                             try:
                                 rtts.append(int(r))
-                            except:
+                            except Exception as e:
                                 packet_loss += 1
                                 continue
+
+                        if len(rtts) <= 0:
+                            voided = True
 
                         # IQR filtering...
                         _n = len(rtts)
@@ -148,45 +117,58 @@ class Command(BaseCommand):
                         rtts = [r for r in rtts if r > min and r < max]
 
                         if len(rtts) <= 0:
-                            rtts = [0]
+                            voided = True
 
+                        hop_as_destination = AS.objects.get_as_by_ip(hop_destination_ip)
+                        hop_cc_destination = get_cc_from_ip_address(hop_destination_ip)
                         std_dev = numpy.std(rtts)
-                        tr_hop = TracerouteHop(
-                            date_test=now,
-                            ip_origin=ip_origin,
-                            ip_destination=ip_destination,
-                            min_rtt=numpy.amin(rtts),
-                            max_rtt=numpy.amax(rtts),
-                            ave_rtt=numpy.mean(rtts),
-                            dev_rtt=std_dev,
-                            median_rtt=numpy.median(rtts),
-                            packet_loss=packet_loss,
-                            country_origin=cc_origin,
-                            country_destination=cc_destination,
-                            ip_version=6 if ':' in destination_ip else 4,
-                            as_origin=as_origin.asn,
-                            as_destination=as_destination.asn,
-                            number_probes=len(rtts),
 
-                            tester="probeapi",
-                            tester_version="1",
-                            traceroute_result=tr
-                        )
-                        tr.traceroutehop_set.add(tr_hop)
-                        tr.hop_count += 1
-                        tr.save()
-                    tr.country_destination = tr.traceroutehop_set.last().country_destination
-                    tr.country_origin = tr.traceroutehop_set.last().country_origin
-                    tr.as_destination = tr.traceroutehop_set.last().as_destination
-                    tr.as_origin = tr.traceroutehop_set.last().as_origin
-                    tr.save()
+                        if voided:
+                            hop = TracerouteHop(
+                                date_test=now,
+                                # ip_origin='',
+                                ip_destination=hop_destination_ip,
+                                min_rtt=0,
+                                max_rtt=0,
+                                ave_rtt=0,
+                                dev_rtt=0,
+                                median_rtt=0,
+                                packet_loss=packet_loss,
+                                country_origin=cc_origin,
+                                country_destination=hop_cc_destination,
+                                ip_version=6 if ':' in hop_destination_ip else 4,
+                                as_origin=as_origin,
+                                as_destination=hop_as_destination.asn,
+                                url="",
+                                number_probes=len(rtts)
+                            )
+                        else:
+                            hop = TracerouteHop(
+                                date_test=now,
+                                # ip_origin='',
+                                ip_destination=hop_destination_ip,
+                                min_rtt=numpy.amin(rtts),
+                                max_rtt=numpy.amax(rtts),
+                                ave_rtt=numpy.mean(rtts),
+                                dev_rtt=std_dev,
+                                median_rtt=numpy.median(rtts),
+                                packet_loss=packet_loss,
+                                country_origin=cc_origin,
+                                country_destination=hop_cc_destination,
+                                ip_version=6 if ':' in hop_destination_ip else 4,
+                                as_origin=as_origin,
+                                as_destination=hop_as_destination.asn,
+                                url="",
+                                number_probes=0
+                            )
+                        traceroute_result.traceroutehop_set.add(hop)  # save()
 
-                return
+        ccs = get_countries(ccs=ccs)
 
-        ccs = get_countries().keys()
+        if ccs is None:
+            return EMPTY_RESULTS
 
-        tps = SpeedtestTestPoint.objects.get_ipv4().filter(enabled=True).distinct('country').order_by(
-            'country')  # one TP per country TODO get *really* random tests... TODO get ipv6!!!
+        ccs = ccs.keys()  # get countries with running probes...
 
         urls = []
         thread_pool = ThreadPool(self.threads)
@@ -198,53 +180,73 @@ class Command(BaseCommand):
         elif self.max_points == 1:
             tps = [tps[0]]
 
-        print "TPs %s x CCs %s" % (len(tps), len(ccs))
-        then = datetime.datetime.now(tz=GMTUY())
-        for i, tp in enumerate(tps):
+        tps = list(tps)
+        shuffle(tps)  # shuffle in case the script gets aborted (do not run only the small alphanumeric tps only)
 
-            # sanity check
-            online = tp.check_point(protocol="icmp")
-            if not online:
-                continue
+        for tp in tps:
 
-            for cc in ccs:
+            if isinstance(tp, SpeedtestTestPoint) or isinstance(tp, TestPoint):
+                # normal flux... skip if targetting rotating domain
+
+                # sanity check before building URLs
+                online = tp.check_point(timeout=10, save=False, protocol="icmp")
+                if not online:
+                    print "Skipping %s" % (tp)
+                    continue
+
                 destination_ip = tp.ip_address
-                ping_count = self.ping_count
+            else:
+                destination_ip = tp  # the domain itself
 
-                max_hops = 50
-                ping_time = 1000
-                sleep_time = 1000
-                tx_time = 10000
-                timeout = ping_count * max_hops * (ping_time + sleep_time) + tx_time  # seconds
+            urls += self.build_url_for_tp(ccs, destination_ip, self.ping_count)
 
-                t = Template(
-                    "https://probeapifree.p.mashape.com/Probes.svc/StartTracertTestByCountry?"
-                    "countrycode={{ cc }}&"
-                    # "count={{ count }}&"
-                    "destination={{ destination }}&"
-                    "probeslimit={{ probeslimit }}"
-                    # "timeout={{ timeout }}"
-                )
+        self.logger.info("TPs %s x CCs %s" % (len(tps), len(ccs)))
+        self.logger.info("Launching %.0f worker threads on a %.0f jobs queue" % (self.threads, len(urls)))
+        for u in urls:
+            print u
 
-                ctx = Context(
-                    {
-                        'cc': cc,
-                        # 'count': ping_count,
-                        'destination': destination_ip,
-                        'probeslimit': 2 * len(ccs)
-                        # 'timeout': timeout
-                    }
-                )
-                url_probeapi = t.render(ctx)
-                if self.max_job_queue_size == 0 or len(urls) <= self.max_job_queue_size:
-                    urls.append(url_probeapi)
-
-        print "TPs %s x CCs %s" % (len(tps), len(ccs))
-        print "Launching %.0f worker threads on a %.0f jobs queue" % (self.threads, len(urls))
         thread_pool.map(do_work, urls)
 
         thread_pool.close()
         thread_pool.join()
 
-        print "Command ended with %.0f worker threads on a %.0f jobs queue" % (self.threads, len(urls))
-        print "Command took %s" % (datetime.datetime.now(tz=GMTUY()) - then)
+        self.logger.info("Command ended with %.0f worker threads on a %.0f jobs queue" % (self.threads, len(urls)))
+        self.logger.info("Command took %s" % (datetime.datetime.now(tz=GMTUY()) - then))
+
+        return self.results
+
+    def build_url_for_tp(self, ccs, destination_ip, ping_count):
+
+        urls = []
+
+        for cc in ccs:
+
+            hops = 10
+            round_trip = 2 * hops
+            time_for_each_ping = 1000
+            tx_time = 10000
+            timeout = ping_count * round_trip * time_for_each_ping + tx_time
+
+            t = Template(
+                settings.PROBEAPI_ENDPOINT + "/StartTracertTestByCountry?"
+                                             "countrycode={{ cc }}&"
+                                             "count={{ count }}&"
+                                             "destination={{ destination }}&"
+                                             "probeslimit={{ probeslimit }}&"
+                                             "timeout={{ timeout }}"
+            )
+
+            ctx = Context(
+                {
+                    'cc': cc,
+                    'count': ping_count,
+                    'destination': destination_ip,
+                    'probeslimit': 10,  # 10 (probes per CC)
+                    'timeout': timeout
+                }
+            )
+            url_probeapi = t.render(ctx)
+            if self.max_job_queue_size == 0 or len(urls) < self.max_job_queue_size:
+                urls.append(url_probeapi)
+
+        return urls
