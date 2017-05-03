@@ -9,11 +9,10 @@ from probeapi import ProbeApiMeasurement
 class Command(BaseCommand):
     @probeapi(command="Africa Connectivity UTC+04:00")
     def handle(self, *args, **options):
-        msm = ProbeApiMeasurement(max_job_queue_size=50, max_points=20)
-        ccs = ['RE', 'MU', 'SC']
-
+        msm = ProbeApiMeasurement(max_job_queue_size=100, max_points=50)
+        ccs = ['CF', 'SO', 'SN', 'SZ', 'TD', 'ZM', 'LR', 'NE', 'YT', 'RE', 'SC', 'SD', 'LS', 'GN', 'BF', 'CD', 'CM', 'SL', 'ST', 'ET', 'BI', 'MZ', 'NA', 'TG']
         results = msm.init(
-            tps=['africa-connectivity.exp.dev.lacnic.net']*10,
+            tps=['africa-connectivity.exp.dev.lacnic.net'],
             ccs=ccs
         )
 
