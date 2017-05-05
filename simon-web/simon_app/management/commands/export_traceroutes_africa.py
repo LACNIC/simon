@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from simon_app.models import Country, TracerouteResult
+from simon_app.models import Country, TracerouteResult, ResultsManager
 from collections import defaultdict
 from datetime import datetime
 import datetime
@@ -23,7 +23,7 @@ class Command(BaseCommand):
         comments.append(["# Data exported at %s (%s)." % (now, now.tzinfo)])
 
         ccs = Country.objects.get_afrinic_countrycodes()
-        start=datetime.datetime(year=2017, month=03, day=21)
+        start = datetime.datetime(year=2017, month=03, day=21)
 
         trs = TracerouteResult.objects.filter(
             Q(country_destination__in=ccs) & Q(country_origin__in=ccs)
@@ -58,8 +58,10 @@ class Command(BaseCommand):
                 serializable_hop['med_rtt'] = hop.median_rtt
                 serializable_hop['max_rtt'] = hop.max_rtt
 
-                serializable_hop['ip_origin'] = hop.ip_origin
-                serializable_hop['ip_destination'] = hop.ip_destination
+                if hop.ip_origin is not None:
+                    serializable_hop['ip_origin'] = ResultsManager.show_address_to_the_world(hop.ip_origin)
+                if hop.ip_destination is not None:
+                    serializable_hop['ip_destination'] = ResultsManager.show_address_to_the_world(hop.ip_destination)
 
                 uy = pytz.timezone(pytz.country_timezones['UY'][0])
                 try:
@@ -82,7 +84,7 @@ class Command(BaseCommand):
 
                 serializable_trace['hops'].append(serializable_hop)
 
-            traces.append(json.dumps(serializable_trace))
+            traces.append(serializable_trace)
 
         with open(STATIC_ROOT + '/results-africa-connectivity-traces.json', 'wb') as jsonfile:
             jsonfile.write(json.dumps(traces))

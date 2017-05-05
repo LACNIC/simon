@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from simon_app.models import Country, ProbeApiPingResult, ResultsManager
 from collections import defaultdict
-from datetime import datetime, timedelta
+from datetime import datetime
 import datetime
 import pytz
 import json
