@@ -20,11 +20,16 @@ class ProbeApiMeasurement():
         Class that holds the logic to perform a ProbeAPI measurement
     """
 
-    def __init__(self, threads=50, max_job_queue_size=200, max_points=0, ping_count=10):
+    def __init__(
+            self, threads=50, max_job_queue_size=200, max_points=0, ping_count=10,
+            tps=[], ccs=[]
+    ):
         self.threads = threads
         self.max_job_queue_size = max_job_queue_size  # 0 for limitless
         self.max_points = max_points  # 0 for limitless
         self.ping_count = ping_count  # amount of ICMP pings performed per test
+        self.tps = tps
+        self.ccs = ccs
 
     logger = logging.getLogger(__name__)
 
@@ -32,7 +37,13 @@ class ProbeApiMeasurement():
 
     results = []
 
-    def init(self, tps=[], ccs=[]):
+    def init(self, tps=None, ccs=None):
+
+        if tps is None:
+            tps = self.tps
+        if ccs is None:
+            ccs = self.ccs
+
         empty_results = []
 
         def do_work(url):
