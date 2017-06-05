@@ -111,7 +111,7 @@ def web_points(request):
     response = json.dumps(json_points)
     response = "{ \"points\": " + response + " }"
 
-    if callback is None:
+    if callback is None or callback.lower() == 'none':
         return response
     else:
         return '%s( %s );' % (callback, response)  # JSONP wrapper
