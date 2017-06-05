@@ -48,7 +48,7 @@ if HOSTNAME == 'simon':
         'natmeter.labs.lacnic.net',
         'warp.lacnic.net',
         'lacnic.net',
-        '127.0.0.1'
+        '127.0.0.1:8000'
     )
     CORS_ALLOW_HEADERS = (
         'x-requested-with',
