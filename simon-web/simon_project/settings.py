@@ -41,15 +41,17 @@ if HOSTNAME == 'simon':
     CHARTS_URL = "https://charts.dev.lacnic.net"  # *no* trailing slash
     LOGS = "/var/log/apache2/simon/production.log"
     ALLOWED_HOSTS = ['localhost', '127.0.0.1', '127.0.0.1:8000', '.lacnic.net', '*']
-    # CORS_ORIGIN_ALLOW_ALL = True
     CORS_ORIGIN_WHITELIST = (
         'simon.lacnic.net',
         'labs.lacnic.net',
         'natmeter.labs.lacnic.net',
         'warp.lacnic.net',
         'lacnic.net',
-        '127.0.0.1:8000'
+        '127.0.0.1:8000',
+        'monitor.dev.lacnic.net',
+        'natmeter.labs.lacnic.net'
     )
+    CORS_ORIGIN_ALLOW_ALL = True
     CORS_ALLOW_HEADERS = (
         'x-requested-with',
         'content-type',
