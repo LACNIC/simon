@@ -32,6 +32,7 @@ import logging
 from django.http import UnreadablePostError
 import operator
 
+
 @cache_page(60 * 60 * 24)
 def lab(request):
     """
@@ -525,12 +526,12 @@ def reports(request):
 
     matrix_region_js = Results.objects.results_matrix_cc(tester="JavaScript")
     matrix_js = [(
-                     m[0],
-                     m[1],
-                     int(m[2]),
-                     int(m[3]),
-                     int(m[4])
-                 ) for m in matrix_region_js if m[0] == cc1 or m[1] == cc1]
+        m[0],
+        m[1],
+        int(m[2]),
+        int(m[3]),
+        int(m[4])
+    ) for m in matrix_region_js if m[0] == cc1 or m[1] == cc1]
     matrix_js = sorted(matrix_js, key=lambda tup: tup[2])
     matrix_js_origin_cc = [m for m in matrix_js if m[0] == cc1]  # having origin as CC
     matrix_js_destination_cc = [m for m in matrix_js if m[1] == cc1]  # having destination as CC
@@ -719,23 +720,36 @@ def charts(request):
 
     url = settings.CHARTS_URL + "/code/"
 
-    data = dict(data=json.dumps(
-        [list(d[0].strftime("%d/%m/%Y") for d in results_timeline), [r[1] for r in results_timeline],
-         [r[2] for r in results_timeline]]),
+    data = dict(
+        x=json.dumps(
+            list(d[0].strftime("%Y-%m-%d") for d in results_timeline)
+        ),
+        ys=json.dumps([
+            [r[1] for r in results_timeline],
+            [r[2] for r in results_timeline]
+        ]),
         divId='results_timeline',
         labels=json.dumps(['HTTP', 'ICMP']),
         colors=json.dumps(['#144C4C', '#57737A']),
         kind='AreaChart',
-        xAxis='date')
+        xType='date'
+    )
 
     results_timeline = requests.post(url, data=data, headers={'Connection': 'close'}).text
 
-    data = dict(data=json.dumps([list((d[0].strftime("%d/%m/%Y") for d in rs)), list(ipv6_penetration_ratios)]),
-                divId='ipv6_penetration',
-                labels=json.dumps(['IPv6 sample ratio']),
-                colors=json.dumps(['#615D6C']),
-                kind='AreaChart',
-                xAxis='date')
+    data = dict(
+        x=json.dumps(
+            list(d[0].strftime("%Y-%m-%d") for d in rs)
+        ),
+        y=json.dumps(
+            list(ipv6_penetration_ratios)
+        ),
+        divId='ipv6_penetration',
+        labels=json.dumps(['IPv6 sample ratio']),
+        colors=json.dumps(['#615D6C']),
+        kind='AreaChart',
+        xType='date'
+    )
     ipv6_penetration = requests.post(url, data=data, headers={'Connection': 'close'}).text
 
     inner_count = len(inner_isos)
@@ -743,13 +757,20 @@ def charts(request):
     avg_list = [a - m for a, m in zip(list(inner_lats), list(inner_lats_min))]
     max_list = [max_ - avg for avg, max_ in zip(list(inner_lats), list(inner_lats_max))]
 
-    data = dict(data=json.dumps([list(inner_isos), list(inner_lats_min), avg_list, max_list]),
-                divId='inner_latency',
-                labels=json.dumps(['Min RTT', 'Ave RTT', 'Max RTT']),
-                colors=json.dumps(['#144C4C', '#57737A', '#95C1BE']),
-                kind='BarChart',
-                stacked=True,
-                xAxis='string')
+    data = dict(
+        x=json.dumps(
+            list(inner_isos)
+        ),
+        ys=json.dumps(
+            [list(inner_lats_min), avg_list, max_list]
+        ),
+        divId='inner_latency',
+        labels=json.dumps(['Min RTT', 'Ave RTT', 'Max RTT']),
+        colors=json.dumps(['#144C4C', '#57737A', '#95C1BE']),
+        kind='BarChart',
+        stacked=True,
+        xType='string'
+    )
     inner_latency = requests.post(url, data=data, headers={'Connection': 'close'}).text
 
     # Country information
@@ -758,7 +779,7 @@ def charts(request):
     inner_area = []
     inner = Results.objects.inner(tester=settings.PROTOCOLS["HTTP"], months=6)
     ccs = Country.objects.get_lacnic_countrycodes()
-    restcountries = json.loads(requests.get("http://restcountries.eu/rest/v1/all").text)
+    restcountries = json.loads(requests.get("http://restcountries.eu/rest/v1/all").text)  # TODO sacarlo de aca
     for c in restcountries:
         alpha2Code = c["alpha2Code"]
         if alpha2Code not in ccs:
@@ -785,19 +806,19 @@ def charts(request):
         new_key = "%02d - %s" % (i, v["alpha2Code"])
         inner_area[i]["alpha2Code"] = new_key
     inner_area_max = max(list((k["latency_per_area"]) for k in inner_area))
-    data = dict(data=json.dumps([
-        list(k["alpha2Code"] for k in inner_area),
-        list((k["latency_per_area"] / inner_area_max) for k in inner_area)
-    ]),
+    data = dict(
+        x=json.dumps(
+            list(k["alpha2Code"] for k in inner_area)
+        ),
+        y=json.dumps(
+            list((k["latency_per_area"] / inner_area_max) for k in inner_area)
+        ),
         divId='inner_latency_area',
         labels=json.dumps(['Min RTT per square km']),
         colors=json.dumps(['#144C4C']),
         kind='BarChart',
         stacked=True,
-        xAxis='string',
-        my_options=json.dumps(
-            {'chartArea': {'width': '50%'}}
-        )
+        xType='string'
     )
     inner_latency_area = requests.post(url, data=data, headers={'Connection': 'close'}).text
 
