@@ -685,6 +685,7 @@ def charts(request):
     inner_lats_min = []
     inner_lats_max = []
     for i, v in enumerate(inners):
+        if v[0] not in Country.objects.get_lacnic_countrycodes(): continue
         if v[1] is None: continue
 
         iso = "%02d - %s" % (i, str(v[0]))
