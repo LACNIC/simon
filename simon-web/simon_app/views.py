@@ -549,36 +549,65 @@ def reports(request):
     [ases_js.append(a) for a in _a2 if a not in ases_js]
     v6_js = js.filter(ip_version=6)
     v6_count_js = v6_js.count()
-    latency_histogram_js = Chart.objects.asyncChart(data=[list(js)], divId="chart_js", labels=['JavaScript'],
-                                                    colors=['#81B3C1'])
 
-    applet = Chart.objects.filterQuerySet(Results.objects.applet().filter(testype='ntp'), cc1=cc1, cc2=cc2,
-                                          date_from=date_from, date_to=date_to, bidirectional=bidirectional)
-    latency_histogram_applet = Chart.objects.asyncChart(data=[list(applet)], divId="chart_applet", labels=['Applet'],
-                                                        colors=['#77A4DD'], my_options={"hAxis": {"maxValue": 800.0}})
+    data = dict(
+        x=json.dumps(
+            list(js)
+        ),
+        divId='latency_histogram_js',
+        labels=json.dumps(['HTTP GET']),
+        colors=json.dumps(['#81B3C1'])
+    )
+    latency_histogram_js = requests.post(
+        url=settings.CHARTS_URL + "/hist/code/", data=data, headers={'Connection': 'close'}
+    ).text
 
     probeapi = Chart.objects.filterQuerySet(Results.objects.probeapi(), cc1=cc1, cc2=cc2, date_from=date_from,
                                             date_to=date_to, bidirectional=bidirectional)
-    latency_histogram_probeapi = Chart.objects.asyncChart(data=[list(probeapi)], divId="chart_probeapi",
-                                                          labels=['DOS ping'],
-                                                          colors=['#6F8AB7'], my_options={"hAxis": {"maxValue": 800.0}})
+    data = dict(
+        x=json.dumps(
+            list(probeapi)
+        ),
+        divId='latency_histogram_probeapi',
+        labels=json.dumps(['ICMP ping']),
+        colors=json.dumps(['#6F8AB7'])
+    )
+    latency_histogram_probeapi = requests.post(
+        url=settings.CHARTS_URL + "/hist/code/", data=data, headers={'Connection': 'close'}
+    ).text
+
 
     ripe_atlas = Chart.objects.filterQuerySet(Results.objects.ripe_atlas(), cc1=cc1, cc2=cc2, date_from=date_from,
                                               date_to=date_to, bidirectional=bidirectional)
-    latency_histogram_ripe_atlas = Chart.objects.asyncChart(data=[list(ripe_atlas)], divId="chart_ripe_atlas",
-                                                            labels=['RIPE Atlas'], colors=['#615D6C'],
-                                                            my_options={"hAxis": {"maxValue": 800.0}})
+    data = dict(
+        x=json.dumps(
+            list(ripe_atlas)
+        ),
+        divId='latency_histogram_ripe_atlas',
+        labels=json.dumps(['RIPE Atlas']),
+        colors=json.dumps(['#615D6C'])
+    )
+    latency_histogram_ripe_atlas = requests.post(
+        url = settings.CHARTS_URL + "/hist/code/", data=data, headers={'Connection': 'close'}
+    ).text
 
     v6 = int(100.0 * v6_count_js / len(js))
     v4 = int(100.0 - v6)
-    pie_chart = Chart.objects.asyncPieChart(labels=["IPv4", "IPv6"], divId="pie_chart",
-                                            data=[["IPv4", "IPv6"], [v4, v6]], colors=["#615D6C", "#77A4DD"],
-                                            my_options=json.dumps({"pieHole": 0.5}))
+    data = dict(
+        x=json.dumps(
+            list([v4, v6])
+        ),
+        divId='pie_chart',
+        labels=json.dumps(['IPv4', 'IPv6']),
+        colors=json.dumps(['#615D6C', '#77A4DD']),
+        kind='PieChart'
+        # xType='date'
+    )
+    pie_chart = requests.post(settings.CHARTS_URL + "/code/", data=data, headers={'Connection': 'close'}).text
 
     context = getContext(request)
     context['collapse'] = "in"
     context['form'] = form
-    context['latency_histogram_applet'] = latency_histogram_applet
     context['latency_histogram_probeapi'] = latency_histogram_probeapi
     context['latency_histogram_js'] = latency_histogram_js
     context['latency_histogram_ripe_atlas'] = latency_histogram_ripe_atlas
@@ -702,21 +731,43 @@ def charts(request):
 
     # Async Charts
 
-    latency_histogram_probeapi = Chart.objects.asyncChart(
-        data=[rtt for rtt in rtts_probeapi],
-        divId="latency_histogram_probeapi",
-        labels=['ICMP'],
-        colors=['#608BC4']
-    )
+    # latency_histogram_probeapi = Chart.objects.async_chart(
+    #     # x=[rtt for rtt in rtts_probeapi],
+    #     x=[10,20,12,13,13,14,13,1,13,13,13,13,14,14,14,14,1,14],
+    #     divId="latency_histogram_probeapi",
+    #     labels=['ICMP'],
+    #     colors=['#608BC4']
+    # )
 
-    latency_histogram_js = Chart.objects.asyncChart(
-        data=rtts_js,
-        divId="latency_histogram_js",
-        labels=['HTTP'],
-        colors=['#608BC4']
-    )
+    # latency_histogram_js = Chart.objects.async_chart(
+    #     # x=rtts_js,
+    #     x=[10, 20, 12, 13, 13, 14, 13, 1, 13, 13, 13, 13, 14, 14, 14, 14, 1, 14],
+    #     divId="latency_histogram_js",
+    #     labels=['HTTP'],
+    #     colors=['#608BC4']
+    # )
 
     # Sync Charts
+
+    url = settings.CHARTS_URL + "/hist/code/"
+    data = dict(
+        x=json.dumps(
+            list(rtts_js)
+        ),
+        divId='latency_histogram_js',
+        labels=json.dumps(['HTTP']),
+        colors=json.dumps(['#608BC4'])
+    )
+    latency_histogram_js = requests.post(url, data=data, headers={'Connection': 'close'}).text
+    data = dict(
+        x=json.dumps(
+            list([rtt for rtt in rtts_probeapi])
+        ),
+        divId='latency_histogram_probeapi',
+        labels=json.dumps(['ICMP']),
+        colors=json.dumps(['#608BC4'])
+    )
+    latency_histogram_probeapi = requests.post(url, data=data, headers={'Connection': 'close'}).text
 
     url = settings.CHARTS_URL + "/code/"
 
@@ -734,7 +785,6 @@ def charts(request):
         kind='AreaChart',
         xType='date'
     )
-
     results_timeline = requests.post(url, data=data, headers={'Connection': 'close'}).text
 
     data = dict(

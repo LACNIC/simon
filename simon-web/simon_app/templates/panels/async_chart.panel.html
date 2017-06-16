@@ -56,17 +56,17 @@
         };
     };
 
-    function loadAsyncChart(d, s, divId, data, labels, colors, kind, xAxis, my_options) {
+    function loadAsyncChart(d, s, divId, x, labels, colors, kind, xType, my_options) {
 
         UI.progress.val("10");
 
         var payload = {
-            "data": data,
+            "x": x,
             "divId": divId,
             "labels": labels,
             "colors": colors,
             "kind": kind,
-            "xAxis": xAxis,
+            "xType": xType,
             "my_options": my_options
         };
 
@@ -129,6 +129,6 @@
 <script async type="application/javascript">
     google.load('visualization', '1.0', {'packages': ['table', 'corechart']});
     google.setOnLoadCallback(
-            loadAsyncChart(document, "script", "{{ divId }}", "{{ data|safe }}", "{{ labels | safe }}", "{{ colors | safe }}", "{{ kind | safe }}", "{{ xAxis | safe }}", "{{ my_options | safe }}")
+            loadAsyncChart(document, "script", "{{ divId }}", "{{ x|safe }}", "{{ labels | safe }}", "{{ colors | safe }}", "{{ kind | safe }}", "{{ xType | safe }}", "{{ my_options | safe }}")
     );
 </script>

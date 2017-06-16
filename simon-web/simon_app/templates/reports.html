@@ -110,7 +110,8 @@
                                 <td class="myrow" style="padding: 0px;">{{ m.0 }}</td>
                                 <td class="myrow" style="padding: 0px;">{{ m.1 }}</td>
                                 <td class="myrow" style="padding: 0px;">
-                                    <div class="progress" style="width: {{ m.4|percentage:400|unlocalize }}%; margin-bottom: 3px;">
+                                    <div class="progress"
+                                         style="width: {{ m.4|percentage:400|unlocalize }}%; margin-bottom: 3px;">
                                         <div class="progress-bar mybar" role="progressbar"
                                              style="width: {{ m.2|percentage:m.4|unlocalize }}%; background-image: none; background-color: #95C1BE;">
                                             {{ m.2 }}
@@ -139,21 +140,19 @@
                 {% if js|length != 0 %}
                     <h4 class="page-header">Medidor: Javascript (<code>http</code>)</h4>
 
-                    <p>Esta gráfica esta basada en {{ js | length | unit_shortener }} muestras recolectadas desde {{ date_from }}. Los
+                    <p>Esta gráfica esta basada en {{ js | length | unit_shortener }} muestras recolectadas
+                        desde {{ date_from }}. Los
                         siguientes países están involucrados en los resultados de esta gráfica:</p>
                     <p>
                         {% for a in countries_js %}
                             <span class="label label-info">{{ a }}</span>
                         {% endfor %}
                     </p>
-                    {{ latency_histogram_js | safe }}
-                {% endif %}
+                    <script type="text/javascript">
+                        {{ latency_histogram_js | safe }}
+                    </script>
+                    <div id="latency_histogram_js"></div>
 
-                {% if applet|length != 0 %}
-                    <h4 class="page-header">Medidor: Applet (<code>ntp</code>)</h4>
-
-                    <p>Esta gráfica esta basada en {{ applet | length | unit_shortener }} muestras recolectadas desde {{ date_from }}</p>
-                    {{ latency_histogram_applet | safe }}
                 {% endif %}
 
                 {% if probeapi|length != 0 %}
@@ -161,7 +160,10 @@
 
                     <p>Esta gráfica esta basada en {{ probeapi | length | unit_shortener }} muestras recolectadas
                         desde {{ date_from }}</p>
-                    {{ latency_histogram_probeapi | safe }}
+                    <script type="text/javascript">
+                        {{ latency_histogram_probeapi | safe }}
+                    </script>
+                    <div id="latency_histogram_probeapi"></div>
 
 
                     <p class="pull-right" style="font-size: 0.9em;">
@@ -176,7 +178,12 @@
 
                     <p>Esta gráfica esta basada en {{ ripe_atlas | length | unit_shortener }} muestras recolectadas
                         desde {{ date_from }}</p>
-                    {{ latency_histogram_ripe_atlas | safe }}
+
+                    <script type="text/javascript">
+                        {{ latency_histogram_ripe_atlas | safe }}
+                    </script>
+                    <div id="latency_histogram_ripe_atlas"></div>
+{#                    {{ latency_histogram_ripe_atlas | safe }}#}
 
                     <p class="pull-right" style="font-size: 0.9em;">
                         <code>ICMP</code> RIPE Atlas Ping results are performed using the <a href="http:/atlas.ripe.net"
@@ -194,7 +201,21 @@
                 <p>
                     {{ v6_count_js }}% de las mediciones de {{ country }} se realizaron via IPv6.
                 </p>
-                {{ pie_chart | safe }}
+
+                <div class="bd-callout bd-callout-warning">
+                    <h4 class="card-title">Card title</h4>
+                    <p class="card-text">
+                        Some quick example text to build on the card
+                        title and make up the bulk of
+                        the card's content.
+                    </p>
+                </div>
+                {#                <script type="text/javascript">#}
+                {#                    {{ pie_chart | safe }}#}
+                {#                </script>#}
+                {#                <div id="pie_chart"></div>#}
+
+                {#                {{ pie_chart | safe }}#}
 
                 <h3>Mapas de latencia de {{ country }}</h3>
 
@@ -220,7 +241,8 @@
                 </h3>
 
                 <p>
-                    Los siguientes sistemas autónomos (un total de {{ ases_js | length | unit_shortener }}) forman parte de las mediciones <code>http</code> ({{ js | length | unit_shortener }}) de este reporte.
+                    Los siguientes sistemas autónomos (un total de {{ ases_js | length | unit_shortener }}) forman parte
+                    de las mediciones <code>http</code> ({{ js | length | unit_shortener }}) de este reporte.
                 </p>
                 {% for a in ases_js %}
                     <span class="label label-info">{{ a }}</span>
