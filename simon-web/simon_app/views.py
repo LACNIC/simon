@@ -728,25 +728,6 @@ def charts(request):
     # Charts Services #
     ###################
 
-
-    # Async Charts
-
-    # latency_histogram_probeapi = Chart.objects.async_chart(
-    #     # x=[rtt for rtt in rtts_probeapi],
-    #     x=[10,20,12,13,13,14,13,1,13,13,13,13,14,14,14,14,1,14],
-    #     divId="latency_histogram_probeapi",
-    #     labels=['ICMP'],
-    #     colors=['#608BC4']
-    # )
-
-    # latency_histogram_js = Chart.objects.async_chart(
-    #     # x=rtts_js,
-    #     x=[10, 20, 12, 13, 13, 14, 13, 1, 13, 13, 13, 13, 14, 14, 14, 14, 1, 14],
-    #     divId="latency_histogram_js",
-    #     labels=['HTTP'],
-    #     colors=['#608BC4']
-    # )
-
     # Sync Charts
 
     url = settings.CHARTS_URL + "/hist/code/"
@@ -785,22 +766,22 @@ def charts(request):
         kind='AreaChart',
         xType='date'
     )
-    results_timeline = requests.post(url, data=data, headers={'Connection': 'close'}).text
+    results_timeline = requests.post(settings.CHARTS_URL + "/code/", data=data, headers={'Connection': 'close'}).text
 
     data = dict(
         x=json.dumps(
             list(d[0].strftime("%Y-%m-%d") for d in rs)
         ),
-        y=json.dumps(
+        ys=json.dumps([
             list(ipv6_penetration_ratios)
-        ),
+        ]),
         divId='ipv6_penetration',
         labels=json.dumps(['IPv6 sample ratio']),
         colors=json.dumps(['#615D6C']),
         kind='AreaChart',
         xType='date'
     )
-    ipv6_penetration = requests.post(url, data=data, headers={'Connection': 'close'}).text
+    ipv6_penetration = requests.post(settings.CHARTS_URL + "/code/", data=data, headers={'Connection': 'close'}).text
 
     inner_count = len(inner_isos)
 
