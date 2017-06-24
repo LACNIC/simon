@@ -9,15 +9,13 @@ from probeapi import ProbeApiMeasurement
 class Command(BaseCommand):
     @probeapi(command="ProbeAPI LACNIC")
     def handle(self, *args, **options):
-        msm = ProbeApiMeasurement()
-        lacnic_countrycodes = Country.objects.get_lacnic_countrycodes()
-        results = msm.init(
-            tps=SpeedtestTestPoint.objects.get_ipv4().
-                filter(enabled=True).
-                distinct('country').
-                order_by('country').
-                filter(country__in=lacnic_countrycodes),
-
-            ccs=lacnic_countrycodes
+        msm = ProbeApiMeasurement(
+            max_job_queue_size=10
         )
+        ccs = Country.objects.get_lacnic_countrycodes()
+        results = msm.init(
+            tps=["lac-connectivity.exp.dev.lacnic.net"],
+            ccs=ccs
+        )
+        
         return results
