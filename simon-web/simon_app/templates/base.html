@@ -43,8 +43,8 @@
 
     <!-- LACNIC Styles -->
     <link rel="stylesheet" type="text/css" href="{% static 'simon_app/css/simon.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'simon_app/css/lacniclabs-portales-negro.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'simon_app/css/lacniclabs-override.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'simon_app/css/lacniclabs-generico.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'simon_app/css/lacniclabs-especifico.css' %}">
 
     <!-- GitHub buttons -->
     <!-- Place this tag in your head or just before your close body tag. -->
@@ -84,11 +84,12 @@
 </div>
 
 {#Segunda barra#}
-<div id="barra-secundaria" class="navbar visible-sm visible-md visible-lg visible-xl">
+<div id="barra-secundaria" class="navbar">
 
     <ul class="nav navbar-nav">
         <li><a href="http://lacnic.net">Home de LACNIC</a></li>
         <li><a href="http://labs.lacnic.net">Blog LACNIC Labs</a></li>
+        <li><a href="https://natmeter.labs.lacnic.net">NAT Meter</a></li>
     </ul>
 </div>
 
@@ -110,94 +111,30 @@
 
 </div>
 
-<div class="footer">
+<footer>
 
-    <!-- Feedback test -->
-    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
-        <h3>
-            Agradecemos tu feedback!
-        </h3>
+    <a href="https://www.labs.lacnic.net/">
+        <img src="{% static 'simon_app/imgs/logos/logo_labs_foot.png' %}" class="hidden-xs center-block"
+             title="LACNIC labs"/>
+    </a>
+</footer>
 
-        <p>
-            Gracias a tu feedback podremos realizar más mediciones, involucrar a más personas, y ofrecer mejores
-            datos y conclusiones. Tu opinión nos importa!
-        </p>
-    </div>
-
-    <!-- Feedback form -->
-    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
-        <form class="navbar-form" action="{% url 'simon_app.views.feedbackForm' %}" method="post">
-            {% csrf_token %}
-            <div>
-
-                {{ feedbackform.remitente }}
-
-                {{ feedbackform.mensaje }}
-
-                <input type="submit" value="Enviar comentarios" id="submit"
-                       class="btn btn-default navbar-btn pull-left"/>
-
-
-            </div>
-        </form>
-    </div>
-
-    <!-- LACNIC Labs logo -->
-    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
-        <a href="https://www.labs.lacnic.net/">
-            <img src="{% static 'simon_app/imgs/logos/logo_labs_foot.png' %}"
-                 class="center-block"
-                 title="LACNIC labs"
-                 style="max-height: 75px;"
-            />
-        </a>
-    </div>
-
-    <!-- GitHub button -->
-    <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
-        <div style="text-align: center; margin-top: 1.5em;">
-            <!-- Place this tag where you want the button to render. -->
-            <a class="github-button" href="https://github.com/lacnic/simon" data-icon="octicon-star"
-               data-style="mega"
-               data-count-href="/lacnic/simon/stargazers" data-count-api="/repos/lacnic/simon#stargazers_count"
-               data-count-aria-label="# stargazers on GitHub" aria-label="Star lacnic/simon on GitHub">Like on
-                GitHub!</a>
-
-        </div>
-
-        <!-- Begin LetsEncrypt site seal HTML -->
-        <a href="https://letsencrypt.org/">
-            <img class="center-block" style="max-width:10em; margin-top: 1.5em;"
-                 src="https://cdn.discourse.org/business/uploads/letsencrypt/original/1X/149e86cd7f135095e9c92f4e67a4b6a7b80a60c0.png">
-        </a>
-        {#    </div>#}
-        <!-- End LetsEncrypt site seal HTML -->
-
-        <p class="center-block" style="text-align: center; margin-top: 1.5em;">
-            Application Version: {{ APP_VERSION }}<br/>
-            Last Updated {{ DATE_UPDATED }}<br/>
-            Latest Commit {{ LATEST_COMMIT }} (<a href="https://github.com/LACNIC/simon/commit/"{{ LATEST_COMMIT }}>GitHub</a>)
-        </p>
-    </div>
-
-</div>
-
-<script data-main="{% static 'simon_app/js/simon_probe_plugin.js' %}/main"
-        src="{% static 'simon_app/js/require.js' %}"></script>
+{#<script data-main="{% static 'simon_app/js/simon_probe_plugin.js' %}/main"#}
+{#        src="{% static 'simon_app/js/require.js' %}"></script>#}
 
 <!-- 		Analytics -->
 <script>
     (function (i, s, o, g, r, a, m) {
         i['GoogleAnalyticsObject'] = r;
         i[r] = i[r] || function () {
-                    (i[r].q = i[r].q || []).push(arguments)
-                }, i[r].l = 1 * new Date();
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
         a = s.createElement(o), m = s.getElementsByTagName(o)[0];
         a.async = 1;
         a.src = g;
         m.parentNode.insertBefore(a, m)
     })(window, document, 'script',
-            '//www.google-analytics.com/analytics.js', 'ga');
+        '//www.google-analytics.com/analytics.js', 'ga');
 
     ga('create', 'UA-33695965-2', 'lacnic.net');
     ga('send', 'pageview');
@@ -208,13 +145,11 @@
 
     (function (d, s) {
         var js = d.createElement(s),
-                sc = d.getElementsByTagName(s)[0];
+            sc = d.getElementsByTagName(s)[0];
 
         js.src = "{% static 'simon_app/js/simon_probe_plugin.js' %}";// "https://simon.lacnic.net/simon/static/simon_app/js/simon_probe_plugin.js";
         js.type = "text/javascript";
         sc.parentNode.insertBefore(js, sc);
-
-
         js.onload = js.onreadystatechange = function () {
 
             /*
@@ -224,12 +159,14 @@
                 SIMON.printr("Measured " + rtt + " ms");
             };
 
-                        SIMON.init();// only for Home and Lab pages.
+            SIMON.init();// only for Home and Lab pages.
         };
 
     }(document, "script"));
 
 </script>
 
+{% block afterbody %}
+{% endblock %}
 </body>
 </html>
