@@ -9,16 +9,12 @@ from probeapi import ProbeApiMeasurement
 class Command(BaseCommand):
     @probeapi(command="Brazil Connectivity")
     def handle(self, *args, **options):
-        msm = ProbeApiMeasurement(max_job_queue_size=50, max_points=20)
-        ccs = ['BR'] * 10
-        tps = SpeedtestTestPoint.objects.get_ipv4().\
-                filter(enabled=True).\
-                distinct('country').\
-                order_by('country').\
-                filter(country__in=ccs)
-
+        msm = ProbeApiMeasurement(
+            max_job_queue_size=10
+        )
+        ccs = ['BR']
         results = msm.init(
-            tps=tps,
+            tps=["br.exp.dev.lacnic.net"],
             ccs=ccs
         )
 
