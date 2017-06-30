@@ -52,7 +52,7 @@ class ProbeApiMeasurement():
                 response = get_probeapi_response(url)
 
                 if response is not None:
-                    process_response(response)
+                    process_response(response, requested_url=url)
 
             except Exception as e:
                 print e
@@ -60,7 +60,14 @@ class ProbeApiMeasurement():
             finally:
                 return
 
-        def process_response(response):
+        def process_response(response, requested_url=''):
+            """
+                :param response:
+                :param requested_url: The URL requested beforehand to the service
+                :return:
+            """
+
+            target = requested_url.split('&')[2].split('=')[1]
 
             py_object = json.loads(response, parse_int=int)
 
@@ -117,7 +124,11 @@ class ProbeApiMeasurement():
                         continue
 
                     as_destination = AS.objects.get_as_by_ip(destination_ip)
-                    cc_destination = TestPoint.objects.get(ip_address=destination_ip).country
+                    cc_destination = TestPoint.objects.get_or_none(ip_address=destination_ip)
+                    if cc_destination is None:
+                        cc_destination = 'XX'
+                    else:
+                        cc_destination = cc_destination.country
 
                     std_dev = numpy.std(rtts)
                     result = ProbeApiPingResult(
@@ -135,7 +146,7 @@ class ProbeApiMeasurement():
                         ip_version=6 if ':' in destination_ip else 4, \
                         as_origin=as_origin.asn, \
                         as_destination=as_destination.asn, \
-                        url="", \
+                        url=target, \
                         number_probes=len(rtts)
                     )
                     result.save()

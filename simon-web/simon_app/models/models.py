@@ -788,6 +788,13 @@ class RipeAtlasMeasurement(models.Model):
 
 
 class TestPointManager(models.Manager):
+
+    def get_or_none(self, *args, **kwargs):
+        try:
+            return self.get(*args, **kwargs)
+        except Exception as e:
+            return None
+
     def get_ipv4(self):
         return TestPoint.objects.exclude(ip_address__contains=':')
 

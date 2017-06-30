@@ -17,5 +17,5 @@ class Command(BaseCommand):
             tps=["lac-connectivity.exp.dev.lacnic.net"],
             ccs=ccs
         )
-        
+
         return results

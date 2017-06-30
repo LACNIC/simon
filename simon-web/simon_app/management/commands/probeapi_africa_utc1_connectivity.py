@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from django.core.management.base import BaseCommand
-from simon_app.models import SpeedtestTestPoint, Country
+from probeapi_top28 import ping_top28
 from simon_app.decorators import probeapi
 from probeapi import ProbeApiMeasurement
 
@@ -18,4 +18,6 @@ class Command(BaseCommand):
             ccs=ccs
         )
 
-        return results
+        top28_results = ping_top28(ccs)
+
+        return results + top28_results

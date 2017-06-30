@@ -15,7 +15,6 @@ class Command(BaseCommand):
             ping_count=3
         )
         ccs = Country.objects.get_lacnic_countrycodes()
-
         results = msm.init(
             tps=["lac-connectivity.exp.dev.lacnic.net"],
             ccs=ccs
