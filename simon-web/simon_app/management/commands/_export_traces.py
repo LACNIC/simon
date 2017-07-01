@@ -69,6 +69,6 @@ def export_traces(trs, filename):
 
         traces.append(serializable_trace)
 
-    with open(STATIC_ROOT + "%s.json" % filename, 'wb') as jsonfile:
+    with open(STATIC_ROOT + "/%s.json" % filename, 'wb') as jsonfile:
         jsonfile.write(json.dumps(traces))
         jsonfile.close()
