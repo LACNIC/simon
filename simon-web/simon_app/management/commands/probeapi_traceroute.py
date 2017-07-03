@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from django.template import Template, Context
-
+from django.db import transaction
 from simon_app.models import *
 from simon_app.reportes import GMTUY
 from simon_app.api_views import get_cc_from_ip_address
@@ -15,6 +15,7 @@ import datetime
 import numpy
 import logging
 import urlparse
+
 
 class ProbeApiTraceroute():
     """
@@ -42,7 +43,7 @@ class ProbeApiTraceroute():
                 response = get_probeapi_response(url)
 
                 if response is not None:
-                    process_response(response)
+                    self.process_response(response, requested_url=url)
 
             except Exception as e:
                 print e
@@ -50,118 +51,6 @@ class ProbeApiTraceroute():
 
             finally:
                 return
-
-        def process_response(response):
-            now = datetime.datetime.now(tz=GMTUY())
-
-            py_object = json.loads(response, parse_int=int)['StartTracertTestByCountryResult']
-
-            # py_object is a list
-            if len(py_object) <= 0:
-                return
-
-            for probe_target_result in py_object:
-
-                cc_origin = probe_target_result['Country']['CountryCode']
-                print "cc origin '%s'" % cc_origin
-
-                as_string = probe_target_result['ASN']['AsnID']
-                if len(as_string) > 2:
-                    as_origin = as_string[2:]  # strip 'AS'
-                else:
-                    as_origin = 0
-
-                packet_loss = 0
-
-                for traceroute in probe_target_result['TRACERoute']:
-
-                    destination_ip = traceroute['IP']
-
-                    traceroute_result = TracerouteResult(
-                        # ip_origin=
-                        ip_destination=destination_ip,
-                        as_origin=as_origin,
-                        as_destination=AS.objects.get_as_by_ip(destination_ip).asn,
-                        country_origin=cc_origin,
-                        country_destination=TestPoint.objects.get(ip_address=destination_ip).country
-                    )
-
-                    traceroute_result.save()
-
-                    for hop in traceroute['Tracert']:
-
-                        hop_destination_ip = hop['IP']
-
-                        voided = False
-
-                        rtts = []
-                        for r in hop['PingTimeArray']:
-                            try:
-                                rtts.append(int(r))
-                            except Exception as e:
-                                packet_loss += 1
-                                continue
-
-                        if len(rtts) <= 0:
-                            voided = True
-
-                        # IQR filtering...
-                        _n = len(rtts)
-                        rtts = sorted(rtts)
-                        index = len(rtts) - 1
-                        q1 = rtts[int(0.25 * index)]
-                        q3 = rtts[int(0.75 * index)]
-                        iqr = q3 - q1
-                        max = q3 + 1.5 * iqr
-                        min = q1 - 1.5 * iqr
-                        rtts = [r for r in rtts if r > min and r < max]
-
-                        if len(rtts) <= 0:
-                            voided = True
-
-                        hop_as_destination = AS.objects.get_as_by_ip(hop_destination_ip)
-                        hop_cc_destination = get_cc_from_ip_address(hop_destination_ip)
-                        std_dev = numpy.std(rtts)
-
-                        if voided:
-                            hop = TracerouteHop(
-                                date_test=now,
-                                # ip_origin='',
-                                ip_destination=hop_destination_ip,
-                                min_rtt=0,
-                                max_rtt=0,
-                                ave_rtt=0,
-                                dev_rtt=0,
-                                median_rtt=0,
-                                packet_loss=packet_loss,
-                                country_origin=cc_origin,
-                                country_destination=hop_cc_destination,
-                                ip_version=6 if ':' in hop_destination_ip else 4,
-                                as_origin=as_origin,
-                                as_destination=hop_as_destination.asn,
-                                url="",
-                                number_probes=len(rtts)
-                            )
-                        else:
-                            hop = TracerouteHop(
-                                date_test=now,
-                                # ip_origin='',
-                                ip_destination=hop_destination_ip,
-                                min_rtt=numpy.amin(rtts),
-                                max_rtt=numpy.amax(rtts),
-                                ave_rtt=numpy.mean(rtts),
-                                dev_rtt=std_dev,
-                                median_rtt=numpy.median(rtts),
-                                packet_loss=packet_loss,
-                                country_origin=cc_origin,
-                                country_destination=hop_cc_destination,
-                                ip_version=6 if ':' in hop_destination_ip else 4,
-                                as_origin=as_origin,
-                                as_destination=hop_as_destination.asn,
-                                url="",
-                                number_probes=0
-                            )
-                        traceroute_result.traceroutehop_set.add(hop)  # save()
 
         ccs = get_countries(ccs=ccs)
 
@@ -214,6 +103,144 @@ class ProbeApiTraceroute():
         self.logger.info("Command took %s" % (datetime.datetime.now(tz=GMTUY()) - then))
 
         return self.results
+
+    def process_response(self, response, requested_url=''):
+        """
+        :param response:
+        :param requested_url:
+        :param persist:
+        :return: Parsed list of TracerouteResult s
+        """
+
+        now = datetime.datetime.now(tz=GMTUY())
+
+        py_object = json.loads(response, parse_int=int)['StartTracertTestByCountryResult']
+
+        # py_object is a list
+        if len(py_object) <= 0:
+            return
+
+        results = []  # results to be returned
+
+        for probe_target_result in py_object:
+
+            target = requested_url.split('&')[2].split('=')[1]
+
+            cc_origin = probe_target_result['Country']['CountryCode']
+
+            as_string = probe_target_result['ASN']['AsnID']
+            if len(as_string) > 2:
+                as_origin = as_string[2:]  # strip 'AS'
+            else:
+                as_origin = 0
+
+            packet_loss = 0
+
+            for traceroute in probe_target_result['TRACERoute']:
+
+                destination_ip = traceroute['IP']
+
+                cc_destination = TestPoint.objects.get_or_none(ip_address=destination_ip)
+                if cc_destination is None:
+                    cc_destination = 'XX'
+                else:
+                    cc_destination = cc_destination.country
+
+                traceroute_result = TracerouteResult(
+                    ip_origin='0.0.0.1',
+                    ip_destination=destination_ip,
+                    as_origin=as_origin,
+                    as_destination=AS.objects.get_as_by_ip(destination_ip).asn,
+                    country_origin=cc_origin,
+                    country_destination=cc_destination
+                )
+
+                traceroute_result.save()
+
+                for hop in traceroute['Tracert']:
+
+                    hop_destination_ip = hop['IP']
+
+                    voided = False
+
+                    rtts = []
+                    for r in hop['PingTimeArray']:
+                        try:
+                            rtts.append(int(r))
+                        except Exception as e:
+                            packet_loss += 1
+                            continue
+
+                    if len(rtts) == 0:
+                        voided = True
+                    else:
+
+                        # IQR filtering...
+                        _n = len(rtts)
+                        rtts = sorted(rtts)
+                        index = len(rtts) - 1
+                        q1 = rtts[int(0.25 * index)]
+                        q3 = rtts[int(0.75 * index)]
+                        iqr = q3 - q1
+                        max = q3 + 1.5 * iqr
+                        min = q1 - 1.5 * iqr
+                        rtts = [r for r in rtts if r > min and r < max]
+
+                        if len(rtts) == 0:
+                            voided = True
+
+                    hop_as_destination = AS.objects.get_as_by_ip(hop_destination_ip)
+                    hop_cc_destination = get_cc_from_ip_address(hop_destination_ip)
+
+                    if hop_cc_destination is None:
+                        hop_cc_destination = 'XX'
+
+                    std_dev = numpy.std(rtts)
+
+                    if voided:
+                        hop = TracerouteHop(
+                            date_test=now,
+                            # ip_origin='',
+                            ip_destination=hop_destination_ip,
+                            min_rtt=0,
+                            max_rtt=0,
+                            ave_rtt=0,
+                            dev_rtt=0,
+                            median_rtt=0,
+                            packet_loss=packet_loss,
+                            country_origin=cc_origin,
+                            country_destination=hop_cc_destination,
+                            ip_version=6 if ':' in hop_destination_ip else 4,
+                            as_origin=as_origin,
+                            as_destination=hop_as_destination.asn,
+                            url=target,
+                            number_probes=len(rtts)
+                        )
+                    else:
+                        hop = TracerouteHop(
+                            date_test=now,
+                            # ip_origin='',
+                            ip_destination=hop_destination_ip,
+                            min_rtt=numpy.amin(rtts),
+                            max_rtt=numpy.amax(rtts),
+                            ave_rtt=numpy.mean(rtts),
+                            dev_rtt=std_dev,
+                            median_rtt=numpy.median(rtts),
+                            packet_loss=packet_loss,
+                            country_origin=cc_origin,
+                            country_destination=hop_cc_destination,
+                            ip_version=6 if ':' in hop_destination_ip else 4,
+                            as_origin=as_origin,
+                            as_destination=hop_as_destination.asn,
+                            url=target,
+                            number_probes=0
+                        )
+
+                    traceroute_result.traceroutehop_set.add(hop)  # save()
+
+                # to be returned
+                results.append(traceroute_result)
+        return results
 
     def build_url_for_tp(self, ccs, destination_ip, ping_count):
 

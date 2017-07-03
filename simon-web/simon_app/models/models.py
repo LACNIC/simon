@@ -220,8 +220,14 @@ class ASManager(models.Manager):
             return AS.objects.raw(
                 "SELECT * FROM simon_app_as WHERE INET(network) >>= inet '%s' ORDER BY pfx_length DESC LIMIT 1" % ip_address)[
                 0]
-        except IndexError:
-            return AS.objects.filter(pfx_length=0).filter(asn=0)[0]
+        except Exception as e:
+
+            return AS(
+                asn=0,
+                pfx_length=0,
+                network='0/0'
+            )
+            # return AS.objects.filter(pfx_length=0).filter(asn=0)[0]
 
 
 class AS(models.Model):
@@ -526,10 +532,13 @@ class TracerouteResult(models.Model):
     as_destination = models.IntegerField(null=True)
     country_origin = models.CharField(max_length=2)
     country_destination = models.CharField(max_length=2)
-    # hop_count = models.IntegerField(default=0)
 
     output = models.TextField(max_length=2000, default='')
     objects = TracerouteResultManager()
+
+    @property
+    def hops(self):
+        return self.traceroutehop_set.all()
 
     @property
     def hop_count(self):
@@ -557,10 +566,14 @@ class TracerouteResult(models.Model):
         try:
             if self.ip_origin is not None:
                 self.country_origin = reader.city(self.ip_origin).country.iso_code  # TODO llevar a Result
-            if self.ip_destination is not None:
-                self.country_destination = reader.city(self.ip_destination).country.iso_code  # TODO llevar a Result
         except AddressNotFoundError as e:
-            pass
+            self.country_origin = 'XX'
+
+        if self.ip_destination is not None:
+            try:
+                self.country_destination = reader.city(self.ip_destination).country.iso_code  # TODO llevar a Result
+            except AddressNotFoundError as e:
+                self.country_destination = 'XX'
 
         super(TracerouteResult, self).save(*args, **kwargs)
 

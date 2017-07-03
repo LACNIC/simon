@@ -6,6 +6,14 @@ from simon_app.models import ResultsManager
 from simon_project.settings import STATIC_ROOT
 
 
+def timezone_or_default(cc, default=None):
+    try:
+        cc_timezone = pytz.country_timezones[cc][0]
+        return pytz.timezone(cc_timezone)
+    except KeyError as e:
+        return default
+
+
 def export(sms, filename):
     """
         :param sms: Results to be exported
@@ -33,9 +41,9 @@ def export(sms, filename):
         serializable_object['med_rtt'] = sm.median_rtt
         serializable_object['max_rtt'] = sm.max_rtt
 
-        tz_probe = pytz.timezone(pytz.country_timezones[sm.country_origin][0])
-        tz_target = pytz.timezone(pytz.country_timezones[sm.country_destination][0])
         uy = pytz.timezone(pytz.country_timezones['UY'][0])
+        tz_probe = timezone_or_default(sm.country_origin, default=uy)
+        tz_target = timezone_or_default(sm.country_destination, default=uy)
 
         date = uy.localize(sm.date_test.replace(tzinfo=None))  # uy.localize(sm.date_test + timedelta(hours=03))
         date_utc = pytz.utc.normalize(date)
@@ -44,6 +52,8 @@ def export(sms, filename):
         serializable_object['date_probe'] = str(date_probe)
         serializable_object['date_target'] = str(date_target)
         serializable_object['date_utc'] = str(date_utc)
+
+        serializable_object['target_url'] = sm.url
 
         if sm.ip_origin is not None:
             serializable_object['ip_origin'] = ResultsManager.show_address_to_the_world(sm.ip_origin)

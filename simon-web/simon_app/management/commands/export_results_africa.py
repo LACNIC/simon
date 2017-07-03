@@ -14,11 +14,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         comments = []
 
-        now = datetime.now().replace(second=0, microsecond=0)
-        uy = pytz.timezone('America/Montevideo')
-        now = uy.localize(now)
-        comments.append(["# Data exported at %s (%s)." % (now, now.tzinfo)])
-
         ccs = Country.objects.get_afrinic_countrycodes()
         start = datetime(year=2017, month=03, day=21)
 
@@ -29,3 +24,17 @@ class Command(BaseCommand):
         )
 
         export(sms, 'results-africa-connectivity')  # .json
+
+        # top 28
+        top28 = ['jumia.com.ng', 'konga.com', 'bidorbuy.co.za', 'fnb.co.za', 'gtbank.com', 'absa.co.za',
+                 'standardbank.co.za', 'almasryalyoum.com', 'elkhabar.com', 'vanguardngr.com', 'news24.com',
+                 'punchng.com', 'iol.co.za', 'ghanaweb.com', 'nairaland.com', 'supersport.com', 'alwafd.org',
+                 'iroking.com']
+
+        trs_top28 = ProbeApiPingResult.objects.filter(
+            Q(country_origin__in=ccs) & Q(url__in=top28)
+        ).filter(
+            date_test__gte=start
+        )
+
+        export(trs_top28, 'results-africa-connectivity-top28')

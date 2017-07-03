@@ -41,6 +41,9 @@ def export_traces(trs, filename):
             serializable_hop['med_rtt'] = hop.median_rtt
             serializable_hop['max_rtt'] = hop.max_rtt
 
+            if hop.url:
+                serializable_hop['target_url'] = hop.url
+
             if hop.ip_origin is not None:
                 serializable_hop['ip_origin'] = ResultsManager.show_address_to_the_world(hop.ip_origin)
             if hop.ip_destination is not None:

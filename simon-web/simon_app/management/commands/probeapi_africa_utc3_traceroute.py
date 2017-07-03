@@ -3,6 +3,7 @@
 from django.core.management.base import BaseCommand
 from simon_app.decorators import probeapi
 from probeapi_traceroute import ProbeApiTraceroute
+from probeapi_top28 import trace_top28
 
 
 class Command(BaseCommand):
@@ -20,4 +21,6 @@ class Command(BaseCommand):
             ccs=ccs
         )
 
-        return results
+        results_top28 = trace_top28(ccs)
+
+        return results + results_top28
