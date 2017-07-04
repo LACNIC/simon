@@ -22,9 +22,9 @@ SIMON = {
         configs: SIMON.debug && "http://127.0.0.1:8000/web_configs/" || "https://simon.lacnic.net/web_configs/",
         offline: SIMON.debug && "http://127.0.0.1:8000/postxmlresult/offline/" || "https://simon.lacnic.net/postxmlresult/offline/",
         post: SIMON.debug && "http://127.0.0.1:8000/postxmlresult/latency/" || "https://simon.lacnic.net/postxmlresult/latency/",
-        country: "https://simon.lacnic.net/getCountry/",
+        country: SIMON.debug && "http://127.0.0.1:8000/getCountry/" || "https://simon.lacnic.net/getCountry/",
         ipv6ResolveURL: "https://simon.v6.labs.lacnic.net/cemd/getip/jsonp/",
-        ipv4ResolveURL: "https://simon.v4.labs.lacnic.net/cemd/getip/jsonp/"
+        ipv4ResolveURL: SIMON.debug && "http://127.0.0.1:8002/getip/" || "https://simon.v4.labs.lacnic.net/cemd/getip/jsonp/"
     },
 
     workflow: {
@@ -84,18 +84,18 @@ SIMON = {
 
         SIMON.printr("Getting user country...");
 
-        $.ajax({
-            type: 'GET',
-            url: SIMON.urls.country,
-            contentType: "text/javascript",
-            dataType: 'jsonp',
-            crossDomain: true,
-            context: this,
-            success: function (cc) {
-                SIMON.countryCode = cc['cc'];
+        fetch(
+            SIMON.urls.country
+        ).then(
+            function (r) {
+                return r.text();
+            }
+        ).then(
+            function (cc) {
+                SIMON.countryCode = cc;
                 SIMON.getMyIPAddress(SIMON.urls.ipv6ResolveURL);
             }
-        });
+        );
     },
 
     getTestsConfigs: function () {
@@ -105,82 +105,85 @@ SIMON = {
          */
         SIMON.log("Fetching tests configurations...");
 
-        $.ajax({
-            url: SIMON.urls.configs,
-            dataType: 'jsonp',
-            crossDomain: true,
-            context: this
-        }).success(function (data) {
-
-            if (data.configs.run == 1) {
-                SIMON.workflow.run = true;
-            } else {
-                SIMON.printr("Stopping script execution...");
-                return;
-//                SIMON.workflow.run = false;
+        fetch(SIMON.urls.configs).then(
+            function (r) {
+                return r.json();
             }
+        ).then(
+            function (data) {
+                if (data.configs.run == 1) {
+                    SIMON.workflow.run = true;
+                } else {
+                    SIMON.printr("Stopping script execution...");
+                    return;
+                }
 
-            if (data.configs.latency == 1) {
-                SIMON.workflow.latency = true;
-            } else {
-                SIMON.workflow.latency = false;
+                if (data.configs.latency == 1) {
+                    SIMON.workflow.latency = true;
+                } else {
+                    SIMON.workflow.latency = false;
+                }
+
+                if (data.configs.throughput == 1) {
+                    SIMON.workflow.throughput = true;
+                } else {
+                    SIMON.workflow.throughput = false;
+                }
+
+                if (SIMON.ipv6Address != "")
+                    SIMON.getPoints(6);
+                else
+                    SIMON.getPoints(4);
             }
+        )
 
-            if (data.configs.throughput == 1) {
-                SIMON.workflow.throughput = true;
-            } else {
-                SIMON.workflow.throughput = false;
-            }
-
-            if (SIMON.ipv6Address != "")
-                this.getPoints(6);
-            else
-                this.getPoints(4);
-        });
     },
 
     getPoints: function (ipVersion) {
 
-        $.ajax(
-            {
-                url: SIMON.urls.home + "web_points?" +
-                "amount=" + SIMON.params.amount +
-                "&ip_version=" + ipVersion +
-                "&countrycode=" + SIMON.countryCode +
-                "&protocol=" + SIMON.params.protocol,
-                dataType: 'jsonp',
-                crossDomain: true,
-                context: this
-            }).success(function (data) {
-
-            SIMON.points = new Array();
-
-            /*
-             * callback when the points are loaded from the server
-             */
-
-            for (i in data.points) {
-                var jsonPoint = data.points[i];
-                var testPoint = {
-                    "ip": jsonPoint.ip,
-                    "url": jsonPoint.url,
-                    "country": jsonPoint.country,
-                    "countryName": jsonPoint.countryName,
-                    "city": jsonPoint.city,
-                    "region": jsonPoint.region,
-                    "results": [],  // holds the results of latency tests
-                    "throughputResults": [],
-                    "online": false,
-                    "onlineFinished": false
-                };
-
-                SIMON.points.push(testPoint);
+        fetch(
+            SIMON.urls.home + "web_points?" +
+            "amount=" + SIMON.params.amount +
+            "&ip_version=" + ipVersion +
+            "&countrycode=" + SIMON.countryCode +
+            "&protocol=" + SIMON.params.protocol
+        ).then(
+            function (r) {
+                return r.json();
             }
+        ).then(
+            function (data) {
 
-            SIMON.after_points();
-            SIMON.siteOnLine(SIMON.points[0]);
+                SIMON.points = new Array();
 
-        }).complete();
+                /*
+                 * callback when the points are loaded from the server
+                 */
+
+                for (i in data.points) {
+                    var jsonPoint = data.points[i];
+                    var testPoint = {
+                        "ip": jsonPoint.ip,
+                        "url": jsonPoint.url,
+                        "country": jsonPoint.country,
+                        "countryName": jsonPoint.countryName,
+                        "city": jsonPoint.city,
+                        "region": jsonPoint.region,
+                        "results": [],  // holds the results of latency tests
+                        "throughputResults": [],
+                        "online": false,
+                        "onlineFinished": false
+                    };
+
+                    SIMON.points.push(testPoint);
+                }
+
+                SIMON.after_points();
+                SIMON.siteOnLine(SIMON.points[0]);
+
+            }
+        );
+
     },
 
     siteOnLine: function (testPoint) {
@@ -193,9 +196,9 @@ SIMON = {
          * get the '/' directory
          */
         var url;
-        if (this.getIPversion(testPoint.ip) == 4)
+        if (SIMON.getIPversion(testPoint.ip) == 4)
             url = SIMON.params.protocol + "://" + endpoint + "/";
-        else if (this.getIPversion(testPoint.ip) == 6)
+        else if (SIMON.getIPversion(testPoint.ip) == 6)
             url = SIMON.params.protocol + "://[" + endpoint + "]/";
 
         $.ajax({
@@ -270,16 +273,16 @@ SIMON = {
 
         const endpoint = SIMON.params.protocol == "https" && testPoint.url.split("://")[1].split("/")[0] || testPoint.ip;
 
-        if (this.getIPversion(testPoint.ip) == '6') {
-            url = SIMON.params.protocol + "://[" + endpoint + "]/" + Math.random();
+        if (SIMON.getIPversion(testPoint.ip) == '6') {
+            url = SIMON.params.protocol + "://[" + endpoint + "]?" + 'resource=' + Math.random();
         } else {
-            url = SIMON.params.protocol + "://" + endpoint + "/" + Math.random();
+            url = SIMON.params.protocol + "://" + endpoint + "?" + 'resource=' + Math.random();
         }
 
         SIMON.before_each();
 
         $.jsonp({
-            type: 'GET',
+            type: 'HEAD', //'GET', makes no difference :(
             url: url,
             dataType: 'jsonp',
             timeout: SIMON.latencyTimeout,
@@ -290,6 +293,12 @@ SIMON = {
             beforeSend: function (xhr) {
                 if (xhr.overrideMimeType)
                     xhr.setRequestHeader("Connection", "close");
+            },
+
+            success: function () {
+
+                SIMON.log('success');
+
             },
 
             error: function (jqXHR, textStatus) {
@@ -303,13 +312,14 @@ SIMON = {
                      */
                     rtt = (+new Date - ts);
                     testPoint.results.push(rtt);
+                    SIMON.log(rtt);
                     SIMON.after_each(rtt);
                 }
 
-                SIMON.saveTestPoint(testPoint);// store results in global
+                SIMON.saveTestPoint(testPoint);  // store results in global
                 // variable
 
-                if (SIMON.testerFinished(testPoint)) {// post results
+                if (SIMON.testerFinished(testPoint)) {  // post results
 
                     var array = [];
                     array.push(testPoint);
@@ -331,7 +341,9 @@ SIMON = {
 
                     } else {
                         SIMON.after_end();
-                        SIMON.printr("Thank you!");
+                        var thanks = "Thank you!";
+                        SIMON.log(thanks);
+                        SIMON.printr(thanks);
                     }
                 }
 
@@ -389,33 +401,30 @@ SIMON = {
 
     getMyIPAddress: function (url) {
 
-        $.ajax({
-            type: 'GET',
-            url: url,
-            dataType: 'jsonp',
-            timeout: 5000,
-            crossDomain: true,
-            context: this,
-            success: function (data) {
-
-                if (this.getIPversion(data.ip) == '4') {
+        fetch(
+            url
+        ).then(
+            function (r) {
+                return r.json();
+            }
+        ).then(
+            function (data) {
+                SIMON.log('data ' + typeof data.ip);
+                if (SIMON.getIPversion(data.ip) == '4') {
                     SIMON.ipv4Address = data.ip;
                     SIMON.getTestsConfigs();// exit
 
-                } else if (this.getIPversion(data.ip) == '6') {
+                } else if (SIMON.getIPversion(data.ip) == '6') {
                     SIMON.ipv6Address = data.ip;
                     SIMON.getMyIPAddress(SIMON.urls.ipv4ResolveURL);
                 }
             },
-            error: function (jqXHR, textStatus, errorThrown) {
-
+            function (err) {
+                SIMON.log('err ' + typeof err.ip);
                 if (SIMON.ipv4Address == "")
                     SIMON.getMyIPAddress(SIMON.urls.ipv4ResolveURL);
-            },
-            complete: function () {
-
             }
-        });
+        );
     },
 
     getTestPointIndex: function (testPoint) {
@@ -827,8 +836,9 @@ SIMON = {
         }
 
         a = d.extend({}, A, a);
-        var f = a.success, v = a.error, z = a.complete, y = a.dataFilter, q = a.callbackParameter, B = a.callback, J = a.cache, p = a.pageCache, C = a.charset, c = a.url, g = a.data, D = a.timeout, r, m = 0, n =
-            H, b, l, x;
+        var f = a.success, v = a.error, z = a.complete, y = a.dataFilter, q = a.callbackParameter, B = a.callback,
+            J = a.cache, p = a.pageCache, C = a.charset, c = a.url, g = a.data, D = a.timeout, r, m = 0, n =
+                H, b, l, x;
         E && E(function (a) {
             a.done(f).fail(v);
             f = a.resolve;
@@ -878,11 +888,13 @@ SIMON = {
 })(jQuery);
 
 var dateFormat = function () {
-    var l = /d{1,4}|m{1,4}|yy(?:yy)?|([HhMsTt])\1?|[LloSZ]|"[^"]*"|'[^']*'/g, m = /\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) (?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\d{4})?)\b/g, v = /[^-+\dA-Z]/g, d = function (a, c) {
-        a = String(a);
-        for (c = c || 2; a.length < c;)a = "0" + a;
-        return a
-    };
+    var l = /d{1,4}|m{1,4}|yy(?:yy)?|([HhMsTt])\1?|[LloSZ]|"[^"]*"|'[^']*'/g,
+        m = /\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) (?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\d{4})?)\b/g,
+        v = /[^-+\dA-Z]/g, d = function (a, c) {
+            a = String(a);
+            for (c = c || 2; a.length < c;)a = "0" + a;
+            return a
+        };
     return function (a, c, h) {
         var f = dateFormat;
         1 != arguments.length || "[object String]" != Object.prototype.toString.call(a) || /\d/.test(a) || (c = a, a = void 0);
@@ -890,35 +902,37 @@ var dateFormat = function () {
         if (isNaN(a))throw SyntaxError("invalid date");
         c = String(f.masks[c] || c || f.masks["default"]);
         "UTC:" == c.slice(0, 4) && (c = c.slice(4), h = !0);
-        var b = h ? "getUTC" : "get", g = a[b + "Date"](), p = a[b + "Day"](), k = a[b + "Month"](), q = a[b + "FullYear"](), e = a[b + "Hours"](), r = a[b + "Minutes"](), t = a[b + "Seconds"](), b = a[b + "Milliseconds"](), n = h ? 0 : a.getTimezoneOffset(), u = {
-            d: g,
-            dd: d(g),
-            ddd: f.i18n.dayNames[p],
-            dddd: f.i18n.dayNames[p + 7],
-            m: k + 1,
-            mm: d(k + 1),
-            mmm: f.i18n.monthNames[k],
-            mmmm: f.i18n.monthNames[k + 12],
-            yy: String(q).slice(2),
-            yyyy: q,
-            h: e % 12 || 12,
-            hh: d(e % 12 || 12),
-            H: e,
-            HH: d(e),
-            M: r,
-            MM: d(r),
-            s: t,
-            ss: d(t),
-            l: d(b, 3),
-            L: d(99 < b ? Math.round(b / 10) : b),
-            t: 12 > e ? "a" : "p",
-            tt: 12 > e ? "am" : "pm",
-            T: 12 > e ? "A" : "P",
-            TT: 12 > e ? "AM" : "PM",
-            Z: h ? "UTC" : (String(a).match(m) || [""]).pop().replace(v, ""),
-            o: (0 < n ? "-" : "+") + d(100 * Math.floor(Math.abs(n) / 60) + Math.abs(n) % 60, 4),
-            S: ["th", "st", "nd", "rd"][3 < g % 10 ? 0 : (10 != g % 100 - g % 10) * g % 10]
-        };
+        var b = h ? "getUTC" : "get", g = a[b + "Date"](), p = a[b + "Day"](), k = a[b + "Month"](),
+            q = a[b + "FullYear"](), e = a[b + "Hours"](), r = a[b + "Minutes"](), t = a[b + "Seconds"](),
+            b = a[b + "Milliseconds"](), n = h ? 0 : a.getTimezoneOffset(), u = {
+                d: g,
+                dd: d(g),
+                ddd: f.i18n.dayNames[p],
+                dddd: f.i18n.dayNames[p + 7],
+                m: k + 1,
+                mm: d(k + 1),
+                mmm: f.i18n.monthNames[k],
+                mmmm: f.i18n.monthNames[k + 12],
+                yy: String(q).slice(2),
+                yyyy: q,
+                h: e % 12 || 12,
+                hh: d(e % 12 || 12),
+                H: e,
+                HH: d(e),
+                M: r,
+                MM: d(r),
+                s: t,
+                ss: d(t),
+                l: d(b, 3),
+                L: d(99 < b ? Math.round(b / 10) : b),
+                t: 12 > e ? "a" : "p",
+                tt: 12 > e ? "am" : "pm",
+                T: 12 > e ? "A" : "P",
+                TT: 12 > e ? "AM" : "PM",
+                Z: h ? "UTC" : (String(a).match(m) || [""]).pop().replace(v, ""),
+                o: (0 < n ? "-" : "+") + d(100 * Math.floor(Math.abs(n) / 60) + Math.abs(n) % 60, 4),
+                S: ["th", "st", "nd", "rd"][3 < g % 10 ? 0 : (10 != g % 100 - g % 10) * g % 10]
+            };
         return c.replace(l, function (a) {
             return a in u ? u[a] : a.slice(1, a.length - 1)
         })
