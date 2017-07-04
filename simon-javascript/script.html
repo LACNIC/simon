@@ -17,18 +17,19 @@
             // Require libraries loaded
             requirejs.config({
                 "paths": {
-                    "jquery": "https://code.jquery.com/jquery-1.11.1.min",
+                    "jquery": "https://cdn.dev.lacnic.net/jquery-1.11.1.min",
                     "jsonp": "https://cdn.dev.lacnic.net/jsonp",
+                    "date-format": "https://cdn.dev.lacnic.net/date.format",
                     "simon": "simon_probe_plugin",  // local dev. script
                 }
             });
 
-            require(["jquery"], function ($) {
-                // Configuration loaded now, safe to do other require calls
-                // that depend on that config.
+            require(["jquery"], function (jQuery) {
 
-                require(["simon", "jsonp"], function () {
+                require(["simon", "jsonp", "date-format"], function (simon, jsonp, dateFormat) {
+
                     SIMON.init();
+
                 });
             });
         }

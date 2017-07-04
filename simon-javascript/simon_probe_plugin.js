@@ -1,12 +1,15 @@
 /*
  * JavaScript probe that is hosted in different sites and harvests data as users visit that site.
- * LACNIC Labs - 2016
+ * LACNIC Labs - 2017
+ * agustin at lacnic dot net
  */
-SIMON = {};
-SIMON.debug = false;
-SIMON = {
 
-    params: {
+var SIMON = (function (_$) {
+    var simon = {}
+
+    simon.debug = true;
+
+    simon.params = {
         percentage: 1.0,// 100%
         amount: 5,// amount of points
         numTests: 10,// amount of tests per point. Greater numTests --> less
@@ -15,138 +18,138 @@ SIMON = {
         post: true,
         print: true,
         console: 'console'
-    },
+    };
 
-    urls: {
-        home: SIMON.debug && "http://127.0.0.1:8000/" || "https://simon.lacnic.net/",
-        configs: SIMON.debug && "http://127.0.0.1:8000/web_configs/" || "https://simon.lacnic.net/web_configs/",
-        offline: SIMON.debug && "http://127.0.0.1:8000/postxmlresult/offline/" || "https://simon.lacnic.net/postxmlresult/offline/",
-        post: SIMON.debug && "http://127.0.0.1:8000/postxmlresult/latency/" || "https://simon.lacnic.net/postxmlresult/latency/",
-        country: SIMON.debug && "http://127.0.0.1:8000/getCountry/" || "https://simon.lacnic.net/getCountry/",
+    simon.urls = {
+        home: simon.debug && "http://127.0.0.1:8000/" || "https://simon.lacnic.net/",
+        configs: simon.debug && "http://127.0.0.1:8000/web_configs/" || "https://simon.lacnic.net/web_configs/",
+        offline: simon.debug && "http://127.0.0.1:8000/postxmlresult/offline/" || "https://simon.lacnic.net/postxmlresult/offline/",
+        post: simon.debug && "http://127.0.0.1:8000/postxmlresult/latency/" || "https://simon.lacnic.net/postxmlresult/latency/",
+        country: simon.debug && "http://127.0.0.1:8000/getCountry/" || "https://simon.lacnic.net/getCountry/",
         ipv6ResolveURL: "https://simon.v6.labs.lacnic.net/cemd/getip/jsonp/",
-        ipv4ResolveURL: SIMON.debug && "http://127.0.0.1:8002/getip/" || "https://simon.v4.labs.lacnic.net/cemd/getip/jsonp/"
-    },
+        ipv4ResolveURL: simon.debug && "http://127.0.0.1:8002/getip/" || "https://simon.v4.labs.lacnic.net/cemd/getip/jsonp/"
+    };
 
-    workflow: {
+    simon.workflow = {
         latency: false,// TODO
         throughput: false
-    },
+    };
 
-    points: [],
+    simon.points = [],
 
-    running: false,
+        simon.running = false,
 
-    siteOnLineTimeout: 6000,
-    latencyTimeout: 1000,
-    testType: 'tcp_web',
-    countryCode: "",
-    ipv4Address: "",
-    ipv6Address: "",
-    DEFAULT_TIME: -1,
+        simon.siteOnLineTimeout = 6000,
+        simon.latencyTimeout = 1000,
+        simon.testType = 'tcp_web',
+        simon.countryCode = "",
+        simon.ipv4Address = "",
+        simon.ipv6Address = "",
+        simon.DEFAULT_TIME = -1,
 
-    before_start: function () {
+        simon.before_start = function () {
 
-    },
+        };
 
-    after_end: function () {
+    simon.after_end = function () {
 
-    },
+    };
 
-    before_each: function () {
+    simon.before_each = function () {
 
-    },
+    };
 
-    after_each: function (rtt) {
+    simon.after_each = function (rtt) {
 
-    },
+    };
 
-    after_points: function () {
+    simon.after_points = function () {
 
-    },
+    };
 
-    init: function () {
+    simon.init = function () {
 
-        if (Math.random() < SIMON.params.percentage && SIMON.running == false) {
-            SIMON.running = true;
-            SIMON.before_start();
-            return SIMON.getCountry();
+        if (Math.random() < simon.params.percentage && simon.running == false) {
+            simon.running = true;
+            simon.before_start();
+            return simon.getCountry();
         } else {
-            SIMON.log("N/A");
+            simon.log("N/A");
         }
-    },
+    };
 
-    stop: function () {
-        SIMON.printr("Stopping tests...it may take a while");
-        SIMON.running = false;
-    },
+    simon.stop = function () {
+        simon.printr("Stopping tests...it may take a while");
+        simon.running = false;
+    };
 
-    getCountry: function () {
+    simon.getCountry = function () {
 
-        SIMON.printr("Getting user country...");
+        simon.printr("Getting user country...");
 
         fetch(
-            SIMON.urls.country
+            simon.urls.country
         ).then(
             function (r) {
                 return r.text();
             }
         ).then(
             function (cc) {
-                SIMON.countryCode = cc;
-                SIMON.getMyIPAddress(SIMON.urls.ipv6ResolveURL);
+                simon.countryCode = cc;
+                simon.getMyIPAddress(simon.urls.ipv6ResolveURL);
             }
         );
-    },
+    };
 
-    getTestsConfigs: function () {
+    simon.getTestsConfigs = function () {
 
         /*
          * get the test configs from the server
          */
-        SIMON.log("Fetching tests configurations...");
+        simon.log("Fetching tests configurations...");
 
-        fetch(SIMON.urls.configs).then(
+        fetch(simon.urls.configs).then(
             function (r) {
                 return r.json();
             }
         ).then(
             function (data) {
                 if (data.configs.run == 1) {
-                    SIMON.workflow.run = true;
+                    simon.workflow.run = true;
                 } else {
-                    SIMON.printr("Stopping script execution...");
+                    simon.printr("Stopping script execution...");
                     return;
                 }
 
                 if (data.configs.latency == 1) {
-                    SIMON.workflow.latency = true;
+                    simon.workflow.latency = true;
                 } else {
-                    SIMON.workflow.latency = false;
+                    simon.workflow.latency = false;
                 }
 
                 if (data.configs.throughput == 1) {
-                    SIMON.workflow.throughput = true;
+                    simon.workflow.throughput = true;
                 } else {
-                    SIMON.workflow.throughput = false;
+                    simon.workflow.throughput = false;
                 }
 
-                if (SIMON.ipv6Address != "")
-                    SIMON.getPoints(6);
+                if (simon.ipv6Address != "")
+                    simon.getPoints(6);
                 else
-                    SIMON.getPoints(4);
+                    simon.getPoints(4);
             }
         )
 
-    },
+    };
 
-    getPoints: function (ipVersion) {
+    simon.getPoints = function (ipVersion) {
 
         fetch(
-            SIMON.urls.home + "web_points?" +
-            "amount=" + SIMON.params.amount +
+            simon.urls.home + "web_points?" +
+            "amount=" + simon.params.amount +
             "&ip_version=" + ipVersion +
-            "&countrycode=" + SIMON.countryCode +
-            "&protocol=" + SIMON.params.protocol
+            "&countrycode=" + simon.countryCode +
+            "&protocol=" + simon.params.protocol
         ).then(
             function (r) {
                 return r.json();
@@ -154,7 +157,7 @@ SIMON = {
         ).then(
             function (data) {
 
-                SIMON.points = new Array();
+                simon.points = new Array();
 
                 /*
                  * callback when the points are loaded from the server
@@ -175,38 +178,43 @@ SIMON = {
                         "onlineFinished": false
                     };
 
-                    SIMON.points.push(testPoint);
+                    simon.points.push(testPoint);
                 }
 
-                SIMON.after_points();
-                SIMON.siteOnLine(SIMON.points[0]);
+                simon.after_points();
+                simon.siteOnLine(simon.points[0]);
 
             }
         );
 
-    },
+    };
 
-    siteOnLine: function (testPoint) {
+    simon.siteOnLine = function (testPoint) {
 
-        const endpoint = SIMON.params.protocol == "https" && testPoint.url.split("://")[1].split("/")[0] || testPoint.ip;
+        testPoint.ip = '201.139.121.100';
 
-        SIMON.printr("Checking site " + endpoint + " (" + testPoint.country + ") via " + SIMON.params.protocol.toUpperCase());
+        const endpoint = simon.params.protocol == "https" && testPoint.url.split("://")[1].split("/")[0] || testPoint.ip;
+
+        simon.printr("Checking site " + endpoint + " (" + testPoint.country + ") via " + simon.params.protocol.toUpperCase());
 
         /*
          * get the '/' directory
          */
         var url;
-        if (SIMON.getIPversion(testPoint.ip) == 4)
-            url = SIMON.params.protocol + "://" + endpoint + "/";
-        else if (SIMON.getIPversion(testPoint.ip) == 6)
-            url = SIMON.params.protocol + "://[" + endpoint + "]/";
+        if (simon.getIPversion(testPoint.ip) == 4)
+            url = simon.params.protocol + "://" + endpoint + "/";
+        else if (simon.getIPversion(testPoint.ip) == 6)
+            url = simon.params.protocol + "://[" + endpoint + "]/";
 
-        $.ajax({
+        _$.ajax({
             url: url,
             dataType: 'jsonp',
             crossDomain: true,
             context: this,
-            timeout: SIMON.siteOnLineTimeout,
+            timeout: simon.siteOnLineTimeout,
+            // beforeSend: function (xhr) {
+            //     xhr.setRequestHeader("Accept", "text/html");
+            // },
             complete: function (jqXHR, textStatus) {
 
                 testPoint.onlineFinished = true;
@@ -225,67 +233,69 @@ SIMON = {
                      */
                     var array = [];
                     array.push(testPoint);
-                    var xml = SIMON.buildOfflineXML(array);
-                    SIMON.printr("Reporting offline test point...");
-                    SIMON.postResults(SIMON.urls.offline, xml);
+                    var xml = simon.buildOfflineXML(array);
+                    simon.printr("Reporting offline test point...");
+                    simon.postResults(simon.urls.offline, xml);
                 }
 
                 /*
                  * store results in global variable
                  */
-                SIMON.saveTestPoint(testPoint);
-                SIMON.startPointTest(testPoint);
+                simon.saveTestPoint(testPoint);
+                simon.startPointTest(testPoint);
             }
         });
-    },
+    };
 
-    saveTestPoint: function (testPoint) {
+    simon.saveTestPoint = function (testPoint) {
         /*
          * save test point to global variable 'points'
          */
         var index = this.getTestPointIndex(testPoint);
-        SIMON.points[index] = testPoint;
-    },
+        simon.points[index] = testPoint;
+    };
 
-    startPointTest: function (testPoint) {
+    simon.startPointTest = function (testPoint) {
         if (testPoint.online) {
             // schedule latency tests
             var that = this;
-            for (var i = 0; i < SIMON.params.numTests; i++) {
+            for (var i = 0; i < simon.params.numTests; i++) {
                 setTimeout(function () {
-                    SIMON.latencyTest(testPoint);
-                }, SIMON.latencyTimeout * i);
+                    simon.latencyTest(testPoint);
+                }, simon.latencyTimeout * i);
             }
         } else {
-            SIMON.abortTestPointTest(testPoint);
-            var nextTestPoint = SIMON.getNextPoint(testPoint);
+            simon.abortTestPointTest(testPoint);
+            var nextTestPoint = simon.getNextPoint(testPoint);
             if (nextTestPoint != -1) {
-                SIMON.siteOnLine(nextTestPoint);
+                simon.siteOnLine(nextTestPoint);
             }
         }
-    },
+    };
 
-    latencyTest: function (testPoint) {
+    simon.latencyTest = function (testPoint) {
 
         var ts, rtt;
 
         var url;
 
-        const endpoint = SIMON.params.protocol == "https" && testPoint.url.split("://")[1].split("/")[0] || testPoint.ip;
+        const endpoint = simon.params.protocol == "https" && testPoint.url.split("://")[1].split("/")[0] || testPoint.ip;
 
-        if (SIMON.getIPversion(testPoint.ip) == '6') {
-            url = SIMON.params.protocol + "://[" + endpoint + "]?" + 'resource=' + Math.random();
+        if (simon.getIPversion(testPoint.ip) == '6') {
+            url = simon.params.protocol + "://[" + endpoint + "]?" + 'resource=' + Math.random();
         } else {
-            url = SIMON.params.protocol + "://" + endpoint + "?" + 'resource=' + Math.random();
+            url = simon.params.protocol + "://" + endpoint + "?" + 'resource=' + Math.random();
         }
 
-        SIMON.before_each();
+        simon.before_each();
 
-        $.jsonp({
+        _$.jsonp({
             type: 'HEAD', //'GET', makes no difference :(
             url: url,
-            dataType: 'jsonp',
-            timeout: SIMON.latencyTimeout,
+            crossDomain: true,
+            cache: false,
+            dataType: 'html',  // 'jsonp',
+            timeout: simon.latencyTimeout,
             xhrFields: {
                 withCredentials: true
             },
@@ -293,15 +303,18 @@ SIMON = {
             beforeSend: function (xhr) {
                 if (xhr.overrideMimeType)
                     xhr.setRequestHeader("Connection", "close");
+
+                // xhr.setRequestHeader("Accept", "text/html");
             },
 
             success: function () {
 
-                SIMON.log('success');
+                simon.log('success');
 
             },
 
             error: function (jqXHR, textStatus) {
+
                 if (textStatus == 'timeout') {
                     testPoint.results.push('timeout');
 
@@ -312,38 +325,35 @@ SIMON = {
                      */
                     rtt = (+new Date - ts);
                     testPoint.results.push(rtt);
-                    SIMON.log(rtt);
-                    SIMON.after_each(rtt);
+                    simon.after_each(rtt);
                 }
 
-                SIMON.saveTestPoint(testPoint);  // store results in global
+                simon.saveTestPoint(testPoint);  // store results in global
                 // variable
 
-                if (SIMON.testerFinished(testPoint)) {  // post results
+                if (simon.testerFinished(testPoint)) {  // post results
 
                     var array = [];
                     array.push(testPoint);
 
                     var xml;
-                    if (SIMON.getIPversion(testPoint.ip) == '4') {
-                        xml = SIMON.buildXML(array, SIMON.ipv4Address);
+                    if (simon.getIPversion(testPoint.ip) == '4') {
+                        xml = simon.buildXML(array, simon.ipv4Address);
 
-                    } else if (SIMON.getIPversion(testPoint.ip) == '6') {
-                        xml = SIMON.buildXML(array, SIMON.ipv6Address);
+                    } else if (simon.getIPversion(testPoint.ip) == '6') {
+                        xml = simon.buildXML(array, simon.ipv6Address);
 
                     }
-                    SIMON.postResults(SIMON.urls.post, xml);
+                    simon.postResults(simon.urls.post, xml);
 
-                    var nextTestPoint = SIMON.getNextPoint(testPoint);
+                    var nextTestPoint = simon.getNextPoint(testPoint);
                     if (nextTestPoint != -1) {
 
-                        SIMON.siteOnLine(nextTestPoint);// ... and next tests
+                        simon.siteOnLine(nextTestPoint);// ... and next tests
 
                     } else {
-                        SIMON.after_end();
-                        var thanks = "Thank you!";
-                        SIMON.log(thanks);
-                        SIMON.printr(thanks);
+                        simon.after_end();
+                        simon.printr(thanks);
                     }
                 }
 
@@ -351,25 +361,25 @@ SIMON = {
         });
 
         ts = +new Date;
-    },
+    };
 
-    abortTestPointTest: function (testPoint) {
+    simon.abortTestPointTest = function (testPoint) {
         /*
          * fill remaining results with 'aborted'
          */
 
-        for (var i = testPoint.results.length; i < SIMON.params.numTests; i++) {
+        for (var i = testPoint.results.length; i < simon.params.numTests; i++) {
             testPoint.results.push('aborted');
         }
 
         for (i in testPoint.throughputResults) {
-            if (testPoint.throughputResults[i].time == SIMON.DEFAULT_TIME) {
+            if (testPoint.throughputResults[i].time == simon.DEFAULT_TIME) {
                 testPoint.throughputResults[i].time = 'aborted';
             }
         }
-    },
+    };
 
-    buildOfflineXML: function (offlinePoints) {
+    simon.buildOfflineXML = function (offlinePoints) {
         if (offlinePoints instanceof Array) {
 
             var date = new Date();
@@ -397,9 +407,9 @@ SIMON = {
          * error
          */
         return 1;
-    },
+    };
 
-    getMyIPAddress: function (url) {
+    simon.getMyIPAddress = function (url) {
 
         fetch(
             url
@@ -409,44 +419,42 @@ SIMON = {
             }
         ).then(
             function (data) {
-                SIMON.log('data ' + typeof data.ip);
-                if (SIMON.getIPversion(data.ip) == '4') {
-                    SIMON.ipv4Address = data.ip;
-                    SIMON.getTestsConfigs();// exit
+                if (simon.getIPversion(data.ip) == '4') {
+                    simon.ipv4Address = data.ip;
+                    simon.getTestsConfigs();// exit
 
-                } else if (SIMON.getIPversion(data.ip) == '6') {
-                    SIMON.ipv6Address = data.ip;
-                    SIMON.getMyIPAddress(SIMON.urls.ipv4ResolveURL);
+                } else if (simon.getIPversion(data.ip) == '6') {
+                    simon.ipv6Address = data.ip;
+                    simon.getMyIPAddress(simon.urls.ipv4ResolveURL);
                 }
             },
             function (err) {
-                SIMON.log('err ' + typeof err.ip);
-                if (SIMON.ipv4Address == "")
-                    SIMON.getMyIPAddress(SIMON.urls.ipv4ResolveURL);
+                if (simon.ipv4Address == "")
+                    simon.getMyIPAddress(simon.urls.ipv4ResolveURL);
             }
         );
-    },
+    };
 
-    getTestPointIndex: function (testPoint) {
-        for (i in SIMON.points) {
-            if (SIMON.points[i].ip == testPoint.ip) {
+    simon.getTestPointIndex = function (testPoint) {
+        for (i in simon.points) {
+            if (simon.points[i].ip == testPoint.ip) {
                 return i;
             }
         }
         return null;
-    },
+    };
 
-    getNextPoint: function (testPoint) {
+    simon.getNextPoint = function (testPoint) {
         var index = this.getTestPointIndex(testPoint);
         index++;
-        if (index < SIMON.points.length) {
-            return SIMON.points[index];
+        if (index < simon.points.length) {
+            return simon.points[index];
         } else {
             return -1;
         }
-    },
+    };
 
-    getPrintTimeWithOffset: function (date) {
+    simon.getPrintTimeWithOffset = function (date) {
 
         var hh = date.getHours().toString();
         var mm = date.getMinutes().toString();
@@ -463,13 +471,13 @@ SIMON = {
         }
 
         var time = hh + ':' + mm + ':' + ss;
-        var offset = SIMON.getPrintOffset(date);
+        var offset = simon.getPrintOffset(date);
         return time + offset;
-    },
+    };
 
-    buildXML: function (testPoints, origin_ip) {
+    simon.buildXML = function (testPoints, origin_ip) {
 
-        SIMON.printr("Building XML");
+        simon.printr("Building XML");
 
         if (testPoints instanceof Array && testPoints.length > 0) {
             var date = new Date();
@@ -478,44 +486,44 @@ SIMON = {
             xml = xml + "<simon xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">";
             xml = xml + "<version>2</version>";
             xml = xml + "<date>" + date.format("yyyy-mm-dd") + "</date>";
-            xml = xml + "<time>" + SIMON.getPrintTimeWithOffset(date) + "</time>";
-            xml = xml + "<local_country>" + SIMON.countryCode + "</local_country>";
+            xml = xml + "<time>" + simon.getPrintTimeWithOffset(date) + "</time>";
+            xml = xml + "<local_country>" + simon.countryCode + "</local_country>";
 
             for (var i = 0; i < testPoints.length; i++) {
 
-                var cleanResults = SIMON.quartiles.filter(SIMON.getNumericalValues(testPoints[i].results));
+                var cleanResults = simon.quartiles.filter(simon.getNumericalValues(testPoints[i].results));
                 if (testPoints[i].results.length != cleanResults.length) {
                     var diff = testPoints[i].results.length - cleanResults.length;
-                    SIMON.log("Stripped " + diff + " outliers...");
+                    simon.log("Stripped " + diff + " outliers...");
                 }
-                SIMON.log(SIMON.summary(cleanResults));
+                simon.log(simon.summary(cleanResults));
 
                 xml = xml + "<test>";
                 xml = xml + "<destination_ip>" + testPoints[i].ip
                     + "</destination_ip>";
                 xml = xml + "<origin_ip>" + origin_ip + "</origin_ip>";
-                xml = xml + "<testtype>" + SIMON.testType + "</testtype>";
+                xml = xml + "<testtype>" + simon.testType + "</testtype>";
 
                 xml = xml + "<number_probes>" + cleanResults.length
                     + "</number_probes>";
                 xml = xml + "<min_rtt>"
-                    + Math.floor(SIMON.getMin(cleanResults)) + "</min_rtt>";
+                    + Math.floor(simon.getMin(cleanResults)) + "</min_rtt>";
                 xml = xml + "<max_rtt>"
-                    + Math.floor(SIMON.getMax(cleanResults)) + "</max_rtt>";
+                    + Math.floor(simon.getMax(cleanResults)) + "</max_rtt>";
                 xml = xml + "<ave_rtt>"
-                    + Math.floor(SIMON.getMean(cleanResults))
+                    + Math.floor(simon.getMean(cleanResults))
                     + "</ave_rtt>";
                 xml = xml + "<dev_rtt>"
-                    + Math.floor(SIMON.getStdDev(cleanResults))
+                    + Math.floor(simon.getStdDev(cleanResults))
                     + "</dev_rtt>";
                 xml = xml + "<median_rtt>"
-                    + Math.floor(SIMON.getMedian(cleanResults))
+                    + Math.floor(simon.getMedian(cleanResults))
                     + "</median_rtt>";
                 xml = xml + "<packet_loss>"
-                    + SIMON.getLost(testPoints[i].results)
+                    + simon.getLost(testPoints[i].results)
                     + "</packet_loss>";
                 xml = xml + "<ip_version>"
-                    + SIMON.getIPversion(testPoints[i].ip)
+                    + simon.getIPversion(testPoints[i].ip)
                     + "</ip_version>";
                 xml = xml + "</test>";
             }
@@ -526,14 +534,14 @@ SIMON = {
             xml = xml + "<url>" + window.location.hostname + "</url>";
             xml = xml + "</simon>";
 
-            SIMON.log("XML built");
+            simon.log("XML built");
             return xml;
         } else {
-            SIMON.log("Trying to build Results XML with 0 points or points is not an array instance");
+            simon.log("Trying to build Results XML with 0 points or points is not an array instance");
         }
-    },
+    };
 
-    getPrintOffset: function (date) {
+    simon.getPrintOffset = function (date) {
         /*
          * Check if positive timezone offsets have the '+' sign...
          */
@@ -559,9 +567,9 @@ SIMON = {
         }
 
         return sign + hh + ":" + mm;
-    },
+    };
 
-    getNumericalValues: function (dataSet) {
+    simon.getNumericalValues = function (dataSet) {
         /*
          * Gets numerical and positive values only
          */
@@ -575,16 +583,16 @@ SIMON = {
             return res;
         }
         return 0;
-    },
+    };
 
-    sortfunction: function (a, b) {
+    simon.sortfunction = function (a, b) {
         /*
          * Causes an array to be sorted numerically and ascending.
          */
         return (a - b);
-    },
+    };
 
-    getMin: function (dataSet) {
+    simon.getMin = function (dataSet) {
         if (dataSet instanceof Array && dataSet.length > 0) {
             dataSet.sort(function (a, b) {
                 return a - b;
@@ -592,9 +600,9 @@ SIMON = {
             return dataSet[0];
         }
         return 0;
-    },
+    };
 
-    getMax: function (dataSet) {
+    simon.getMax = function (dataSet) {
         if (dataSet instanceof Array && dataSet.length > 0) {
             dataSet.sort(function (a, b) {
                 return a - b;
@@ -603,9 +611,9 @@ SIMON = {
             return dataSet[0];
         }
         return 0;
-    },
+    };
 
-    getMedian: function (dataSet) {
+    simon.getMedian = function (dataSet) {
 
         if (dataSet instanceof Array && dataSet.length > 0) {
             /*
@@ -625,9 +633,9 @@ SIMON = {
             }
         }
         return 0;
-    },
+    };
 
-    getStdDev: function (dataSet) {
+    simon.getStdDev = function (dataSet) {
         if (dataSet instanceof Array && dataSet.length > 0) {
             var deviations = new Array(dataSet.length);
             var mean = this.getMean(dataSet);
@@ -640,17 +648,17 @@ SIMON = {
             }
         }
         return 0;
-    },
+    };
 
-    getMean: function (dataSet) {
+    simon.getMean = function (dataSet) {
         if (dataSet instanceof Array && dataSet.length > 0) {
 
-            return Math.floor(SIMON.sum(dataSet) / dataSet.length);
+            return Math.floor(simon.sum(dataSet) / dataSet.length);
         }
         return 0;
-    },
+    };
 
-    quartiles: {
+    simon.quartiles = {
         q1: function (dataSet) {
             dataSet.sort(function (a, b) {
                 return a - b;
@@ -666,18 +674,18 @@ SIMON = {
         },
 
         iqr: function (dataSet) {
-            return SIMON.quartiles.q3(dataSet) - SIMON.quartiles.q1(dataSet);
+            return simon.quartiles.q3(dataSet) - simon.quartiles.q1(dataSet);
         },
 
         filter: function (dataSet) {
-            var q1 = SIMON.quartiles.q1(dataSet);
-            var q3 = SIMON.quartiles.q3(dataSet);
+            var q1 = simon.quartiles.q1(dataSet);
+            var q3 = simon.quartiles.q3(dataSet);
             var iqr = q3 - q1;
-            return SIMON.stats.grater_than(SIMON.stats.lower_than(dataSet, q3 + 1.5 * iqr), q1 - 1.5 * iqr);
+            return simon.stats.grater_than(simon.stats.lower_than(dataSet, q3 + 1.5 * iqr), q1 - 1.5 * iqr);
         }
-    },
+    };
 
-    stats: {
+    simon.stats = {
         grater_than: function (dataSet, value) {
             var res = [];
             for (i in dataSet) {
@@ -713,9 +721,9 @@ SIMON = {
             }
             return res;
         }
-    },
+    };
 
-    sum: function (dataSet) {
+    simon.sum = function (dataSet) {
         var sum = 0;
         if (dataSet instanceof Array) {
             for (i in dataSet) {
@@ -725,9 +733,9 @@ SIMON = {
             }
         }
         return sum;
-    },
+    };
 
-    getLost: function (dataSet) {
+    simon.getLost = function (dataSet) {
         var lost = 0;
         if (dataSet instanceof Array && dataSet.length > 0) {
             for (i in dataSet) {
@@ -737,33 +745,33 @@ SIMON = {
             }
         }
         return lost;
-    },
+    };
 
-    getIPversion: function (ip) {
+    simon.getIPversion = function (ip) {
         if (ip.indexOf(":") > -1) {
             return '6';
         } else if (ip.indexOf(".") > -1) {
             return '4';
         }
         return -1;// error
-    },
+    };
 
-    testerFinished: function (testPoint) {
-        if (testPoint.results.length == SIMON.params.numTests) {
+    simon.testerFinished = function (testPoint) {
+        if (testPoint.results.length == simon.params.numTests) {
             return true;
         }
         return false;
-    },
+    };
 
-    postResults: function (url, data) {
+    simon.postResults = function (url, data) {
 
-        if (!SIMON.params.post) {
+        if (!simon.params.post) {
             return false;
         }
 
-        SIMON.printr("Posting results...");
+        simon.printr("Posting results...");
 
-        $.ajax({
+        _$.ajax({
             type: 'POST',
             url: url,
             data: data,
@@ -774,110 +782,39 @@ SIMON = {
                 return false;
             }
         });
-    },
+    };
 
-    printr: function (text) {
+    simon.printr = function (text) {
 
-        SIMON.log(text);
+        simon.log(text);
 
-        if (SIMON.params.print && document.getElementById(SIMON.params.console) != null) {
-            cur_html = $('#' + SIMON.params.console).html();
-            $('#' + SIMON.params.console).html(cur_html + text + "<br>");
-            var y = $('#' + SIMON.params.console).scrollTop();
-            $('#' + SIMON.params.console).scrollTop(y + 30);
+        if (simon.params.print && document.getElementById(simon.params.console) != null) {
+            cur_html = _$('#' + simon.params.console).html();
+            _$('#' + simon.params.console).html(cur_html + text + "<br>");
+            var y = _$('#' + simon.params.console).scrollTop();
+            _$('#' + simon.params.console).scrollTop(y + 30);
         }
-    },
+    };
 
-    log: function (text) {
+    simon.log = function (text) {
         var HEADING = "[INFO] [" + new Date() + "] ";
-        return console.log(HEADING + text);
-    },
+        console.log(HEADING + text);
+    };
 
-    warn: function (text) {
+    simon.warn = function (text) {
         var HEADING = "[WARN] [" + new Date() + "] ";
-        return console.warn(HEADING + text);
-    },
+        console.warn(HEADING + text);
+    };
 
-    error: function (text) {
+    simon.error = function (text) {
         var HEADING = "[ERROR] [" + new Date() + "] ";
-        return console.error(HEADING + text);
-    },
+        console.error(HEADING + text);
+    };
 
-    summary: function (dataSet) {
-        return 'min=' + Math.floor(SIMON.getMin(dataSet)) + ' ms max=' + Math.floor(SIMON.getMax(dataSet)) + ' ms mean='
-            + Math.floor(SIMON.getMean(dataSet)) + ' ms std. dev.=' + Math.floor(SIMON.getStdDev(dataSet)) + ' ms';
+    simon.summary = function (dataSet) {
+        return 'min=' + Math.floor(simon.getMin(dataSet)) + ' ms max=' + Math.floor(simon.getMax(dataSet)) + ' ms mean='
+            + Math.floor(simon.getMean(dataSet)) + ' ms std. dev.=' + Math.floor(simon.getStdDev(dataSet)) + ' ms';
     }
-};
 
-var dateFormat = function () {
-    var l = /d{1,4}|m{1,4}|yy(?:yy)?|([HhMsTt])\1?|[LloSZ]|"[^"]*"|'[^']*'/g,
-        m = /\b(?:[PMCEA][SDP]T|(?:Pacific|Mountain|Central|Eastern|Atlantic) (?:Standard|Daylight|Prevailing) Time|(?:GMT|UTC)(?:[-+]\d{4})?)\b/g,
-        v = /[^-+\dA-Z]/g, d = function (a, c) {
-            a = String(a);
-            for (c = c || 2; a.length < c;)a = "0" + a;
-            return a
-        };
-    return function (a, c, h) {
-        var f = dateFormat;
-        1 != arguments.length || "[object String]" != Object.prototype.toString.call(a) || /\d/.test(a) || (c = a, a = void 0);
-        a = a ? new Date(a) : new Date;
-        if (isNaN(a))throw SyntaxError("invalid date");
-        c = String(f.masks[c] || c || f.masks["default"]);
-        "UTC:" == c.slice(0, 4) && (c = c.slice(4), h = !0);
-        var b = h ? "getUTC" : "get", g = a[b + "Date"](), p = a[b + "Day"](), k = a[b + "Month"](),
-            q = a[b + "FullYear"](), e = a[b + "Hours"](), r = a[b + "Minutes"](), t = a[b + "Seconds"](),
-            b = a[b + "Milliseconds"](), n = h ? 0 : a.getTimezoneOffset(), u = {
-                d: g,
-                dd: d(g),
-                ddd: f.i18n.dayNames[p],
-                dddd: f.i18n.dayNames[p + 7],
-                m: k + 1,
-                mm: d(k + 1),
-                mmm: f.i18n.monthNames[k],
-                mmmm: f.i18n.monthNames[k + 12],
-                yy: String(q).slice(2),
-                yyyy: q,
-                h: e % 12 || 12,
-                hh: d(e % 12 || 12),
-                H: e,
-                HH: d(e),
-                M: r,
-                MM: d(r),
-                s: t,
-                ss: d(t),
-                l: d(b, 3),
-                L: d(99 < b ? Math.round(b / 10) : b),
-                t: 12 > e ? "a" : "p",
-                tt: 12 > e ? "am" : "pm",
-                T: 12 > e ? "A" : "P",
-                TT: 12 > e ? "AM" : "PM",
-                Z: h ? "UTC" : (String(a).match(m) || [""]).pop().replace(v, ""),
-                o: (0 < n ? "-" : "+") + d(100 * Math.floor(Math.abs(n) / 60) + Math.abs(n) % 60, 4),
-                S: ["th", "st", "nd", "rd"][3 < g % 10 ? 0 : (10 != g % 100 - g % 10) * g % 10]
-            };
-        return c.replace(l, function (a) {
-            return a in u ? u[a] : a.slice(1, a.length - 1)
-        })
-    }
-}();
-dateFormat.masks = {
-    "default": "ddd mmm dd yyyy HH:MM:ss",
-    shortDate: "m/d/yy",
-    mediumDate: "mmm d, yyyy",
-    longDate: "mmmm d, yyyy",
-    fullDate: "dddd, mmmm d, yyyy",
-    shortTime: "h:MM TT",
-    mediumTime: "h:MM:ss TT",
-    longTime: "h:MM:ss TT Z",
-    isoDate: "yyyy-mm-dd",
-    isoTime: "HH:MM:ss",
-    isoDateTime: "yyyy-mm-dd'T'HH:MM:ss",
-    isoUtcDateTime: "UTC:yyyy-mm-dd'T'HH:MM:ss'Z'"
-};
-dateFormat.i18n = {
-    dayNames: "Sun Mon Tue Wed Thu Fri Sat Sunday Monday Tuesday Wednesday Thursday Friday Saturday".split(" "),
-    monthNames: "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec January February March April May June July August September October November December".split(" ")
-};
-Date.prototype.format = function (l, m) {
-    return dateFormat(this, l, m)
-};
+    return simon;
+})($);
