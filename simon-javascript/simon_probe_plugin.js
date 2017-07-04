@@ -30,6 +30,10 @@ var SIMON = (function (_$) {
         ipv4ResolveURL: simon.debug && "http://127.0.0.1:8002/getip/" || "https://simon.v4.labs.lacnic.net/cemd/getip/jsonp/"
     };
 
+    simon.messages = {
+        thanks: "Thanks!"
+    }
+
     simon.workflow = {
         latency: false,// TODO
         throughput: false
@@ -39,7 +43,7 @@ var SIMON = (function (_$) {
 
         simon.running = false,
 
-        simon.siteOnLineTimeout = 6000,
+        simon.siteOnLineTimeout = 3000,
         simon.latencyTimeout = 1000,
         simon.testType = 'tcp_web',
         simon.countryCode = "",
@@ -191,8 +195,6 @@ var SIMON = (function (_$) {
 
     simon.siteOnLine = function (testPoint) {
 
-        testPoint.ip = '201.139.121.100';
-
         const endpoint = simon.params.protocol == "https" && testPoint.url.split("://")[1].split("/")[0] || testPoint.ip;
 
         simon.printr("Checking site " + endpoint + " (" + testPoint.country + ") via " + simon.params.protocol.toUpperCase());
@@ -208,35 +210,55 @@ var SIMON = (function (_$) {
 
         _$.ajax({
             url: url,
+            type: 'HEAD',
             dataType: 'jsonp',
             crossDomain: true,
             context: this,
             timeout: simon.siteOnLineTimeout,
-            // beforeSend: function (xhr) {
-            //     xhr.setRequestHeader("Accept", "text/html");
-            // },
+            error: function(jqXHR, textStatus, errorThrown){
+
+            },
             complete: function (jqXHR, textStatus) {
 
                 testPoint.onlineFinished = true;
+                testPoint.online = true;  // will be used later...
+
                 /*
                  * (useful) HTTP errors 2XX - Success 500-504 Server Error 401
                  * Unauthorized 407 Authentication required
                  */
-                var pattern = /2[0-9]{2}|50[01234]|401|407/;
 
-                if (pattern.test(jqXHR.status)) {
-                    testPoint.online = true;
-                } else {
+                if(jqXHR.status != 200) {
+
                     testPoint.online = false;
-                    /*
-                     * report offline point
-                     */
+
                     var array = [];
                     array.push(testPoint);
                     var xml = simon.buildOfflineXML(array);
                     simon.printr("Reporting offline test point...");
                     simon.postResults(simon.urls.offline, xml);
+
                 }
+
+
+
+
+                // var pattern = /2[0-9]{2}|50[01234]|401|407/;
+
+                // if (pattern.test(jqXHR.status)) {
+                    // testPoint.online = true;
+                // } else {
+
+                    // testPoint.online = false;
+                    // /*
+                    //  * report offline point
+                    //  */
+                    // var array = [];
+                    // array.push(testPoint);
+                    // var xml = simon.buildOfflineXML(array);
+                    // simon.printr("Reporting offline test point...");
+                    // simon.postResults(simon.urls.offline, xml);
+                // }
 
                 /*
                  * store results in global variable
@@ -353,7 +375,7 @@ var SIMON = (function (_$) {
 
                     } else {
                         simon.after_end();
-                        simon.printr(thanks);
+                        simon.printr(simon.messages.thanks);
                     }
                 }
 
