@@ -7,7 +7,7 @@
 var SIMON = (function (_$) {
     var simon = {}
 
-    simon.debug = true;
+    simon.debug = false;
 
     simon.params = {
         percentage: 1.0,// 100%
