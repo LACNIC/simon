@@ -4,10 +4,11 @@
  * agustin at lacnic dot net
  */
 
-var SIMON = (function (_$) {
-    var simon = {}
+define(function () {
 
-    simon.debug = false;
+    _$ = require('jquery');
+
+    var simon = {}
 
     simon.params = {
         percentage: 1.0,// 100%
@@ -16,19 +17,35 @@ var SIMON = (function (_$) {
         // error
         protocol: location.protocol === 'https:' && "https" || "http",
         post: true,
-        print: true,
+        log: false,
+        print: false,
         console: 'console'
     };
 
     simon.urls = {
-        home: simon.debug && "http://127.0.0.1:8000/" || "https://simon.lacnic.net/",
-        configs: simon.debug && "http://127.0.0.1:8000/web_configs/" || "https://simon.lacnic.net/web_configs/",
-        offline: simon.debug && "http://127.0.0.1:8000/postxmlresult/offline/" || "https://simon.lacnic.net/postxmlresult/offline/",
-        post: simon.debug && "http://127.0.0.1:8000/postxmlresult/latency/" || "https://simon.lacnic.net/postxmlresult/latency/",
-        country: simon.debug && "http://127.0.0.1:8000/getCountry/" || "https://simon.lacnic.net/getCountry/",
+        home: "https://simon.lacnic.net/",
+        configs: "https://simon.lacnic.net/web_configs/",
+        offline: "https://simon.lacnic.net/postxmlresult/offline/",
+        post: "https://simon.lacnic.net/postxmlresult/latency/",
+        country: "https://simon.lacnic.net/getCountry/",
         ipv6ResolveURL: "https://simon.v6.labs.lacnic.net/cemd/getip/jsonp/",
-        ipv4ResolveURL: simon.debug && "http://127.0.0.1:8002/getip/" || "https://simon.v4.labs.lacnic.net/cemd/getip/jsonp/"
+        ipv4ResolveURL: "https://simon.v4.labs.lacnic.net/cemd/getip/jsonp/"
     };
+
+    simon.debug = function () {
+        this.urls = {
+            home: "http://127.0.0.1:8000/",
+            configs: "http://127.0.0.1:8000/web_configs/",
+            offline: "http://127.0.0.1:8000/postxmlresult/offline/",
+            post: "http://127.0.0.1:8000/postxmlresult/latency/",
+            country: "http://127.0.0.1:8000/getCountry/",
+            ipv6ResolveURL: "https://simon.v6.labs.lacnic.net/cemd/getip/jsonp/",
+            ipv4ResolveURL: "http://127.0.0.1:8002/getip/"
+        };
+
+        this.params.log = true;
+        this.params.print = true;
+    }
 
     simon.messages = {
         thanks: "Thanks!"
@@ -71,7 +88,7 @@ var SIMON = (function (_$) {
 
     };
 
-    simon.init = function () {
+    simon.init = function (opts) {
 
         if (Math.random() < simon.params.percentage && simon.running == false) {
             simon.running = true;
@@ -215,7 +232,7 @@ var SIMON = (function (_$) {
             crossDomain: true,
             context: this,
             timeout: simon.siteOnLineTimeout,
-            error: function(jqXHR, textStatus, errorThrown){
+            error: function (jqXHR, textStatus, errorThrown) {
 
             },
             complete: function (jqXHR, textStatus) {
@@ -228,7 +245,7 @@ var SIMON = (function (_$) {
                  * Unauthorized 407 Authentication required
                  */
 
-                if(jqXHR.status != 200) {
+                if (jqXHR.status != 200) {
 
                     testPoint.online = false;
 
@@ -241,23 +258,21 @@ var SIMON = (function (_$) {
                 }
 
 
-
-
                 // var pattern = /2[0-9]{2}|50[01234]|401|407/;
 
                 // if (pattern.test(jqXHR.status)) {
-                    // testPoint.online = true;
+                // testPoint.online = true;
                 // } else {
 
-                    // testPoint.online = false;
-                    // /*
-                    //  * report offline point
-                    //  */
-                    // var array = [];
-                    // array.push(testPoint);
-                    // var xml = simon.buildOfflineXML(array);
-                    // simon.printr("Reporting offline test point...");
-                    // simon.postResults(simon.urls.offline, xml);
+                // testPoint.online = false;
+                // /*
+                //  * report offline point
+                //  */
+                // var array = [];
+                // array.push(testPoint);
+                // var xml = simon.buildOfflineXML(array);
+                // simon.printr("Reporting offline test point...");
+                // simon.postResults(simon.urls.offline, xml);
                 // }
 
                 /*
@@ -819,18 +834,27 @@ var SIMON = (function (_$) {
     };
 
     simon.log = function (text) {
-        var HEADING = "[INFO] [" + new Date() + "] ";
-        console.log(HEADING + text);
+
+        if (simon.params.log) {
+            var HEADING = "[INFO] [" + new Date() + "] ";
+            console.log(HEADING + text);
+        }
     };
 
     simon.warn = function (text) {
-        var HEADING = "[WARN] [" + new Date() + "] ";
-        console.warn(HEADING + text);
+
+        if (simon.params.log) {
+            var HEADING = "[WARN] [" + new Date() + "] ";
+            console.warn(HEADING + text);
+        }
     };
 
     simon.error = function (text) {
-        var HEADING = "[ERROR] [" + new Date() + "] ";
-        console.error(HEADING + text);
+
+        if (simon.params.log) {
+            var HEADING = "[ERROR] [" + new Date() + "] ";
+            console.error(HEADING + text);
+        }
     };
 
     simon.summary = function (dataSet) {
@@ -839,4 +863,4 @@ var SIMON = (function (_$) {
     }
 
     return simon;
-})($);
+});
