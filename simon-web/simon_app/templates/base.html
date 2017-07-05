@@ -143,28 +143,37 @@
 
 <!-- SIMON script async loading -->
 <script type="application/javascript">
+    (function (f, b) {
+        var c = f.createElement(b),
+            e = f.getElementsByTagName(b)[0];
+        c.src = "https://cdn.dev.lacnic.net/require.js";
+        c.type = "text/javascript";
+        e.parentNode.insertBefore(c, e);
+        c.onload = c.onreadystatechange = function () {
+            // Require libraries loaded
+            requirejs.config({
+                "paths": {
+                    "jquery": "https://cdn.dev.lacnic.net/jquery-1.11.1.min",
+                    "jsonp": "https://cdn.dev.lacnic.net/jsonp",
+                    "date-format": "https://cdn.dev.lacnic.net/date.format",
+                    "simon": "https://cdn.rawgit.com/LACNIC/simon/fd53ddf2/simon-javascript/simon_probe_plugin"  //  '/static/simon_app/js/simon_probe_plugin'
+                }
+            });
 
-    (function (d, s) {
-        var js = d.createElement(s),
-            sc = d.getElementsByTagName(s)[0];
+            require(["jquery"], function () {
+                require(["jsonp", "date-format"], function () {
 
-        js.src = "{% static 'simon_app/js/simon_probe_plugin.js' %}";// "https://simon.lacnic.net/simon/static/simon_app/js/simon_probe_plugin.js";
-        js.type = "text/javascript";
-        sc.parentNode.insertBefore(js, sc);
-        js.onload = js.onreadystatechange = function () {
+                    require(["simon"], function (SIMON) {
 
-            /*
-             Test configurations
-             */
-            SIMON.after_each = function (rtt) {
-                SIMON.printr("Measured " + rtt + " ms");
-            };
+{#                        SIMON.debug();#}
+                        SIMON.init();
 
-            SIMON.init();// only for Home and Lab pages.
-        };
+                    });
+                });
+            });
 
+        }
     }(document, "script"));
-
 </script>
 
 {% block afterbody %}
