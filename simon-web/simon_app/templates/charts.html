@@ -14,17 +14,12 @@
         }
     </style>
 
-    {#    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>#}
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-
     <!-- Google Charts -->
-{#    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.4.3/jquery.min.js"></script>#}
-{#    <script src="https://www.google.com/jsapi" type="text/javascript"></script>#}
+    <script src="https://www.google.com/jsapi" type="text/javascript"></script>
     <script src="https://www.gstatic.com/charts/loader.js" type="text/javascript"></script>
 
     <!-- Google IPv6 stats -->
-{#    <script src="https://www.google.com/intl/en_ALL/ipv6/statistics/data/adoption.js"></script>#}
-
+    {#    <script src="https://www.google.com/intl/en_ALL/ipv6/statistics/data/adoption.js"></script>#}
 
     <script>
         google.load("visualization", "1", {packages: ["geochart"]});
@@ -179,6 +174,7 @@
             {{ ipv6_penetration | safe }}
         </script>
         <div id="ipv6_penetration"></div>
+{#        <div id="v6"></div>#}
 
         <h3 class="page-header">Cantidad de mediciones por protocolo</h3>
 
@@ -242,6 +238,7 @@
                 </script>
                 <div id="inner_latency_area" style="min-height: 40em;"></div>
 
+
             </div>
         </div>
 
@@ -286,4 +283,37 @@
     </div>
 
 
+
+
+{% endblock %}
+
+{% block afterbody %}
+
+{#    <script type="application/javascript">#}
+{#        (function (d, s) {#}
+{#            var js = d.createElement(s),#}
+{#                sc = d.getElementsByTagName(s)[0];#}
+{##}
+{#            js.src = "{% static 'simon_app/js/charts.js' %}";// "https://cdn.dev.lacnic.net/charts.js";#}
+{#            js.type = "text/javascript";#}
+{#            sc.parentNode.insertBefore(js, sc);#}
+{#            js.onload = js.onreadystatechange = function () {#}
+{##}
+{##}
+{##}
+{#                CHARTS.fetchChart({#}
+{#                    x: [1, 2, 3, 4, 5],#}
+{#                    ys: [[1, 2, 3, 4, 5]],#}
+{#                    labels: ['eje'],#}
+{#                    kind: 'ColumnChart',#}
+{#                    divId: 'v6',#}
+{#                    colors: ['yellow']#}
+{#                });#}
+{##}
+{##}
+{##}
+{#            };#}
+{#        }(document, "script"));#}
+{#    </script>#}
+    {##}
 {% endblock %}

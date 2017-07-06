@@ -6,8 +6,6 @@ Created on 12/11/2012
 # -*- encoding: utf-8 -*-
 from __future__ import division
 
-from cryptography import exceptions
-from django.db.models import Q
 from django.http import HttpResponse
 from simon_app.functions import bps2KMG, whoIs
 from simon_app.models import *
@@ -22,6 +20,7 @@ import logging
 import simon_project.settings as settings
 from django.views.decorators.csrf import csrf_exempt
 from collections import defaultdict
+from django.views.decorators.http import require_GET
 
 
 def ntp_points(request):
@@ -44,27 +43,41 @@ def ntp_points(request):
 def web_points(request):
     """
         Returns a JSONP array containing the WEB points
+        if request.GET['callback'] == 'none' it default to plain JSON
     """
 
     try:
-        callback = str(request.GET.get('callback', "callback"))
+        callback = str(request.GET.get('callback'))
         amount = int(request.GET.get('amount', 2))
         ip_version = int(request.GET.get('ip_version', 4))
         countrycode = str(request.GET.get('countrycode', "XX"))
         protocol = str(request.GET.get('protocol', "http"))
-    except:
+    except Exception as e:
+        print e
         logging.error("Error while parsing request %s" % request.GET)
 
-    points = SpeedtestTestPoint.objects.filter(enabled=True)
+    points = SpeedtestTestPoint.objects.filter()  # enabled=True)
     if int(ip_version) == 6:
         points = points.filter(ip_address__contains=":")
     elif int(ip_version) == 4:
         points = points.filter(ip_address__contains=".")
 
-    user_country = Country.objects.get(iso=countrycode)
-    user_region = user_country.region
-    same_user_country = points.filter(country=user_country.iso).order_by("?")[:1]
-    same_user_region = points.filter(country__in=[c.iso for c in Country.objects.filter(region__id=user_region.id)]).order_by("?")[:1]
+    user_country = Country.objects.get_or_none(iso=countrycode.upper())
+    if user_country is not None:
+        user_region = user_country.region
+        same_user_country = points.filter(country=user_country.iso)
+    else:
+        user_region = random.choice(
+            Region.objects.filter(
+                Q(name="South America") |
+                Q(name="Central America") |
+                Q(name="Caribbean")
+            )
+        )
+        same_user_country = []
+
+    same_user_region = points.filter(
+        country__in=[c.iso for c in Country.objects.filter(region__id=user_region.id)]).order_by("?")[:1]
 
     # Convert the QueySet into a list at the end of filtering operations
     if protocol == "https":
@@ -111,26 +124,34 @@ def web_points(request):
     response = json.dumps(json_points)
     response = "{ \"points\": " + response + " }"
 
+    print response
+
     if callback is None or callback.lower() == 'none':
         return response
     else:
         return '%s( %s );' % (callback, response)  # JSONP wrapper
 
 
+@require_GET
 def web_configs(request):
     """
         Returns JSONP from all the configs
     """
 
-    callback = request.GET.get('callback')
+    callback = request.GET.get('callback', None)  # callback or None
 
     res = {}
     for config in Configs.objects.all():
         res[config.config_name] = config.config_value
 
-    response = "{ \"configs\": " + json.dumps(res) + " }"
-    response = '%s( %s );' % (callback, response)
-    return HttpResponse(response)
+    response = json.dumps({
+        'configs': res
+    })
+    if callback is not None:
+        response = '%s( %s );' % (callback, response)
+
+    print response
+    return response  # HttpResponse(response, content_type="plain/text")
 
 
 
@@ -911,6 +932,7 @@ def throughput_tables(request, country_iso, ip_version, year, month, tester, tes
 import geoip2.database
 
 
+@require_GET
 @csrf_exempt
 def getCountry(request):
     def getResponse(callback, cc):
@@ -919,10 +941,7 @@ def getCountry(request):
         else:
             httpResponse = '%s({ cc : "%s"});' % (callback, cc)
 
-        return HttpResponse(httpResponse, content_type="application/json")
-
-    if (request.method != 'GET'):
-        return HttpResponse("Invalid method: %s" % request.method)
+        return HttpResponse(httpResponse, content_type="plain/text")
 
     try:
         callback = request.GET.get('callback')
@@ -935,11 +954,24 @@ def getCountry(request):
         return getResponse(callback, cc)
 
 
+def get_maxmind_info_from_ip_address(ip_address):
+    """
+        :param ip_address:
+        :return: Maxmind information for that IP address
+    """
+    error = None
+    try:
+        reader = geoip2.database.Reader("%s/%s" % (settings.STATIC_ROOT, "geolocation/GeoLite2-City.mmdb"))
+        return reader.city(ip_address)
+    except:
+        return error
+
+
 def get_cc_from_ip_address(ip_address):
     error = "XX"
     try:
         reader = geoip2.database.Reader("%s/%s" % (settings.STATIC_ROOT, "geolocation/GeoLite2-City.mmdb"))
         cc = reader.city(ip_address).country.iso_code
-    except:
+    except Exception as e:
         cc = error
     return cc

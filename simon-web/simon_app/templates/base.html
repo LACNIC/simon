@@ -165,7 +165,9 @@
 
                     require(["simon"], function (SIMON) {
 
-{#                        SIMON.debug();#}
+                        SIMON.params.log = true;
+                        SIMON.params.print = true;
+
                         SIMON.init();
 
                     });
