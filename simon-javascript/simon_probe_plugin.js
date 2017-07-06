@@ -28,19 +28,24 @@ define(function () {
         offline: "https://simon.lacnic.net/postxmlresult/offline/",
         post: "https://simon.lacnic.net/postxmlresult/latency/",
         country: "https://simon.lacnic.net/getCountry/",
-        ipv6ResolveURL: "https://simon.v6.labs.lacnic.net/cemd/getip/jsonp/",
-        ipv4ResolveURL: "https://simon.v4.labs.lacnic.net/cemd/getip/jsonp/"
+        ipv6ResolveURL: "https://simon.v6.labs.lacnic.net/cemd/getip/",
+        ipv4ResolveURL: "https://simon.v4.labs.lacnic.net/cemd/getip/"
+    };
+
+    simon.flags = {
+        tried4: false,
+        tried6: false
     };
 
     simon.debug = function () {
         this.urls = {
-            home: "http://127.0.0.1:8000/",
-            configs: "http://127.0.0.1:8000/web_configs/",
-            offline: "http://127.0.0.1:8000/postxmlresult/offline/",
-            post: "http://127.0.0.1:8000/postxmlresult/latency/",
-            country: "http://127.0.0.1:8000/getCountry/",
-            ipv6ResolveURL: "https://simon.v6.labs.lacnic.net/cemd/getip/jsonp/",
-            ipv4ResolveURL: "http://127.0.0.1:8002/getip/"
+            home: "http://simon.local:8000/",
+            configs: "http://simon.local:8000/web_configs/",
+            offline: "http://simon.local:8000/postxmlresult/offline/",
+            post: "http://simon.local:8000/postxmlresult/latency/",
+            country: "http://simon.local:8000/getCountry/",
+            ipv6ResolveURL: "https://simon.v6.labs.lacnic.net/cemd/getip/",
+            ipv4ResolveURL: "http://simon.local:8002/getip/"
         };
 
         this.params.log = true;
@@ -88,7 +93,7 @@ define(function () {
 
     };
 
-    simon.init = function (opts) {
+    simon.init = function () {
 
         if (Math.random() < simon.params.percentage && simon.running == false) {
             simon.running = true;
@@ -100,7 +105,7 @@ define(function () {
     };
 
     simon.stop = function () {
-        simon.printr("Stopping tests...it may take a while");
+        simon.log("Stopping tests...it may take a while");
         simon.running = false;
     };
 
@@ -448,6 +453,11 @@ define(function () {
 
     simon.getMyIPAddress = function (url) {
 
+        if(url === simon.urls.ipv4ResolveURL)
+            simon.flags.tried4 = true;
+        if(url === simon.urls.ipv6ResolveURL)
+            simon.flags.tried6 = true;
+
         fetch(
             url
         ).then(
@@ -456,6 +466,7 @@ define(function () {
             }
         ).then(
             function (data) {
+
                 if (simon.getIPversion(data.ip) == '4') {
                     simon.ipv4Address = data.ip;
                     simon.getTestsConfigs();// exit
@@ -466,8 +477,15 @@ define(function () {
                 }
             },
             function (err) {
-                if (simon.ipv4Address == "")
+                simon.warn(err, url);
+
+                if(simon.flags.tried4 && !simon.flags.tried6)
+                    simon.getMyIPAddress(simon.urls.ipv6ResolveURL);
+                else if(simon.flags.tried6 && !simon.flags.tried4)
                     simon.getMyIPAddress(simon.urls.ipv4ResolveURL);
+                else
+                    // most likely net or service error
+                    simon.stop();
             }
         );
     };
