@@ -7,13 +7,27 @@ from probeapi import ProbeApiMeasurement
 
 
 class Command(BaseCommand):
-    @probeapi(command="Africa Connectivity [BANNED]")
+    @probeapi(command="Africa Connectivity [Neighbours]")
     def handle(self, *args, **options):
-        msm = ProbeApiMeasurement(max_job_queue_size=100, max_points=50)
-        ccs = ['CF', 'SO', 'SN', 'SZ', 'TD', 'ZM', 'LR', 'NE', 'YT', 'RE', 'SC', 'SD', 'LS', 'GN', 'BF', 'CD', 'CM', 'SL', 'ST', 'ET', 'BI', 'MZ', 'NA', 'TG']
-        results = msm.init(
-            tps=['africa-connectivity.exp.dev.lacnic.net'],
-            ccs=ccs
-        )
+        neighbours = {
+            'BI': ['RW'], 'DZ': ['MR'], 'ET': ['KE'], 'RW': ['BI', 'CD', 'TZ', 'UG'], 'TZ': ['RW', 'ZM'],
+            'CM': ['CF', 'GQ'], 'NA': ['AO'], 'LR': ['GN'], 'TD': ['CF'], 'ZM': ['AO', 'CD', 'MW', 'MZ', 'TZ'],
+            'CI': ['GN'], 'GQ': ['CM', 'GA'], 'MR': ['DZ', 'ML', 'SN'], 'CG': ['CF', 'CD'],
+            'CF': ['CM', 'TD', 'CD', 'CG', 'SD'], 'AO': ['CD', 'ZM', 'NA'], 'CD': ['AO', 'CF', 'CG', 'RW', 'ZM'],
+            'GA': ['GQ'], 'GN': ['CI', 'LR', 'ML', 'SN', 'SL'], 'ZW': ['MZ'], 'KE': ['ET', 'SO'], 'ML': ['GN', 'MR'],
+            'MW': ['ZM'], 'SO': ['KE'], 'SN': ['GN', 'MR'], 'SL': ['GN'], 'UG': ['RW'], 'MZ': ['ZM', 'ZW'], 'SD': ['CF']
+        }
+
+        def init_msm((N, ns)):
+            msm = ProbeApiMeasurement()
+
+            results = msm.init(
+                tps=["%s.exp.dev.lacnic.net" % n.lower() for n in ns],
+                ccs=[N]
+            )
+
+            return results
+
+        results = map(init_msm, [(N, ns) for N, ns in neighbours.items()])
 
         return results
