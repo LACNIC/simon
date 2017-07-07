@@ -161,7 +161,7 @@ class ProbeApiMeasurement():
 
         ccs = get_countries(ccs=ccs)
 
-        if ccs is None:
+        if ccs is None or ccs == {}:
             return empty_results
 
         ccs = ccs.keys()  # get countries with running probes...
