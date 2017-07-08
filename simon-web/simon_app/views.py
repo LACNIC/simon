@@ -653,7 +653,8 @@ def reports_as(request):
 
 def charts(request):
     """
-        Regional Charts page.
+
+        Regional Charts "Reports" page.
 
     :param request:
     :return:
@@ -697,25 +698,39 @@ def charts(request):
 
     now = datetime.datetime.now()
     a_month_ago = now - datetime.timedelta(days=30)
-    rtts_probeapi = Results.objects.probeapi().filter(date_test__gte=a_month_ago).values_list('ave_rtt', flat=True)
-    rtts_js = Results.objects.javascript().filter(date_test__gte=a_month_ago).values_list('ave_rtt', flat=True)
+    rtts_probeapi = Results.objects.probeapi().filter(
+        date_test__gte=a_month_ago,
+        country_origin__in=Country.objects.get_lacnic_countrycodes(),
+        country_destination__in=Country.objects.get_lacnic_countrycodes()
+    ).values_list(
+        'ave_rtt', flat=True
+    )
+    rtts_js = Results.objects.javascript().filter(
+        date_test__gte=a_month_ago,
+        country_origin__in=Country.objects.get_lacnic_countrycodes(),
+        country_destination__in=Country.objects.get_lacnic_countrycodes()
+    ).values_list(
+        'ave_rtt', flat=True
+    )
 
     # IPv6 penetration chart
     rs = Results.objects.ipv6_penetration_timeline()
     ipv6_penetration_ratios = [(r[2] * 1.0 / (r[1] + r[2])) for r in rs if r[1] > 0 or r[2] > 0]
-
     results_timeline = Results.objects.get_results_timeline()
 
     # Inner Latency Chart
+    t0 = datetime.datetime.now()
+
     from operator import itemgetter
     inners = Results.objects.inner(tester=settings.PROTOCOLS["HTTP"], months=6)
+    inners = [(cc, _min, _avg, _max, _count) for cc, _min, _avg, _max, _count in inners if cc in Country.objects.get_lacnic_countrycodes()]
     inners = sorted([i for i in inners], key=itemgetter(1), reverse=True)  # ordered by min RTT
     inner_isos = []
     inner_lats = []
     inner_lats_min = []
     inner_lats_max = []
     for i, v in enumerate(inners):
-        if v[0] not in Country.objects.get_lacnic_countrycodes(): continue
+        # if v[0] not in Country.objects.get_lacnic_countrycodes(): continue
         if v[1] is None: continue
 
         iso = "%02d - %s" % (i, str(v[0]))
@@ -808,9 +823,17 @@ def charts(request):
     from operator import itemgetter
 
     inner_area = []
-    inner = Results.objects.inner(tester=settings.PROTOCOLS["HTTP"], months=6)
+    inner = Results.objects.inner(
+        tester=settings.PROTOCOLS["HTTP"],
+        months=6
+    )
     ccs = Country.objects.get_lacnic_countrycodes()
-    restcountries = json.loads(requests.get("http://restcountries.eu/rest/v1/all").text)  # TODO sacarlo de aca
+    inner = [(cc, _min, _avg, _max, latency) for cc, _min, _avg, _max, latency in inner if cc in ccs]
+
+    lines = open("%s/restcountries.json" % settings.STATIC_ROOT, 'r').readlines()
+    restcountries = json.loads(
+        str(lines[0])
+    )
     for c in restcountries:
         alpha2Code = c["alpha2Code"]
         if alpha2Code not in ccs:
