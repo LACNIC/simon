@@ -141,6 +141,18 @@
 
 </script>
 
+<script type="application/javascript">
+    // Global variable CHARTS
+    // Accessible from child templates
+    var CHARTS = {
+        loading: true,
+        queue: [],
+        draw: function (chart) {
+            this.queue.push(chart);
+        }
+    };
+</script>
+
 <!-- SIMON script async loading -->
 <script type="application/javascript">
     (function (f, b) {
@@ -173,6 +185,52 @@
                     });
                 });
             });
+
+        }
+    }(document, "script"));
+</script>
+
+<script type="application/javascript">
+
+    (function (f, b) {
+
+        var c = f.createElement(b),
+            e = f.getElementsByTagName(b)[0];
+        c.src = "https://cdn.dev.lacnic.net/require.js";
+        c.type = "text/javascript";
+        e.parentNode.insertBefore(c, e);
+        c.onload = c.onreadystatechange = function () {
+            // Require libraries loaded
+            requirejs.config({
+                "paths": {
+                    "charts": "/static/simon_app/js/charts",
+{#                    "charts": "https://cdn.rawgit.com/LACNIC/static/43aba159/charts",#}
+                    "jsapi": "https://www.gstatic.com/charts/loader",
+                    "jquery": "https://cdn.dev.lacnic.net/jquery-1.11.1.min"
+                }
+            });
+
+            if (typeof google != 'undefined' && typeof google.charts != 'undefined') {
+                require(["charts", "jquery"], function (ASYNC_CHARTS, $) {
+                    onLoad(ASYNC_CHARTS);
+                });
+            } else {
+                require(["charts", "jquery", "jsapi"], function (ASYNC_CHARTS, $) {
+                    onLoad(ASYNC_CHARTS);
+                });
+            }
+
+            var onLoad = function (ASYNC_CHARTS) {
+
+{#                ASYNC_CHARTS.endpoint = 'http://127.0.0.1:8001';#}
+
+                for (i in CHARTS.queue) {
+                    ASYNC_CHARTS.draw(CHARTS.queue[i])
+                }
+
+                CHARTS = ASYNC_CHARTS;
+            }
+
 
         }
     }(document, "script"));

@@ -209,7 +209,6 @@ class ThroughputResults(models.Model):
 
 
 class ASManager(models.Manager):
-
     def get_as_by_ip(self, ip_address):
         """
 
@@ -801,7 +800,6 @@ class RipeAtlasMeasurement(models.Model):
 
 
 class TestPointManager(models.Manager):
-
     def get_or_none(self, *args, **kwargs):
         try:
             return self.get(*args, **kwargs)
@@ -1085,12 +1083,20 @@ class ChartManager(models.Manager):
         :return:
         """
 
-        print queryset
         if cc2 is None:
             # one country against the region
             queryset = queryset.filter(
+                Q(
+                    country_origin__in=Country.objects.get_lacnic_countrycodes()
+                ) & \
+                Q(
+                    country_destination__in=Country.objects.get_lacnic_countrycodes()
+                )
+            ).filter(
                 Q(country_origin=cc1) | Q(country_destination=cc1)
             )
+
+
         else:
             # between two countries
             if bidirectional:

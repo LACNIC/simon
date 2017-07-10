@@ -18,9 +18,6 @@
     <script src="https://www.google.com/jsapi" type="text/javascript"></script>
     <script src="https://www.gstatic.com/charts/loader.js" type="text/javascript"></script>
 
-    <!-- Google IPv6 stats -->
-    {#    <script src="https://www.google.com/intl/en_ALL/ipv6/statistics/data/adoption.js"></script>#}
-
     <script>
         google.load("visualization", "1", {packages: ["geochart"]});
         google.setOnLoadCallback(drawRegionsMap);
@@ -39,7 +36,7 @@
                     maxValue: 50
                 },
                 backgroundColor: {
-                    fill: '#F7F7F7'
+                    fill: '#fff'
                 }
             };
 
@@ -170,11 +167,10 @@
         <p>
             La siguiente gráfica muestra la proporción de pruebas de Simón realizadas por IPv6 en los últimos 2 meses.
         </p>
-        <script type="text/javascript">
-            {{ ipv6_penetration | safe }}
-        </script>
-        <div id="ipv6_penetration"></div>
-{#        <div id="v6"></div>#}
+        {#        <script type="text/javascript">#}
+        {#            {{ ipv6_penetration | safe }}#}
+        {#        </script>#}
+        <div id="ipv6_penetration" style="height: 20em;"></div>
 
         <h3 class="page-header">Cantidad de mediciones por protocolo</h3>
 
@@ -182,10 +178,10 @@
             A continuación se muestra el histórico de la cantidad de muestras generadas diariamente durante los últimos
             2 meses.
         </p>
-        <script type="text/javascript">
-            {{ results_timeline | safe }}
-        </script>
-        <div id="results_timeline"></div>
+        {#        <script type="text/javascript">#}
+        {#            {{ results_timeline | safe }}#}
+        {#        </script>#}
+        <div id="results_timeline" style="height: 20em;"></div>
 
 
         <p>
@@ -215,10 +211,7 @@
                     locales. Para países pequeños, este valor debería ser menor que para
                     países grandes.</p>
 
-                <script type="text/javascript">
-                    {{ inner_latency | safe }}
-                </script>
-                <div id="inner_latency" style="min-height: 40em;"></div>
+                <div id="inner_latency" style="height: 40em;"></div>
 
             </div>
             <div class="col-sm-6">
@@ -226,17 +219,14 @@
                 <p>
                     La siguiente gráfica muestra la latencia interna de cada país, dividido la superficie total
                     de ese
-                    país, en km^2, en valores relativos (comparado frente al *peor* país). Este indicador soluciona el
+                    país, en km<sup>2</sup>, en valores relativos (comparado frente al <i>peor</i> país). Este indicador
+                    soluciona el
                     problema de la latencia en interna en <code>ms</code>, ya que ese
                     indicador perjudica a países de grandes superficies y beneficia a los más pequeños. Por ende, en el
                     extremo "bueno" de la escala se ubicarán países con baja latencia y gran superficie y en el extremo
-                    "malo" de la escala se ubicarán países con mucha latencia y poca superficie. Country information
-                    from <a href="https://restcountries.eu" target="_blank">RESTcountries</a>.
+                    "malo" de la escala se ubicarán países con mucha latencia y poca superficie. Informaci´n de países obtenida de <a href="https://restcountries.eu" target="_blank">RESTcountries</a>.
                 </p>
-                <script type="text/javascript">
-                    {{ inner_latency_area | safe }}
-                </script>
-                <div id="inner_latency_area" style="min-height: 40em;"></div>
+                <div id="inner_latency_area" style="height: 40em;"></div>
 
 
             </div>
@@ -289,31 +279,57 @@
 
 {% block afterbody %}
 
-{#    <script type="application/javascript">#}
-{#        (function (d, s) {#}
-{#            var js = d.createElement(s),#}
-{#                sc = d.getElementsByTagName(s)[0];#}
-{##}
-{#            js.src = "{% static 'simon_app/js/charts.js' %}";// "https://cdn.dev.lacnic.net/charts.js";#}
-{#            js.type = "text/javascript";#}
-{#            sc.parentNode.insertBefore(js, sc);#}
-{#            js.onload = js.onreadystatechange = function () {#}
-{##}
-{##}
-{##}
-{#                CHARTS.fetchChart({#}
-{#                    x: [1, 2, 3, 4, 5],#}
-{#                    ys: [[1, 2, 3, 4, 5]],#}
-{#                    labels: ['eje'],#}
-{#                    kind: 'ColumnChart',#}
-{#                    divId: 'v6',#}
-{#                    colors: ['yellow']#}
-{#                });#}
-{##}
-{##}
-{##}
-{#            };#}
-{#        }(document, "script"));#}
-{#    </script>#}
-    {##}
+    <script type="application/javascript">
+
+        CHARTS.draw({
+            x: {{ results_timeline.x | safe }},
+            ys: {{ results_timeline.ys }},
+            xType: 'date',
+            divId: 'results_timeline',
+            labels: ['HTTP', 'ICMP'],
+            colors: ['144C4C', '57737A'],
+            kind: 'AreaChart',
+            xType: 'date',
+        });
+
+        CHARTS.draw({
+            x: {{ v6.x | safe }},
+            ys: [
+                {{ v6.y }}
+            ],
+            xType: 'date',
+            labels: ['eje'],
+            kind: 'AreaChart',
+            divId: 'ipv6_penetration',
+            colors: ['615D6C']
+
+        });
+
+        CHARTS.draw({
+            x: {{ inner_latency.x | safe }},
+            ys: {{ inner_latency.y }},
+            xType: 'string',
+            labels: ['Min RTT', 'Ave RTT', 'Max RTT'],
+            kind: 'BarChart',
+            stacked: 'true',
+            divId: 'inner_latency',
+            colors: ['144C4C', '57737A', '95C1BE']
+
+        });
+
+        CHARTS.draw({
+            x: {{ inner_latency_area.x | safe }},
+            ys: [{{ inner_latency_area.y }}],
+            xType: 'string',
+            labels: ['Min RTT per square km'],
+            kind: 'BarChart',
+            stacked: 'true',
+            divId: 'inner_latency_area',
+            colors: ['144C4C']
+
+        });
+
+        inner_latency_area
+    </script>
+
 {% endblock %}

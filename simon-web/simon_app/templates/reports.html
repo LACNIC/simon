@@ -148,10 +148,7 @@
                             <span class="label label-info">{{ a }}</span>
                         {% endfor %}
                     </p>
-                    <script type="text/javascript">
-                        {{ latency_histogram_js | safe }}
-                    </script>
-                    <div id="latency_histogram_js"></div>
+                    <div id="latency_histogram_js" style="height: 20em;"></div>
 
                 {% endif %}
 
@@ -160,10 +157,11 @@
 
                     <p>Esta gráfica esta basada en {{ probeapi | length | unit_shortener }} muestras recolectadas
                         desde {{ date_from }}</p>
-                    <script type="text/javascript">
-                        {{ latency_histogram_probeapi | safe }}
-                    </script>
-                    <div id="latency_histogram_probeapi"></div>
+
+                    {% for a in countries_probeapi %}
+                        <span class="label label-info">{{ a }}</span>
+                    {% endfor %}
+                    <div id="latency_histogram_probeapi" style="height: 20em;"></div>
 
 
                     <p class="pull-right" style="font-size: 0.9em;">
@@ -179,11 +177,7 @@
                     <p>Esta gráfica esta basada en {{ ripe_atlas | length | unit_shortener }} muestras recolectadas
                         desde {{ date_from }}</p>
 
-                    <script type="text/javascript">
-                        {{ latency_histogram_ripe_atlas | safe }}
-                    </script>
-                    <div id="latency_histogram_ripe_atlas"></div>
-{#                    {{ latency_histogram_ripe_atlas | safe }}#}
+                    <div id="latency_histogram_ripe_atlas" style="height: 20em;"></div>
 
                     <p class="pull-right" style="font-size: 0.9em;">
                         <code>ICMP</code> RIPE Atlas Ping results are performed using the <a href="http:/atlas.ripe.net"
@@ -202,20 +196,7 @@
                     {{ v6_count_js }}% de las mediciones de {{ country }} se realizaron via IPv6.
                 </p>
 
-                <div class="bd-callout bd-callout-warning">
-                    <h4 class="card-title">Card title</h4>
-                    <p class="card-text">
-                        Some quick example text to build on the card
-                        title and make up the bulk of
-                        the card's content.
-                    </p>
-                </div>
-                {#                <script type="text/javascript">#}
-                {#                    {{ pie_chart | safe }}#}
-                {#                </script>#}
-                {#                <div id="pie_chart"></div>#}
-
-                {#                {{ pie_chart | safe }}#}
+                <div id="pie_chart"></div>
 
                 <h3>Mapas de latencia de {{ country }}</h3>
 
@@ -291,7 +272,7 @@
                     maxValue: 500
                 },
                 backgroundColor: {
-                    fill: '#FFFAF2'
+                    fill: '#fff'
                 },
                 legend: {numberFormat: '## ms'}
             };
@@ -310,4 +291,43 @@
         }
     </script>
 
+{% endblock %}
+
+{% block afterbody %}
+
+    <script type="application/javascript">
+
+        {{ latency_histogram_js.x }}.length > 0 && CHARTS.draw({
+            x: {{ latency_histogram_js.x | safe }},
+            kind: 'Histogram',
+            labels: ['HTTP GET'],
+            divId: 'latency_histogram_js',
+            colors: ['81B3C1']
+        });
+
+        {{ latency_histogram_probeapi.x }}.length > 0 && CHARTS.draw({
+            x: {{ latency_histogram_probeapi.x | safe }},
+            kind: 'Histogram',
+            labels: ['ICMP ping'],
+            divId: 'latency_histogram_probeapi',
+            colors: ['6F8AB7']
+        });
+
+        {{ latency_histogram_ripe_atlas.x}}.length > 0 && CHARTS.draw({
+            x: {{ latency_histogram_ripe_atlas.x | safe }},
+            kind: 'Histogram',
+            labels: ['ICMP ping'],
+            divId: 'latency_histogram_ripe_atlas',
+            colors: ['6F8AB7']
+        });
+
+        CHARTS.draw({
+            x: {{ pie_chart.value | safe }},
+            kind: 'PieChart',
+            xType: 'string',
+            labels: ['IPv4', 'IPv6'],
+            divId: 'pie_chart',
+            colors: ['615D6C', '77A4DD']
+        });
+    </script>
 {% endblock %}

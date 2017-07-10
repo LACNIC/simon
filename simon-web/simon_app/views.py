@@ -536,74 +536,68 @@ def reports(request):
     matrix_js_origin_cc = [m for m in matrix_js if m[0] == cc1]  # having origin as CC
     matrix_js_destination_cc = [m for m in matrix_js if m[1] == cc1]  # having destination as CC
 
-    # matrix_probeapi = Results.objects.results_matrix_cc(tester="probeapi")
-
-    js = Chart.objects.filterQuerySet(Results.objects.javascript(), cc1=cc1, cc2=cc2, date_from=date_from,
-                                      date_to=date_to, bidirectional=bidirectional)
+    js = Chart.objects.filterQuerySet(
+        Results.objects.javascript(),
+        cc1=cc1,
+        cc2=cc2,
+        date_from=date_from,
+        date_to=date_to,
+        bidirectional=bidirectional
+    )
     _a1 = js.filter(country_origin=cc1).values_list('as_origin', flat=True)
     _a2 = js.filter(country_destination=cc1).values_list('as_destination', flat=True)
-    countries_js = js.filter(country_origin=cc1).values_list('country_destination', flat=True).distinct(
-        'country_destination')
+    countries_js = js.filter(
+        country_origin=cc1
+    ).values_list('country_destination', flat=True).distinct(
+        'country_destination'
+    )
     ases_js = []
     [ases_js.append(a) for a in _a1 if a not in ases_js]
     [ases_js.append(a) for a in _a2 if a not in ases_js]
     v6_js = js.filter(ip_version=6)
     v6_count_js = v6_js.count()
 
-    data = dict(
-        x=json.dumps(
-            list(js)
-        ),
-        divId='latency_histogram_js',
-        labels=json.dumps(['HTTP GET']),
-        colors=json.dumps(['#81B3C1'])
-    )
-    latency_histogram_js = requests.post(
-        url=settings.CHARTS_URL + "/hist/code/", data=data, headers={'Connection': 'close'}
-    ).text
+    latency_histogram_js = {
+        'x': [j for j in js]
+    }
 
-    probeapi = Chart.objects.filterQuerySet(Results.objects.probeapi(), cc1=cc1, cc2=cc2, date_from=date_from,
-                                            date_to=date_to, bidirectional=bidirectional)
-    data = dict(
-        x=json.dumps(
-            list(probeapi)
-        ),
-        divId='latency_histogram_probeapi',
-        labels=json.dumps(['ICMP ping']),
-        colors=json.dumps(['#6F8AB7'])
+    probeapi = Chart.objects.filterQuerySet(
+        Results.objects.probeapi(),
+        cc1=cc1,
+        cc2=cc2,
+        date_from=date_from,
+        date_to=date_to,
+        bidirectional=bidirectional
     )
-    latency_histogram_probeapi = requests.post(
-        url=settings.CHARTS_URL + "/hist/code/", data=data, headers={'Connection': 'close'}
-    ).text
 
+    latency_histogram_probeapi = {
+        'x': [p for p in probeapi]
+    }
 
-    ripe_atlas = Chart.objects.filterQuerySet(Results.objects.ripe_atlas(), cc1=cc1, cc2=cc2, date_from=date_from,
-                                              date_to=date_to, bidirectional=bidirectional)
-    data = dict(
-        x=json.dumps(
-            list(ripe_atlas)
-        ),
-        divId='latency_histogram_ripe_atlas',
-        labels=json.dumps(['RIPE Atlas']),
-        colors=json.dumps(['#615D6C'])
+    countries_probeapi = probeapi.filter(
+        country_origin=cc1
+    ).values_list('country_destination', flat=True).distinct(
+        'country_destination'
     )
-    latency_histogram_ripe_atlas = requests.post(
-        url = settings.CHARTS_URL + "/hist/code/", data=data, headers={'Connection': 'close'}
-    ).text
 
-    v6 = int(100.0 * v6_count_js / len(js))
-    v4 = int(100.0 - v6)
-    data = dict(
-        x=json.dumps(
-            list([v4, v6])
-        ),
-        divId='pie_chart',
-        labels=json.dumps(['IPv4', 'IPv6']),
-        colors=json.dumps(['#615D6C', '#77A4DD']),
-        kind='PieChart'
-        # xType='date'
+    ripe_atlas = Chart.objects.filterQuerySet(
+        Results.objects.ripe_atlas(),
+        cc1=cc1,
+        cc2=cc2,
+        date_from=date_from,
+        date_to=date_to,
+        bidirectional=bidirectional
     )
-    pie_chart = requests.post(settings.CHARTS_URL + "/code/", data=data, headers={'Connection': 'close'}).text
+
+    latency_histogram_ripe_atlas = {
+        'x': [a for a in ripe_atlas]
+    }
+
+    v6 = 100.0 * v6_count_js / len(js)
+    v4 = 100.0 - v6
+    pie_chart = {
+        'value': [v4, v6]
+    }
 
     context = getContext(request)
     context['collapse'] = "in"
@@ -611,6 +605,7 @@ def reports(request):
     context['latency_histogram_probeapi'] = latency_histogram_probeapi
     context['latency_histogram_js'] = latency_histogram_js
     context['latency_histogram_ripe_atlas'] = latency_histogram_ripe_atlas
+
     context['cc'] = cc1
     context['country'] = country1_object.printable_name
     context['matrix_js'] = matrix_js
@@ -623,6 +618,7 @@ def reports(request):
     context['date_from'] = date_from
     context['ases_js'] = ases_js
     context['countries_js'] = countries_js
+    context['countries_probeapi'] = countries_probeapi
     context['pie_chart'] = pie_chart
     context['v6_count_js'] = "%.1f" % (100.0 * v6_count_js / len(js))
 
@@ -723,7 +719,8 @@ def charts(request):
 
     from operator import itemgetter
     inners = Results.objects.inner(tester=settings.PROTOCOLS["HTTP"], months=6)
-    inners = [(cc, _min, _avg, _max, _count) for cc, _min, _avg, _max, _count in inners if cc in Country.objects.get_lacnic_countrycodes()]
+    inners = [(cc, _min, _avg, _max, _count) for cc, _min, _avg, _max, _count in inners if
+              cc in Country.objects.get_lacnic_countrycodes()]
     inners = sorted([i for i in inners], key=itemgetter(1), reverse=True)  # ordered by min RTT
     inner_isos = []
     inner_lats = []
@@ -765,59 +762,28 @@ def charts(request):
     )
     latency_histogram_probeapi = requests.post(url, data=data, headers={'Connection': 'close'}).text
 
-    url = settings.CHARTS_URL + "/code/"
+    results_timeline = {
+        'x': list(d[0].strftime("%Y-%m-%d") for d in results_timeline),
+        'ys': [
+            [int(r[1]) for r in results_timeline],
+            [int(r[2]) for r in results_timeline]
+        ]
+    }
 
-    data = dict(
-        x=json.dumps(
-            list(d[0].strftime("%Y-%m-%d") for d in results_timeline)
-        ),
-        ys=json.dumps([
-            [r[1] for r in results_timeline],
-            [r[2] for r in results_timeline]
-        ]),
-        divId='results_timeline',
-        labels=json.dumps(['HTTP', 'ICMP']),
-        colors=json.dumps(['#144C4C', '#57737A']),
-        kind='AreaChart',
-        xType='date'
-    )
-    results_timeline = requests.post(settings.CHARTS_URL + "/code/", data=data, headers={'Connection': 'close'}).text
-
-    data = dict(
-        x=json.dumps(
-            list(d[0].strftime("%Y-%m-%d") for d in rs)
-        ),
-        ys=json.dumps([
-            list(ipv6_penetration_ratios)
-        ]),
-        divId='ipv6_penetration',
-        labels=json.dumps(['IPv6 sample ratio']),
-        colors=json.dumps(['#615D6C']),
-        kind='AreaChart',
-        xType='date'
-    )
-    ipv6_penetration = requests.post(settings.CHARTS_URL + "/code/", data=data, headers={'Connection': 'close'}).text
+    v6 = {
+        'x': list(d[0].strftime("%Y-%m-%d") for d in rs),
+        'y': list(ipv6_penetration_ratios)
+    }
 
     inner_count = len(inner_isos)
 
     avg_list = [a - m for a, m in zip(list(inner_lats), list(inner_lats_min))]
     max_list = [max_ - avg for avg, max_ in zip(list(inner_lats), list(inner_lats_max))]
 
-    data = dict(
-        x=json.dumps(
-            list(inner_isos)
-        ),
-        ys=json.dumps(
-            [list(inner_lats_min), avg_list, max_list]
-        ),
-        divId='inner_latency',
-        labels=json.dumps(['Min RTT', 'Ave RTT', 'Max RTT']),
-        colors=json.dumps(['#144C4C', '#57737A', '#95C1BE']),
-        kind='BarChart',
-        stacked=True,
-        xType='string'
-    )
-    inner_latency = requests.post(url, data=data, headers={'Connection': 'close'}).text
+    inner_latency = {
+        'x': inner_isos,
+        'y': [list(inner_lats_min), avg_list, max_list]
+    }
 
     # Country information
     from operator import itemgetter
@@ -860,21 +826,11 @@ def charts(request):
         new_key = "%02d - %s" % (i, v["alpha2Code"])
         inner_area[i]["alpha2Code"] = new_key
     inner_area_max = max(list((k["latency_per_area"]) for k in inner_area))
-    data = dict(
-        x=json.dumps(
-            list(k["alpha2Code"] for k in inner_area)
-        ),
-        y=json.dumps(
-            list((k["latency_per_area"] / inner_area_max) for k in inner_area)
-        ),
-        divId='inner_latency_area',
-        labels=json.dumps(['Min RTT per square km']),
-        colors=json.dumps(['#144C4C']),
-        kind='BarChart',
-        stacked=True,
-        xType='string'
-    )
-    inner_latency_area = requests.post(url, data=data, headers={'Connection': 'close'}).text
+
+    inner_latency_area = {
+        'x': list(k["alpha2Code"].encode('utf-8') for k in inner_area),
+        'y': list((k["latency_per_area"] / inner_area_max) for k in inner_area)
+    }
 
     ############
     # RESPONSE #
@@ -887,7 +843,8 @@ def charts(request):
         'countries': countries,
         'latency_histogram_probeapi': latency_histogram_probeapi,
         'latency_histogram_js': latency_histogram_js,
-        'ipv6_penetration': ipv6_penetration,
+        # 'ipv6_penetration': ipv6_penetration,
+        'v6': v6,
         'results_timeline': results_timeline,
         'inner_latency': inner_latency,
         'inner_latency_area': inner_latency_area,
