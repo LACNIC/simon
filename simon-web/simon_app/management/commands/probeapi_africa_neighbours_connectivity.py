@@ -10,12 +10,13 @@ class Command(BaseCommand):
     @probeapi(command="Africa Connectivity [Neighbours]")
     def handle(self, *args, **options):
         neighbours = {
-            'BI': ['RW'], 'DZ': ['MR'], 'ET': ['KE'], 'RW': ['BI', 'CD', 'TZ', 'UG'], 'TZ': ['RW', 'ZM'],
+            'BI': ['RW'], 'DZ': ['MR'], 'ET': ['DJ', 'ER', 'KE', 'SO', 'SS', 'SD'], 'RW': ['BI', 'CD', 'TZ', 'UG'], 'TZ': ['RW', 'ZM'],
             'CM': ['CF', 'GQ'], 'NA': ['AO'], 'LR': ['GN'], 'TD': ['CF'], 'ZM': ['AO', 'CD', 'MW', 'MZ', 'TZ'],
             'CI': ['GN'], 'GQ': ['CM', 'GA'], 'MR': ['DZ', 'ML', 'SN'], 'CG': ['CF', 'CD'],
-            'CF': ['CM', 'TD', 'CD', 'CG', 'SD'], 'AO': ['CD', 'ZM', 'NA'], 'CD': ['AO', 'CF', 'CG', 'RW', 'ZM'],
+            'CF': ['CM', 'TD', 'CD', 'CG', 'SD'], 'AO': ['CD', 'CG', 'ZM', 'NA'], 'CD': ['AO', 'CF', 'CG', 'RW', 'ZM'],
             'GA': ['GQ'], 'GN': ['CI', 'LR', 'ML', 'SN', 'SL'], 'ZW': ['MZ'], 'KE': ['ET', 'SO'], 'ML': ['GN', 'MR'],
-            'MW': ['ZM'], 'SO': ['KE'], 'SN': ['GN', 'MR'], 'SL': ['GN'], 'UG': ['RW'], 'MZ': ['ZM', 'ZW'], 'SD': ['CF']
+            'MW': ['ZM'], 'SO': ['KE'], 'SN': ['GN', 'MR'], 'SL': ['GN'], 'UG': ['RW'], 'MZ': ['ZM', 'ZW'], 'SD': ['CF'],
+            'CV': ['SN', 'GM', 'GW', 'MR']
         }
 
         def init_msm((N, ns)):
