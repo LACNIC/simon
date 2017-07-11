@@ -15,7 +15,7 @@ class Command(BaseCommand):
         comments = []
 
         ccs = Country.objects.get_lacnic_countrycodes()
-        start = datetime(year=2016, month=07, day=01)
+        start = datetime(year=2016, month=01, day=01)
 
         sms = ProbeApiPingResult.objects.filter(
             Q(country_destination__in=ccs) & Q(country_origin__in=ccs)
