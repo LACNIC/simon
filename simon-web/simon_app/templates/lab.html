@@ -5,41 +5,76 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 {% endblock %}
 
-<script type="application/javascript">
-    var CATEGORIES = 30;
-    var MIN = 0;
-    var MAX = 900;
-    var data = [];
-    var ip = "";
+{% block afterbody %}
 
-    function updateChart(rtt) {
-        var i = Math.floor((rtt - MIN) / (MAX / CATEGORIES));
-        var viejo = $('#container').highcharts().series[0].data[i]['y'];
-        $('#container').highcharts().series[0].data[i].update(++viejo);
+    <script type="application/javascript">
+        var CATEGORIES = 30;
+        var MIN = 0;
+        var MAX = 900;
+        var data = [];
+        var ip = "";
 
-        $('#container').highcharts().setTitle({text: SIMON.summary(SIMON.quartiles.filter(SIMON.getNumericalValues(SIMON.points[0].results)))});
-    }
+        var categories = [];
+        var radio = (MAX - MIN) / (2 * CATEGORIES);
+        for (var i = MIN; i < MAX; i = i + 2 * radio) {
+            categories.push('~' + (i + radio));// + '±' + (radio));
+            data.push(0);
+        }
 
-    $(document).ready(function () {
-        SIMON.params = {
-            numTests: 100,
-            post: true,
-            print: true,
-            console: 'console'
-        };
+        var chart = new Highcharts.Chart(
+            'container',
+            {
+                chart: {
+                    renderTo: 'container',
+                    type: 'column',
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                    animation: false
+                },
+                plotOptions: {
+                    column: {
+                        shadow: false,
+                        borderWidth: .5,
+                        borderColor: '#666',
+                        pointPadding: 0,
+                        groupPadding: 0,
+                        color: 'rgba(204,204,204,.85)'
+                    }
+                },
+                title: {
+                    text: 'Distribución'
+                },
+                xAxis: {
+                    categories: categories
+                },
+                yAxis: {
+                    title: {
+                        text: 'Densidad'
+                    }
+                },
+                series: [
+                    {
+                        name: 'Latencia ' + '(categorías de '
+                        + ((MAX - MIN) / CATEGORIES) + ' ms)',
+                        data: data
+                    }
+                ]
+            }
+        );
 
-        SIMON.before_start = function () {
+        function updateChart(rtt) {
+            var i = Math.floor((rtt - MIN) / (MAX / CATEGORIES));
+            var viejo = chart.series[0].data[i]['y'];
+            chart.series[0].data[i].update(++viejo);
+
+            chart.setTitle({text: SIMON.summary(SIMON.quartiles.filter(SIMON.getNumericalValues(SIMON.points[0].results)))});
+        }
+
+        function start() {
+
             ip = $("#textfield").val();
-        };
 
-        SIMON.after_each = function (rtt) {
-            updateChart(rtt);
-            data.push(rtt);
-        };
-
-        SIMON.after_points = function () {
             var testPoint = {
-                "ip": $("#textfield").val(),
+                "ip": ip,
                 "url": "",
                 "country": "",
                 "countryName": "",
@@ -51,59 +86,32 @@
                 "onlineFinished": false
             };
             SIMON.points = [testPoint];
-        };
 
-
-        /*
-         Generate data and categories arrays first
-         */
-        var categories = [];
-        var radio = (MAX - MIN) / (2 * CATEGORIES);
-        for (var i = MIN; i < MAX; i = i + 2 * radio) {
-            categories.push('~' + (i + radio));// + '±' + (radio));
-            data.push(0);
+            SIMON.init();
         }
 
-        var chart = new Highcharts.Chart(
-                {#        $('#container').highcharts(#}
-                {
-                    chart: {
-                        renderTo: 'container',
-                        type: 'column',
-                        backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                        animation: false
-                    },
-                    plotOptions: {
-                        column: {
-                            shadow: false,
-                            borderWidth: .5,
-                            borderColor: '#666',
-                            pointPadding: 0,
-                            groupPadding: 0,
-                            color: 'rgba(204,204,204,.85)'
-                        }
-                    },
-                    title: {
-                        text: 'Distribución'
-                    },
-                    xAxis: {
-                        categories: categories
-                    },
-                    yAxis: {
-                        title: {
-                            text: 'Densidad'
-                        }
-                    },
-                    series: [
-                        {
-                            name: 'Latencia ' + '(categorías de '
-                                    + ((MAX - MIN) / CATEGORIES) + ' ms)',
-                            data: data
-                        }
-                    ]
-                });
-    });
-</script>
+        setTimeout(function () {
+
+            SIMON.params.numTests = 100;
+            SIMON.params.post = false;
+            SIMON.params.print = false;
+            SIMON.params.console = 'console';
+
+            SIMON.after_each = function (rtt) {
+                updateChart(rtt);
+                data.push(rtt);
+            };
+
+            SIMON.after_points = function () {
+
+            };
+
+            document.getElementsByTagName("button")[0].disabled = false;
+
+        }, 5000);
+    </script>
+{% endblock %}
+
 
 {% block title %}Lab{% endblock %}
 
@@ -125,17 +133,18 @@
             intervalo de tiempo la misma deberá estabilizarse y comenzar a
             aproximarse a su forma para N --> inf.</p>
 
-        <form class="navbar-form">
-            <input type="text" id="textfield" autofocus="autofocus" placeholder="Dirección IP (v4 o v6)" style="width: 30em"/>
+        {#        <form class="navbar-form">#}
+        <input type="text" id="textfield" autofocus="autofocus" placeholder="Dirección IP (v4 o v6)"
+               style="width: 30em"/>
 
-            <button class="btn btn-default" onclick="SIMON.init()">
-                Iniciar
-            </button>
-        </form>
+        <button class="btn btn-default" onclick="start()" disabled>
+            Iniciar
+        </button>
+        {#        </form>#}
 
 
-        <div id="container" style="margin-top: 1em;"></div>
-        {#        <div id="" class="console" style="margin-bottom: 1em;"></div>#}
+        <div id="container" style="margin-top: 1em; height: 20em;"></div>
+        <div id="console" class="console" style="margin-bottom: 1em;"></div>
     </div>
 
 {% endblock %}
