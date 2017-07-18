@@ -158,5 +158,5 @@ LOGGING = {
     }
 }
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.lacnic.net', '*']
+ALLOWED_HOSTS = ['*']
 CORS_ORIGIN_ALLOW_ALL = True
