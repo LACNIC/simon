@@ -17,7 +17,7 @@ import os, sys
 
 sys.path.append('/opt/django/simon/simon-wimi')
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "cemd.settings")
+os.environ["DJANGO_SETTINGS_MODULE"] = 'cemd.settings'
 
 from django.core.wsgi import get_wsgi_application
 
