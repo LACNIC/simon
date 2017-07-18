@@ -153,6 +153,10 @@
     };
 </script>
 
+<script type="application/javascript">
+    var SIMON;
+</script>
+
 <!-- SIMON script async loading -->
 <script type="application/javascript">
     (function (f, b) {
@@ -175,12 +179,14 @@
             require(["jquery"], function () {
                 require(["jsonp", "date-format"], function () {
 
-                    require(["simon"], function (SIMON) {
+                    require(["simon"], function (_SIMON) {
 
-                        SIMON.params.log = true;
-                        SIMON.params.print = true;
+                        _SIMON.params.log = true;
+                        _SIMON.params.print = true;
 
-                        SIMON.init();
+                        SIMON = _SIMON;  // load SIMON as a global variable
+
+{#                        SIMON.init();#}
 
                     });
                 });
@@ -203,8 +209,8 @@
             // Require libraries loaded
             requirejs.config({
                 "paths": {
-                    "charts": "/static/simon_app/js/charts",
-{#                    "charts": "https://cdn.rawgit.com/LACNIC/static/43aba159/charts",#}
+{#                    "charts": "/static/simon_app/js/charts",#}
+                    "charts": "https://cdn.rawgit.com/LACNIC/static/96dacbac/charts",
                     "jsapi": "https://www.gstatic.com/charts/loader",
                     "jquery": "https://cdn.dev.lacnic.net/jquery-1.11.1.min"
                 }

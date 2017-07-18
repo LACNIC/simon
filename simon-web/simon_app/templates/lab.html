@@ -1,77 +1,81 @@
 {% extends 'base.html' %}
 
 {% block headers %}
-    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js" xmlns="http://www.w3.org/1999/html"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script>
+    <script src="http://d3js.org/d3.v4.js"></script>
 {% endblock %}
 
 {% block afterbody %}
 
     <script type="application/javascript">
-        var CATEGORIES = 30;
-        var MIN = 0;
-        var MAX = 900;
-        var data = [];
-        var ip = "";
+        var results = [];
+        var chart = redrawChart([0]);
 
-        var categories = [];
-        var radio = (MAX - MIN) / (2 * CATEGORIES);
-        for (var i = MIN; i < MAX; i = i + 2 * radio) {
-            categories.push('~' + (i + radio));// + '±' + (radio));
-            data.push(0);
-        }
+        function redrawChart(rtts) {
 
-        var chart = new Highcharts.Chart(
-            'container',
-            {
-                chart: {
-                    renderTo: 'container',
-                    type: 'column',
-                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                    animation: false
-                },
-                plotOptions: {
-                    column: {
-                        shadow: false,
-                        borderWidth: .5,
-                        borderColor: '#666',
-                        pointPadding: 0,
-                        groupPadding: 0,
-                        color: 'rgba(204,204,204,.85)'
-                    }
-                },
-                title: {
-                    text: 'Distribución'
-                },
-                xAxis: {
-                    categories: categories
-                },
-                yAxis: {
-                    title: {
-                        text: 'Densidad'
-                    }
-                },
-                series: [
-                    {
-                        name: 'Latencia ' + '(categorías de '
-                        + ((MAX - MIN) / CATEGORIES) + ' ms)',
-                        data: data
-                    }
-                ]
+            n = rtts.length;
+            var num_categories = Math.sqrt(n);
+            let min = _.min(rtts);
+            let max = _.max(rtts);
+            var histGenerator = d3.histogram()
+                .domain([min, max])    // Set the domain to cover the entire intervall [0;]
+                .thresholds(num_categories + 1);
+            var hist = histGenerator(rtts);
+
+            var categories = [];
+            var data = []
+            for (var h in hist) {
+                data.push(hist[h].length);
+                categories.push(_.mean(hist[h]).toFixed(1));
             }
-        );
 
-        function updateChart(rtt) {
-            var i = Math.floor((rtt - MIN) / (MAX / CATEGORIES));
-            var viejo = chart.series[0].data[i]['y'];
-            chart.series[0].data[i].update(++viejo);
+            return new Highcharts.Chart(
+                'container',
+                {
+                    chart: {
+                        renderTo: 'container',
+                        type: 'column',
+                        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                        animation: false
+                    },
+                    plotOptions: {
+                        column: {
+                            shadow: false,
+                            borderWidth: .5,
+                            borderColor: '#666',
+                            pointPadding: 0,
+                            groupPadding: 0,
+                            color: 'rgba(204,204,204,.85)'
+                        }
+                    },
+                    title: {
+                        text: 'Distribución'
+                    },
+                    xAxis: {
+                        categories: categories
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Densidad'
+                        }
+                    },
+                    series: [
+                        {
+                            name: 'Latencia ' + '(categorías de ' + Math.floor((max - min) / num_categories) + ' ms)',
+                            data: data
+                        }
+                    ]
+                }
+            );
 
-            chart.setTitle({text: SIMON.summary(SIMON.quartiles.filter(SIMON.getNumericalValues(SIMON.points[0].results)))});
-        }
+        };
 
         function start() {
 
             ip = $("#textfield").val();
+            SIMON.params.numTests = $("#probes").val();
 
             var testPoint = {
                 "ip": ip,
@@ -98,8 +102,8 @@
             SIMON.params.console = 'console';
 
             SIMON.after_each = function (rtt) {
-                updateChart(rtt);
-                data.push(rtt);
+                results.push(parseFloat(rtt));
+                redrawChart(results);
             };
 
             SIMON.after_points = function () {
@@ -123,7 +127,7 @@
 
         <p>
             Este espacio permite la exploración del medidor JavaScript. Para
-            iniciar una prueba, digite una dirección IP y oprima el botón de <i>Iniciar</i>.
+            iniciar una prueba, digite un sitio web o una dirección IP y oprima el botón de <i>Iniciar</i>.
         </p>
 
         <p>Debajo se muestra una gráfica que va mostrando la distribución
@@ -131,20 +135,27 @@
             RTT percibidos en cada test. Bien comiencen las pruebas, la
             distribución comenzará a variar, pero una vez transcurrido un
             intervalo de tiempo la misma deberá estabilizarse y comenzar a
-            aproximarse a su forma para N --> inf.</p>
+            aproximarse a su forma para N &#8594; inf.</p>
 
-        {#        <form class="navbar-form">#}
-        <input type="text" id="textfield" autofocus="autofocus" placeholder="Dirección IP (v4 o v6)"
-               style="width: 30em"/>
 
-        <button class="btn btn-default" onclick="start()" disabled>
-            Iniciar
-        </button>
-        {#        </form>#}
+        <p>
+            <b>Sitio web / dirección IP (v4 o v6)</b>
+            <br/>
+            <input type="text" id="textfield" autofocus="autofocus" placeholder=""
+                   style="width: 30em"/>
 
+            <br/>
+            <br/>
+            <b>Muestras</b>
+            <br/>
+            <input type="text" id="probes" value="100"/>
+
+            <button class="btn btn-default" onclick="start()" disabled>
+                Iniciar
+            </button>
 
         <div id="container" style="margin-top: 1em; height: 20em;"></div>
-        <div id="console" class="console" style="margin-bottom: 1em;"></div>
+        </p>
     </div>
 
 {% endblock %}
