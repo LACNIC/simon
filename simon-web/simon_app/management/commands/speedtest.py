@@ -114,7 +114,8 @@ class Command(BaseCommand):
                             # https_check.save()
                             tp.httpscheck_set.add(https_check)
 
-                            nuevos.append(tp)
+                            if tp.country in ccs_lacnic:
+                                nuevos.append(tp)
 
             except AddrFormatError:
                 logging.warning("Address Format Error")
