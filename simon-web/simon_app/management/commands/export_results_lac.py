@@ -30,3 +30,15 @@ class Command(BaseCommand):
             date_test__gte=start
         )
         export(js, 'results-lac-connectivity-js')  # .json
+
+        # Results for 2015
+        start = datetime(year=2015, month=01, day=01)
+        end = datetime(year=2016, month=12, day=31)
+
+        sms = ProbeApiPingResult.objects.filter(
+            Q(country_destination__in=ccs) & Q(country_origin__in=ccs)
+        ).filter(
+            date_test__gte=start,
+            date_test__lte=end
+        )
+        export(sms, 'results-lac-connectivity-2015')  # .json
