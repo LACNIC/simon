@@ -19,6 +19,7 @@ httplib2<=0.9.1
 ipaddr==2.1.11
 lxml<=3.3.5
 netaddr<=0.7.13
+newrelic==2.92.0.78
 numpy==1.11.0
 psycopg2<=2.5.1
 pyping>=0.0.4

@@ -50,11 +50,12 @@
         </div>
     </div>
 
-    <div class="col-sm-4" style="float: left;">
+    <div class="col-sm-4">
         <h2>Reportes</h2>
         <a href="{% url 'simon_app.views.charts' %}"
            alt="Gráficas de la región. Esta sección muestra las mediciones de latencia de la región LAC.">
-            <h3>Regionales</h3></a>
+            <h3>Regionales</h3>
+        </a>
 
         <p>Si quieres observar los datos con más claridad, puedes
             consultar algunas gráficas de latencia que muestran informacián
@@ -74,12 +75,15 @@
             experimento a gran escala que está conduciendo una de las organizaciones hermanas de LACNIC: APNIC.</p>
     </div>
 
-    <div class="col-sm-4" style="float: right;">
+    <div class="col-sm-4"
+{#         style="float: right;"#}
+    >
         <div class="">
             {% url 'simon_app.views.participate' as url_pr %}
             <a href="{{ url_pr }}"
                alt="Información acerca de cómo ser parte de este proyecto. Hay varias formas de participar!">
-                <h2>¿Cómo Participar?</h2></a>
+                <h2>¿Cómo Participar?</h2>
+            </a>
 
             <p>
             <ul>
@@ -99,9 +103,12 @@
 
     <div class="col-sm-4">
         <a href="{% url 'simon_app.views.api' %}" alt="API para obtener los resultados.">
-            <h2>API</h2></a>
-        <p>Si deseas consumir los datos a través de interfaces estandar,
-            consulta nuestra API.</p>
+            <h2>API</h2>
+        </a>
+        <p>
+            Si deseas consumir los datos a través de interfaces estandar,
+            consulta nuestra API.
+        </p>
     </div>
 
     <div class="col-sm-4">

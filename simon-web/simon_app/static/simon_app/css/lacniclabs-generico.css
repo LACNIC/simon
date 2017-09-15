@@ -115,7 +115,7 @@ h4 {
     border: none;
     margin: 0;
 	background-color: #000;
-	padding:15px 50px;
+	padding: 15px 15px;
 }
 #barra-primaria img {
     float:left;
@@ -124,6 +124,7 @@ h4 {
     color: #ffffff;
     font-family: 'foundrymonolinelight';
     text-decoration: none;
+    /*text-align: left;*/
 }
 
 #barra-secundaria > p {
@@ -180,4 +181,9 @@ footer img {
     margin: 0 0 15px 0;
     text-align: left;
     color: #4c4c4e;
+}
+
+.nav > li > a {
+    line-height: 50%;
+    text-align: center;
 }
