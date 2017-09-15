@@ -28,6 +28,7 @@ module.exports = function (config) {
 
         // list of files / patterns to load in the browser
         files: [
+            'https://cdn.dev.lacnic.net/require.js',
             'https://cdn.dev.lacnic.net/jquery-1.11.1.min.js',
             'simon_probe_plugin.js',
             'https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js'
