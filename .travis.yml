@@ -33,7 +33,7 @@ before_script:
   - python simon-web/manage.py makemigrations
   - python simon-web/manage.py migrate
   - npm install -g karma
-  - npm install -g jasmine-core
+  - npm install -g jasmine-core karma-jasmine
   - npm install -g karma-chrome-launcher
   - npm install -g karma-browserstack-launcher
 
