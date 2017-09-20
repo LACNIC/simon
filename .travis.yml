@@ -32,7 +32,7 @@ before_script:
   - psql -c 'create database simon;' -U postgres
   - python simon-web/manage.py makemigrations
   - python simon-web/manage.py migrate
-  - npm install karma
+  - npm install -g karma
   - npm install -g jasmine-core
   - npm install -g karma-chrome-launcher
   - npm install -g karma-browserstack-launcher
