@@ -33,14 +33,14 @@ before_script:
   - python simon-web/manage.py makemigrations
   - python simon-web/manage.py migrate
   - npm install karma
-  - npm install -g jasmine-core 
+  - npm install -g jasmine-core
   - npm install -g karma-chrome-launcher
   - npm install -g karma-browserstack-launcher
 
 script:
   - python simon-web/manage.py test
   - coverage run simon-web/manage.py test
-  - simon-javascript/node_modules/karma/bin/karma start simon-javascript/karma.conf.js --single-run
+  - karma start simon-javascript/karma.conf.js --single-run
 
 after_success: coveralls
 
