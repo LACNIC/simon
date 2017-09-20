@@ -23,15 +23,13 @@ module.exports = function (config) {
 
         // frameworks to use
         // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-        frameworks: ['jasmine'],
-
+        frameworks: ['jasmine', 'requirejs'],
 
         // list of files / patterns to load in the browser
         files: [
-            'https://cdn.dev.lacnic.net/require.js',
-            'https://cdn.dev.lacnic.net/jquery-1.11.1.min.js',
-            'simon_probe_plugin.js',
-            'https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js'
+            'tests/test-main.js',
+            'tests/simon_test.js',
+            {pattern: 'simon_probe_plugin.js', included: false}
         ],
 
 
@@ -60,21 +58,23 @@ module.exports = function (config) {
 
         // level of logging
         // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-        logLevel: config.LOG_INFO,
+        logLevel: config.LOG_DEBUG,
 
 
         // enable / disable watching file and executing tests whenever any file changes
-        autoWatch: true,
+        autoWatch: false,
+
+        // browserNoActivityTimeout: 20000,
 
 
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        browsers: ['Chrome', 'Firefox', 'Safari'],//, 'Opera', 'IE'],
+        browsers: ['Chrome'],  // , 'Firefox', 'Safari'],//, 'Opera', 'IE'],
 
 
         // Continuous Integration mode
         // if true, Karma captures browsers, runs the tests and exits
-        singleRun: false,
+        singleRun: true,
 
         // Concurrency level
         // how many browser should be started simultaneous

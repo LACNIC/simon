@@ -1,11 +1,15 @@
+describe("Definition test suite", function() {
 
-
-define(['simon_probe_plugin'], function(SIMON){
-
-		describe("SIMON JS Test Suite", function() {
-			it("SIMON object has loaded correctly", function () {
-		        expect(SIMON).toBeDefined();
-		    });
+	it("Is defined", function () {
+		define('Simon dep.', ['simon'], function(SIMON) {
+				expect(SIMON).toBeDefined();
 		});
+	});
+
+	it("Behaves like a msms script", function () {
+		define('Simon dep.', ['simon'], function(SIMON) {
+				expect(foo).toBe(_var);
+		});
+	});
 
 });
