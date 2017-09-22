@@ -2,6 +2,7 @@
 import os
 import socket
 import passwords
+from datadog import initialize
 from datetime import datetime
 import passwords
 from subprocess import check_output
@@ -33,6 +34,12 @@ PROBEAPI_ENDPOINT = "https://kong.speedcheckerapi.com:8443/ProbeAPIService/Probe
 
 NEWRELIC = ""
 
+datadog_options = {
+    'api_key': '3474b64f0a78ff2319d54dec840bf75f',
+    'app_key': '25a9d930c341034cbde1a450089346da395263d0'
+}
+initialize(**datadog_options)
+
 DEBUG = True
 HOSTNAME = socket.gethostname()
 if HOSTNAME == 'simon':
@@ -61,6 +68,7 @@ if HOSTNAME == 'simon':
         'x-csrftoken',
         'Access-Control-Allow-Origin'
     )
+    DATADOG_DEFAULT_TAGS = ['env:prod']
 else:
     # Developer mode
     DEBUG = True
@@ -68,6 +76,7 @@ else:
     CHARTS_URL = "https://charts.dev.lacnic.net" # "http://127.0.0.1:8001"  #
     LOGS = PROJECT_ROOT + "/logs/debug.log"
     CORS_ORIGIN_ALLOW_ALL = True
+    DATADOG_DEFAULT_TAGS = ['env:dev']
 
 MANAGERS = ADMINS
 
@@ -192,6 +201,7 @@ asns = ['278', '676', '1251', '1292', '1296', '1797', '1831', '1840', '1916', '2
         '28188', '28189', '28190', '28191', '28192', '28193', '28194', '28195', '28196', '28197', '28198', '28199',
         '28200', '28201', '28202', '28203', '28204', '28205', '28206', '28207', '28208', '28209', '28210', '28211',
         '28212', '28213', '28214', '28215', '28216', '28217', '28218', '28219', '28220', '28222', '2822']
+
 
 # Admin's email address
 # Offline test points, new WEB points and new NTP points will be anounced here
@@ -343,11 +353,17 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
-    "sslserver",
+    # "sslserver",
+    'ddtrace.contrib.django',
     'simon_app',
     'corsheaders',
     'django_extensions'
 )
+
+DATADOG_TRACE = {
+    'DEFAULT_SERVICE': 'simon',
+    'TAGS': {'env': 'dev'},
+}
 
 
 # A sample logging configuration. The only tangible logging

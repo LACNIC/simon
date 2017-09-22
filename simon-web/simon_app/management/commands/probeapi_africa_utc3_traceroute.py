@@ -4,10 +4,15 @@ from django.core.management.base import BaseCommand
 from simon_app.decorators import probeapi
 from probeapi_traceroute import ProbeApiTraceroute
 from probeapi_top28 import trace_top28
+from simon_app.decorators import timed
 
 
 class Command(BaseCommand):
-    @probeapi(command="Africa Connectivity UTC+03:00 [traceroute]")
+
+    command = "Africa Connectivity UTC+03:00 [traceroute]"
+
+    @timed(name=command)
+    @probeapi(command=command)
     def handle(self, *args, **options):
         msm = ProbeApiTraceroute(
             max_job_queue_size=50,

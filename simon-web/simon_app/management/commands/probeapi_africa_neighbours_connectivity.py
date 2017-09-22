@@ -4,10 +4,16 @@ from django.core.management.base import BaseCommand
 from simon_app.models import SpeedtestTestPoint, Country
 from simon_app.decorators import probeapi
 from probeapi import ProbeApiMeasurement
+from simon_app.decorators import timed
 
 
 class Command(BaseCommand):
-    @probeapi(command="Africa Connectivity [Neighbours]")
+
+
+    command = "Africa Connectivity [Neighbours]"
+
+    @timed(name=command)
+    @probeapi(command=command)
     def handle(self, *args, **options):
         neighbours = {
             'BI': ['RW'], 'DZ': ['MR'], 'ET': ['DJ', 'ER', 'KE', 'SO', 'SS', 'SD'], 'RW': ['BI', 'CD', 'TZ', 'UG'], 'TZ': ['RW', 'ZM'],

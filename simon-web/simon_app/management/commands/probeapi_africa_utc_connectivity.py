@@ -4,10 +4,15 @@ from django.core.management.base import BaseCommand
 from probeapi_top28 import ping_top28
 from simon_app.decorators import probeapi
 from probeapi import ProbeApiMeasurement
+from simon_app.decorators import timed
 
 
 class Command(BaseCommand):
-    @probeapi(command="Africa Connectivity UTC")
+
+    command = "Africa Connectivity UTC"
+
+    @timed(name=command)
+    @probeapi(command=command)
     def handle(self, *args, **options):
         msm = ProbeApiMeasurement(max_job_queue_size=50, max_points=20)
         ccs = ['EH', 'GM', 'SH', 'BF', 'GH', 'GN', 'GW', 'CI', 'LR', 'ML', 'MR', 'MA', 'ST', 'SN',

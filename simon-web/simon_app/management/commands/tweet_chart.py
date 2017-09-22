@@ -3,9 +3,11 @@ from django.core.management.base import BaseCommand
 from simon_app.models import *
 from scipy.stats import gaussian_kde
 import numpy as np
+from simon_app.decorators import timed
 
 
 class Command(BaseCommand):
+    @timed(name="Tweeting chart")
     def handle(self, *args, **options):
         import twitter, random
         from simon_project import passwords as passwords
