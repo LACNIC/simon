@@ -48,7 +48,9 @@ def timed_command(name=''):
 
         @statsd.timed('timed_command', tags=tags)
         def wrapper(*args, **kw):
+            statsd.increment('counted_command', tags=tags)
             f(*args, **kw)
+            statsd.decrement('counted_command', tags=tags)
 
         return wrapper
 
