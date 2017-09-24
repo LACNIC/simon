@@ -3,10 +3,10 @@ from simon_project.settings import DEBUG
 import logging
 import twitter
 from simon_project import passwords as passwords
-from simon_app.decorators import timed
+from simon_app.decorators import timed_command
 
 
-@timed(name="Tweeting")
+@timed_command(name="Tweeting")
 def tweet(text):
 
     logger = logging.getLogger(__name__)

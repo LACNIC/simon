@@ -5,12 +5,12 @@ from simon_app import caching
 import zlib, urllib2
 import datetime
 from sys import stdout
-from simon_app.decorators import timed
+from simon_app.decorators import timed_command
 
 
 class Command(BaseCommand):
 
-    @timed(name="Downloading RIPE RIS")
+    @timed_command(name="Downloading RIPE RIS")
     def handle(self, *args, **options):
 
         now = datetime.datetime.now()

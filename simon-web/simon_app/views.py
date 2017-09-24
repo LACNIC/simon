@@ -29,13 +29,13 @@ from _socket import timeout
 from django.views.decorators.cache import cache_page
 import logging
 
-from simon_app.decorators import timed
+from simon_app.decorators import timed_command
 
 from django.http import UnreadablePostError
 import operator
 
 
-@timed
+#  @timed_command
 @cache_page(60 * 60 * 24)
 def lab(request):
     """
@@ -43,25 +43,25 @@ def lab(request):
     return render_to_response('lab.html')
 
 
-@timed
+#  @timed_command
 @cache_page(60 * 60 * 24)
 def thanks(request):
     return render_to_response('thanks.html', getContext(request))
 
 
-@timed
+#  @timed_command
 @cache_page(60 * 60 * 24)
 def about(request):
     return render_to_response('about.html', getContext(request))
 
 
-@timed
+#  @timed_command
 @cache_page(60 * 60 * 24)
 def browserstack(request):
     return render_to_response('browserstack.html', getContext(request))
 
 
-@timed
+#  @timed_command
 @cache_page(60 * 15)
 def articles(request):
     return render_to_response('articles.html', getContext(request))
@@ -74,7 +74,7 @@ def articles(request):
 from reportes import UploadFileForm
 
 
-@timed
+#  @timed_command
 @csrf_exempt
 def traceroute(request):
     """
@@ -95,7 +95,7 @@ def traceroute(request):
         return render(request, 'traceroute.html', {'traceroutes': traceroutes})
 
 
-@timed
+#  @timed_command
 def traceroute_curl(request):
     ip = request.META['REMOTE_ADDR']
     l_root_4 = "199.7.83.42"
@@ -118,7 +118,7 @@ def traceroute_curl(request):
                   content_type='text/plain')
 
 
-@timed
+#  @timed_command
 def saveTracerouteResults(request, fileName):
     """
         Traceroute calculations
@@ -199,83 +199,83 @@ def saveTracerouteResults(request, fileName):
             pass
 
 
-@timed
+#  @timed_command
 def servers_locations_maps(request):
     result = servers_locations_maps_api(request)
     return HttpResponse(result, content_type="application/json")
 
 
-@timed
+#  @timed_command
 def region_throughput_chart(request):
     result = region_throughput_chart_api(request)
     return HttpResponse(result, content_type="application/json")
 
 
-@timed
+#  @timed_command
 def throughput_by_country_chart(request):
     result = throughput_by_country_chart_api(request)
     return HttpResponse(result, content_type="application/json")
 
 
-@timed
+#  @timed_command
 def web_points(request):
     result = web_points_api(request)
     return HttpResponse(result, content_type="application/json")
 
 
-@timed
+#  @timed_command
 def ntp_points(request):
     result = ntp_points_api(request)
     return HttpResponse(result, content_type="application/json")
 
 
-@timed
+#  @timed_command
 def web_configs(request):
     response = web_configs_api(request)
     return HttpResponse(response)
 
 
-@timed
+#  @timed_command
 @cache_page(60 * 60 * 24)
 def api(request):
     return render_to_response('api.html', getContext(request))
 
 
-@timed
+#  @timed_command
 def country_latency_chart(request, country):
     result = country_latency_chart_api(request, country)
     return HttpResponse(result, content_type="application/json")
 
 
-@timed
+#  @timed_command
 def region_latency_chart(request):
     result = region_latency_chart_api(request)
     return HttpResponse(result, content_type="application/json")
 
 
-@timed
+#  @timed_command
 def inner_latency_chart(request):
     result = inner_latency_chart_api(request)
     return HttpResponse(result, content_type="application/json")
 
 
-@timed
+#  @timed_command
 def latency(request, country='all', ip_version=4, year=2009, month=01):
     return latency_api(request, country, ip_version, year, month)
 
 
-@timed
+#  @timed_command
 def throughput(request, country='all', ip_version=4, year=2009, month=01):
     return throughput_api(request, country, ip_version, year, month)
 
 
-@timed
+#  @timed_command
 def throughput_json(request, country_iso, ip_version, year, month, tester, tester_version):  # , test_type):
     json = throughput_json_api(request, country_iso, ip_version, year, month, tester, tester_version)
     return HttpResponse(json, content_type="application/json")
 
 
-@timed
+#  @timed_command
 def throughput_tables(request, country_iso, ip_version, year, month, tester, tester_version):  # , test_type):
     json, ip_version, country_name, date, now, tester, tester_version = throughput_tables_api(request, country_iso,
                                                                                               ip_version, year, month,
@@ -285,12 +285,12 @@ def throughput_tables(request, country_iso, ip_version, year, month, tester, tes
                                'now': now, 'tester': tester, 'tester_version': tester_version}, getContext(request))
 
 
-@timed
+#  @timed_command
 def err404(request):
     return render_to_response('404.html')
 
 
-@timed
+#  @timed_command
 @csrf_exempt
 def post_xml_result(request):
     """
@@ -347,7 +347,7 @@ def post_xml_result(request):
     return HttpResponse("END")
 
 
-@timed
+#  @timed_command
 @csrf_exempt
 def post_traceroute(request):
     """
@@ -374,7 +374,7 @@ def post_traceroute(request):
     return HttpResponse("Thanks!\n")
 
 
-@timed
+#  @timed_command
 @csrf_exempt
 def post_xml_throughput_result(request):
     if (request.method != 'POST'):
@@ -423,7 +423,7 @@ def post_xml_throughput_result(request):
     return HttpResponse("END")
 
 
-@timed
+#  @timed_command
 @csrf_exempt
 def post_offline_testpoints(request):
     logger = logging.getLogger(__name__)
@@ -475,42 +475,42 @@ def post_offline_testpoints(request):
     return HttpResponse("END")
 
 
-@timed
+#  @timed_command
 @cache_page(60 * 60 * 24)
 def home(request):
     return render_to_response('home.html', getContext(request))
 
 
-@timed
+#  @timed_command
 def prueba(request):
     context = getContext(request)
     return render_to_response('prueba.html', context)
 
 
-@timed
+#  @timed_command
 def speedtest(request):
     context = getContext(request)
     return render_to_response('speedtest.html', context)
 
 
-@timed
+#  @timed_command
 def prueba_rt(request):
     context = getContext(request)
     response = render_to_response('prueba_rt.html', context)
     return response
 
 
-@timed
+#  @timed_command
 def objectives(request):
     return render_to_response('objectives.html', getContext(request))
 
 
-@timed
+#  @timed_command
 def participate(request):
     return render_to_response('participate.html', getContext(request))
 
 
-@timed
+#  @timed_command
 def reports(request):
     from reportes import ReportForm
     from api_views import get_cc_from_ip_address
@@ -661,7 +661,7 @@ def reports(request):
     return render_to_response('reports.html', context)
 
 
-@timed
+#  @timed_command
 def reports_as(request):
     from reportes import ASForm
 
@@ -684,7 +684,7 @@ def reports_as(request):
     return render_to_response('reports_as.html', context)
 
 
-@timed
+#  @timed_command
 def charts(request):
     """
 
@@ -892,12 +892,12 @@ def charts(request):
     return render_to_response('charts.html', ctx)
 
 
-@timed
+#  @timed_command
 def charts_reports_bandwidth(request):
     return render_to_response('charts_reports_bandwidth.html', getContext(request))
 
 
-@timed
+#  @timed_command
 def feedbackForm(request):
     """
     View in charge of precessing the feedback form
@@ -930,19 +930,19 @@ def feedbackForm(request):
     return redirect('simon_app.views.home')
 
 
-@timed
+#  @timed_command
 def applet(request):
     # return render(request, 'applet.html')
     return render_to_response('applet.html', getContext(request))
 
 
-@timed
+#  @timed_command
 def applet_run(request):
     # return render(request, 'applet.html')
     return render_to_response('applet_run.html', getContext(request))
 
 
-@timed
+#  @timed_command
 def v6perf(request):
     ctx = getContext(request)
 
@@ -954,14 +954,14 @@ def v6perf(request):
     return render_to_response('v6perf.html', ctx)
 
 
-@timed
+#  @timed_command
 def v6adoption(request):
     ctx = getContext(request)
     ctx['v6_perfs'] = V6Perf.objects.latest_measurements()
     return render_to_response('v6adoption.html', ctx)
 
 
-@timed
+#  @timed_command
 @cache_page(60 * 60 * 24)
 def atlas(request):
     from collections import Counter, OrderedDict

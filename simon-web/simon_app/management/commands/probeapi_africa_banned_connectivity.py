@@ -3,14 +3,14 @@
 from django.core.management.base import BaseCommand
 from simon_app.decorators import probeapi
 from probeapi import ProbeApiMeasurement
-from simon_app.decorators import timed
+from simon_app.decorators import timed_command
 
 
 class Command(BaseCommand):
 
     command = "Africa Connectivity [BANNED]"
 
-    @timed(name=command)
+    @timed_command(name=command)
     @probeapi(command=command)
     def handle(self, *args, **options):
         msm = ProbeApiMeasurement(max_job_queue_size=100, max_points=50)

@@ -34,24 +34,21 @@ def probeapi(command="Default ProbeAPI Command"):
     return real_decorator
 
 
-def timed(name=''):
+def timed_command(name=''):
     """
-        Wrapper decorator around datadog's *statsd.timed* decorator
-        :param function: function to be timed
+        Wrapper decorator around datadog's *statsd.timed_command* decorator
+        :param name: Name to appear in Datadog
         :return:
     """
 
-    def real_decorator(function):
+    def real_decorator(f):
 
-        view = ''
-        if name == '':
-            view = function.__name__
-        else:
-            view = name
+        view_ = ['command:' + name]
+        tags = view_ + settings.DATADOG_DEFAULT_TAGS
 
-        @statsd.timed('timed', tags=['view:' + view] + settings.DATADOG_DEFAULT_TAGS)
+        @statsd.timed('timed_command', tags=tags)
         def wrapper(*args, **kw):
-            return function(*args, **kw)
+            f(*args, **kw)
 
         return wrapper
 

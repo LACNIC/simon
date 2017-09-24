@@ -361,8 +361,8 @@ INSTALLED_APPS = (
 )
 
 DATADOG_TRACE = {
-    'DEFAULT_SERVICE': 'simon',
-    'TAGS': {'env': 'dev'},
+    'DEFAULT_SERVICE': 'simon'
+    # 'TAGS': {'env': 'dev'},
 }
 
 
