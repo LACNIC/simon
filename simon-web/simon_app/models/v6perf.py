@@ -4,10 +4,17 @@ from models import Country
 
 
 class V6PerfManager(models.Manager):
+
+
     def latest_measurements(self):
-        reverse_ = V6Perf.objects.filter(country__in=Country.objects.get_lacnic_countrycodes()).order_by('country',
-                                                                                                         '-date').distinct(
-            'country')
+        reverse_ = V6Perf.objects.filter(
+            country__in=Country.objects.get_lacnic_countrycodes()
+        ).order_by(
+            'country',
+            '-date'
+        ).distinct(
+            'country'
+        )
         return reverse_
 
 

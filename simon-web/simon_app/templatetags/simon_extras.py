@@ -69,7 +69,12 @@ def time_since(value):
     :return:
     """
     td = datetime.now(GMTUY()) - value
-    if td.seconds > 3600:
+
+    print td
+
+    if td.days > 1:
+        return "mas de un dia"
+    elif td.seconds > 3600:
         mins = "%.0f minutos" % ((td.seconds % 3600) / 60)
         horas = "%.0f %s" % (td.seconds / 3600, "horas" if td.seconds / 3600 > 1 else "hora")
         return "%s %s" % (horas, mins)
