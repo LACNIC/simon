@@ -33,6 +33,7 @@ from simon_app.decorators import timed_command
 
 from django.http import UnreadablePostError
 import operator
+from datadog import statsd
 
 
 #  @timed_command
@@ -334,6 +335,11 @@ def post_xml_result(request):
                 result.as_destination = AS.objects.get_as_by_ip(result.ip_destination).asn
                 result.user_agent = simon.find('user_agent').text
                 result.url = simon.find('url').text
+
+                statsd.increment(
+                    'Result via HTTP POST',
+                    tags=['type:HTTP', 'tester:' + result.tester, 'url:' + result.url] + settings.DATADOG_DEFAULT_TAGS
+                )
 
                 result.save()
         except etree.XMLSyntaxError as e:
