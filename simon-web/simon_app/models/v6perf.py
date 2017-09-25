@@ -8,7 +8,8 @@ class V6PerfManager(models.Manager):
 
     def latest_measurements(self):
         reverse_ = V6Perf.objects.filter(
-            country__in=Country.objects.get_lacnic_countrycodes()
+            country__in=Country.objects.get_lacnic_countrycodes(),
+            time_window=30
         ).order_by(
             'country',
             '-date'
