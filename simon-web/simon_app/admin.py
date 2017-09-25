@@ -209,7 +209,7 @@ class RegionAdmin(SimonAdmin):
     ]
 
 class V6PerfAdmin(SimonReadOnlyAdmin):
-    list_display = ['country', 'diff', 'dualstack', 'v6_rate', 'date']
+    list_display = ['country', 'diff', 'dualstack', 'v6_rate', 'date', 'time_window']
     pass
 
 
