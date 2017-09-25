@@ -23,6 +23,7 @@ class V6Perf(models.Model):
 
     """
     date = models.DateTimeField(default=datetime.now)
+    time_window = models.IntegerField(default=30)
     diff = models.FloatField(default=0.0)
     dualstack = models.FloatField(default=0.0)
     v6_rate = models.FloatField(default=0.0)
