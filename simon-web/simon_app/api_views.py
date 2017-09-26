@@ -124,8 +124,6 @@ def web_points(request):
     response = json.dumps(json_points)
     response = "{ \"points\": " + response + " }"
 
-    print response
-
     if callback is None or callback.lower() == 'none':
         return response
     else:
@@ -150,7 +148,6 @@ def web_configs(request):
     if callback is not None:
         response = '%s( %s );' % (callback, response)
 
-    print response
     return response  # HttpResponse(response, content_type="plain/text")
 
 
