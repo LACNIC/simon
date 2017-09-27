@@ -14,12 +14,15 @@ from lxml import etree
 import logging
 from sys import stdout
 from simon_app.reportes import GMTUY
-from simon_app.decorators import timed_command
+from simon_app.decorators import timed_command, mem_comsumption
 
 
 class Command(BaseCommand):
 
-    @timed_command(name="Fetching speedtest points")
+    command = "Fetching speedtest points"
+
+    @timed_command(name=command)
+    @mem_comsumption(name=command)
     def handle(self, *args, **options):
 
         ccs_lacnic = [c.iso for c in Country.objects.get_lacnic_countries()]

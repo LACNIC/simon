@@ -14,6 +14,7 @@ class Command(BaseCommand):
 
     @timed_command(name=command)
     @probeapi(command=command)
+    @mem_comsumption(name=command)
     def handle(self, *args, **options):
         neighbours = {
             'BI': ['RW'], 'DZ': ['MR'], 'ET': ['DJ', 'ER', 'KE', 'SO', 'SS', 'SD'], 'RW': ['BI', 'CD', 'TZ', 'UG'], 'TZ': ['RW', 'ZM'],

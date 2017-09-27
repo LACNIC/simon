@@ -5,7 +5,7 @@ from simon_app.models import Country
 from simon_app.decorators import probeapi
 from probeapi import ProbeApiMeasurement
 from multiprocessing.dummy import Pool as ThreadPool
-from simon_app.decorators import timed_command
+from simon_app.decorators import timed_command, mem_comsumption
 
 
 class Command(BaseCommand):
@@ -17,6 +17,7 @@ class Command(BaseCommand):
 
     @timed_command(name=command)
     @probeapi(command=command)
+    @mem_comsumption(name=command)
     def handle(self, *args, **options):
         ccs = Country.objects.get_afrinic_countrycodes()[0:5]
 

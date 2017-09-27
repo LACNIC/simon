@@ -5,6 +5,9 @@ import logging
 from datadog import statsd
 from simon_project import settings
 from simon_app.models.management import ProbeApiAudit
+import os
+import psutil
+import sys
 
 
 def probeapi(command="Default ProbeAPI Command"):
@@ -42,7 +45,6 @@ def timed_command(name=''):
     """
 
     def real_decorator(f):
-
         view_ = ['command:' + name]
         tags = view_ + settings.DATADOG_DEFAULT_TAGS
 
@@ -51,6 +53,45 @@ def timed_command(name=''):
             statsd.increment('counted_command', tags=tags)
             f(*args, **kw)
             statsd.decrement('counted_command', tags=tags)
+
+        return wrapper
+
+    return real_decorator
+
+
+def mem_comsumption(name=''):
+    """
+        Wrapper decorator around datadog's *statsd.timed_command* decorator
+        :param name: Name to appear in Datadog
+        :return:
+    """
+
+    def real_decorator(f):
+        view_ = ['command:' + name]
+        tags = view_ + settings.DATADOG_DEFAULT_TAGS
+
+        def wrapper(*args, **kw):
+            process = psutil.Process(os.getpid())
+            m0 = process.memory_info()
+            f(*args, **kw)
+            m1 = process.memory_info()
+
+            diff = dict()
+            diff['rss'] = m1.rss - m0.rss
+            diff['vms'] = m1.vms - m0.vms
+
+            sys.stderr.write("[Memory consmuption @mem_comsumption (rss)] %.2f\n" % diff['rss'])
+            sys.stderr.write("[Memory consmuption @mem_comsumption (vms)] %.2f\n" % diff['vms'])
+            statsd.gauge(
+                metric='mem_comsumption',
+                value=diff['rss'],
+                tags=tags + ['mem_kind:rss']
+            )
+            statsd.gauge(
+                metric='mem_comsumption',
+                value=diff['vms'],
+                tags=tags + ['mem_kind:vms']
+            )
 
         return wrapper
 

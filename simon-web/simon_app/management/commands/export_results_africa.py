@@ -4,13 +4,18 @@ from datetime import datetime
 from django.core.management.base import BaseCommand
 from django.db.models import Q
 from simon_app.models import Country, ProbeApiPingResult
+from simon_app.decorators import timed_command, mem_comsumption
 
 
 class Command(BaseCommand):
     """
-    Command to export Africa Connectivity results to the world
+        Command to export Africa Connectivity results to the world
     """
 
+    command = "Export Results AFRICA"
+
+    @timed_command(name=command)
+    @mem_comsumption(name=command)
     def handle(self, *args, **options):
         comments = []
 

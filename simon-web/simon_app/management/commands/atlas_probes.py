@@ -15,10 +15,13 @@ from collections import Counter
 
 
 class Command(BaseCommand):
+
+    command = "New Atlas Probes Check"
+
+    @timed_command(name=command)
     def handle(self, *args, **options):
-        command = "New Atlas Probes Check"
         logger = logging.getLogger(__name__)
-        logger.info("Starting command [%s]" % (command))
+        logger.info("Starting command [%s]" % self.command)
 
         try:
 
@@ -31,48 +34,48 @@ class Command(BaseCommand):
             anchor = 0
 
             anchor_count = anchor
-            for cc in ccs:
+            # for cc in ccs:
 
-                next = "/api/v1/probe/?country_code=%s" % (cc)
-                while next != None:
+            next = "/api/v2/probes?format=json&country__in=%s" % ccs
+            while next is not None:
 
-                    url = "%s%s" % (base_url, next)
-                    page_content = json.loads(urllib2.urlopen(url).read())
-                    next = page_content['meta']['next']
+                url = "%s%s" % (base_url, next)
+                page_content = json.loads(urllib2.urlopen(url).read())
+                next = page_content['next']
 
-                    for probe in page_content['objects']:
+                for probe in page_content['results']:
 
-                        is_anchor = probe['is_anchor']
-                        if is_anchor:
-                            anchor_count += 1
+                    is_anchor = probe['is_anchor']
+                    if is_anchor:
+                        anchor_count += 1
 
-                        status = probe['status_name']
-                        rap_status = RipeAtlasProbeStatus(
-                            date=datetime.now(GMTUY()),
-                            status=status
-                        )
-                        statuses.append(status)
+                    status = probe['status']['name']
+                    rap_status = RipeAtlasProbeStatus(
+                        date=datetime.now(GMTUY()),
+                        status=status
+                    )
+                    statuses.append(status)
 
-                        if probe['id'] in existent_probes:
-                            rap_status.probe = RipeAtlasProbe.objects.get(probe_id=probe['id'])
-                            rap_status.save()
-                            continue
-
-                        rap = RipeAtlasProbe(
-                            probe_id=probe['id'],
-                            country_code=probe['country_code'],
-                            asn_v4=probe['asn_v4'],
-                            asn_v6=probe['asn_v6'],
-                            prefix_v4=probe['prefix_v4'],
-                            prefix_v6=probe['prefix_v6'],
-                        )
-                        rap.save()
-
-                        rap_status.probe = rap
+                    if probe['id'] in existent_probes:
+                        rap_status.probe = RipeAtlasProbe.objects.get(probe_id=probe['id'])
                         rap_status.save()
+                        continue
 
-                        print is_anchor
-                        new_probes.append({'probe': rap, 'status': rap_status, 'cc': cc, 'is_anchor': is_anchor})
+                    rap = RipeAtlasProbe(
+                        probe_id=probe['id'],
+                        country_code=probe['country_code'],
+                        asn_v4=probe['asn_v4'],
+                        asn_v6=probe['asn_v6'],
+                        prefix_v4=probe['prefix_v4'],
+                        prefix_v6=probe['prefix_v6'],
+                    )
+                    rap.save()
+
+                    rap_status.probe = rap
+                    rap_status.save()
+
+                    print is_anchor
+                    new_probes.append({'probe': rap, 'status': rap_status, 'cc': probe['country_code'], 'is_anchor': is_anchor})
 
             counter = Counter(statuses)
             for c in counter:
@@ -103,10 +106,10 @@ class Command(BaseCommand):
 
                 connected = unicode(counter["Connected"])
                 text = u"%.0f %s en la región (%s)! Eso hace un total de %s RIPE Atlas probes conectadas!" % (
-                        n,
-                        "nuevas RIPE Atlas probes" if n > 1 else "nueva RIPE Atlas probe",
-                        countries_text,
-                        connected
+                    n,
+                    "nuevas RIPE Atlas probes" if n > 1 else "nueva RIPE Atlas probe",
+                    countries_text,
+                    connected
                 )
                 print text
                 tweet(text)
@@ -114,15 +117,15 @@ class Command(BaseCommand):
                 new_anchors = [p for p in new_probes if p['is_anchor']]
                 for a in new_anchors:
                     text = u"Una buena noticia! Se ha detectado un nuevo RIPE Atlas Anchor en la región (%s)!" % (
-                    a['probe'].country_code)
+                        a['probe'].country_code)
                     tweet(text)
 
             status = True
         except Exception as e:
             status = False
-            logger.error("Command failed [%s]" % (command))
+            logger.error("Command failed [%s]" % (self.command))
             logger.error(e)
 
         finally:
-            ca = CommandAudit(command=command, status=status)
+            ca = CommandAudit(command=self.command, status=status)
             ca.save()
