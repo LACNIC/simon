@@ -61,6 +61,7 @@ def export(sms, filename):
             serializable_object['ip_destination'] = ResultsManager.show_address_to_the_world(sm.ip_destination)
 
         res.append(serializable_object)
+        del sm
 
     with open(STATIC_ROOT + "/%s.json" % filename, 'wb') as jsonfile:
         jsonfile.write(json.dumps(res))
