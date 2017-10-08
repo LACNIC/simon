@@ -22,7 +22,6 @@ before_install:
     - sh -e /etc/init.d/xvfb start
 
 install:
-  - pip install setuptools==26.1.1
   - pip install -r requirements.txt --allow-external ripe.atlas.sagan ripe.atlas.cousteau
   - pip install coveralls
   - mkdir simon-web/logs

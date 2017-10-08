@@ -27,4 +27,5 @@ psutil==5.3.1
 psycopg2<=2.5.1
 pyping>=0.0.4
 pytz==2014.4
+setuptools==26.1.1
 trparse<=0.1.0
