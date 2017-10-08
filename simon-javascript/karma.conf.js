@@ -1,96 +1,94 @@
 // Karma configuration
-// Generated on Tue Jun 14 2016 16:30:20 GMT-0300 (UYT)
+// Generated on Sun Oct 08 2017 12:29:36 GMT-0300 (-03)
 
-module.exports = function (config) {
+module.exports = function(config) {
 
-    // define browsers
-    config.customLaunchers = {
-        chrome_osx: {
-            base: 'BrowserStack',
-            browser: 'Chrome',
-            browser_version: '52',
-            os: 'OS X',
-            os_version: 'El Capitan',
-            displayName: "Chrome OSX Desktop"
-        }
+  // define browsers
+  config.customLaunchers = {
+    chrome_osx: {
+      base: 'BrowserStack',
+      browser: 'Chrome',
+      browser_version: '52',
+      os: 'OS X',
+      os_version: 'El Capitan',
+      displayName: "Chrome OSX Desktop"
     }
+  }
 
-    config.set({
+  config.set({
 
-        // base path that will be used to resolve all patterns (eg. files, exclude)
-        basePath: '',
-
-
-        // frameworks to use
-        // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-        frameworks: ['jasmine', 'requirejs'],
-
-        // list of files / patterns to load in the browser
-        files: [
-            'tests/test-main.js',
-            'tests/simon_test.js',
-            {pattern: 'simon_probe_plugin.js', included: false}
-        ],
+    // base path that will be used to resolve all patterns (eg. files, exclude)
+    basePath: '',
 
 
-        // list of files to exclude
-        exclude: [],
+    // frameworks to use
+    // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
+    frameworks: ['jasmine', 'requirejs'],
 
 
-        // preprocess matching files before serving them to the browser
-        // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-        preprocessors: {},
+    // list of files / patterns to load in the browser
+    files: [
+      'test-main.js',
+      {pattern: 'tests/*.js', included: false},
+      {pattern: './*.js', included: false}
+    ],
 
 
-        // test results reporter to use
-        // possible values: 'dots', 'progress'
-        // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-        reporters: ['progress'],
+    // list of files to exclude
+    exclude: [
+    ],
 
 
-        // web server port
-        port: 9876,
+    // preprocess matching files before serving them to the browser
+    // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
+    preprocessors: {
+    },
 
 
-        // enable / disable colors in the output (reporters and logs)
-        colors: true,
+    // test results reporter to use
+    // possible values: 'dots', 'progress'
+    // available reporters: https://npmjs.org/browse/keyword/karma-reporter
+    reporters: ['progress'],
 
 
-        // level of logging
-        // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-        logLevel: config.LOG_DEBUG,
+    // web server port
+    port: 9876,
 
 
-        // enable / disable watching file and executing tests whenever any file changes
-        autoWatch: false,
-
-        // browserNoActivityTimeout: 20000,
+    // enable / disable colors in the output (reporters and logs)
+    colors: true,
 
 
-        // start these browsers
-        // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        browsers: ['Chrome'],  // , 'Firefox', 'Safari'],//, 'Opera', 'IE'],
+    // level of logging
+    // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
+    logLevel: config.LOG_INFO,
 
 
-        // Continuous Integration mode
-        // if true, Karma captures browsers, runs the tests and exits
-        singleRun: true,
+    // enable / disable watching file and executing tests whenever any file changes
+    autoWatch: true,
 
-        // Concurrency level
-        // how many browser should be started simultaneous
-        concurrency: Infinity,
 
-        /*
-         * global config of your BrowserStack account
-         */
+    // start these browsers
+    // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
+    browsers: ['Chrome'],
 
-        browserStack: {
-            username: process.env.BS_USERNAME,
-            accessKey: process.env.BS_ACCESS_KEY
-        },
 
-        // start these browsers
-        // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-        browsers: [Object.keys(config.customLaunchers)],
-    })
+    // Continuous Integration mode
+    // if true, Karma captures browsers, runs the tests and exits
+    singleRun: false,
+
+    // Concurrency level
+    // how many browser should be started simultaneous
+    concurrency: Infinity,
+
+    // global config of your BrowserStack account
+    browserStack: {
+      username: process.env.BS_USERNAME,
+      accessKey: process.env.BS_ACCESS_KEY
+    },
+
+    // start these browsers
+    // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
+    browsers: [Object.keys(config.customLaunchers)],
+  })
 }

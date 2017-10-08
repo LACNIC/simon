@@ -4,7 +4,7 @@
  * agustin at lacnic dot net
  */
 
-define(function () {
+define(['jquery'], function () {
 
     _$ = require('jquery');
 
