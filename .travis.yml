@@ -15,7 +15,7 @@ addons:
     packages:
     - libpq5=9.3.18-0ubuntu0.14.04.1
     - python-dev=2.7.5-5ubuntu3
-    - python-psycopg2=2.7.1-1build5
+    - python-psycopg2=2.4.5-1build5
 
 before_install:
     - export DISPLAY=:99.0
