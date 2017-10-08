@@ -12,7 +12,7 @@ By hosting the following JavaScript in your site, your visitors will start gener
 <script src="https://cdn.dev.lacnic.net/lacnic-net-measurements.js"></script>
 ```
 
-Visit [the site](http://simon.labs.lacnic.net "Proyecto Simón")! By visiting the site you help us by automatically generating measurements.
+Visit [the site](http://simon.lacnic.net "Proyecto Simón")! By visiting the site you help us by automatically generating measurements.
 
 ![Build status](https://travis-ci.org/LACNIC/simon.svg?branch=master)
 [![Coverage Status](https://coveralls.io/repos/LACNIC/simon/badge.svg?branch=master&service=github)](https://coveralls.io/github/LACNIC/simon?branch=master)
