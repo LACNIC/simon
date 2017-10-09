@@ -354,7 +354,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     # "sslserver",
-    'ddtrace.contrib.django',
+    # 'ddtrace.contrib.django',
     'simon_app',
     'corsheaders',
     'django_extensions'
