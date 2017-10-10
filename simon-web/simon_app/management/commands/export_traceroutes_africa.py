@@ -7,6 +7,9 @@ from django.db.models import Q
 from simon_app.models import Country, TracerouteResult, TracerouteHop
 from simon_app.decorators import timed_command, mem_comsumption
 
+from optparse import make_option
+from cProfile import Profile
+
 
 class Command(BaseCommand):
     """
@@ -15,9 +18,30 @@ class Command(BaseCommand):
 
     command = "Export Traces AFRICA"
 
+    option_list = BaseCommand.option_list + (
+        make_option('--profile',
+                    default=False,
+                    help='Show cProfile information'),
+    )
+
+    def handle(self, *args, **options):
+        """
+            Dummy handle... chooses to profile or not to profile
+        :param args:
+        :param options:
+        :return:
+        """
+
+        if options.get('profile', False):
+            profiler = Profile()
+            profiler.runcall(self._handle, *args, **options)
+            profiler.print_stats()
+        else:
+            self._handle(*args, **options)
+
     @timed_command(name=command)
     @mem_comsumption(name=command)
-    def handle(self, *args, **options):
+    def _handle(self, *args, **options):
         comments = []
 
         ccs = Country.objects.get_afrinic_countrycodes()
@@ -27,9 +51,11 @@ class Command(BaseCommand):
             Q(country_destination__in=ccs) & Q(country_origin__in=ccs)
         ).filter(
             traceroutehop__date_test__gt=start
-        )
+        ).values_list('pk', flat=True)
 
-        export_traces(trs, 'results-africa-connectivity-traces')
+            # .iterator()
+
+        export_traces(trs, 'results-africa-connectivity-traces', pks=set(trs))
 
         # top 28
         top28 = ['jumia.com.ng', 'konga.com', 'bidorbuy.co.za', 'fnb.co.za', 'gtbank.com', 'absa.co.za',

@@ -2,11 +2,15 @@ import pytz
 import json
 from collections import defaultdict
 from datetime import datetime
-from simon_app.models import ResultsManager
+from simon_app.models import ResultsManager, TracerouteResult
 from simon_project.settings import STATIC_ROOT
 
 
-def export_traces(trs, filename):
+def export_traces(trs, filename, pks=[]):
+
+    if pks:
+        trs = TracerouteResult.objects.filter(pk__in=pks)
+
     comments = []
 
     now = datetime.now().replace(second=0, microsecond=0)
@@ -73,5 +77,6 @@ def export_traces(trs, filename):
         traces.append(serializable_trace)
 
     with open(STATIC_ROOT + "/%s.json" % filename, 'wb') as jsonfile:
-        jsonfile.write(json.dumps(traces))
-        jsonfile.close()
+        encoder = json.JSONEncoder()
+        for chunk in encoder.iterencode(traces):
+            jsonfile.write(chunk)
