@@ -2,9 +2,14 @@ from django.core.management.base import BaseCommand
 from simon_app.models.v6perf import *
 from datetime import datetime
 import requests, json
-
+from simon_app.decorators import *
 
 class Command(BaseCommand):
+
+    command = "Fetching v6 perf info"
+
+    @mem_comsumption(name=command)
+    @timed_command(name=command)
     def handle(self, *args, **options):
 
         """
