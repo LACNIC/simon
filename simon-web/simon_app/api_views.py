@@ -56,7 +56,7 @@ def web_points(request):
         print e
         logging.error("Error while parsing request %s" % request.GET)
 
-    points = SpeedtestTestPoint.objects.filter()  # enabled=True)
+    points = SpeedtestTestPoint.objects.filter(enabled=True)
     if int(ip_version) == 6:
         points = points.filter(ip_address__contains=":")
     elif int(ip_version) == 4:
