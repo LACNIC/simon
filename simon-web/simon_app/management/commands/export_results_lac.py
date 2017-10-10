@@ -26,17 +26,15 @@ class Command(BaseCommand):
             Q(country_destination__in=ccs) & Q(country_origin__in=ccs)
         ).filter(
             date_test__gte=start
-        )
-        export(sms, 'results-lac-connectivity')  # .json
-        del sms
+        ).values_list('pk', flat=True)
+        export([], 'results-lac-connectivity', pks=set(sms))  # .json
 
         js = Results.objects.javascript().filter(
             Q(country_destination__in=ccs) & Q(country_origin__in=ccs)
         ).filter(
             date_test__gte=start
-        )
-        export(js, 'results-lac-connectivity-js')  # .json
-        del js
+        ).values_list('pk', flat=True)
+        export([], 'results-lac-connectivity-js', pks=set(js))  # .json
 
         # Results for 2015
         start = datetime(year=2015, month=01, day=01)
@@ -47,6 +45,5 @@ class Command(BaseCommand):
         ).filter(
             date_test__gte=start,
             date_test__lte=end
-        )
-        export(sms, 'results-lac-connectivity-2015')  # .json
-        del sms
+        ).values_list('pk', flat=True)
+        export([], 'results-lac-connectivity-2015', pks=set(sms))  # .json

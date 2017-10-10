@@ -53,8 +53,6 @@ class Command(BaseCommand):
             traceroutehop__date_test__gt=start
         ).values_list('pk', flat=True)
 
-            # .iterator()
-
         export_traces(trs, 'results-africa-connectivity-traces', pks=set(trs))
 
         # top 28

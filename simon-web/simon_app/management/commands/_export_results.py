@@ -2,7 +2,7 @@ import json
 import pytz
 from collections import defaultdict
 from datetime import datetime
-from simon_app.models import ResultsManager
+from simon_app.models import ResultsManager, ProbeApiPingResult
 from simon_project.settings import STATIC_ROOT
 
 
@@ -14,12 +14,16 @@ def timezone_or_default(cc, default=None):
         return default
 
 
-def export(sms, filename):
+def export(sms, filename, pks=[]):
     """
         :param sms: Results to be exported
         :param filename: filename to be written with those results
         :return: void
     """
+
+    if pks:
+        sms = ProbeApiPingResult.objects.filter(pk__in=pks)
+
     comments = []
 
     now = datetime.now().replace(second=0, microsecond=0)
@@ -64,5 +68,6 @@ def export(sms, filename):
         del sm
 
     with open(STATIC_ROOT + "/%s.json" % filename, 'wb') as jsonfile:
-        jsonfile.write(json.dumps(res))
-        jsonfile.close()
+        encoder = json.JSONEncoder()
+        for chunk in encoder.iterencode(res):
+            jsonfile.write(chunk)

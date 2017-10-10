@@ -26,9 +26,9 @@ class Command(BaseCommand):
             Q(country_destination__in=ccs) & Q(country_origin__in=ccs)
         ).filter(
             date_test__gte=start
-        )
+        ).values_list('pk', flat=True)
 
-        export(sms, 'results-africa-connectivity')  # .json
+        export([], 'results-africa-connectivity', pks=set(sms))  # .json
 
         # top 28
         top28 = ['jumia.com.ng', 'konga.com', 'bidorbuy.co.za', 'fnb.co.za', 'gtbank.com', 'absa.co.za',
