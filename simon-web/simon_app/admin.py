@@ -84,7 +84,7 @@ class TestPointAdmin(SimonReadOnlyAdmin):
     list_filter = ('country',)
     ordering = ['-date_created', 'enabled']
     actions = [enable, disable, check_point]
-    search_fields = ['country', 'ip_address', 'autnum', 'city']
+    search_fields = ['country', 'ip_address', 'city']
 
 
 class SpeedtestTestPointListFilter(SimpleListFilter):
