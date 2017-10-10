@@ -33,8 +33,8 @@ class Command(BaseCommand):
             Q(country_destination__in=ccs) & Q(country_origin__in=ccs)
         ).filter(
             date_test__gte=start
-        ).values_list('pk', flat=True)
-        export([], 'results-lac-connectivity-js', pks=set(js))  # .json
+        )  # .values_list('pk', flat=True)  # can't do pks yet
+        export(js, 'results-lac-connectivity-js')  # .json
 
         # Results for 2015
         start = datetime(year=2015, month=01, day=01)
