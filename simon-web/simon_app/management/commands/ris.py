@@ -6,10 +6,10 @@ import zlib, urllib2
 import datetime
 from sys import stdout
 from simon_app.decorators import timed_command, mem_comsumption
+from django.db import transaction
 
 
 class Command(BaseCommand):
-
     command = "Downloading RIPE RIS"
 
     @timed_command(name=command)
@@ -24,15 +24,15 @@ class Command(BaseCommand):
         # exit(1)
 
         print "Downloading RIS..."
-        file_v4=urllib2.urlopen('http://www.ris.ripe.net/dumps/riswhoisdump.IPv4.gz').read()
-        file_v6=urllib2.urlopen('http://www.ris.ripe.net/dumps/riswhoisdump.IPv6.gz').read()
+        file_v4 = urllib2.urlopen('http://www.ris.ripe.net/dumps/riswhoisdump.IPv4.gz').read()
+        file_v6 = urllib2.urlopen('http://www.ris.ripe.net/dumps/riswhoisdump.IPv6.gz').read()
 
         print "Parsing RIS..."
-        ris_v4 = zlib.decompress(file_v4, 16+zlib.MAX_WBITS)
-        ris_v6 = zlib.decompress(file_v6, 16+zlib.MAX_WBITS)
+        ris_v4 = zlib.decompress(file_v4, 16 + zlib.MAX_WBITS)
+        ris_v6 = zlib.decompress(file_v6, 16 + zlib.MAX_WBITS)
         asn_list = [asn.split('\t') for asn in ris_v4.split('\n')] + [asn.split('\t') for asn in ris_v6.split('\n')]
 
-        old = [a for a in AS.objects.all()] # Delete ALL AS-related info and make place for new information
+        old = [a for a in AS.objects.all()]  # Delete ALL AS-related info and make place for new information
         internet = AS(
             asn=0,
             network="0.0.0.0/0",
@@ -43,6 +43,7 @@ class Command(BaseCommand):
         internet.save()
 
         print "Inserting new records (%s)" % (now)
+        new = []
         N = len(asn_list)
         for i, line in enumerate(asn_list):
             try:
@@ -55,8 +56,14 @@ class Command(BaseCommand):
                 asn = line[0]
                 pfx_length = ip.split('/')[1]
 
-                # if not networkInLACNICResources(ip):
-                #     continue
+                try:
+                    int(asn)
+                    int(pfx_length)
+                except:
+                    continue
+
+                if int(asn) > 2147483647:  # max IntegerField on PostgreSQL
+                    continue
 
                 as_object = AS(
                     asn=asn,
@@ -65,12 +72,18 @@ class Command(BaseCommand):
                     date_updated=now,
                     regional=True
                 )
-                as_object.save()
+                new.append(as_object)
+                # as_object.save()
 
             except KeyboardInterrupt:
                 exit(1)
             except:
                 continue
+
+        with transaction.atomic():
+            for n in new:
+                # print n.asn, n.network, n.pfx_length
+                n.save()
 
         print "Deleting old records..."
         for o in old:
