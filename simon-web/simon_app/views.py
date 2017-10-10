@@ -452,6 +452,12 @@ def post_offline_testpoints(request):
 
             for point in points:
                 offline_ip = point.find('destination_ip').text
+
+                statsd.increment(
+                    'Offline Testpoint via HTTP POST',
+                    tags=['type:HTTP'] + settings.DATADOG_DEFAULT_TAGS
+                )
+
                 try:
                     # match
                     offline_report = OfflineReport.objects.get(ip_address=offline_ip)
