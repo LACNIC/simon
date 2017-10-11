@@ -9,7 +9,7 @@ from simon_app.decorators import timed_command, mem_comsumption
 
 class Command(BaseCommand):
 
-    command = "ProbeAPI LACNIC"
+    command = "Latency Sets LACNIC"
 
     @timed_command(name=command)
     @probeapi(command=command)
@@ -18,9 +18,9 @@ class Command(BaseCommand):
         msm = ProbeApiMeasurement(
             max_job_queue_size=10
         )
-        ccs = Country.objects.get_lacnic_countrycodes()
+        ccs = ["UY", "PE"]
         results = msm.init(
-            tps=["lac-connectivity.exp.dev.lacnic.net"],
+            tps=["uy-mvd-as28000.anchors.atlas.ripe.net", "191.240.3.46", "187.157.254.5"],
             ccs=ccs
         )
 

@@ -31,12 +31,9 @@ class ProbeApiMeasurement():
         self.ping_count = ping_count  # amount of ICMP pings performed per test
         self.tps = tps
         self.ccs = ccs
-
-    logger = logging.getLogger(__name__)
-
-    lock = Lock()
-
-    results = []
+        self.results = []
+        self.lock = Lock()
+        self.logger = logging.getLogger(__name__)
 
     def init(self, tps=None, ccs=None):
 
@@ -53,121 +50,13 @@ class ProbeApiMeasurement():
                 response = get_probeapi_response(url)
 
                 if response is not None:
-                    process_response(response, requested_url=url)
+                    self.process_response(response, requested_url=url)
 
             except Exception as e:
-                print e
+                print e, e.message
 
             finally:
                 return
-
-        def process_response(response, requested_url=''):
-            """
-                :param response:
-                :param requested_url: The URL requested beforehand to the service
-                :return:
-            """
-
-            target = requested_url.split('&')[2].split('=')[1]
-
-            py_object = json.loads(response, parse_int=int)
-
-            if len(py_object['StartPingTestByCountryResult']) <= 0:
-                return
-
-            for result in py_object['StartPingTestByCountryResult']:
-
-                cc_origin = result['Country']['CountryCode']
-                asn = result['ASN']['AsnID'][2:]  # strip 'AS'
-
-                packet_loss = 0
-
-                for ping_ in result['Ping']:
-                    rtts = []
-                    for r in ping_['PingTimeArray']:
-                        try:
-                            rtts.append(int(r))
-                        except Exception as e:
-                            packet_loss += 1
-                            continue
-                    destination_ip = ping_["IP"]
-
-                    try:
-                        empty_ass = AS.objects.filter(network__isnull=True,
-                                                      asn=asn)  # get the asn with no network associated
-                        if len(empty_ass) <= 0:
-                            as_origin = AS(asn=asn)  # create the empty-network AS
-                            as_origin.save()
-                        elif len(empty_ass) > 1:
-                            continue
-                        else:
-                            as_origin = empty_ass[0]
-
-                    except Exception as e:
-                        as_origin = AS(asn=asn)  # create the empty-network AS
-                        as_origin.save()
-
-                    if len(rtts) <= 0:
-                        continue
-
-                    # IQR filtering...
-                    _n = len(rtts)
-                    rtts = sorted(rtts)
-                    index = len(rtts) - 1
-                    q1 = rtts[int(0.25 * index)]
-                    q3 = rtts[int(0.75 * index)]
-                    iqr = q3 - q1
-                    max = q3 + 1.5 * iqr
-                    min = q1 - 1.5 * iqr
-                    rtts = [r for r in rtts if r > min and r < max]
-
-                    if len(rtts) <= 0:
-                        continue
-
-                    as_destination = AS.objects.get_as_by_ip(destination_ip)
-                    cc_destination = TestPoint.objects.get_or_none(ip_address=destination_ip)
-                    if cc_destination is None:
-                        cc_destination = 'XX'
-                    else:
-                        cc_destination = cc_destination.country
-
-                    std_dev = numpy.std(rtts)
-                    result = ProbeApiPingResult(
-                        date_test=datetime.datetime.now(tz=GMTUY()), \
-                        ip_origin='', \
-                        ip_destination=destination_ip, \
-                        min_rtt=numpy.amin(rtts), \
-                        max_rtt=numpy.amax(rtts), \
-                        ave_rtt=numpy.mean(rtts), \
-                        dev_rtt=std_dev, \
-                        median_rtt=numpy.median(rtts), \
-                        packet_loss=packet_loss, \
-                        country_origin=cc_origin, \
-                        country_destination=cc_destination, \
-                        ip_version=6 if ':' in destination_ip else 4, \
-                        as_origin=as_origin.asn, \
-                        as_destination=as_destination.asn, \
-                        url=target, \
-                        number_probes=len(rtts)
-                    )
-                    result.save()
-
-                    statsd.increment(
-                        'Result via Speedchecker',
-                        tags=[
-                                 'type:' + result.testype,
-                                 'tester:' + result.tester,
-                                 'url:' + result.url
-                             ] + settings.DATADOG_DEFAULT_TAGS
-                    )
-
-                    self.lock.acquire()
-                    self.results.append(result)
-                    self.lock.release()
-
-                    self.logger.info(
-                        "ICMP ping from %s to %s is %.0f ms (%s samples, +- %.0f ms, %.0f samples stripped)" % (
-                            cc_origin, cc_destination, numpy.mean(rtts), len(rtts), 2 * std_dev, _n - len(rtts)))
 
         ccs = get_countries(ccs=ccs)
 
@@ -220,6 +109,123 @@ class ProbeApiMeasurement():
         self.logger.info("Command took %s" % (datetime.datetime.now(tz=GMTUY()) - then))
 
         return self.results
+
+    def process_response(self, response, requested_url=''):
+        """
+            :param response:
+            :param requested_url: The URL requested beforehand to the service
+            :return:
+        """
+
+        target = requested_url.split('&')[2].split('=')[1]
+
+        py_object = json.loads(response, parse_int=int)
+
+        key = 'StartPingTestByCountryResult'
+        if key not in py_object.keys():
+            return
+        if len(py_object[key]) <= 0:
+            return
+
+        for result in py_object['StartPingTestByCountryResult']:
+
+            cc_origin = result['Country']['CountryCode']
+            asn = result['ASN']['AsnID'][2:]  # strip 'AS'
+
+            packet_loss = 0
+
+            for ping_ in result['Ping']:
+                rtts = []
+
+                for r in ping_['PingTimeArray']:
+                    try:
+                        rtts.append(int(r))
+                    except Exception as e:
+                        packet_loss += 1
+                        continue
+                destination_ip = ping_["IP"]
+
+                try:
+                    empty_ass = AS.objects.filter(
+                        network__isnull=True,
+                        asn=asn,
+                    )  # get the asn with no network associated
+
+                    if len(empty_ass) <= 0:
+                        as_origin = AS(
+                            asn=asn,
+                            date_updated=datetime.datetime.now(tz=GMTUY())
+                        )  # create the empty-network AS
+                        as_origin.save()
+                    else:
+                        as_origin = empty_ass[0]
+
+                except Exception as e:
+                    print e, e.message
+                    as_origin = AS(asn=asn)  # create the empty-network AS
+                    as_origin.save()
+
+                if len(rtts) <= 0:
+                    continue
+
+                # IQR filtering...
+                _n = len(rtts)
+                rtts = sorted(rtts)
+                index = len(rtts) - 1
+                q1 = rtts[int(0.25 * index)]
+                q3 = rtts[int(0.75 * index)]
+                iqr = q3 - q1
+                max = q3 + 1.5 * iqr
+                min = q1 - 1.5 * iqr
+                rtts = [r for r in rtts if r > min and r < max]
+
+                if len(rtts) <= 0:
+                    continue
+
+                as_destination = AS.objects.get_as_by_ip(destination_ip)
+                cc_destination = TestPoint.objects.get_or_none(ip_address=destination_ip)
+                if cc_destination is None:
+                    cc_destination = 'XX'
+                else:
+                    cc_destination = cc_destination.country
+
+                std_dev = numpy.std(rtts)
+                result = ProbeApiPingResult(
+                    date_test=datetime.datetime.now(tz=GMTUY()), \
+                    ip_origin='', \
+                    ip_destination=destination_ip, \
+                    min_rtt=numpy.amin(rtts), \
+                    max_rtt=numpy.amax(rtts), \
+                    ave_rtt=numpy.mean(rtts), \
+                    dev_rtt=std_dev, \
+                    median_rtt=numpy.median(rtts), \
+                    packet_loss=packet_loss, \
+                    country_origin=cc_origin, \
+                    country_destination=cc_destination, \
+                    ip_version=6 if ':' in destination_ip else 4, \
+                    as_origin=as_origin.asn, \
+                    as_destination=as_destination.asn, \
+                    url=target, \
+                    number_probes=len(rtts)
+                )
+                result.save()
+
+                statsd.increment(
+                    'Result via Speedchecker',
+                    tags=[
+                             'type:' + result.testype,
+                             'tester:' + result.tester,
+                             'url:' + result.url
+                         ] + settings.DATADOG_DEFAULT_TAGS
+                )
+
+                self.lock.acquire()
+                self.results.append(result)
+                self.lock.release()
+
+                self.logger.info(
+                    "ICMP ping from %s to %s is %.0f ms (%s samples, +- %.0f ms, %.0f samples stripped)" % (
+                        cc_origin, cc_destination, numpy.mean(rtts), len(rtts), 2 * std_dev, _n - len(rtts)))
 
     def build_url_for_tp(self, ccs, destination_ip, ping_count):
 
