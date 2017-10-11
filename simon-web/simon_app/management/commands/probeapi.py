@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from datadog import statsd
 from django.template import Template, Context
 
 from simon_app.models import *
@@ -150,6 +151,15 @@ class ProbeApiMeasurement():
                         number_probes=len(rtts)
                     )
                     result.save()
+
+                    statsd.increment(
+                        'Result via Speedchecker',
+                        tags=[
+                                 'type:' + result.testype,
+                                 'tester:' + result.tester,
+                                 'url:' + result.url
+                             ] + settings.DATADOG_DEFAULT_TAGS
+                    )
 
                     self.lock.acquire()
                     self.results.append(result)
