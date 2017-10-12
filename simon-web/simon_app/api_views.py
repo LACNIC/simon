@@ -82,8 +82,8 @@ def web_points(request):
     statsd.increment(
         'Web points',
         tags=[
-                 'amount:' + amount,
-                 'ip_version:' + ip_version,
+                 'amount:' + str(amount),
+                 'ip_version:' + str(ip_version),
                  'countrycode:' + countrycode,
                  'protocol:' + protocol,
                  'user_country:' + user_country.iso,
