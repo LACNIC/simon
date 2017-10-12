@@ -68,7 +68,7 @@ if HOSTNAME == 'simon':
         'x-csrftoken',
         'Access-Control-Allow-Origin'
     )
-    DATADOG_DEFAULT_TAGS = ['env:prod']
+    DATADOG_DEFAULT_TAGS = ['env:prod', 'app:simon']
 else:
     # Developer mode
     DEBUG = True
@@ -76,7 +76,7 @@ else:
     CHARTS_URL = "https://charts.dev.lacnic.net" # "http://127.0.0.1:8001"  #
     LOGS = PROJECT_ROOT + "/logs/debug.log"
     CORS_ORIGIN_ALLOW_ALL = True
-    DATADOG_DEFAULT_TAGS = ['env:dev']
+    DATADOG_DEFAULT_TAGS = ['env:dev', 'app:simon']
 
 MANAGERS = ADMINS
 

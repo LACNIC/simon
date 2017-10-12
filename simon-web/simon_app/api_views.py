@@ -5,7 +5,7 @@ Created on 12/11/2012
 '''
 # -*- encoding: utf-8 -*-
 from __future__ import division
-
+from datadog import statsd
 from django.http import HttpResponse
 from simon_app.functions import bps2KMG, whoIs
 from simon_app.models import *
@@ -78,6 +78,18 @@ def web_points(request):
 
     same_user_region = points.filter(
         country__in=[c.iso for c in Country.objects.filter(region__id=user_region.id)]).order_by("?")[:1]
+
+    statsd.increment(
+        'Web points',
+        tags=[
+                 'amount:' + amount,
+                 'ip_version:' + ip_version,
+                 'countrycode:' + countrycode,
+                 'protocol:' + protocol,
+                 'user_country:' + user_country.iso,
+                 'user_region:' + user_region.name,
+             ] + settings.DATADOG_DEFAULT_TAGS
+    )
 
     # Convert the QueySet into a list at the end of filtering operations
     if protocol == "https":
