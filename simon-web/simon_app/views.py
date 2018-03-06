@@ -604,9 +604,11 @@ def reports(request):
     [ases_js.append(a) for a in _a2 if a not in ases_js]
     v6_js = js.filter(ip_version=6)
     v6_count_js = v6_js.count()
+    
+    MAX_URL_RESULTS = 1500
 
     latency_histogram_js = {
-        'x': [j for j in js]
+        'x': [j for j in js][:MAX_URL_RESULTS]
     }
 
     probeapi = Chart.objects.filterQuerySet(
@@ -619,7 +621,7 @@ def reports(request):
     )
 
     latency_histogram_probeapi = {
-        'x': [p for p in probeapi]
+        'x': [p for p in probeapi][:MAX_URL_RESULTS]
     }
 
     countries_probeapi = probeapi.filter(
