@@ -1,13 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from simon_app.models import *
 import json
 import requests
-from simon_project.settings import KONG_API_KEY
+from simon_project.settings import KONG_API_KEY, PROBEAPI_ENDPOINT
 
 
 def get_countries(ccs=[]):
-    url = settings.PROBEAPI_ENDPOINT + "/GetCountries"
+    url = PROBEAPI_ENDPOINT + "/GetCountries"
 
     try:
         print "Getting countries..."
