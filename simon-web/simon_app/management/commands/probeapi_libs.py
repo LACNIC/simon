@@ -4,9 +4,10 @@ from django.core.management.base import BaseCommand
 from simon_app.models import *
 from simon_app.reportes import GMTUY
 from django.template import Template, Context
-from simon_project import passwords
 import urllib2
 import json
+import requests
+from simon_project.settings import KONG_API_KEY
 import datetime
 import numpy
 from random import sample
@@ -32,9 +33,12 @@ def get_countries(ccs=[]):
 
 
 def get_probeapi_response(url):
-    req = urllib2.Request(url)
-    req.add_header("apikey", settings.KONG_API_KEY)
-    req.add_header("Accept", "application/json")
-    urlopen = urllib2.urlopen(req)
-    response = urlopen.read()
+
+    response = requests.get(
+        url,
+        headers={
+            'Apikey': KONG_API_KEY
+        }
+    ).text
+
     return response
