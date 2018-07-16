@@ -1,18 +1,9 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from django.core.management.base import BaseCommand
 from simon_app.models import *
-from simon_app.reportes import GMTUY
-from django.template import Template, Context
-import urllib2
 import json
 import requests
 from simon_project.settings import KONG_API_KEY
-import datetime
-import numpy
-from random import sample
-from multiprocessing.dummy import Pool as ThreadPool
-from simon_app.api_views import get_cc_from_ip_address
 
 
 def get_countries(ccs=[]):
