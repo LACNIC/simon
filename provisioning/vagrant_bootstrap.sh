@@ -14,8 +14,9 @@ pip_requirements=$home/requirements.txt
 {
 	sudo apt-get install -y --force-yes \
 	git \
-	subversion \
-	python-psycopg2 \
+	apache2 \
+	apache2-dev \
+	# python-psycopg2 \
 	python-dev \
 	libxml2-dev \
 	libxslt-dev \
@@ -28,6 +29,10 @@ pip_requirements=$home/requirements.txt
 	python-pandas \
 	python-sympy \
 	python-nose
+
+	build-essential
+
+
 } > /dev/null && echo "New system dependencies installed"
 
 
@@ -47,17 +52,16 @@ pip_requirements=$home/requirements.txt
 	unzip $dump_zip
 	# && sudo -u postgres psql < $dump && echo "Simon database created and populated"
 	# echo "from django.contrib.auth.models import User; User.objects.create_superuser('simon', 'admin@example.com', 'simon')" | python manage.py shell
+
+	# Archivos que faltan
+	sudo touch /opt/django/simon/simon-web/simon_project/passwords.py
+	sudo mkdir /opt/django/simon/simon-web/logs
+	sudo touch /opt/django/simon/simon-web/logs/debug.log
+
 } > /dev/null
 
 {
-	wget --quiet https://bootstrap.pypa.io/get-pip.py > /dev/null && python get-pip.py > /dev/null && rm get-pip.py && echo "pip installed" && pip install -r $pip_requirements > /dev/null && echo "Python dependencies installed"
+	curl https://bootstrap.pypa.io/get-pip.py | sudo python && echo "pip installed" && pip install -r $pip_requirements > /dev/null && echo "Python dependencies installed"
 } && echo "Python dependencies installed"
-
-#{
-	# cd $webserver
-	# python manage.py syncdb
-	# python manage.py runserver 0.0.0.0:8000 &
-	# cd -
-#} && echo "Django web server is up  and running :)"
 
 echo "VM dependencies installed"
