@@ -15,7 +15,7 @@ addons:
   apt:
     packages:
     - libpq5=9.5.13-0ubuntu0.16.04
-    - libpq-dev
+    - libpq-dev=9.5.13-0ubuntu0.16.04
     - python-dev
 #    - python-psycopg2
     - apache2
