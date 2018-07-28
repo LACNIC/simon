@@ -13,7 +13,7 @@ addons:
     repo_token: f7fa84853f7688638c4692deda36f9c85b4c4099fd42da5a6e7097c2f29cd651
   apt:
     packages:
-    - libpq5=9.3.4-1
+    - libpq5=9.5.13
     - libpq-dev=9.3.4-1
     - python-dev=2.7.5-5ubuntu3
     - python-psycopg2=2.4.5-1build5
