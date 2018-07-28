@@ -16,7 +16,7 @@ addons:
     - libpq5
     - libpq-dev
     - python-dev
-    - python-psycopg2
+#    - python-psycopg2
     - apache2
     - apache2-dev
 
