@@ -847,7 +847,7 @@ class TestPoint(models.Model):
             response = pyping.ping(self.ip_address)
             return response.ret_code == 0
 
-        from requests import get, head
+        from requests import head
 
         try:
             logging.getLogger("requests").setLevel(logging.CRITICAL)  # silence GETs
@@ -858,13 +858,9 @@ class TestPoint(models.Model):
             endpoint = self.url.replace("http://", "").replace("https://", "").split("/")[0]
             url = "%s://%s/" % (protocol, endpoint)
 
-            print url
-
             response = head(url, timeout=timeout)
-            if response.status_code != 200:
-                return False
-            else:
-                return True
+
+            return response.status_code == 200
 
         except Exception as e:
             return False

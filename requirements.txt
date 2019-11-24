@@ -14,6 +14,7 @@ django-tagging<=0.3.2
 django-tastypie==0.13.1
 django-xmlrpc<=0.1.5
 djangocms-admin-style<=0.2.2
+dnspython~=1.16.0
 geoip2<=2.1.0
 httplib2<=0.9.1
 ipaddr==2.1.11
@@ -29,4 +30,5 @@ pytz==2014.4
 requests==2.18.4
 requests[security]==2.18.4
 setuptools==26.1.1
+tqdm~=4.39.0
 trparse<=0.1.0
