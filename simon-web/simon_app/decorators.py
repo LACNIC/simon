@@ -8,6 +8,7 @@ from simon_app.models.management import ProbeApiAudit
 import os
 import psutil
 import sys
+import sys, traceback
 
 
 def probeapi(command="Default ProbeAPI Command"):
@@ -51,8 +52,9 @@ def timed_command(name=''):
         @statsd.timed('timed_command', tags=tags)
         def wrapper(*args, **kw):
             statsd.increment('counted_command', tags=tags)
-            f(*args, **kw)
+            result = f(*args, **kw)
             statsd.decrement('counted_command', tags=tags)
+            return result
 
         return wrapper
 
@@ -73,7 +75,7 @@ def mem_comsumption(name=''):
         def wrapper(*args, **kw):
             process = psutil.Process(os.getpid())
             m0 = process.memory_info()
-            f(*args, **kw)
+            result = f(*args, **kw)
             m1 = process.memory_info()
 
             diff = dict()
@@ -92,6 +94,7 @@ def mem_comsumption(name=''):
                 value=diff['vms'],
                 tags=tags + ['mem_kind:vms']
             )
+            return result
 
         return wrapper
 

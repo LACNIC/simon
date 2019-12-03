@@ -14,6 +14,7 @@ import json
 import datetime
 import numpy
 import logging
+from simon_project.settings import DEBUG
 
 
 class ProbeApiMeasurement():
@@ -37,6 +38,22 @@ class ProbeApiMeasurement():
 
     def init(self, tps=None, ccs=None):
 
+        def do_work(url):
+            try:
+
+                response = get_probeapi_response(url)
+
+                if response is None:
+                    return []
+
+                return self.process_response(response, requested_url=url)
+
+            except Exception as e:
+                print e, e.message
+                return []
+
+        # end of do_work
+
         if tps is None:
             tps = self.tps
         if ccs is None:
@@ -44,26 +61,14 @@ class ProbeApiMeasurement():
 
         empty_results = []
 
-        def do_work(url):
-            try:
-
-                response = get_probeapi_response(url)
-
-                if response is not None:
-                    self.process_response(response, requested_url=url)
-
-            except Exception as e:
-                print e, e.message
-
-            finally:
-                return
-
         ccs = get_countries(ccs=ccs)
 
         if ccs is None or ccs == {}:
             return empty_results
 
         ccs = ccs.keys()  # get countries with running probes...
+        if DEBUG:
+            ccs = ccs[:2]  # less ccs to iterate through when developing
 
         urls = []
         thread_pool = ThreadPool(self.threads)
@@ -100,7 +105,7 @@ class ProbeApiMeasurement():
         for u in urls:
             print u
 
-        thread_pool.map(do_work, urls)
+        self.results = thread_pool.map(do_work, urls)
 
         thread_pool.close()
         thread_pool.join()
@@ -126,6 +131,9 @@ class ProbeApiMeasurement():
             return
         if len(py_object[key]) <= 0:
             return
+
+        # Results to return
+        results = []
 
         for result in py_object['StartPingTestByCountryResult']:
 
@@ -209,6 +217,7 @@ class ProbeApiMeasurement():
                     number_probes=len(rtts)
                 )
                 result.save()
+                results.append(result)
 
                 statsd.increment(
                     'Result via Speedchecker',
@@ -226,6 +235,8 @@ class ProbeApiMeasurement():
                 self.logger.info(
                     "ICMP ping from %s to %s is %.0f ms (%s samples, +- %.0f ms, %.0f samples stripped)" % (
                         cc_origin, cc_destination, numpy.mean(rtts), len(rtts), 2 * std_dev, _n - len(rtts)))
+
+        return results
 
     def build_url_for_tp(self, ccs, destination_ip, ping_count):
 
