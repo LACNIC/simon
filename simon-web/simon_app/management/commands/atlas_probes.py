@@ -5,7 +5,7 @@ import json
 import urllib2
 from simon_app.reportes import GMTUY
 from simon_app.mailing import *
-from simon_app.management.commands.tweet import *
+from simon_app.decorators import timed_command
 import logging
 from collections import Counter
 
@@ -29,18 +29,18 @@ class Command(BaseCommand):
             statuses = []
             new_probes = []  # stores probe and status objects
 
-            base_url = "https://atlas.ripe.net"
+            # base_url = "https://atlas.ripe.net"
             ccs = Country.objects.get_lacnic_countries().values_list('iso', flat=True)
             anchor = 0
 
             anchor_count = anchor
             # for cc in ccs:
 
-            next = "/api/v2/probes?format=json&country__in=%s" % ccs
+            next = "https://atlas.ripe.net/api/v2/probes?format=json&country__in=%s" % ccs
             while next is not None:
 
-                url = "%s%s" % (base_url, next)
-                page_content = json.loads(urllib2.urlopen(url).read())
+                # url = "%s%s" % (base_url, next)
+                page_content = json.loads(urllib2.urlopen(next).read())
                 next = page_content['next']
 
                 for probe in page_content['results']:
@@ -74,7 +74,6 @@ class Command(BaseCommand):
                     rap_status.probe = rap
                     rap_status.save()
 
-                    print is_anchor
                     new_probes.append({'probe': rap, 'status': rap_status, 'cc': probe['country_code'], 'is_anchor': is_anchor})
 
             counter = Counter(statuses)
