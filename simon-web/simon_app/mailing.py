@@ -58,7 +58,7 @@ def send_mail(subject="", template_filename="emails/pretty.html", ctx={}, from_e
     msg = EmailMessage(subject=subject, body=message, from_email=from_email, to=recipient_list)
     msg.content_subtype = 'html'
 
-    MAX_COUNT = 12
+    MAX_COUNT = 3
     sent = False
     count = 0
     while not sent or count < MAX_COUNT:
