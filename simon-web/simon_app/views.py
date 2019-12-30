@@ -872,16 +872,17 @@ def charts(request):
         inner_area.append(dict(alpha2Code=alpha2Code, area=area, borders=borders, latency=latency_,
                                latency_per_area=latency_per_area))
 
-    inner_area = sorted([i for i in inner_area if i["latency"] > 0], key=itemgetter("latency_per_area"),
+    inner_area = sorted([i for i in inner_area], key=itemgetter("latency_per_area"),
                         reverse=True)  # order
     for i, v in enumerate(inner_area):
         new_key = "%02d - %s" % (i, v["alpha2Code"])
         inner_area[i]["alpha2Code"] = new_key
     inner_area_max = max(list((k["latency_per_area"]) for k in inner_area))
 
+
     inner_latency_area = {
         'x': list(k["alpha2Code"].encode('utf-8') for k in inner_area),
-        'y': list((k["latency_per_area"] / inner_area_max) for k in inner_area)
+        'y': list(((k["latency_per_area"] / inner_area_max) if inner_area_max else 0) for k in inner_area)
     }
 
     ############
