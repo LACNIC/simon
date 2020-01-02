@@ -9,7 +9,7 @@ from probeapi_libs import get_countries, get_probeapi_response
 
 from multiprocessing.dummy import Pool as ThreadPool
 from threading import Lock
-from random import shuffle
+from random import shuffle, choice
 import json
 import datetime
 import numpy
@@ -68,7 +68,7 @@ class ProbeApiMeasurement():
 
         ccs = ccs.keys()  # get countries with running probes...
         if DEBUG:
-            ccs = ccs[:2]  # less ccs to iterate through when developing
+            ccs = [choice(ccs)]  # less ccs to iterate through when developing
 
         urls = []
         thread_pool = ThreadPool(self.threads)

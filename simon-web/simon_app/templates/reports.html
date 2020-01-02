@@ -313,7 +313,7 @@
             colors: ['6F8AB7']
         });
 
-        {{ latency_histogram_ripe_atlas.x}}.length > 0 && CHARTS.draw({
+        {{ latency_histogram_ripe_atlas.x }}.length > 0 && CHARTS.draw({
             x: {{ latency_histogram_ripe_atlas.x | safe }},
             kind: 'Histogram',
             labels: ['ICMP ping'],

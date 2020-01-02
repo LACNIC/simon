@@ -523,6 +523,7 @@ def participate(request):
 
 
 #  @timed_command
+@csrf_exempt
 def reports(request):
     from reportes import ReportForm
     from api_views import get_cc_from_ip_address
@@ -643,7 +644,7 @@ def reports(request):
         'x': [a for a in ripe_atlas]
     }
 
-    v6 = 100.0 * v6_count_js / len(js)
+    v6 = 100.0 * v6_count_js / len(js) if js else 0
     v4 = 100.0 - v6
     pie_chart = {
         'value': [v4, v6]
@@ -670,7 +671,7 @@ def reports(request):
     context['countries_js'] = countries_js
     context['countries_probeapi'] = countries_probeapi
     context['pie_chart'] = pie_chart
-    context['v6_count_js'] = "%.1f" % (100.0 * v6_count_js / len(js))
+    context['v6_count_js'] = "%.1f" % (100.0 * v6_count_js / len(js) if js else 0)
 
     return render_to_response('reports.html', context)
 
@@ -770,7 +771,7 @@ def charts(request):
     t0 = datetime.datetime.now()
 
     from operator import itemgetter
-    inners = Results.objects.inner(tester=settings.PROTOCOLS["HTTP"], months=6)
+    inners = Results.objects.inner(tester=settings.PROTOCOLS["ICMP"], months=6)
     inners = [(cc, _min, _avg, _max, _count) for cc, _min, _avg, _max, _count in inners if
               cc in Country.objects.get_lacnic_countrycodes()]
     inners = sorted([i for i in inners], key=itemgetter(1), reverse=True)  # ordered by min RTT
