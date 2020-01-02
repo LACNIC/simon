@@ -129,7 +129,7 @@
                 <h5>Acerca de las mediciones (<code>HTTP</code>)</h5>
                 <p>
                     El protocolo HTTP es el que mejor refleja la experiencia de usuario, debido a que es el mismo
-                    protocolo que se utiliza para la navegación web y web services en general. Esta métrica puede dar
+                    protocolo que se utiliza para la navegación web y servicios en general. Esta métrica puede dar
                     una idea de cómo los usuarios finales de la región se conectan a través de la Web.
                 </p>
             </div>
@@ -233,42 +233,42 @@
         </div>
 
 
-        <div class="chartdiv">
-            <h3 class="page-header">Matriz con latencias</h3>
-
-            <p>
-                La gráfica a continuación representa la latencia promedio en la
-                región. Las filas representan los paises de origen de los tests, y las
-                columnas los de destino. Es decir, si se quieren ver todos los tests
-                con origen Brasil, basta ver la fila BR, si se quieren ver
-                los que tienen destino Brasil, entonces habrá que recorrer la
-                columna BR.
-            </p>
-
-            <p>Las latencias más altas se corresponden con
-                las tonalidaades más oscuras. Se puede ver que las diagonales principales
-                tienen, lógicamente, menor latencia que el promedio de la matriz, ya que se
-                corresponde con la latencia interna de los países.
-            </p>
-
-            <p>Los números dentro de las celdas se corresponden con los valores de las mediciones.</p>
-
-            <div class="col-lg-4">
-                <h4>Matriz de latencias <code>HTTP</code></h4>
-                <img class="center-block" src="{% static 'simon_app/imgs/heatmap-javascript.png' %}"
-                     style="max-width: 100%">
-            </div>
-            <div class="col-lg-4">
-                <h4>Matriz de latencias <code>NTP</code></h4>
-                <img class="center-block" src="{% static 'simon_app/imgs/heatmap-applet.png' %}"
-                     style="max-width: 100%">
-            </div>
-            <div class="col-lg-4">
-                <h4>Matriz de latencias <code>ICMP</code></h4>
-                <img class="center-block" src="{% static 'simon_app/imgs/heatmap-icmp.png' %}" style="max-width: 100%">
-            </div>
-
-        </div>
+{#        <div class="chartdiv">#}
+{#            <h3 class="page-header">Matriz con latencias</h3>#}
+{##}
+{#            <p>#}
+{#                La gráfica a continuación representa la latencia promedio en la#}
+{#                región. Las filas representan los paises de origen de los tests, y las#}
+{#                columnas los de destino. Es decir, si se quieren ver todos los tests#}
+{#                con origen Brasil, basta ver la fila BR, si se quieren ver#}
+{#                los que tienen destino Brasil, entonces habrá que recorrer la#}
+{#                columna BR.#}
+{#            </p>#}
+{##}
+{#            <p>Las latencias más altas se corresponden con#}
+{#                las tonalidaades más oscuras. Se puede ver que las diagonales principales#}
+{#                tienen, lógicamente, menor latencia que el promedio de la matriz, ya que se#}
+{#                corresponde con la latencia interna de los países.#}
+{#            </p>#}
+{##}
+{#            <p>Los números dentro de las celdas se corresponden con los valores de las mediciones.</p>#}
+{##}
+{#            <div class="col-lg-4">#}
+{#                <h4>Matriz de latencias <code>HTTP</code></h4>#}
+{#                <img class="center-block" src="{% static 'simon_app/imgs/heatmap-javascript.png' %}"#}
+{#                     style="max-width: 100%">#}
+{#            </div>#}
+{#            <div class="col-lg-4">#}
+{#                <h4>Matriz de latencias <code>NTP</code></h4>#}
+{#                <img class="center-block" src="{% static 'simon_app/imgs/heatmap-applet.png' %}"#}
+{#                     style="max-width: 100%">#}
+{#            </div>#}
+{#            <div class="col-lg-4">#}
+{#                <h4>Matriz de latencias <code>ICMP</code></h4>#}
+{#                <img class="center-block" src="{% static 'simon_app/imgs/heatmap-icmp.png' %}" style="max-width: 100%">#}
+{#            </div>#}
+{##}
+{#        </div>#}
 
     </div>
 
