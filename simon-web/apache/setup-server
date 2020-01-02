@@ -1,0 +1,6 @@
+mod_wsgi-express setup-server /opt/django/simon/simon-web/simon_project/wsgi.py \
+--port 80 --https-port 443 --https-only \
+--server-name simon.lacnic.net \
+--ssl-certificate-file /etc/letsencrypt/archive/simon.lacnic.net/cert1.pem --ssl-certificate-key-file /etc/letsencrypt/archive/simon.lacnic.net/privkey1.pem \
+--server-root /etc/apache2/simon --url-alias /static /opt/django/simon/simon-web/simon_app/static \
+--user www-data --group www-data

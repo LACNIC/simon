@@ -1,35 +1,44 @@
 #!/usr/bin/env bash
 
 user=postgres
-home=/vagrant
-webserver=$home/simon-web
+# home=/vagrant
+wd=/opt/django/simon
+webserver=$wd/simon-web
 dump=$home/simon.dump
 dump_zip=$dump.zip
-pip_requirements=$home/requirements.txt
+pip_requirements=$wd/requirements.txt
 
 {
 	apt-get update
+	apt install software-properties-common
+	add-apt-repository ppa:maxmind/ppa
+	add-apt-repository ppa:certbot/certbot
+	
+	apt install --yes libgeoip1 libgeoip-dev geoip-bin \
+	python-certbot-apache 
+
 } > /dev/null && echo "Base system dependencies updated"
 
 {
-	sudo apt-get install -y --force-yes \
+	sudo apt install --yes --force-yes \
 	git \
 	apache2 \
 	apache2-dev \
 	# python-psycopg2 \
+	python2.7 \
 	python-dev \
 	libxml2-dev \
 	libxslt-dev \
+	libpq-dev \
 	unzip \
-	python-numpy \
-	python-scipy \
-	python-matplotlib \
-	ipython \
-	ipython-notebook \
-	python-pandas \
-	python-sympy \
-	python-nose
-
+	# python-numpy \
+	# python-scipy \
+	# python-matplotlib \
+	# ipython \
+	# ipython-notebook \
+	# python-pandas \
+	# python-sympy \
+	# python-nose
 	build-essential
 
 
@@ -38,25 +47,25 @@ pip_requirements=$home/requirements.txt
 
 {
 	sudo apt-get install -y --force-yes \
-	postgresql-9.1 \
-	postgresql-contrib-9.1 \
+	postgresql-9.5 \
+	postgresql-contrib-9.5 \
 	postgresql-client-common \
-	postgresql-client-9.1
+	postgresql-client-9.5
 
 } > /dev/null && echo "PostgreSQL installed"
 
 {
 	sudo -u postgres psql -c "alter role $user password 'postgres'"
 	sudo -u postgres psql -c "create database simon with owner=$user"
-	touch $dump ^^ echo "Dummy file created"
-	unzip $dump_zip
+	# touch $dump ^^ echo "Dummy file created"
+	# unzip $dump_zip
 	# && sudo -u postgres psql < $dump && echo "Simon database created and populated"
 	# echo "from django.contrib.auth.models import User; User.objects.create_superuser('simon', 'admin@example.com', 'simon')" | python manage.py shell
 
 	# Archivos que faltan
-	sudo touch /opt/django/simon/simon-web/simon_project/passwords.py
-	sudo mkdir /opt/django/simon/simon-web/logs
-	sudo touch /opt/django/simon/simon-web/logs/debug.log
+	sudo touch $webserver/simon_project/passwords.py
+	sudo mkdir $webserver/logs
+	sudo touch $webserver/logs/debug.log
 
 } > /dev/null
 

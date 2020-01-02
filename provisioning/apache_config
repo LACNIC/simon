@@ -1,0 +1,1 @@
+sudo mod_wsgi-express setup-server /opt/django/simon/simon-web/simon_project/wsgi.py --user www-data --group www-data --server-root=/etc/apache2 --port=80
