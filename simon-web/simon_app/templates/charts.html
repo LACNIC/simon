@@ -123,31 +123,31 @@
             Los datos correspondientes a la siguiente gráfica pertenecen a las muestras recogidas en el último mes.
         </p>
 
-        <h4>Medidor: Javascript (<code>HTTP</code>)</h4>
-        <div class="row">
-            <div class="col-sm-4 col-md-4 col-lg-4">
-                <h5>Acerca de las mediciones (<code>HTTP</code>)</h5>
-                <p>
-                    El protocolo HTTP es el que mejor refleja la experiencia de usuario, debido a que es el mismo
-                    protocolo que se utiliza para la navegación web y servicios en general. Esta métrica puede dar
-                    una idea de cómo los usuarios finales de la región se conectan a través de la Web.
-                </p>
-            </div>
-            <div class="col-sm-8 col-md-8 col-lg-8">
-                <h5>Histograma</h5>
-                <script type="text/javascript">
-                    {{ latency_histogram_js | safe }}
-                </script>
-                <div id="latency_histogram_js"></div>
-            </div>
-        </div>
+{#        <h4>Medidor: Javascript (<code>HTTP</code>)</h4>#}
+{#        <div class="row">#}
+{#            <div class="col-sm-4 col-md-4 col-lg-4">#}
+{#                <h5>Acerca de las mediciones (<code>HTTP</code>)</h5>#}
+{#                <p>#}
+{#                    El protocolo HTTP es el que mejor refleja la experiencia de usuario, debido a que es el mismo#}
+{#                    protocolo que se utiliza para la navegación web y servicios en general. Esta métrica puede dar#}
+{#                    una idea de cómo los usuarios finales de la región se conectan a través de la Web.#}
+{#                </p>#}
+{#            </div>#}
+{#            <div class="col-sm-8 col-md-8 col-lg-8">#}
+{#                <h5>Histograma</h5>#}
+{#                <script type="text/javascript">#}
+{#                    {{ latency_histogram_js | safe }}#}
+{#                </script>#}
+{#                <div id="latency_histogram_js"></div>#}
+{#            </div>#}
+{#        </div>#}
 
         <h4>Medidor: ProbeAPI (<code>ICMP</code>)</h4>
         <div class="row">
             <div class="col-sm-4 col-md-4 col-lg-4">
                 <h5>Acerca de las mediciones (<code>ICMP</code>)</h5>
                 <p>
-                    El protocolo ICMP está más vinculado a la infraestructura de Internet. Las siglas Internet Control
+                    El protocolo ICMP está vinculado a la infraestructura de Internet. Las siglas Internet Control
                     Messaging Protocol son suficientemente explicativas como para dar a entender que no se trata de un
                     protocolo para uso en los usurios finales, sino para control y monitoreo de conectividad.
                 </p>
@@ -214,22 +214,22 @@
                 <div id="inner_latency" style="height: 40em;"></div>
 
             </div>
-            <div class="col-sm-6">
-                <h4 class="page-header">Latencia interna ponderada por superficie</h4>
-                <p>
-                    La siguiente gráfica muestra la latencia interna de cada país, dividido la superficie total
-                    de ese
-                    país, en km<sup>2</sup>, en valores relativos (comparado frente al <i>peor</i> país). Este indicador
-                    soluciona el
-                    problema de la latencia en interna en <code>ms</code>, ya que ese
-                    indicador perjudica a países de grandes superficies y beneficia a los más pequeños. Por ende, en el
-                    extremo "bueno" de la escala se ubicarán países con baja latencia y gran superficie y en el extremo
-                    "malo" de la escala se ubicarán países con mucha latencia y poca superficie. Informaci´n de países obtenida de <a href="https://restcountries.eu" target="_blank">RESTcountries</a>.
-                </p>
-                <div id="inner_latency_area" style="height: 40em;"></div>
-
-
-            </div>
+{#            <div class="col-sm-6">#}
+{#                <h4 class="page-header">Latencia interna ponderada por superficie</h4>#}
+{#                <p>#}
+{#                    La siguiente gráfica muestra la latencia interna de cada país, dividido la superficie total#}
+{#                    de ese#}
+{#                    país, en km<sup>2</sup>, en valores relativos (comparado frente al <i>peor</i> país). Este indicador#}
+{#                    soluciona el#}
+{#                    problema de la latencia en interna en <code>ms</code>, ya que ese#}
+{#                    indicador perjudica a países de grandes superficies y beneficia a los más pequeños. Por ende, en el#}
+{#                    extremo "bueno" de la escala se ubicarán países con baja latencia y gran superficie y en el extremo#}
+{#                    "malo" de la escala se ubicarán países con mucha latencia y poca superficie. Informaci´n de países obtenida de <a href="https://restcountries.eu" target="_blank">RESTcountries</a>.#}
+{#                </p>#}
+{#                <div id="inner_latency_area" style="height: 40em;"></div>#}
+{##}
+{##}
+{#            </div>#}
         </div>
 
 
@@ -317,9 +317,9 @@
 
         });
 
-        CHARTS.draw({
-            x: {{ inner_latency_area.x | safe }},
-            ys: [{{ inner_latency_area.y }}],
+        /* CHARTS.draw({
+            {#x: {{ inner_latency_area.x | safe }},#}
+            {#ys: [{{ inner_latency_area.y }}],#}
             xType: 'string',
             labels: ['Min RTT per square km'],
             kind: 'BarChart',
@@ -327,7 +327,7 @@
             divId: 'inner_latency_area',
             colors: ['144C4C']
 
-        });
+        }); */
 
     </script>
 
