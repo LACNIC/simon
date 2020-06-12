@@ -4,7 +4,8 @@ from __future__ import division
 from datadog import statsd
 from django.contrib.gis.geoip import GeoIP
 from django.http import HttpResponse
-from django.shortcuts import redirect, render_to_response, render
+# from django.template.loader import render_to_string as render_to_response
+from django.shortcuts import redirect, render, render_to_response
 from django.views.decorators.csrf import csrf_exempt
 from lxml import etree
 
@@ -893,7 +894,7 @@ def charts(request):
     from django.template import RequestContext
     from lib.helpers import simon_processor
 
-    ctx = RequestContext(request, {
+    ctx = {
         'countries': countries,
         'latency_histogram_probeapi': latency_histogram_probeapi,
         'latency_histogram_js': latency_histogram_js,
@@ -903,7 +904,7 @@ def charts(request):
         'inner_latency': inner_latency,
         'inner_latency_area': inner_latency_area,
         'inner_count': inner_count * 2
-    }, processors=[simon_processor])
+    }
 
     return render_to_response('charts.html', ctx)
 

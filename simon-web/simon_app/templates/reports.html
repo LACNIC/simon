@@ -34,12 +34,12 @@
 
         <p>
             Las muestras consideradas en estos reportes fueron obtenidas por <a
-                href="{% url 'simon_app.views.participate' %}">la
+                href="{% url 'participate' %}">la
             contribución de cientos de usuarios</a> en cada uno de los países.
         </p>
 
 
-        <form class="navbar-form" id="country_form" action="{% url 'simon_app.views.reports' %}" method="post">
+        <form class="navbar-form" id="country_form" action="{% url 'reports' %}" method="post">
             {% csrf_token %}
             <table>
                 {{ form.as_table }}

@@ -40,7 +40,7 @@
 
     <div class="col-sm-4">
         <div class="">
-            <a href="{% url 'simon_app.views.objectives' %}" alt="Objetivos del proyecto.">
+            <a href="{% url 'objectives' %}" alt="Objetivos del proyecto.">
                 <h2>Objetivos</h2>
             </a>
 
@@ -50,7 +50,7 @@
         </div>
 
         <div class="">
-                <a href="{% url 'simon_app.views.atlas' %}"
+                <a href="{% url 'atlas' %}"
                    alt="Información acerca de la plataforma RIPE Atlas en la región LAC. Sumate a esta iniciativa!">
                     <h2>RIPE Atlas en LAC</h2></a>
 
@@ -61,7 +61,7 @@
 
     <div class="col-sm-4">
         <h2>Reportes</h2>
-        <a href="{% url 'simon_app.views.charts' %}"
+        <a href="{% url 'charts' %}"
            alt="Gráficas de la región. Esta sección muestra las mediciones de latencia de la región LAC.">
             <h3>Regionales</h3>
         </a>
@@ -70,7 +70,7 @@
             consultar algunas gráficas de latencia que muestran informacián
             acerca de la calidad de Internet en toda la region.</p>
 
-        <a href="{% url 'simon_app.views.reports' %}"
+        <a href="{% url 'reports' %}"
            alt="Reportes de los resultados obtenidos, agregados a nivel de país.">
             <h3>Por país</h3></a>
 
@@ -88,7 +88,7 @@
 {#         style="float: right;"#}
     >
         <div class="">
-            {% url 'simon_app.views.participate' as url_pr %}
+            {% url 'participate' as url_pr %}
             <a href="{{ url_pr }}"
                alt="Información acerca de cómo ser parte de este proyecto. Hay varias formas de participar!">
                 <h2>¿Cómo Participar?</h2>
@@ -111,7 +111,7 @@
     </div>
 
     <div class="col-sm-4">
-        <a href="{% url 'simon_app.views.api' %}" alt="API para obtener los resultados.">
+        <a href="{% url 'api' %}" alt="API para obtener los resultados.">
             <h2>API</h2>
         </a>
         <p>

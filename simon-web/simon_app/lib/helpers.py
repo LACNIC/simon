@@ -18,4 +18,5 @@ def simon_processor(request):
 
 
 def getContext(request=None):
-    return RequestContext(request)
+    return {}
+    # return RequestContext(request)

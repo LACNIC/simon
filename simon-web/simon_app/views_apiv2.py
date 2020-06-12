@@ -20,12 +20,12 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from django.views.decorators.http import require_http_methods
-from django.conf.urls import patterns, url
+from django.conf.urls import url
 
 # Final URLs object
-urlpatterns = patterns('',
-                       url(r'^$', 'simon_app.views_apiv2.latency')
-)
+# urlpatterns = [
+#                        url(r'^$', latency)
+# ]
 
 @require_http_methods(["GET"])
 def latency(request):
