@@ -728,7 +728,7 @@ def charts(request):
     # MAP #
     # ######
 
-    testpoints = TestPoint.objects.all()
+    testpoints = TestPoint.objects.filter(enabled=True, country__isnull=False)
     countries = {}
     for tp in testpoints:
         if tp.country is not None:
