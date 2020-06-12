@@ -982,34 +982,10 @@ def v6adoption(request):
 @cache_page(60 * 60 * 24)
 def atlas(request):
     from collections import Counter, OrderedDict
-    from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
-    rs = RipeAtlasProbeStatus.objects.get_timeline()
+    # from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
     # get the amount of times the cron job was ran in that day so far
     cron_frequencies = RipeAtlasProbeStatus.objects.get_cron_frequencies()
-
-    connected_timeline = zip([r[1] for r in rs], [cf[1] for cf in cron_frequencies])
-    disconnected_timeline = zip([r[2] for r in rs], [cf[1] for cf in cron_frequencies])
-    abandoned_timeline = zip([r[3] for r in rs], [cf[1] for cf in cron_frequencies])
-    never_timeline = zip([r[4] for r in rs], [cf[1] for cf in cron_frequencies])
-
-    connected_timeline = [conn[0] / conn[1] for conn in connected_timeline]
-    disconnected_timeline = [conn[0] / conn[1] for conn in disconnected_timeline]
-    abandoned_timeline = [conn[0] / conn[1] for conn in abandoned_timeline]
-    never_timeline = [conn[0] / conn[1] for conn in never_timeline]
-    data = dict(data=json.dumps(
-        [list(d[0].strftime("%d/%m/%Y") for d in rs), connected_timeline, disconnected_timeline, abandoned_timeline,
-         never_timeline]),
-        divId='statuses_timeline',
-        labels=json.dumps(['Connected', 'Disconnected', 'Abandoned', 'Never Connected']),
-        colors=json.dumps(['#9BC53D', '#C3423F', '#FDE74C', 'darkgray']),
-        kind='AreaChart',
-        xAxis='date')
-    url = settings.CHARTS_URL + "/code"
-    statuses_timeline = requests.post(url, data=data, headers={'Connection': 'close'}).text
-
-    # Basic Atlas stats
 
     from collections import defaultdict
     status_dict = defaultdict(int)
@@ -1038,9 +1014,11 @@ def atlas(request):
     counter = Counter(countries_with_probes)
 
     # Dict for the map
-    map = ""
+    _map = ""
     for c in counter.items():
-        map += "%s," % ([c[0].encode("utf8"), c[1]])
+        if not c[0]: continue
+
+        _map += "%s," % ([c[0].encode("utf8"), c[1]])
 
     for cc in counter:
         n = len(probes_all.filter(country_code=cc))
@@ -1071,7 +1049,9 @@ def atlas(request):
         counter[cc]['abandoned'] = "%.1f%%" % (country_abandoned * 100.0 / country_all_count)
         counter[cc]['never'] = "%.1f%%" % (country_never * 100.0 / country_all_count)
 
-        counter[cc]['country_name'] = Country.objects.get(iso=cc).printable_name
+        country_object = Country.objects.get_or_none(iso=cc)
+        if country_object:
+            counter[cc]['country_name'] = country_object.printable_name
 
     counter = OrderedDict(sorted(counter.items(), key=lambda t: t[0]))
 
@@ -1094,10 +1074,7 @@ def atlas(request):
         'abandoned': abandoned,
         'counter': counter,
         'countries_without_probes': countries_without_probes,
-
-        'statuses_timeline': statuses_timeline,
-
-        'map': map
+        'map': _map
     }
 
     return render_to_response("atlas.html", ctx, getContext(request))
