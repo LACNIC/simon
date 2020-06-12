@@ -1,5 +1,5 @@
 datadog==0.17.0
-django==1.7
+django==1.11.29
 django-admin-bootstrapped<=2.3.5
 django-classy-tags<=0.5.1
 django-cms<=3.0.2
