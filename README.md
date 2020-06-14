@@ -9,7 +9,7 @@ The project aims to provide enough information about regional connectivity in or
 By hosting the following JavaScript in your site, your visitors will start generating measurements automatically!
 
 ```javascript
-<script src="https://cdn.dev.lacnic.net/lacnic-net-measurements.js"></script>
+<script src="https://simon.lacnic.net/static/simon_app/js/lacnic-net-measurements.js"></script>
 ```
 
 Visit [the site](http://simon.lacnic.net "Proyecto Simón")! By visiting the site you help us by automatically generating measurements.
