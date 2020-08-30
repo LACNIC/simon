@@ -4,11 +4,16 @@ from django.core.management.base import BaseCommand
 
 
 class Command(BaseCommand):
+
+    def add_arguments(self, parser):
+        parser.add_argument('cc', type=str)
+        parser.add_argument('af', choices=['v4', 'v6'])
+
     def handle(self, *args, **options):
         # First arg is country code, second arg is ip version: v4 or v6
 
-        cc = args[0]
-        af = args[1]
+        cc = options['cc']
+        af = options['af']
         version = ""
 
         if af == "v4":
