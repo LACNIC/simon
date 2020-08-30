@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-from probeapi import ProbeApiMeasurement
+from _probeapi import ProbeApiMeasurement
 from probeapi_traceroute import ProbeApiTraceroute
 
 SITES = ['jumia.com.ng', 'konga.com', 'bidorbuy.co.za', 'fnb.co.za', 'gtbank.com', 'absa.co.za',
