@@ -117,7 +117,7 @@ def b(server):
 
     qname = name.from_text(url)
     q = message.make_query(qname, rdatatype.A)  # TODO AAAA
-    r = query.udp(q, '8.8.8.8' if DEBUG else 'ns2.lacnic.net.uy')
+    r = query.udp(q, '8.8.8.8' if DEBUG else '200.7.84.14')
     try:
         rrset = r.find_rrset(r.answer, qname, rdataclass.IN, rdatatype.A)
         server['addresses'] = [rr.address for rr in rrset]
