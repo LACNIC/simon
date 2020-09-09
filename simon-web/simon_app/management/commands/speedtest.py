@@ -18,6 +18,7 @@ from tqdm import tqdm
 import multiprocessing
 # We must import this explicitly, it is not imported by the top-level
 # multiprocessing module.
+from simon_project.settings import DEBUG
 import multiprocessing.pool
 from multiprocessing import Pool, TimeoutError, Process
 from datetime import datetime
@@ -116,7 +117,7 @@ def b(server):
 
     qname = name.from_text(url)
     q = message.make_query(qname, rdatatype.A)  # TODO AAAA
-    r = query.udp(q, '8.8.8.8')
+    r = query.udp(q, '8.8.8.8' if DEBUG else 'ns2.lacnic.net.uy')
     try:
         rrset = r.find_rrset(r.answer, qname, rdataclass.IN, rdatatype.A)
         server['addresses'] = [rr.address for rr in rrset]
