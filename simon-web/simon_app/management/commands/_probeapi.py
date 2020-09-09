@@ -66,9 +66,10 @@ class ProbeApiMeasurement():
         if ccs is None or ccs == {}:
             return empty_results
 
-        ccs = ccs.keys()  # get countries with running probes...
+        # ccs = ccs.keys()  # get countries with running probes...
         if DEBUG:
-            ccs = [choice(ccs)]  # less ccs to iterate through when developing
+            most_probes = sorted(ccs.items(), key=lambda i: i[1], reverse=True)[0]
+            ccs = [most_probes[0]]  # less ccs to iterate through when developing
 
         urls = []
         thread_pool = ThreadPool(self.threads)

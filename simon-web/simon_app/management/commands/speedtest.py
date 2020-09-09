@@ -81,7 +81,8 @@ class Command(BaseCommand):
 
         tps_checked = []
         for tp in tqdm(filter(None, tps_to_check), desc="Checking for new points"):
-            tps_checked.append(a(tp))
+            for _tp in a(tp):
+                tps_checked.append(_tp)
         # tps_to_check = [a(tp) for tp in tps_to_check if tp is not None]  # now they're TPs
 
         tps_checked_2 = []
@@ -94,7 +95,7 @@ class Command(BaseCommand):
             logging.info("The following Test Points have been added (%.0f):" % (len(nuevos)))
             for tp in nuevos:
                 logging.info(str(tp.ip_address))
-            send_mail_new_points_found(ctx={'points': nuevos})
+            # send_mail_new_points_found(ctx={'points': nuevos})
 
 
 def xml_to_dict(server):
@@ -163,39 +164,29 @@ def a(server):
     #     logging.warn("No address associated with hostname {hostname}".format(hostname=url))
     #     return None
 
+    res = []
     for ip_address in server.get('addresses'):
 
-        # try:
-        #     ip_address = IPAddress(ip_address[4][0])
-        # except AddrFormatError:
-        #     logging.warn("Address Format Error {ip_address}".format(ip_address=ip_address))
-        #     continue
+        (object, created) = SpeedtestTestPoint.objects.update_or_create(
+            description=description,
+            testtype=testtype,
+            ip_address=str(ip_address),
+            country=country,
+            enabled=enabled,
+            date_created=date_created,
+            url=long_url,
+            speedtest_url=long_url,
+            city=city,
+            latitude=latitude,
+            longitude=longitude
+        )
 
-        try:
-            TestPoint.objects.get(ip_address=str(ip_address))
-        except TestPoint.DoesNotExist:
+        if created:
+            res.append(object)
 
-            # TODO check if not in settinvg.v6resources
+    return res
 
-            tp = SpeedtestTestPoint(
-                description=description,
-                testtype=testtype,
-                ip_address=str(ip_address),
-                country=country,
-                enabled=enabled,
-                date_created=date_created,
-                url=long_url,
-                speedtest_url=long_url,
-                city=city,
-                latitude=latitude,
-                longitude=longitude
-            )
-
-            tp.save()
-            return tp
-
-            # if tp.country in ccs_lacnic:
-            #     nuevos.append(tp)
+        # TODO check if not in settinvg.v6resources
 
 
 def perform_https_check(tp):
@@ -205,7 +196,7 @@ def perform_https_check(tp):
 
     protocol = "https"
 
-    https_check = HttpsCheck(
+    https_check = HttpsCheck.objects.create(
         date=datetime.now(tz=tz),
         test_point=tp,
         status=tp.make_request(protocol=protocol)

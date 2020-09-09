@@ -53,7 +53,7 @@ def send_mail(subject="", template_filename="emails/pretty.html", ctx={}, from_e
     logger = logging.getLogger(__name__)
     logger.info("Sending email [%s]" % (subject))
 
-    message = get_template(template_filename).render(Context(ctx))
+    message = get_template(template_filename).render(ctx)
     subject = "[simon] %s" % (subject)  # add the 'simon' tag to mail subject
     msg = EmailMessage(subject=subject, body=message, from_email=from_email, to=recipient_list)
     msg.content_subtype = 'html'
