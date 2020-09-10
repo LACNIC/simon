@@ -14,8 +14,8 @@ class Command(BaseCommand):
 
     command = "Export Results LAC"
 
-    @timed_command(name=command)
-    @mem_comsumption(name=command)
+    # @timed_command(name=command)
+    # @mem_comsumption(name=command)
     def handle(self, *args, **options):
         comments = []
 

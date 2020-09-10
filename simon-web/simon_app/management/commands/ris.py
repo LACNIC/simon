@@ -12,8 +12,8 @@ from django.db import transaction
 class Command(BaseCommand):
     command = "Downloading RIPE RIS"
 
-    @timed_command(name=command)
-    @mem_comsumption(name=command)
+    # @timed_command(name=command)
+    # @mem_comsumption(name=command)
     def handle(self, *args, **options):
 
         now = datetime.datetime.now()

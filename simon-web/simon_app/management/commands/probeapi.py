@@ -15,9 +15,9 @@ class Command(BaseCommand):
         parser.add_argument('--src', type=str, nargs='+')
         parser.add_argument('--dst', type=str, nargs='+')
 
-    @timed_command(name=command)
+    # @timed_command(name=command)
     @probeapi(command=command)
-    @mem_comsumption(name=command)
+    # @mem_comsumption(name=command)
     def handle(self, *args, **options):
 
         ccs = options['src']

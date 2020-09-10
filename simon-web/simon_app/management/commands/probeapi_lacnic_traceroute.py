@@ -11,9 +11,9 @@ class Command(BaseCommand):
 
     command = "LAC Connectivity [traceroute]"
 
-    @timed_command(name=command)
+    # @timed_command(name=command)
     @probeapi(command=command)
-    @mem_comsumption(name=command)
+    # @mem_comsumption(name=command)
     def handle(self, *args, **options):
         msm = ProbeApiTraceroute(
             max_job_queue_size=50,

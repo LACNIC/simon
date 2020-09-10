@@ -54,8 +54,8 @@ class Command(BaseCommand):
 
     command = "Fetching speedtest points"
 
-    @timed_command(name=command)
-    @mem_comsumption(name=command)
+    # @timed_command(name=command)
+    # @mem_comsumption(name=command)
     def handle(self, *args, **options):
 
         ccs_lacnic = [c.iso for c in Country.objects.get_lacnic_countries()]

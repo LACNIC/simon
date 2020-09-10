@@ -39,8 +39,8 @@ class Command(BaseCommand):
         else:
             self._handle(*args, **options)
 
-    @timed_command(name=command)
-    @mem_comsumption(name=command)
+    # @timed_command(name=command)
+    # @mem_comsumption(name=command)
     def _handle(self, *args, **options):
         comments = []
 
