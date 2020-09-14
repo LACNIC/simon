@@ -177,20 +177,6 @@ class ProbeApiMeasurement():
                 if len(rtts) <= 0:
                     continue
 
-                # IQR filtering...
-                _n = len(rtts)
-                rtts = sorted(rtts)
-                index = len(rtts) - 1
-                q1 = rtts[int(0.25 * index)]
-                q3 = rtts[int(0.75 * index)]
-                iqr = q3 - q1
-                max = q3 + 1.5 * iqr
-                min = q1 - 1.5 * iqr
-                rtts = [r for r in rtts if r > min and r < max]
-
-                if len(rtts) <= 0:
-                    continue
-
                 as_destination = AS.objects.get_as_by_ip(destination_ip)
                 cc_destination = TestPoint.objects.get_or_none(ip_address=destination_ip)
                 if cc_destination is None:
