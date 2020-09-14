@@ -66,7 +66,7 @@ class ProbeApiMeasurement():
         if ccs is None or ccs == {}:
             return empty_results
 
-        # ccs = ccs.keys()  # get countries with running probes...
+        # get countries with running probes...
         if DEBUG:
             most_probes = sorted(ccs.items(), key=lambda i: i[1], reverse=True)[0]
             ccs = [most_probes[0]]  # less ccs to iterate through when developing
@@ -200,21 +200,21 @@ class ProbeApiMeasurement():
 
                 std_dev = numpy.std(rtts)
                 result = ProbeApiPingResult(
-                    date_test=datetime.datetime.now(tz=GMTUY()), \
-                    ip_origin='', \
-                    ip_destination=destination_ip, \
-                    min_rtt=numpy.amin(rtts), \
-                    max_rtt=numpy.amax(rtts), \
-                    ave_rtt=numpy.mean(rtts), \
-                    dev_rtt=std_dev, \
-                    median_rtt=numpy.median(rtts), \
-                    packet_loss=packet_loss, \
-                    country_origin=cc_origin, \
-                    country_destination=cc_destination, \
-                    ip_version=6 if ':' in destination_ip else 4, \
-                    as_origin=as_origin.asn, \
-                    as_destination=as_destination.asn, \
-                    url=target, \
+                    date_test=datetime.datetime.now(tz=GMTUY()),
+                    ip_origin='',
+                    ip_destination=destination_ip,
+                    min_rtt=numpy.amin(rtts),
+                    max_rtt=numpy.amax(rtts),
+                    ave_rtt=numpy.mean(rtts),
+                    dev_rtt=std_dev,
+                    median_rtt=numpy.median(rtts),
+                    packet_loss=packet_loss,
+                    country_origin=cc_origin,
+                    country_destination=cc_destination,
+                    ip_version=6 if ':' in destination_ip else 4,
+                    as_origin=as_origin.asn,
+                    as_destination=as_destination.asn,
+                    url=target,
                     number_probes=len(rtts)
                 )
                 result.save()
