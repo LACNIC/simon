@@ -221,8 +221,8 @@ class ProbeApiMeasurement():
                 self.lock.release()
 
                 self.logger.info(
-                    "ICMP ping from %s to %s is %.0f ms (%s samples, +- %.0f ms, %.0f samples stripped)" % (
-                        cc_origin, cc_destination, numpy.mean(rtts), len(rtts), 2 * std_dev, _n - len(rtts)))
+                    "ICMP ping from %s to %s is %.0f ms (%s samples, +- %.0f ms)" % (
+                        cc_origin, cc_destination, numpy.mean(rtts), len(rtts), 2 * std_dev))
 
         return results
 
