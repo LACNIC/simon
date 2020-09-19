@@ -23,7 +23,7 @@ def probeapi(command="Default ProbeAPI Command"):
             try:
                 results = function(*args, **kw)
 
-                n = len(results)
+                n = sum([len(r) for r in results])
                 ca.count = n
                 ca.description = "%d results saved." % n
             except Exception as e:
