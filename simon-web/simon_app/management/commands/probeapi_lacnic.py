@@ -17,7 +17,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         msm = ProbeApiMeasurement(
             max_job_queue_size=10,
-            max_probes=50
+            max_probes=10
         )
         ccs = Country.objects.get_lacnic_countrycodes()
         results = msm.init(
