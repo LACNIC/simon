@@ -16,7 +16,8 @@ class Command(BaseCommand):
     # @mem_comsumption(name=command)
     def handle(self, *args, **options):
         msm = ProbeApiMeasurement(
-            max_job_queue_size=10
+            max_job_queue_size=10,
+            max_probes=50
         )
         ccs = Country.objects.get_lacnic_countrycodes()
         results = msm.init(

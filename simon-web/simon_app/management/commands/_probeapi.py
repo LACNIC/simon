@@ -23,13 +23,14 @@ class ProbeApiMeasurement():
     """
 
     def __init__(
-            self, threads=50, max_job_queue_size=200, max_points=0, ping_count=10,
+            self, threads=50, max_job_queue_size=200, max_points=0, max_probes=10, ping_count=10,
             tps=[], ccs=[]
     ):
         self.threads = threads
         self.max_job_queue_size = max_job_queue_size  # 0 for limitless
         self.max_points = max_points  # 0 for limitless
         self.ping_count = ping_count  # amount of ICMP pings performed per test
+        self.max_probes = max_probes  # amount of ICMP pings performed per test
         self.tps = tps
         self.ccs = ccs
         self.results = []
@@ -99,7 +100,7 @@ class ProbeApiMeasurement():
             else:
                 destination_ip = tp  # the domain itself
 
-            urls += self.build_url_for_tp(ccs, destination_ip, self.ping_count)
+            urls += self.build_url_for_tp(ccs, destination_ip, self.ping_count, self.max_probes)
 
         self.logger.info("TPs %s x CCs %s" % (len(tps), len(ccs)))
         self.logger.info("Launching %.0f worker threads on a %.0f jobs queue" % (self.threads, len(urls)))
@@ -225,7 +226,7 @@ class ProbeApiMeasurement():
 
         return results
 
-    def build_url_for_tp(self, ccs, destination_ip, ping_count):
+    def build_url_for_tp(self, ccs, destination_ip, ping_count, max_probes=10):
 
         urls = []
 
@@ -250,7 +251,7 @@ class ProbeApiMeasurement():
                     'cc': cc,
                     'count': ping_count,
                     'destination': destination_ip,
-                    'probeslimit': 10,  # 10 (probes per CC)
+                    'probeslimit': max_probes,
                     'timeout': timeout
                 }
             )
