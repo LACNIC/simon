@@ -19,6 +19,8 @@ def get_countries(ccs=[]):
                 res[cc] = p["ProbesCount"]
         return res
     except Exception as e:
+        print e
+        print response
         return None
 
 
