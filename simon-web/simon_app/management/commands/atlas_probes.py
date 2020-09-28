@@ -18,7 +18,7 @@ class Command(BaseCommand):
 
     command = "New Atlas Probes Check"
 
-    # @timed_command(name=command)
+    @timed_command(name=command)
     def handle(self, *args, **options):
         logger = logging.getLogger(__name__)
         logger.info("Starting command [%s]" % self.command)

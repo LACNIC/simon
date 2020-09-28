@@ -11,9 +11,9 @@ class Command(BaseCommand):
 
     command = "ProbeAPI RIPE NCC"
 
-    # @timed_command(name=command)
+    @timed_command(name=command)
     @probeapi(command=command)
-    # @mem_comsumption(name=command)
+    @mem_comsumption(name=command)
     def handle(self, *args, **options):
         msm = ProbeApiMeasurement(max_job_queue_size=50, max_points=20)
         ripencc_countrycodes = Country.objects.get_ripencc_countrycodes()

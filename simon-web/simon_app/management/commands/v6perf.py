@@ -8,8 +8,8 @@ class Command(BaseCommand):
 
     command = "Fetching v6 perf info"
 
-    # @mem_comsumption(name=command)
-    # @timed_command(name=command)
+    @mem_comsumption(name=command)
+    @timed_command(name=command)
     def handle(self, *args, **options):
 
         """
