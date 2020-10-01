@@ -14,6 +14,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('--src', type=str, nargs='+')
         parser.add_argument('--dst', type=str, nargs='+')
+        parser.add_argument('--probes', type=int)
 
     @timed_command(name=command)
     @probeapi(command=command)
@@ -22,6 +23,7 @@ class Command(BaseCommand):
 
         ccs = options['src']
         dst = options['dst']
+        probes = options['probes']
 
         # accept ip addr, hostnmae, or plain txt as dst
         # plain txt will be formatted to hostname %s.exp.dev.lacnic.net
@@ -31,7 +33,8 @@ class Command(BaseCommand):
         )
 
         msm = ProbeApiMeasurement(
-            max_job_queue_size=10
+            max_job_queue_size=10,
+            max_probes=probes
         )
         results = msm.init(
             tps=dst,
