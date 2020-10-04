@@ -37,7 +37,7 @@ class ProbeApiMeasurement():
         self.lock = Lock()
         self.logger = logging.getLogger(__name__)
 
-    def init(self, tps=None, ccs=None):
+    def init(self, tps=None, ccs=None, timeout=None):
 
         def do_work(url):
             try:
@@ -100,7 +100,7 @@ class ProbeApiMeasurement():
             else:
                 destination_ip = tp  # the domain itself
 
-            urls += self.build_url_for_tp(ccs, destination_ip, self.ping_count, self.max_probes)
+            urls += self.build_url_for_tp(ccs, destination_ip, self.ping_count, self.max_probes, timeout=timeout)
 
         self.logger.info("TPs %s x CCs %s" % (len(tps), len(ccs)))
         self.logger.info("Launching %.0f worker threads on a %.0f jobs queue" % (self.threads, len(urls)))
@@ -226,7 +226,7 @@ class ProbeApiMeasurement():
 
         return results
 
-    def build_url_for_tp(self, ccs, destination_ip, ping_count, max_probes=10):
+    def build_url_for_tp(self, ccs, destination_ip, ping_count, max_probes=10, timeout=None):
 
         urls = []
 
@@ -235,7 +235,8 @@ class ProbeApiMeasurement():
             round_trip = 2
             time_for_each_ping = 1000
             tx_time = 10000
-            timeout = ping_count * round_trip * time_for_each_ping + tx_time
+            if timeout is None:
+                timeout = 2 * ping_count * round_trip * time_for_each_ping + tx_time
 
             t = Template(
                 settings.PROBEAPI_ENDPOINT + "/StartPingTestByCountry?"
