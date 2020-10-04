@@ -179,7 +179,7 @@ class ProbeApiMeasurement():
                     continue
 
                 as_destination = AS.objects.get_as_by_ip(destination_ip)
-                cc_destination = TestPoint.objects.get_or_none(ip_address=destination_ip)
+                cc_destination = TestPoint.objects.filter(ip_address=destination_ip, enabled=True)
                 if cc_destination is None:
                     cc_destination = 'XX'
                 else:
