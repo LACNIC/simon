@@ -14,7 +14,7 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('--src', type=str, nargs='+')
         parser.add_argument('--dst', type=str, nargs='+')
-        parser.add_argument('--probes', type=int)
+        parser.add_argument('--probes', type=int, default=10)
         parser.add_argument('--timeout', type=int, default=30000)
 
     @timed_command(name=command)
