@@ -183,7 +183,7 @@ class ProbeApiMeasurement():
                 if cc_destination is None:
                     cc_destination = 'XX'
                 else:
-                    cc_destination = cc_destination.country
+                    cc_destination = cc_destination.first().country
 
                 std_dev = numpy.std(rtts)
                 result = ProbeApiPingResult(
