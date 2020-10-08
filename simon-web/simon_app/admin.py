@@ -128,21 +128,6 @@ class InactiveUsersView(ChangeList):
         return qs.filter(is_staff=False, is_active=False, is_superuser=False)
 
 
-class RipeAtlasTokenAdmin(SimonReadOnlyAdmin):
-    pass
-
-
-class RipeAtlasTokenListAdmin(SimonReadOnlyAdmin):
-    pass
-    # def save_model(self, request, obj, form, change):
-    #     print obj
-    #     tokens = self.token_list.split(sep="\n")
-    #     for token in tokens:
-    #         print token
-    #         rat = RipeAtlasToken(token=token)
-    #         rat.save()
-
-
 class CommandAuditAdmin(SimonReadOnlyAdmin):
     list_display = ['command', 'date', 'status']
 
