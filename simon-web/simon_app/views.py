@@ -915,39 +915,6 @@ def charts_reports_bandwidth(request):
 
 
 #  @timed_command
-def feedbackForm(request):
-    """
-    View in charge of precessing the feedback form
-    :param request:
-    :return:
-    """
-    if request.method != 'POST':
-        return HttpResponse("Invalid Method")
-
-    from django.core.mail import EmailMessage
-
-    post = request.POST
-    mensaje = post['mensaje']
-    remitente = post['remitente']
-
-    Comment(person=remitente, comment=mensaje).save()
-
-    subject = 'Feedback desde Simón'
-    mssg = "%s dice:\n%s" % (remitente, mensaje)
-    from_ = 'agustin@lacnic.net'
-
-    to = []
-    for admin in settings.ADMINS:
-        to.append(admin[1])
-
-    # EmailMessage(subject, mssg, to=["agustin@lacnic.net"]).send()
-    # send_mail(subject, mssg, from_, to, fail_silently=False)
-
-    # request.method = 'GET'
-    return redirect('simon_app.views.home')
-
-
-#  @timed_command
 def applet(request):
     # return render(request, 'applet.html')
     return render_to_response('applet.html', getContext(request))

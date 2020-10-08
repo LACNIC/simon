@@ -627,14 +627,6 @@ class TracerouteHop(Results):
     def __str__(self):
         print "AS%s (%s) --> AS%s (%s)" % (self.as_origin, self.ip_origin, self.as_destination, self.ip_destination)
 
-
-class RipeAtlasResult(Results):
-    probe_id = models.IntegerField(null=False)
-    measurement_id = models.IntegerField(null=False)
-    type = CharField(max_length=100)
-    oneoff = models.BooleanField(default=False)
-
-
 class RipeAtlasProbeManager(models.Manager):
     def connected_now(self):
         return RipeAtlasProbe.objects.filter(ripeatlasprobestatus__status="Connected")
@@ -756,49 +748,6 @@ class RipeAtlasProbeStatus(models.Model):
         super(RipeAtlasProbeStatus, self).save(*args, **kwargs)
 
 
-class RipeAtlasPingResult(RipeAtlasResult):
-    def is_valid(self):
-
-        if self.min_rtt > 0 and self.max_rtt > 0 and self.ave_rtt > 0:
-            pass
-        else:
-            return False
-
-        ccs = Country.objects.get_lacnic_countrycodes()
-        return self.country_origin in ccs and self.country_destination in ccs
-
-    def merge(self, ripeAtlasPingResult):
-        """
-        Used for merging multiple results, Useful if we don't want to crwod our database
-        :param ripeAtlasPingResult:
-        :return:
-        """
-        res = RipeAtlasPingResult(
-            min_rtt=min(self.rtt_min, self.rtt_min),
-            max_rtt=max(self.rtt_max, self.rtt_max),
-            ave_rtt=(self.rtt_average + self.rtt_average) / 2.0,
-            median_rtt=0,
-            # it's not possible to combine (unless we merge the samples...) #TODO store the result samples
-            number_probes=self.packets_sent + self.packet_loss,
-            packet_loss=self.packet_loss + self.packet_loss
-        )
-        return res
-
-    class Meta:
-        verbose_name = 'Resultado RIPE Atlas ICMP Ping'
-        verbose_name_plural = 'Resultados RIPE Atlas ICMP Ping'
-
-
-class RipeAtlasTracerouteResult(RipeAtlasResult):
-    pass
-
-
-class RipeAtlasMeasurement(models.Model):
-    measurement_id = models.IntegerField(null=False)
-    running = models.BooleanField(default=True)
-    type = CharField(max_length=100)
-
-
 class TestPointManager(models.Manager):
     def get_or_none(self, *args, **kwargs):
         try:
@@ -918,19 +867,6 @@ class SpeedtestTestPoint(TestPoint):
     class Meta:
         verbose_name = 'Punto de prueba de Speedtest.com'
         verbose_name_plural = 'Puntos de prueba de Speedtest.com'
-
-
-class MajesticMillionTestPoint(SpeedtestTestPoint):
-    """
-        Class that represent Test Points obtained from the Majestic Million list
-    """
-
-    url_majestic = models.TextField(null=True)
-    objects = SpeedTestPointManager()
-
-    class Meta:
-        verbose_name = 'Punto de prueba de Majestic Million'
-        verbose_name_plural = 'Puntos de prueba de Majestic Million'
 
 
 class HttpsCheck(models.Model):
@@ -1111,67 +1047,3 @@ class ChartManager(models.Manager):
 class Chart(models.Model):
     objects = ChartManager()
     pass
-
-
-class RipeAtlasTokenManager(models.Manager):
-    # Nada
-    pass
-
-
-class RipeAtlasToken(models.Model):
-    token = models.CharField(default='', max_length=100, verbose_name="Token de RIPE Atlas", null=False)
-    probe = models.ForeignKey(RipeAtlasProbe, null=True)
-    comments = models.TextField(default='', verbose_name="Comentarios", null=True)
-    date_added = models.DateTimeField(default=datetime.now())
-
-    objects = RipeAtlasTokenManager()
-
-
-class RipeAtlasTokenList(models.Model):
-    token_list = models.TextField(default='', verbose_name="Lista de Tokens separadas por saltos de linea")
-    processed = models.BooleanField(default=False)
-    date_added = models.DateTimeField(default=datetime.now())
-
-    def save(self, *args, **kwargs):
-        """
-        :param args:
-        :param kwargs:
-        :return:
-        """
-        # if self.token_list is None or self.token_list == "":
-        #     return
-
-        token_list = super(RipeAtlasTokenList, self).save(*args, **kwargs)  # Call the "real" save() method.
-
-        # Save all the tokens
-        tokens = str(self.token_list).splitlines()
-        for token in tokens:
-            print token
-            rat = RipeAtlasToken(token=token)
-            rat.save()
-        # Save the processed list
-        return token_list
-
-
-class RipeAtlasMonitoredIds(models.Model):
-    probe_id = IntegerField()
-    date = models.DateTimeField(default=datetime.now())
-
-
-class CommentManager(models.Manager):
-    pass
-
-
-class Comment(models.Model):
-    person = models.CharField(default="(No especificado)", max_length=200, null=True)
-    comment = models.TextField(default='', null=False)
-    date = models.DateTimeField(default=datetime.now())
-    read = models.BooleanField(default=False)
-    objects = CommentManager()
-
-    def __str__(self):
-        return "%s: %s" % (self.person, self.comment)
-
-    class Meta:
-        verbose_name = 'Comentario'
-        verbose_name_plural = 'Comentarios'

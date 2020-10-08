@@ -21,7 +21,6 @@ urlpatterns = [
                        url(r'^atlas/$', simon_app.views.atlas, name='atlas'),  # RIPE Atlas
                        url(r'^country_latency_chart/([A-Z]{2})/$', simon_app.views.country_latency_chart, name='country_latency_chart'),
                        url(r'^country_latency_chart/([0-9]{1,3})/$', simon_app.views.country_latency_chart, name='country_latency_chart'),
-                       url(r'^feedback/$', simon_app.views.feedbackForm, name='feedbackForm'),
                        url(r'^getCountry/$', simon_app.views.getCountry, name='getCountry'),
                        url(r'^inner_latency_chart/$', simon_app.views.inner_latency_chart, name='inner_latency_chart'),
                        url(r'^lab/$', simon_app.views.lab, name='lab'),

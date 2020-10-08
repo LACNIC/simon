@@ -212,9 +212,6 @@ class V6PerfAdmin(SimonReadOnlyAdmin):
     list_display = ['country', 'diff', 'dualstack', 'v6_rate', 'date', 'time_window']
     pass
 
-
-admin.site.register(Comment)
-
 admin.site.register(Results, ResultsAdmin)
 
 admin.site.register(TestPoint, TestPointAdmin)
@@ -225,16 +222,8 @@ admin.site.register(TracerouteResult, TracerouteResultAdmin)
 admin.site.register(TracerouteHop, TracerouteHopAdmin)
 
 admin.site.register(SpeedtestTestPoint, SpeedtestTestPointAdmin)
-admin.site.register(MajesticMillionTestPoint, SpeedtestTestPointAdmin)
-
-admin.site.register(RipeAtlasPingResult, ResultsAdmin)
 
 admin.site.register(RipeAtlasProbe, RipeAtlasProbeAdmin)
-
-admin.site.register(RipeAtlasToken, RipeAtlasTokenAdmin)
-admin.site.register(RipeAtlasTokenList, RipeAtlasTokenListAdmin)
-
-admin.site.register(RipeAtlasMonitoredIds)
 
 admin.site.register(CommandAudit, CommandAuditAdmin)
 admin.site.register(ProbeApiAudit, ProbeApiAuditAdmin)
