@@ -6,7 +6,7 @@ from simon_app.decorators import chatty_command
 from multiping import MultiPing, multi_ping
 from tqdm import tqdm
 
-__author__ = 'agustin'
+
 
 
 class Command(BaseCommand):

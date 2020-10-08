@@ -1,4 +1,4 @@
-__author__ = 'agustin'
+
 
 from django.conf.urls import include, url
 from simon_app.views import api

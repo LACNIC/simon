@@ -2,7 +2,7 @@ from django.db import models
 from datetime import datetime
 import pytz
 
-__author__ = 'agustin'
+
 
 
 def now():

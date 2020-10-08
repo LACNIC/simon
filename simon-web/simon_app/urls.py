@@ -1,4 +1,4 @@
-__author__ = 'agustin'
+
 from django.views.static import serve
 from django.conf.urls import url
 from django.contrib import admin

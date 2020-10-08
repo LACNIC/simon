@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from simon_project.settings import DEBUG
 import logging
 
-__author__ = 'agustin'
+
 
 
 def send_mail_new_probes_found(subject="Nuevas probes", ctx={}, from_email="agustin@lacnic.net"):
