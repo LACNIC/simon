@@ -31,6 +31,8 @@ ADMINS = (
 )
 
 PROBEAPI_ENDPOINT = "https://kong.speedcheckerapi.com:8443/ProbeAPIService/Probes.svc"
+PROBEAPI_ENDPOINT_V2 = "https://kong.speedcheckerapi.com:8443/ProbeAPIv2"
+
 
 NEWRELIC = ""
 
