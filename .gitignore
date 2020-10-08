@@ -97,14 +97,3 @@ node_modules/
 # Vagrant
 .vagrant/
 
-# Python Notebook
-*.ipynb
-simon-web/simon_app/migrations
-simon-web/simon_app/static/results-africa-connectivity-top28.json
-simon-web/simon_app/static/results-africa-connectivity-traces-top28.json
-simon-web/simon_app/static/results-africa-connectivity-traces.json
-simon-web/simon_app/static/results-africa-connectivity.json
-simon-web/simon_app/static/results-lac-connectivity-2015.json
-simon-web/simon_app/static/results-lac-connectivity-js.json
-simon-web/simon_app/static/results-lac-connectivity.json
-heatmap-probeapi.png
