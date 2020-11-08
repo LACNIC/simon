@@ -197,6 +197,9 @@ class V6PerfAdmin(SimonReadOnlyAdmin):
     list_display = ['country', 'diff', 'dualstack', 'v6_rate', 'date', 'time_window']
     pass
 
+class ProbeApiRequestAdmin(SimonAdmin):
+    pass
+
 admin.site.register(Results, ResultsAdmin)
 
 admin.site.register(TestPoint, TestPointAdmin)
@@ -221,3 +224,4 @@ admin.site.register(Region, RegionAdmin)
 admin.site.register(Country, CountryAdmin)
 
 admin.site.register(V6Perf, V6PerfAdmin)
+admin.site.register(ProbeApiRequest, ProbeApiRequestAdmin)

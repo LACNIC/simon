@@ -506,7 +506,7 @@ class Results(models.Model):
 
 
 class ProbeApiPingResult(Results):
-    def save(self, *args, **kwargs):
+    def save(self, version=1, *args, **kwargs):
         self.tester = 'probeapi'
         self.version = 1
         self.tester_version = self.version
