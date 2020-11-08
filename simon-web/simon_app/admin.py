@@ -198,6 +198,7 @@ class V6PerfAdmin(SimonReadOnlyAdmin):
     pass
 
 class ProbeApiRequestAdmin(SimonAdmin):
+    list_display = ['date_1', 'date_2', 'stage_collected']
     pass
 
 admin.site.register(Results, ResultsAdmin)
