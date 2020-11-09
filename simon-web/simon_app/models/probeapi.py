@@ -1,10 +1,11 @@
 import json
 import numpy
+from datadog import statsd
 from django.db import models
 from datetime import datetime
 from requests import get, post
 from simon_app.models import AS, ProbeApiPingResult, TestPoint
-from simon_project.settings import PROBEAPI_ENDPOINT_V2, KONG_API_KEY
+from simon_project.settings import PROBEAPI_ENDPOINT_V2, KONG_API_KEY, DATADOG_DEFAULT_TAGS
 
 
 class ProbeApiTestSettings(object):
@@ -185,7 +186,7 @@ class ProbeApiRequest(models.Model):
 
                     rtts = [int(rtt) for rtt in r["PingArray"]]
 
-                    ProbeApiPingResult.objects.create(
+                    result = ProbeApiPingResult.objects.create(
                         version=2,
                         ip_destination=ip_destination,
                         number_probes=len(rtts),
@@ -201,6 +202,15 @@ class ProbeApiRequest(models.Model):
                         as_origin=asn,
                         as_destination=as_destination,
                     #     probeApiRequestId=this one
+                    )
+
+                    statsd.increment(
+                        'Result via Speedchecker',
+                        tags=[
+                                 'type:' + result.testype,
+                                 'tester:' + result.tester,
+                                 'url:' + result.url
+                             ] + DATADOG_DEFAULT_TAGS
                     )
 
         except Exception as e:
