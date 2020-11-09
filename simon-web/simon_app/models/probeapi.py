@@ -153,7 +153,8 @@ class ProbeApiRequest(models.Model):
             }
         ).json()
 
-        if j.get("ResponseStatus", {}).get("StatusCode", {}) != "200":
+        # 401 'Test failed or partially failed, not enough results'
+        if j.get("ResponseStatus", {}).get("StatusCode", {}) not in ["200", "401"]:
             # 202 == not ready
             # 504 == no probes
             self.reply_2 = json.dumps(j)
