@@ -9,7 +9,7 @@ from simon_app.decorators import timed_command, mem_comsumption
 
 class Command(BaseCommand):
 
-    command = "ProbeAPI - Fetch details from previously requested measurements"
+    command = "ProbeAPI - Inspect a ProbeApiRequest given its ID"
 
     def add_arguments(self, parser):
         parser.add_argument('--id', type=str)

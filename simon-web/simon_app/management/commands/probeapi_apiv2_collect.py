@@ -9,7 +9,7 @@ from simon_app.decorators import timed_command, mem_comsumption
 
 class Command(BaseCommand):
 
-    command = "ProbeAPI - Fetch results from APIv2 results"
+    command = "ProbeAPI - Collect results from APIv2 results"
 
     def add_arguments(self, parser):
         parser.add_argument('--hours-ago', type=int)

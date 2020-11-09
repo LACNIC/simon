@@ -8,7 +8,7 @@ from simon_app.decorators import timed_command, mem_comsumption
 
 class Command(BaseCommand):
 
-    command = "ProbeAPI - <source,destination> pairs"
+    command = "ProbeAPI - Request measurments from the APIv2 endpoint"
 
     def add_arguments(self, parser):
         parser.add_argument('--src', type=str, nargs='+')
