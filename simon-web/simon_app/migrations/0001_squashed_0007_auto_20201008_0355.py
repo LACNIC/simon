@@ -81,7 +81,7 @@ class Migration(migrations.Migration):
             name='HttpsCheck',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date', models.DateTimeField(default=datetime.datetime(2020, 10, 7, 15, 1, 42, 294099))),
+                ('date', models.DateTimeField(default=datetime.datetime.now)),
                 ('status', models.NullBooleanField(default=False)),
             ],
             options={
@@ -116,7 +116,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.TextField(default=b'')),
                 ('text', models.TextField(default=b'')),
-                ('date_created', models.DateTimeField(default=datetime.datetime(2020, 10, 7, 15, 1, 42, 296554))),
+                ('date_created', models.DateTimeField(default=datetime.datetime.now)),
             ],
         ),
         migrations.CreateModel(
@@ -152,7 +152,7 @@ class Migration(migrations.Migration):
             name='Results',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date_test', models.DateTimeField(default=datetime.datetime(2020, 10, 7, 15, 1, 42, 286160), verbose_name=b'test date')),
+                ('date_test', models.DateTimeField(default=datetime.datetime.now, verbose_name=b'test date')),
                 ('version', models.IntegerField(default=0, null=True)),
                 ('ip_origin', models.GenericIPAddressField(null=True)),
                 ('ip_destination', models.GenericIPAddressField(null=True)),
@@ -349,81 +349,6 @@ class Migration(migrations.Migration):
             name='test_point',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='simon_app.SpeedtestTestPoint'),
         ),
-        migrations.AlterField(
-            model_name='httpscheck',
-            name='date',
-            field=models.DateTimeField(default=datetime.datetime(2020, 10, 7, 15, 2, 4, 302622)),
-        ),
-        migrations.AlterField(
-            model_name='notification',
-            name='date_created',
-            field=models.DateTimeField(default=datetime.datetime(2020, 10, 7, 15, 2, 4, 305135)),
-        ),
-        migrations.AlterField(
-            model_name='results',
-            name='date_test',
-            field=models.DateTimeField(default=datetime.datetime(2020, 10, 7, 15, 2, 4, 294504), verbose_name=b'test date'),
-        ),
-        migrations.AlterField(
-            model_name='httpscheck',
-            name='date',
-            field=models.DateTimeField(default=datetime.datetime(2020, 10, 7, 15, 7, 15, 221240)),
-        ),
-        migrations.AlterField(
-            model_name='notification',
-            name='date_created',
-            field=models.DateTimeField(default=datetime.datetime(2020, 10, 7, 15, 7, 15, 224801)),
-        ),
-        migrations.AlterField(
-            model_name='results',
-            name='date_test',
-            field=models.DateTimeField(default=datetime.datetime(2020, 10, 7, 15, 7, 15, 214730), verbose_name=b'test date'),
-        ),
-        migrations.AlterField(
-            model_name='httpscheck',
-            name='date',
-            field=models.DateTimeField(default=datetime.datetime(2020, 10, 8, 3, 17, 21, 66026)),
-        ),
-        migrations.AlterField(
-            model_name='notification',
-            name='date_created',
-            field=models.DateTimeField(default=datetime.datetime(2020, 10, 8, 3, 17, 21, 71390)),
-        ),
-        migrations.AlterField(
-            model_name='results',
-            name='date_test',
-            field=models.DateTimeField(default=datetime.datetime(2020, 10, 8, 3, 17, 21, 59310), verbose_name=b'test date'),
-        ),
-        migrations.AlterField(
-            model_name='httpscheck',
-            name='date',
-            field=models.DateTimeField(default=datetime.datetime(2020, 10, 8, 3, 19, 57, 763707)),
-        ),
-        migrations.AlterField(
-            model_name='notification',
-            name='date_created',
-            field=models.DateTimeField(default=datetime.datetime(2020, 10, 8, 3, 19, 57, 766811)),
-        ),
-        migrations.AlterField(
-            model_name='results',
-            name='date_test',
-            field=models.DateTimeField(default=datetime.datetime(2020, 10, 8, 3, 19, 57, 757386), verbose_name=b'test date'),
-        ),
-        migrations.AlterField(
-            model_name='httpscheck',
-            name='date',
-            field=models.DateTimeField(default=datetime.datetime(2020, 10, 8, 3, 52, 26, 915980)),
-        ),
-        migrations.AlterField(
-            model_name='notification',
-            name='date_created',
-            field=models.DateTimeField(default=datetime.datetime(2020, 10, 8, 3, 52, 26, 918832)),
-        ),
-        migrations.AlterField(
-            model_name='results',
-            name='date_test',
-            field=models.DateTimeField(default=datetime.datetime(2020, 10, 8, 3, 52, 26, 909504), verbose_name=b'test date'),
-        ),
         migrations.CreateModel(
             name='ProbeApiRequest',
             fields=[
@@ -436,20 +361,5 @@ class Migration(migrations.Migration):
                 ('stage_requested', models.BooleanField(default=False, help_text=b'Determines is a test results has already been collected from the ProbePAI platform')),
                 ('stage_collected', models.BooleanField(default=False, help_text=b'Determines is a test results has already been collected from the ProbePAI platform')),
             ],
-        ),
-        migrations.AlterField(
-            model_name='httpscheck',
-            name='date',
-            field=models.DateTimeField(default=datetime.datetime(2020, 10, 8, 3, 55, 6, 843813)),
-        ),
-        migrations.AlterField(
-            model_name='notification',
-            name='date_created',
-            field=models.DateTimeField(default=datetime.datetime(2020, 10, 8, 3, 55, 6, 846329)),
-        ),
-        migrations.AlterField(
-            model_name='results',
-            name='date_test',
-            field=models.DateTimeField(default=datetime.datetime(2020, 10, 8, 3, 55, 6, 838324), verbose_name=b'test date'),
-        ),
+        )
     ]
