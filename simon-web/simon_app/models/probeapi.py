@@ -41,6 +41,10 @@ class ProbeApiRequest(models.Model):
     probeapi_id = models.CharField(
         max_length=1024
     )
+    test_settings = models.TextField(
+        help_text="JSON request as a text field. This should be JSONField in higher versions of PostgreSQL",
+        default='{}'
+    )
     reply_1 = models.TextField(
         help_text="JSON payload as a text field. This should be JSONField in higher versions of PostgreSQL"
     )
@@ -56,9 +60,9 @@ class ProbeApiRequest(models.Model):
         help_text="Determines is a test results has already been collected from the ProbePAI platform"
     )
 
-    def request(self, ccs=None, destinations=None, ping_count=10, max_probes=10, timeout=1000):
+    def request(self, sources=None, destinations=None, ping_count=10, max_probes=10, timeout=1000):
         """
-        :param ccs: list
+        :param sources: list
         :param destinations: list
         :param max_probes:
         :param ping_count:
@@ -71,8 +75,19 @@ class ProbeApiRequest(models.Model):
         #                   "Sources": [{"CountryCode": "US"}], "Destinations": ["www.google.com"],
         #                   "ProbeInfoProperties": ["Latitude", "Longitude", "ProbeID", "CountryCode", "CityName"]}}
 
-        if ccs is None or destinations is None:
+        if sources is None or destinations is None:
             return {}
+
+        sources_settings = []
+        for source in sources:
+            try:
+                source = int(source)
+                key = "ASN"
+            except ValueError as ve:
+                key = "CountryCode"
+            sources_settings.append(
+                {key: source}
+            )
 
         test_settings = {
             "PingType": "icmp",
@@ -86,12 +101,15 @@ class ProbeApiRequest(models.Model):
             "Ttl": 128,
             "Timeout": timeout,
             "TestCount": max_probes,
-            "Sources": [{"CountryCode": cc} for cc in ccs],
+            "Sources": sources_settings,
             "Destinations": destinations,
             "ProbeInfoProperties": [
                 "Latitude", "Longitude", "ProbeID", "CountryCode", "CityName", "ASN", "Network", "NetworkID"
             ]
         }
+
+        self.test_settings = json.dumps(test_settings)
+        self.save()
 
         return self.post(
             test_settings=test_settings

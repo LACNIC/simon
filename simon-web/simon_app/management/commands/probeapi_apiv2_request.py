@@ -21,7 +21,7 @@ class Command(BaseCommand):
     @mem_comsumption(name=command)
     def handle(self, *args, **options):
 
-        ccs = options['src']
+        sources = options['src']
         dst = options['dst']
         probes = options['probes']
         timeout = options.get('timeout')
@@ -35,7 +35,7 @@ class Command(BaseCommand):
 
         par = ProbeApiRequest()
         response = par.request(
-            ccs=ccs,
+            sources=sources,
             destinations=dst,
             max_probes=probes,
             timeout=timeout

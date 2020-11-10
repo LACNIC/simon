@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
 from django.db import models
 from django.db import connection
 from django.db.models import Q
@@ -415,7 +415,7 @@ class ResultsManager(models.Manager):
 
 
 class Results(models.Model):
-    date_test = models.DateTimeField('test date', default=datetime.now())
+    date_test = models.DateTimeField('test date', default=datetime.now)
     version = models.IntegerField(null=True, default=0)
     ip_origin = models.GenericIPAddressField(null=True)
     ip_destination = models.GenericIPAddressField(null=True)
@@ -874,7 +874,7 @@ class HttpsCheck(models.Model):
         HTTPS checks for Speedtest points
     """
 
-    date = models.DateTimeField(default=datetime.now())
+    date = models.DateTimeField(default=datetime.now)
     status = models.NullBooleanField(default=False)
     test_point = models.ForeignKey(SpeedtestTestPoint)
 
@@ -942,7 +942,7 @@ class Params(models.Model):
 class Notification(models.Model):
     title = models.TextField(default='')
     text = models.TextField(default='')
-    date_created = models.DateTimeField(default=datetime.now())
+    date_created = models.DateTimeField(default=datetime.now)
 
     def expiration_date(self):
         return self.date_created + datetime.timedelta(days=7)
