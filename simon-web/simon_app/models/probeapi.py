@@ -4,7 +4,7 @@ from datadog import statsd
 from django.db import models
 from datetime import datetime
 from requests import get, post
-from simon_app.models import AS, ProbeApiPingResult, TestPoint
+from simon_app.models import AS, ProbeApiPingResult, SpeedtestTestPoint
 from simon_project.settings import PROBEAPI_ENDPOINT_V2, KONG_API_KEY, DATADOG_DEFAULT_TAGS
 
 
@@ -196,18 +196,28 @@ class ProbeApiRequest(models.Model):
                     probe = r["ProbeInfo"]
                     cc = probe.get("CountryCode", "XX")
                     probe_id = probe["ProbeID"]  # TODO store in DB
-                    asn = probe["ASN"]
-
-                    ip_destination = r["IP"]
-                    country_destination = TestPoint.objects.get_or_none(ip_address=ip_destination, enabled=True)
-                    if not country_destination:
-                        country_destination = "XX"
-                    as_destination = AS.objects.get_as_by_ip(ip_destination).asn
+                    asn = probe.get("ASN", 0)
 
                     pings = r["PingArray"]
                     if not pings:
                         continue
-                    rtts = [int(rtt) for rtt in pings]
+                    ip_destination = r["IP"]
+                    tp = SpeedtestTestPoint.objects.filter(
+                        ip_address=ip_destination,
+                        enabled=True
+                    ).order_by(
+                        '-date_created'
+                    ).first()
+                    if tp:
+                        country_destination = tp.country
+                    else:
+                        country_destination = "XX"
+                    if not country_destination:
+                        country_destination = "XX"
+                    as_destination = AS.objects.get_as_by_ip(ip_destination).asn
+
+                    rtts = [int(rtt) for rtt in pings if rtt]
+                    if len(rtts) == 0: continue
 
                     result = ProbeApiPingResult.objects.create(
                         version=2,
