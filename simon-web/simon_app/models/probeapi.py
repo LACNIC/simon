@@ -193,8 +193,8 @@ class ProbeApiRequest(models.Model):
                         # something went wrong
                         continue
 
-                    cc = r.get("CountryCode", "XX")
                     probe = r["ProbeInfo"]
+                    cc = probe.get("CountryCode", "XX")
                     probe_id = probe["ProbeID"]  # TODO store in DB
                     asn = probe["ASN"]
 
@@ -204,7 +204,10 @@ class ProbeApiRequest(models.Model):
                         country_destination = "XX"
                     as_destination = AS.objects.get_as_by_ip(ip_destination).asn
 
-                    rtts = [int(rtt) for rtt in r["PingArray"]]
+                    pings = r["PingArray"]
+                    if not pings:
+                        continue
+                    rtts = [int(rtt) for rtt in pings]
 
                     result = ProbeApiPingResult.objects.create(
                         version=2,
