@@ -104,7 +104,8 @@ class ProbeApiRequest(models.Model):
             "Sources": sources_settings,
             "Destinations": destinations,
             "ProbeInfoProperties": [
-                "Latitude", "Longitude", "ProbeID", "CountryCode", "CityName", "ASN", "Network", "NetworkID"
+                "Latitude", "Longitude", "ProbeID", "CountryCode", "CityName", "ASN", "Network", "NetworkID",
+                "IPAddress"
             ]
         }
 
@@ -196,6 +197,7 @@ class ProbeApiRequest(models.Model):
                     probe = r["ProbeInfo"]
                     cc = probe.get("CountryCode", "XX")
                     probe_id = probe["ProbeID"]  # TODO store in DB
+                    probe_ip = probe["IPAddress"].replace("X",str(0))
                     asn = probe.get("ASN", 0)
 
                     pings = r["PingArray"]
@@ -222,6 +224,7 @@ class ProbeApiRequest(models.Model):
                     result = ProbeApiPingResult.objects.create(
                         version=2,
                         ip_destination=ip_destination,
+                        ip_origin=probe_ip,
                         number_probes=len(rtts),
                         min_rtt=min(rtts),
                         max_rtt=max(rtts),
