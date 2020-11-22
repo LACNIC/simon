@@ -22,7 +22,7 @@ class SimonReadOnlyAdmin(SimonAdmin):
 class ResultsAdmin(SimonReadOnlyAdmin):
     fields = ()
     list_display = ['country_origin', 'country_destination', 'as_origin', 'as_destination', 'ave_rtt', 'dev_rtt',
-                    'date_short', 'protocol']
+                    'date_short', 'protocol', 'ip_origin', 'ip_destination']
     ordering = ['-date_test', 'country_origin', 'country_destination']
     search_fields = ['country_origin', 'country_destination', 'as_origin', 'as_destination']
 
