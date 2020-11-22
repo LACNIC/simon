@@ -358,8 +358,8 @@ class Migration(migrations.Migration):
                 ('probeapi_id', models.CharField(max_length=1024)),
                 ('reply_1', models.TextField(help_text=b'JSON payload as a text field. This should be JSONField in higher versions of PostgreSQL')),
                 ('reply_2', models.TextField(help_text=b'JSON payload as a text field. This should be JSONField in higher versions of PostgreSQL')),
-                ('stage_requested', models.BooleanField(default=False, help_text=b'Determines is a test results has already been collected from the ProbePAI platform')),
-                ('stage_collected', models.BooleanField(default=False, help_text=b'Determines is a test results has already been collected from the ProbePAI platform')),
+                ('stage_requested', models.BooleanField(default=False, help_text=b'Determines is a test results has already been collected from the ProbeAPI platform')),
+                ('stage_collected', models.BooleanField(default=False, help_text=b'Determines is a test results has already been collected from the ProbeAPI platform')),
             ],
         )
     ]

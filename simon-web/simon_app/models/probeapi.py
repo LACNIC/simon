@@ -53,11 +53,11 @@ class ProbeApiRequest(models.Model):
     )
     stage_requested = models.BooleanField(
         default=False,
-        help_text="Determines is a test results has already been collected from the ProbePAI platform"
+        help_text="Determines is a test results has already been collected from the ProbeAPI platform"
     )
     stage_collected = models.BooleanField(
         default=False,
-        help_text="Determines is a test results has already been collected from the ProbePAI platform"
+        help_text="Determines is a test results has already been collected from the ProbeAPI platform"
     )
     test_type = models.CharField(
         default='ping',
