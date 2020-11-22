@@ -15,6 +15,7 @@ class Command(BaseCommand):
         parser.add_argument('--dst', type=str, nargs='+')
         parser.add_argument('--probes', type=int, default=10)
         parser.add_argument('--timeout', type=int, default=30000)
+        parser.add_argument('--type', type=str, default='ping', choices=['ping', 'traceroute'])
 
     @timed_command(name=command)
     @probeapi(command=command)
@@ -25,6 +26,7 @@ class Command(BaseCommand):
         dst = options['dst']
         probes = options['probes']
         timeout = options.get('timeout')
+        type = options.get('type')
 
         # accept ip addr, hostnmae, or plain txt as dst
         # plain txt will be formatted to hostname %s.exp.dev.lacnic.net
@@ -33,7 +35,9 @@ class Command(BaseCommand):
             dst
         )
 
-        par = ProbeApiRequest()
+        par = ProbeApiRequest(
+            test_type=type
+        )
         response = par.request(
             sources=sources,
             destinations=dst,

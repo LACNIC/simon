@@ -511,9 +511,7 @@ class ProbeApiPingResult(Results):
 
     def save(self, version=1, *args, **kwargs):
         self.tester = 'probeapi'
-        self.version = 1
         self.tester_version = self.version
-        self.testype = 'ping'
 
         super(ProbeApiPingResult, self).save(*args, **kwargs)  # Call the "real" save() method.
 
@@ -625,6 +623,13 @@ class TracerouteResult(models.Model):
 
 
 class TracerouteHop(Results):
+    traceroute_result = models.ForeignKey(TracerouteResult)
+
+    def __str__(self):
+        print "AS%s (%s) --> AS%s (%s)" % (self.as_origin, self.ip_origin, self.as_destination, self.ip_destination)
+
+
+class ProbeapiTracerouteHop(ProbeApiPingResult):
     traceroute_result = models.ForeignKey(TracerouteResult)
 
     def __str__(self):

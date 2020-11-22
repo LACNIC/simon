@@ -4,7 +4,7 @@ from datadog import statsd
 from django.db import models
 from datetime import datetime
 from requests import get, post
-from simon_app.models import AS, ProbeApiPingResult, SpeedtestTestPoint
+from simon_app.models import AS, ProbeApiPingResult, SpeedtestTestPoint, TracerouteResult, ProbeapiTracerouteHop
 from simon_project.settings import PROBEAPI_ENDPOINT_V2, KONG_API_KEY, DATADOG_DEFAULT_TAGS
 
 
@@ -59,6 +59,10 @@ class ProbeApiRequest(models.Model):
         default=False,
         help_text="Determines is a test results has already been collected from the ProbePAI platform"
     )
+    test_type = models.CharField(
+        default='ping',
+        max_length=16
+    )
 
     def request(self, sources=None, destinations=None, ping_count=10, max_probes=10, timeout=1000):
         """
@@ -89,14 +93,23 @@ class ProbeApiRequest(models.Model):
                 {key: source}
             )
 
-        test_settings = {
-            "PingType": "icmp",
+        test_settings = {}
+        if self.test_type == 'ping':
+            test_settings["PingType"] = "icmp"
+
+        elif self.test_type == 'traceroute':
+            test_settings["Timeout"] = 60000
+            test_settings["HopTimeout"] = 2000
+            test_settings["MaxFailedHops"] = 64  # allow failed hops
+
+        base_settings = {
+            "Platform": "PC",
             "BufferSize": 32,
             "Count": ping_count,
             "Fragment": 1,
             "Ipv4only": 0,
             "Ipv6only": 0,
-            "Resolve": 0,
+            "Resolve": 1,
             "Sleep": 1000,
             "Ttl": 128,
             "Timeout": timeout,
@@ -109,11 +122,13 @@ class ProbeApiRequest(models.Model):
             ]
         }
 
-        self.test_settings = json.dumps(test_settings)
+        z = test_settings.copy()
+        z.update(base_settings)
+        self.test_settings = json.dumps(z)
         self.save()
 
         return self.post(
-            test_settings=test_settings
+            test_settings=z
         )
 
     def post(self, test_settings=None):
@@ -127,11 +142,18 @@ class ProbeApiRequest(models.Model):
         #     }
         # }
 
+        if self.test_type == "ping":
+            endpoint = "/StartPingTest"
+        elif self.test_type == "traceroute":
+            endpoint = "/StartTracertTest"
+        else:
+            return None
+
         if test_settings is None:
             return {}
 
         j = post(
-            url=PROBEAPI_ENDPOINT_V2 + "/StartPingTest?apikey=" + KONG_API_KEY,
+            url=PROBEAPI_ENDPOINT_V2 + endpoint + "?apikey=" + KONG_API_KEY,
             json={
                 "testSettings": test_settings
             },
@@ -140,22 +162,150 @@ class ProbeApiRequest(models.Model):
             }
         ).json()
 
-        if j['StartPingTestResult']['Status']['StatusCode'] != "200":
+        s = json.dumps(j)
+        self.reply_1 = s
+
+        r = j.get("StartPingTestResult", {}).get("Status", {}).get("StatusCode", {})
+        if r != "200":
             # something went wrong when invoking the api
+            self.save()
             pass
+
         self.stage_requested = True
         self.date_1 = datetime.now()
         self.save()
 
-        s = json.dumps(j)
-
-        self.reply_1 = s
         self.probeapi_id = j["StartPingTestResult"]["TestID"].encode()
 
         self.save()
 
         print j
         return j
+
+    def parse_response(self, j):
+
+        if "PingTestResults" in j:
+            for r in j["PingTestResults"]:
+
+                if r["Status"] != "OK":
+                    # something went wrong
+                    continue
+
+                probe = r["ProbeInfo"]
+                cc = probe.get("CountryCode", "XX")
+                probe_id = probe["ProbeID"]  # TODO store in DB
+                probe_ip = probe["IPAddress"].replace("X", str(0))
+                asn = probe.get("ASN", 0)
+
+                pings = r["PingArray"]
+                if not pings:
+                    continue
+                ip_destination = r["IP"]
+                tp = SpeedtestTestPoint.objects.filter(
+                    ip_address=ip_destination,
+                    enabled=True
+                ).order_by(
+                    '-date_created'
+                ).first()
+                if tp:
+                    country_destination = tp.country
+                else:
+                    country_destination = "XX"
+                if not country_destination:
+                    country_destination = "XX"
+                as_destination = AS.objects.get_as_by_ip(ip_destination).asn
+
+                rtts = [int(rtt) for rtt in pings if rtt]
+                if len(rtts) == 0: continue
+
+                result = ProbeApiPingResult.objects.create(
+                    version=2,
+                    ip_destination=ip_destination,
+                    ip_origin=probe_ip,
+                    number_probes=len(rtts),
+                    min_rtt=min(rtts),
+                    max_rtt=max(rtts),
+                    ave_rtt=int(sum(rtts) / len(rtts)),
+                    dev_rtt=numpy.std(rtts),
+                    median_rtt=numpy.median(rtts),
+                    packet_loss=0,  # TODO
+                    country_origin=cc,
+                    country_destination=country_destination,
+                    ip_version=4 if '.' in ip_destination else 6,
+                    as_origin=asn,
+                    as_destination=as_destination,
+
+                    probeapi_probe_id=probe_id
+                )
+
+                statsd.increment(
+                    'Result via Speedchecker',
+                    tags=[
+                             'type:' + result.testype,
+                             'tester:' + result.tester,
+                             'url:' + result.url
+                         ] + DATADOG_DEFAULT_TAGS
+                )
+        elif "TracerouteTestResults" in j:
+            for r in j["TracerouteTestResults"]:
+
+                if r["Status"] != "OK":
+                    # something went wrong
+                    continue
+
+                probe = r["ProbeInfo"]
+                cc = probe.get("CountryCode", "XX")
+                probe_id = probe["ProbeID"]  # TODO store in DB
+                probe_ip = probe["IPAddress"].replace("X", str(0))
+                asn = probe.get("ASN", 0)
+
+                result = TracerouteResult.objects.create()
+
+                for hop in r.get("Tracert"):
+
+                    pings = hop["PingTimeArray"]
+                    if not pings:
+                        continue
+                    ip_destination = hop["IP"]
+                    country_destination = "XX"
+                    as_destination = AS.objects.get_as_by_ip(ip_destination).asn
+
+                    rtts = [int(rtt) for rtt in pings if rtt]
+                    if len(rtts) == 0: continue  # TODO allow * * * ?
+
+                    h = ProbeapiTracerouteHop.objects.create(
+                        traceroute_result=result,
+                        testype='traceroute',
+
+                        version=2,
+                        ip_destination=ip_destination,
+                        ip_origin=probe_ip,
+                        number_probes=len(rtts),
+                        min_rtt=min(rtts),
+                        max_rtt=max(rtts),
+                        ave_rtt=int(sum(rtts) / len(rtts)),
+                        dev_rtt=numpy.std(rtts),
+                        median_rtt=numpy.median(rtts),
+                        packet_loss=0,  # TODO
+                        country_origin=cc,
+                        country_destination=country_destination,
+                        ip_version=4 if '.' in ip_destination else 6,
+                        as_origin=asn,
+                        as_destination=as_destination,
+
+                        probeapi_probe_id=probe_id
+                    )
+
+                # 1 traceroute --> 1 result through the platform
+                # get general info from last valid hop h, as TracerouteResult is a simple abstraction
+                statsd.increment(
+                    'Result via Speedchecker',
+                    tags=[
+                             'type:' + h.testype,
+                             'tester:' + h.tester,
+                             'url:' + h.url
+                         ] + DATADOG_DEFAULT_TAGS
+                )
 
     def get(self, test_id=None, persist=True):
 
@@ -165,8 +315,14 @@ class ProbeApiRequest(models.Model):
         test_id = test_id if test_id else self.probeapi_id
 
         self.date_2 = datetime.now()
+        if self.test_type == "ping":
+            endpoint = "/GetPingResults"
+        elif self.test_type == "traceroute":
+            endpoint = "/GetTracertResults"
+        else:
+            return
         j = get(
-            PROBEAPI_ENDPOINT_V2 + "/GetPingResults?" + "testID=" + test_id + "&apikey=" + KONG_API_KEY,
+            PROBEAPI_ENDPOINT_V2 + endpoint + "?" + "testID=" + test_id + "&apikey=" + KONG_API_KEY,
             headers={
                 "content-type": "application/json"
             }
@@ -187,68 +343,7 @@ class ProbeApiRequest(models.Model):
 
             else:
                 # first time it's being fetched
-
-                for r in j["PingTestResults"]:
-
-                    if r["Status"] != "OK":
-                        # something went wrong
-                        continue
-
-                    probe = r["ProbeInfo"]
-                    cc = probe.get("CountryCode", "XX")
-                    probe_id = probe["ProbeID"]  # TODO store in DB
-                    probe_ip = probe["IPAddress"].replace("X",str(0))
-                    asn = probe.get("ASN", 0)
-
-                    pings = r["PingArray"]
-                    if not pings:
-                        continue
-                    ip_destination = r["IP"]
-                    tp = SpeedtestTestPoint.objects.filter(
-                        ip_address=ip_destination,
-                        enabled=True
-                    ).order_by(
-                        '-date_created'
-                    ).first()
-                    if tp:
-                        country_destination = tp.country
-                    else:
-                        country_destination = "XX"
-                    if not country_destination:
-                        country_destination = "XX"
-                    as_destination = AS.objects.get_as_by_ip(ip_destination).asn
-
-                    rtts = [int(rtt) for rtt in pings if rtt]
-                    if len(rtts) == 0: continue
-
-                    result = ProbeApiPingResult.objects.create(
-                        version=2,
-                        ip_destination=ip_destination,
-                        ip_origin=probe_ip,
-                        number_probes=len(rtts),
-                        min_rtt=min(rtts),
-                        max_rtt=max(rtts),
-                        ave_rtt=int(sum(rtts)/len(rtts)),
-                        dev_rtt=numpy.std(rtts),
-                        median_rtt=numpy.median(rtts),
-                        packet_loss=0,  # TODO
-                        country_origin=cc,
-                        country_destination=country_destination,
-                        ip_version=4 if '.' in ip_destination else 6,
-                        as_origin=asn,
-                        as_destination=as_destination,
-                        probeapi_probe_id=probe_id
-                    )
-
-                    statsd.increment(
-                        'Result via Speedchecker',
-                        tags=[
-                                 'type:' + result.testype,
-                                 'tester:' + result.tester,
-                                 'url:' + result.url
-                             ] + DATADOG_DEFAULT_TAGS
-                    )
-
+                self.parse_response(j)
         except Exception as e:
             print e
             pass
