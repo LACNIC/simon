@@ -34,6 +34,11 @@ class ResultsAdmin(SimonReadOnlyAdmin):
         )
 
 
+class ProbaeApiPingResultAdmin(ResultsAdmin):
+
+    list_display = ResultsAdmin.list_display + ['probeapi_probe_id']
+
+
 class TracerouteResultAdmin(SimonReadOnlyAdmin):
     def get_readonly_fields(self, request, obj=None):
         return [f.name for f in self.model._meta.fields]
@@ -206,7 +211,7 @@ admin.site.register(Results, ResultsAdmin)
 admin.site.register(TestPoint, TestPointAdmin)
 admin.site.register(Configs, ConfigsAdmin)
 
-admin.site.register(ProbeApiPingResult, ResultsAdmin)
+admin.site.register(ProbeApiPingResult, ProbaeApiPingResultAdmin)
 admin.site.register(TracerouteResult, TracerouteResultAdmin)
 admin.site.register(TracerouteHop, TracerouteHopAdmin)
 

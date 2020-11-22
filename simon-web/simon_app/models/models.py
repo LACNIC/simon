@@ -506,6 +506,9 @@ class Results(models.Model):
 
 
 class ProbeApiPingResult(Results):
+
+    probeapi_probe_id = models.CharField(default='', max_length=128)
+
     def save(self, version=1, *args, **kwargs):
         self.tester = 'probeapi'
         self.version = 1

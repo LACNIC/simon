@@ -237,7 +237,7 @@ class ProbeApiRequest(models.Model):
                         ip_version=4 if '.' in ip_destination else 6,
                         as_origin=asn,
                         as_destination=as_destination,
-                    #     probeApiRequestId=this one
+                        probeapi_probe_id=probe_id
                     )
 
                     statsd.increment(
