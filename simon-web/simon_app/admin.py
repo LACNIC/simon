@@ -39,7 +39,7 @@ class ProbaeApiPingResultAdmin(ResultsAdmin):
     list_display = ResultsAdmin.list_display + ['probeapi_probe_id']
 
 
-class TracerouteResultAdmin(SimonReadOnlyAdmin):
+class ProbeapiTracerouteResultAdmin(SimonReadOnlyAdmin):
     def get_readonly_fields(self, request, obj=None):
         return [f.name for f in self.model._meta.fields]
 
@@ -53,7 +53,7 @@ class TracerouteHopAdmin(SimonReadOnlyAdmin):
         return [f.name for f in self.model._meta.fields]
 
     list_display = ['country_origin', 'country_destination', 'as_origin', 'as_destination', 'ip_origin',
-                    'ip_destination', 'ave_rtt', 'dev_rtt', 'date_short', 'protocol']
+                    'ip_destination', 'ave_rtt', 'dev_rtt', 'date_short', 'protocol', 'hop_number']
     search_fields = ['country_origin', 'country_destination', 'as_origin', 'as_destination', 'ip_origin',
                      'ip_destination']
 
@@ -212,8 +212,8 @@ admin.site.register(TestPoint, TestPointAdmin)
 admin.site.register(Configs, ConfigsAdmin)
 
 admin.site.register(ProbeApiPingResult, ProbaeApiPingResultAdmin)
-admin.site.register(TracerouteResult, TracerouteResultAdmin)
-admin.site.register(TracerouteHop, TracerouteHopAdmin)
+admin.site.register(ProbeapiTracerouteResult, ProbeapiTracerouteResultAdmin)
+admin.site.register(ProbeapiTracerouteHop, TracerouteHopAdmin)
 
 admin.site.register(SpeedtestTestPoint, SpeedtestTestPointAdmin)
 

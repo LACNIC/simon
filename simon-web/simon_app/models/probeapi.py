@@ -3,8 +3,9 @@ import numpy
 from datadog import statsd
 from django.db import models
 from datetime import datetime
+from netaddr import IPAddress
 from requests import get, post
-from simon_app.models import AS, ProbeApiPingResult, SpeedtestTestPoint, TracerouteResult, ProbeapiTracerouteHop
+from simon_app.models import AS, ProbeApiPingResult, SpeedtestTestPoint, ProbeapiTracerouteResult, ProbeapiTracerouteHop
 from simon_project.settings import PROBEAPI_ENDPOINT_V2, KONG_API_KEY, DATADOG_DEFAULT_TAGS
 
 
@@ -144,8 +145,10 @@ class ProbeApiRequest(models.Model):
 
         if self.test_type == "ping":
             endpoint = "/StartPingTest"
+            key = "StartPingTestResult"
         elif self.test_type == "traceroute":
             endpoint = "/StartTracertTest"
+            key = "StartTracertTestResult"
         else:
             return None
 
@@ -165,7 +168,7 @@ class ProbeApiRequest(models.Model):
         s = json.dumps(j)
         self.reply_1 = s
 
-        r = j.get("StartPingTestResult", {}).get("Status", {}).get("StatusCode", {})
+        r = j.get(key, {}).get("Status", {}).get("StatusCode", {})
         if r != "200":
             # something went wrong when invoking the api
             self.save()
@@ -175,7 +178,7 @@ class ProbeApiRequest(models.Model):
         self.date_1 = datetime.now()
         self.save()
 
-        self.probeapi_id = j["StartPingTestResult"]["TestID"].encode()
+        self.probeapi_id = j[key]["TestID"].encode()
 
         self.save()
 
@@ -249,7 +252,7 @@ class ProbeApiRequest(models.Model):
         elif "TracerouteTestResults" in j:
             for r in j["TracerouteTestResults"]:
 
-                if r["Status"] != "OK":
+                if r["TestStatus"]["StatusText"] != "OK":
                     # something went wrong
                     continue
 
@@ -257,16 +260,29 @@ class ProbeApiRequest(models.Model):
                 cc = probe.get("CountryCode", "XX")
                 probe_id = probe["ProbeID"]  # TODO store in DB
                 probe_ip = probe["IPAddress"].replace("X", str(0))
+
                 asn = probe.get("ASN", 0)
 
-                result = TracerouteResult.objects.create()
+                hops_objects = []
+                hops = r.get("Tracert")
+                result = ProbeapiTracerouteResult.objects.create(
+                    ip_origin=probe_ip,
+                    as_origin=asn,
+                    country_origin=cc
+                )
 
-                for hop in r.get("Tracert"):
+                for hop_number, hop in enumerate(hops):
+                    hop_number += 1  # 1-based index for hop number
 
                     pings = hop["PingTimeArray"]
                     if not pings:
                         continue
                     ip_destination = hop["IP"]
+                    try:
+                        IPAddress(ip_destination)
+                    except Exception as e:
+                        ip_destination = '0.0.0.0'
+
                     country_destination = "XX"
                     as_destination = AS.objects.get_as_by_ip(ip_destination).asn
 
@@ -276,6 +292,7 @@ class ProbeApiRequest(models.Model):
                     h = ProbeapiTracerouteHop.objects.create(
                         traceroute_result=result,
                         testype='traceroute',
+                        hop_number=hop_number,
 
                         version=2,
                         ip_destination=ip_destination,
@@ -295,9 +312,16 @@ class ProbeApiRequest(models.Model):
 
                         probeapi_probe_id=probe_id
                     )
+                    hops_objects.append(h)
 
                 # 1 traceroute --> 1 result through the platform
                 # get general info from last valid hop h, as TracerouteResult is a simple abstraction
+                last_hop = result.probeapitraceroutehop_set.order_by('-hop_number').first()
+                result.as_destination = last_hop.as_destination
+                result.ip_destination = last_hop.ip_destination
+                result.country_destination = last_hop.country_destination
+                result.save()
+
                 statsd.increment(
                     'Result via Speedchecker',
                     tags=[

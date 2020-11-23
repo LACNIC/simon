@@ -536,25 +536,32 @@ class TracerouteResult(models.Model):
     output = models.TextField(max_length=2000, default='')
     objects = TracerouteResultManager()
 
+    def __init__(self, *args, **kwargs):
+        super(TracerouteResult, self).__init__(*args, **kwargs)
+
+        # hop set is different between TracerouteResult subclasses
+        # ProbeapiTracerouteResult defines FK as probeapitraceroutehop_set
+        self.hop_set = self.traceroutehop_set
+
     @property
     def hops(self):
-        return self.traceroutehop_set.all()
+        return self.hop_set.all()
 
     @property
     def hop_count(self):
-        return len(self.traceroutehop_set.all())
+        return len(self.hop_set.all())
 
     @property
     def country_count(self):
-        origin = self.traceroutehop_set.all().values_list("country_origin", flat=True)
-        destination = self.traceroutehop_set.all().values_list("country_destination", flat=True)
+        origin = self.hop_set.all().values_list("country_origin", flat=True)
+        destination = self.hop_set.all().values_list("country_destination", flat=True)
         set_ = set(list(origin) + list(destination))
         return len(set_)
 
     @property
     def as_count(self):
-        origin = self.traceroutehop_set.all().values_list("as_origin", flat=True)
-        destination = self.traceroutehop_set.all().values_list("as_destination", flat=True)
+        origin = self.hop_set.all().values_list("as_origin", flat=True)
+        destination = self.hop_set.all().values_list("as_destination", flat=True)
         set_ = set(list(origin) + list(destination))
         return len(set_)
 
@@ -578,7 +585,7 @@ class TracerouteResult(models.Model):
         super(TracerouteResult, self).save(*args, **kwargs)
 
     def __str__(self):
-        all = self.traceroutehop_set.all()
+        all = self.hop_set.all()
         return "%s (AS%s) --> %s (AS%s) (%.0f hops)" % (
             self.country_origin, self.as_origin, self.country_destination, self.as_destination, len(all))
 
@@ -629,8 +636,17 @@ class TracerouteHop(Results):
         print "AS%s (%s) --> AS%s (%s)" % (self.as_origin, self.ip_origin, self.as_destination, self.ip_destination)
 
 
+class ProbeapiTracerouteResult(TracerouteResult):
+
+    def __init__(self, *args, **kwargs):
+        super(ProbeapiTracerouteResult, self).__init__(*args, **kwargs)
+
+        self.hop_set = self.probeapitraceroutehop_set
+
+
 class ProbeapiTracerouteHop(ProbeApiPingResult):
-    traceroute_result = models.ForeignKey(TracerouteResult)
+    hop_number = models.IntegerField(default=0, help_text='0 means something went wrong')
+    traceroute_result = models.ForeignKey(ProbeapiTracerouteResult)
 
     def __str__(self):
         print "AS%s (%s) --> AS%s (%s)" % (self.as_origin, self.ip_origin, self.as_destination, self.ip_destination)
