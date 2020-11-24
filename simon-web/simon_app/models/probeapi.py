@@ -222,6 +222,7 @@ class ProbeApiRequest(models.Model):
                 if len(rtts) == 0: continue
 
                 result = ProbeApiPingResult.objects.create(
+                    testype='ping',
                     version=2,
                     ip_destination=ip_destination,
                     ip_origin=probe_ip,
