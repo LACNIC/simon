@@ -165,6 +165,10 @@ class ProbeApiRequest(models.Model):
             }
         ).json()
 
+        # TODO tmp
+        self.reply_1 = j
+        self.save()
+
         s = json.dumps(j)
         self.reply_1 = s
 
