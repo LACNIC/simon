@@ -155,7 +155,7 @@ class ProbeApiRequest(models.Model):
         if test_settings is None:
             return {}
 
-        j = post(
+        response = post(
             url=PROBEAPI_ENDPOINT_V2 + endpoint + "?apikey=" + KONG_API_KEY,
             json={
                 "testSettings": test_settings
@@ -163,12 +163,13 @@ class ProbeApiRequest(models.Model):
             headers={
                 "content-type": "application/json"
             }
-        ).json()
+        )
 
         # TODO tmp
-        self.reply_1 = j
+        self.reply_1 = response.text
         self.save()
 
+        j = response.json()
         s = json.dumps(j)
         self.reply_1 = s
 
