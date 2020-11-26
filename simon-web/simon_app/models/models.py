@@ -880,6 +880,7 @@ class SpeedtestTestPoint(TestPoint):
             return False
 
         return latest_https_check.status
+    has_https_support.boolean = True  # pretty printing in the django admin
 
     def get_latest_https_check(self):
         by = self.httpscheck_set.order_by("date")

@@ -97,9 +97,7 @@ class SpeedtestTestPointListFilter(SimpleListFilter):
 
 
 class SpeedtestTestPointAdmin(TestPointAdmin):
-    import copy
-    display = copy.deepcopy(TestPointAdmin.list_display)
-    list_display = display + ['has_https_support']
+    list_display = TestPointAdmin.list_display + ['has_https_support']
 
 
 class RipeAtlasProbeAdmin(SimonReadOnlyAdmin):
