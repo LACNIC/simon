@@ -201,8 +201,17 @@ class V6PerfAdmin(SimonReadOnlyAdmin):
     pass
 
 class ProbeApiRequestAdmin(SimonAdmin):
-    list_display = ['date_1', 'date_2', 'test_type', 'stage_collected']
-    pass
+    list_display = ['date_1', 'date_2', 'test_type', 'count', 'stage_collected']
+
+    def count(self, obj):
+        try:
+            sources = json.loads(obj.test_settings).get("Sources")
+        except:
+            sources = []
+        if sources:
+            return len(sources)
+        else:
+            return 0
 
 admin.site.register(Results, ResultsAdmin)
 
