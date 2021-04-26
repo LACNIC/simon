@@ -4,7 +4,7 @@ from datadog import statsd
 from django.template import Template, Context
 
 from simon_app.models import *
-from simon_app.reportes import GMTUY
+from simon_app.functions import GMTUY
 from probeapi_libs import get_countries, get_probeapi_response
 
 from multiprocessing.dummy import Pool as ThreadPool

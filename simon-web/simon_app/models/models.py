@@ -696,7 +696,7 @@ class RipeAtlasProbe(models.Model):
         :param now:
         :return:
         """
-        from simon_app.reportes import GMTUY
+        from simon_app.functions import GMTUY
         from datetime import datetime
         now = datetime.now(tz=GMTUY())
         td = self.last_check_timedelta(now)

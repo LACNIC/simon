@@ -4,7 +4,7 @@ from numpy import math
 from django.db.models import Q, Count
 from datetime import datetime, timedelta, date
 from simon_project import *
-from simon_app.reportes import GMTUY
+from simon_app.functions import GMTUY
 from simon_app.models import Results, Country
 
 class Command(BaseCommand):

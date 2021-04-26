@@ -6,7 +6,7 @@ from django.core.management.base import BaseCommand
 class Command(BaseCommand):
     def handle(self, *args, **options):
         from simon_app.models import Country
-        from simon_app.reportes import GMTUY
+        from simon_app.functions import GMTUY
         from simon_project import passwords
         import urllib2
         import json

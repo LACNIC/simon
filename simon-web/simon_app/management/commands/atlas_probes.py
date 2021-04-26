@@ -3,7 +3,7 @@ from django.core.management.base import BaseCommand
 from simon_app.models import *
 import json
 import urllib2
-from simon_app.reportes import GMTUY
+from simon_app.functions import GMTUY
 from simon_app.mailing import *
 from simon_app.decorators import timed_command
 import logging

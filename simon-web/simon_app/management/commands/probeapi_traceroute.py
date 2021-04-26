@@ -3,7 +3,7 @@
 from django.template import Template, Context
 from django.db import transaction
 from simon_app.models import *
-from simon_app.reportes import GMTUY
+from simon_app.functions import GMTUY
 from simon_app.api_views import get_cc_from_ip_address
 from probeapi_libs import get_countries, get_probeapi_response
 

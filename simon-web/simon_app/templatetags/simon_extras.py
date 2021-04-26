@@ -1,6 +1,6 @@
 from django import template
 from datetime import datetime
-from simon_app.reportes import GMTUY
+from simon_app.functions import GMTUY
 import operator
 
 """

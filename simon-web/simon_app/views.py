@@ -24,11 +24,12 @@ from api_views import \
 from functions import *
 from mailing import send_mail_point_offline
 from models import *
-from reportes import GMTUY
+from functions import GMTUY
 import simon_project.settings as settings
 from _socket import timeout
 from django.views.decorators.cache import cache_page
 import logging
+from django.conf import settings
 
 from simon_app.decorators import timed_command
 
@@ -72,9 +73,6 @@ def articles(request):
 # ##################
 # TRACEROUTE FORM #
 # ##################
-
-from reportes import UploadFileForm
-
 
 #  @timed_command
 @csrf_exempt
@@ -632,18 +630,18 @@ def reports(request):
         'country_destination'
     )
 
-    ripe_atlas = Chart.objects.filterQuerySet(
-        Results.objects.ripe_atlas(),
-        cc1=cc1,
-        cc2=cc2,
-        date_from=date_from,
-        date_to=date_to,
-        bidirectional=bidirectional
-    )
-
-    latency_histogram_ripe_atlas = {
-        'x': [a for a in ripe_atlas]
-    }
+    # ripe_atlas = Chart.objects.filterQuerySet(
+    #     Results.objects.ripe_atlas(),
+    #     cc1=cc1,
+    #     cc2=cc2,
+    #     date_from=date_from,
+    #     date_to=date_to,
+    #     bidirectional=bidirectional
+    # )
+    #
+    # latency_histogram_ripe_atlas = {
+    #     'x': [a for a in ripe_atlas]
+    # }
 
     v6 = 100.0 * v6_count_js / len(js) if js else 0
     v4 = 100.0 - v6
@@ -656,7 +654,7 @@ def reports(request):
     context['form'] = form
     context['latency_histogram_probeapi'] = latency_histogram_probeapi
     context['latency_histogram_js'] = latency_histogram_js
-    context['latency_histogram_ripe_atlas'] = latency_histogram_ripe_atlas
+    # context['latency_histogram_ripe_atlas'] = latency_histogram_ripe_atlas
 
     context['cc'] = cc1
     context['country'] = country1_object.printable_name
@@ -665,7 +663,7 @@ def reports(request):
     context['matrix_js_destination_cc'] = matrix_js_destination_cc
     context['js'] = js
     context['applet'] = applet
-    context['ripe_atlas'] = ripe_atlas
+    # context['ripe_atlas'] = ripe_atlas
     context['probeapi'] = probeapi
     context['date_from'] = date_from
     context['ases_js'] = ases_js
@@ -842,50 +840,50 @@ def charts(request):
     # Country information
     from operator import itemgetter
 
-    inner_area = []
-    inner = Results.objects.inner(
-        tester=settings.PROTOCOLS["HTTP"],
-        months=6
-    )
-    ccs = Country.objects.get_lacnic_countrycodes()
-    inner = [(cc, _min, _avg, _max, latency) for cc, _min, _avg, _max, latency in inner if cc in ccs]
+    # inner_area = []
+    # inner = Results.objects.inner(
+    #     tester=settings.PROTOCOLS["HTTP"],
+    #     months=6
+    # )
+    # ccs = Country.objects.get_lacnic_countrycodes()
+    # inner = [(cc, _min, _avg, _max, latency) for cc, _min, _avg, _max, latency in inner if cc in ccs]
+    #
+    # lines = open("%s/restcountries.json" % settings.STATIC_ROOT, 'r').readlines()
+    # restcountries = json.loads(
+    #     str(lines[0])
+    # )
+    # for c in restcountries:
+    #     alpha2Code = c["alpha2Code"]
+    #     if alpha2Code not in ccs:
+    #         continue
+    #     latency_ = 0.0
+    #     for i in inner:
+    #         if i[0] == alpha2Code:
+    #             latency_ = float(i[1])
+    #
+    #     borders = c["borders"]
+    #
+    #     area = c["area"]
+    #     if area == None: continue
+    #
+    #     latency_per_area = 1.0 * latency_ / area
+    #     if latency_per_area > 0.02: continue
+    #
+    #     inner_area.append(dict(alpha2Code=alpha2Code, area=area, borders=borders, latency=latency_,
+    #                            latency_per_area=latency_per_area))
 
-    lines = open("%s/restcountries.json" % settings.STATIC_ROOT, 'r').readlines()
-    restcountries = json.loads(
-        str(lines[0])
-    )
-    for c in restcountries:
-        alpha2Code = c["alpha2Code"]
-        if alpha2Code not in ccs:
-            continue
-        latency_ = 0.0
-        for i in inner:
-            if i[0] == alpha2Code:
-                latency_ = float(i[1])
-
-        borders = c["borders"]
-
-        area = c["area"]
-        if area == None: continue
-
-        latency_per_area = 1.0 * latency_ / area
-        if latency_per_area > 0.02: continue
-
-        inner_area.append(dict(alpha2Code=alpha2Code, area=area, borders=borders, latency=latency_,
-                               latency_per_area=latency_per_area))
-
-    inner_area = sorted([i for i in inner_area], key=itemgetter("latency_per_area"),
-                        reverse=True)  # order
-    for i, v in enumerate(inner_area):
-        new_key = "%02d - %s" % (i, v["alpha2Code"])
-        inner_area[i]["alpha2Code"] = new_key
-    inner_area_max = max(list((k["latency_per_area"]) for k in inner_area))
+    # inner_area = sorted([i for i in inner_area], key=itemgetter("latency_per_area"),
+    #                     reverse=True)  # order
+    # for i, v in enumerate(inner_area):
+    #     new_key = "%02d - %s" % (i, v["alpha2Code"])
+    #     inner_area[i]["alpha2Code"] = new_key
+    # inner_area_max = max(list((k["latency_per_area"]) for k in inner_area))
 
 
-    inner_latency_area = {
-        'x': list(k["alpha2Code"].encode('utf-8') for k in inner_area),
-        'y': list(((k["latency_per_area"] / inner_area_max) if inner_area_max else 0) for k in inner_area)
-    }
+    # inner_latency_area = {
+    #     'x': list(k["alpha2Code"].encode('utf-8') for k in inner_area),
+    #     'y': list(((k["latency_per_area"] / inner_area_max) if inner_area_max else 0) for k in inner_area)
+    # }
 
     ############
     # RESPONSE #
@@ -902,7 +900,7 @@ def charts(request):
         'v6': v6,
         'results_timeline': results_timeline,
         'inner_latency': inner_latency,
-        'inner_latency_area': inner_latency_area,
+        # 'inner_latency_area': inner_latency_area,
         'inner_count': inner_count * 2
     }
 

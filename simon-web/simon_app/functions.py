@@ -11,7 +11,18 @@ import urllib2
 from urllib2 import URLError
 from django.db.models import Q
 from simon_app.models.models import Results
+from datetime import tzinfo, timedelta
 
+
+class GMTUY(tzinfo):
+    def utcoffset(self, dt):
+        return timedelta(hours=-3)
+
+    def tzname(self, dt):
+        return "GMT -3: Uruguay"
+
+    def dst(self, dt):
+        return timedelta(0)
 
 def whoIs(address):
     # host = 'restwhois.labs.lacnic.net'

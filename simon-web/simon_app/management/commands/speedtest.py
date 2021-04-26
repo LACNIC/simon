@@ -12,7 +12,7 @@ import simon_project.settings as settings
 from urllib2 import urlopen, build_opener, HTTPCookieProcessor
 from lxml import etree
 import logging
-from simon_app.reportes import GMTUY
+from simon_app.functions import GMTUY
 from simon_app.decorators import timed_command, mem_comsumption
 from tqdm import tqdm
 import multiprocessing

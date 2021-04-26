@@ -6,7 +6,7 @@ from random import shuffle
 import datetime
 import logging
 from multiprocessing.dummy import Pool as ThreadPool
-from simon_app.reportes import GMTUY
+from simon_app.functions import GMTUY
 from simon_app.decorators import chatty_command
 from random import shuffle
 

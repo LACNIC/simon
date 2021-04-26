@@ -29,17 +29,6 @@ class CountryDropdownForm(forms.Form):
         empty_label=default_country)
 
 
-class GMTUY(tzinfo):
-    def utcoffset(self, dt):
-        return timedelta(hours=-3)
-
-    def tzname(self, dt):
-        return "GMT -3: Uruguay"
-
-    def dst(self, dt):
-        return timedelta(0)
-
-
 class UploadFileForm(forms.Form):
     file = forms.FileField(label="Archivo con logs de traceroute", required=False)
 
