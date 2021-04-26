@@ -666,8 +666,8 @@ class RipeAtlasProbe(models.Model):
     country_code = models.CharField(max_length=2, null=True)
     asn_v4 = models.IntegerField(null=True)
     asn_v6 = models.IntegerField(null=True)
-    prefix_v4 = models.GenericIPAddressField(null=True)
-    prefix_v6 = models.GenericIPAddressField(null=True)
+    prefix_v4 = models.CharField(max_length=18, null=True)
+    prefix_v6 = models.CharField(max_length=48, null=True)
 
     objects = RipeAtlasProbeManager()
 
