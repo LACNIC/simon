@@ -375,6 +375,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'simon_app',
+    'fixture_magic'
 )
 
 DATADOG_TRACE = {
