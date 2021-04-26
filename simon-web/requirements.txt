@@ -43,3 +43,5 @@ django-contrib-comments~=1.5
 trparse~=0.1.0
 tqdm~=4.39.0
 multiping~=1.1.2
+
+django-fixture-magic~=0.1

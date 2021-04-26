@@ -1,0 +1,5810 @@
+[
+{
+    "model": "simon_app.v6perf",
+    "pk": 82097,
+    "fields": {
+        "date": "2020-08-30T17:09:03.715Z",
+        "time_window": 30,
+        "diff": -12.345,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "ZW"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82096,
+    "fields": {
+        "date": "2020-08-30T17:09:03.714Z",
+        "time_window": 30,
+        "diff": -115.356,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "ZM"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82095,
+    "fields": {
+        "date": "2020-08-30T17:09:03.713Z",
+        "time_window": 30,
+        "diff": -11.905,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "ZA"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82094,
+    "fields": {
+        "date": "2020-08-30T17:09:03.713Z",
+        "time_window": 30,
+        "diff": -10.163,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "YT"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82093,
+    "fields": {
+        "date": "2020-08-30T17:09:03.712Z",
+        "time_window": 30,
+        "diff": -14.715,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "YE"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82092,
+    "fields": {
+        "date": "2020-08-30T17:09:03.711Z",
+        "time_window": 30,
+        "diff": -12.349,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "VN"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82091,
+    "fields": {
+        "date": "2020-08-30T17:09:03.710Z",
+        "time_window": 30,
+        "diff": 23.4,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "VI"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82090,
+    "fields": {
+        "date": "2020-08-30T17:09:03.710Z",
+        "time_window": 30,
+        "diff": -11.03,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "VG"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82089,
+    "fields": {
+        "date": "2020-08-30T17:09:03.709Z",
+        "time_window": 30,
+        "diff": -3.98,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "VE"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82088,
+    "fields": {
+        "date": "2020-08-30T17:09:03.708Z",
+        "time_window": 30,
+        "diff": -56.306,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "UZ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82087,
+    "fields": {
+        "date": "2020-08-30T17:09:03.707Z",
+        "time_window": 30,
+        "diff": -1.484,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "UY"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82086,
+    "fields": {
+        "date": "2020-08-30T17:09:03.706Z",
+        "time_window": 30,
+        "diff": -8.767,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "US"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82085,
+    "fields": {
+        "date": "2020-08-30T17:09:03.706Z",
+        "time_window": 30,
+        "diff": -19.008,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "UG"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82084,
+    "fields": {
+        "date": "2020-08-30T17:09:03.705Z",
+        "time_window": 30,
+        "diff": -1.803,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "UA"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82083,
+    "fields": {
+        "date": "2020-08-30T17:09:03.704Z",
+        "time_window": 30,
+        "diff": -19.64,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "TZ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82082,
+    "fields": {
+        "date": "2020-08-30T17:09:03.703Z",
+        "time_window": 30,
+        "diff": -3.571,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "TW"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82081,
+    "fields": {
+        "date": "2020-08-30T17:09:03.703Z",
+        "time_window": 30,
+        "diff": -64.854,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "TT"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82080,
+    "fields": {
+        "date": "2020-08-30T17:09:03.702Z",
+        "time_window": 30,
+        "diff": 21.501,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "TR"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82079,
+    "fields": {
+        "date": "2020-08-30T17:09:03.701Z",
+        "time_window": 30,
+        "diff": 85.766,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "TO"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82078,
+    "fields": {
+        "date": "2020-08-30T17:09:03.700Z",
+        "time_window": 30,
+        "diff": -2.257,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "TN"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82077,
+    "fields": {
+        "date": "2020-08-30T17:09:03.699Z",
+        "time_window": 30,
+        "diff": -7.152,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "TL"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82076,
+    "fields": {
+        "date": "2020-08-30T17:09:03.698Z",
+        "time_window": 30,
+        "diff": -55.832,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "TJ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82075,
+    "fields": {
+        "date": "2020-08-30T17:09:03.684Z",
+        "time_window": 30,
+        "diff": 30.425,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "TH"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82074,
+    "fields": {
+        "date": "2020-08-30T17:09:03.683Z",
+        "time_window": 30,
+        "diff": -15.169,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "TG"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82073,
+    "fields": {
+        "date": "2020-08-30T17:09:03.682Z",
+        "time_window": 30,
+        "diff": -192.95,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "SZ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82072,
+    "fields": {
+        "date": "2020-08-30T17:09:03.681Z",
+        "time_window": 30,
+        "diff": 12.149,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "SY"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82071,
+    "fields": {
+        "date": "2020-08-30T17:09:03.680Z",
+        "time_window": 30,
+        "diff": -62.031,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "SX"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82070,
+    "fields": {
+        "date": "2020-08-30T17:09:03.680Z",
+        "time_window": 30,
+        "diff": -3.037,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "SV"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82069,
+    "fields": {
+        "date": "2020-08-30T17:09:03.679Z",
+        "time_window": 30,
+        "diff": -67.252,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "SR"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82068,
+    "fields": {
+        "date": "2020-08-30T17:09:03.678Z",
+        "time_window": 30,
+        "diff": -59.053,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "SO"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82067,
+    "fields": {
+        "date": "2020-08-30T17:09:03.677Z",
+        "time_window": 30,
+        "diff": -20.402,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "SN"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82066,
+    "fields": {
+        "date": "2020-08-30T17:09:03.677Z",
+        "time_window": 30,
+        "diff": -9.793,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "SK"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82065,
+    "fields": {
+        "date": "2020-08-30T17:09:03.676Z",
+        "time_window": 30,
+        "diff": 0.608,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "SI"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82064,
+    "fields": {
+        "date": "2020-08-30T17:09:03.675Z",
+        "time_window": 30,
+        "diff": 13.874,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "SG"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82063,
+    "fields": {
+        "date": "2020-08-30T17:09:03.675Z",
+        "time_window": 30,
+        "diff": -10.315,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "SE"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82062,
+    "fields": {
+        "date": "2020-08-30T17:09:03.674Z",
+        "time_window": 30,
+        "diff": -9.054,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "SD"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82061,
+    "fields": {
+        "date": "2020-08-30T17:09:03.673Z",
+        "time_window": 30,
+        "diff": -5.871,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "SC"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82060,
+    "fields": {
+        "date": "2020-08-30T17:09:03.672Z",
+        "time_window": 30,
+        "diff": -107.76,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "SB"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82059,
+    "fields": {
+        "date": "2020-08-30T17:09:03.672Z",
+        "time_window": 30,
+        "diff": -12.403,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "SA"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82058,
+    "fields": {
+        "date": "2020-08-30T17:09:03.671Z",
+        "time_window": 30,
+        "diff": -11.839,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "RW"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82057,
+    "fields": {
+        "date": "2020-08-30T17:09:03.670Z",
+        "time_window": 30,
+        "diff": -0.237,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "RU"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82056,
+    "fields": {
+        "date": "2020-08-30T17:09:03.669Z",
+        "time_window": 30,
+        "diff": 14.305,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "RS"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82055,
+    "fields": {
+        "date": "2020-08-30T17:09:03.669Z",
+        "time_window": 30,
+        "diff": -5.385,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "RO"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82054,
+    "fields": {
+        "date": "2020-08-30T17:09:03.668Z",
+        "time_window": 30,
+        "diff": -5.705,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "RE"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82053,
+    "fields": {
+        "date": "2020-08-30T17:09:03.667Z",
+        "time_window": 30,
+        "diff": 43.934,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "QA"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82052,
+    "fields": {
+        "date": "2020-08-30T17:09:03.667Z",
+        "time_window": 30,
+        "diff": -4.245,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "PY"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82051,
+    "fields": {
+        "date": "2020-08-30T17:09:03.666Z",
+        "time_window": 30,
+        "diff": -6.607,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "PT"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82050,
+    "fields": {
+        "date": "2020-08-30T17:09:03.665Z",
+        "time_window": 30,
+        "diff": -29.969,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "PS"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82049,
+    "fields": {
+        "date": "2020-08-30T17:09:03.664Z",
+        "time_window": 30,
+        "diff": -17.488,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "PR"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82048,
+    "fields": {
+        "date": "2020-08-30T17:09:03.664Z",
+        "time_window": 30,
+        "diff": -13.212,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "PL"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82047,
+    "fields": {
+        "date": "2020-08-30T17:09:03.663Z",
+        "time_window": 30,
+        "diff": 24.552,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "PK"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82046,
+    "fields": {
+        "date": "2020-08-30T17:09:03.662Z",
+        "time_window": 30,
+        "diff": -5.55,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "PH"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82045,
+    "fields": {
+        "date": "2020-08-30T17:09:03.662Z",
+        "time_window": 30,
+        "diff": -39.53,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "PG"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82044,
+    "fields": {
+        "date": "2020-08-30T17:09:03.661Z",
+        "time_window": 30,
+        "diff": -116.74,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "PF"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82043,
+    "fields": {
+        "date": "2020-08-30T17:09:03.660Z",
+        "time_window": 30,
+        "diff": -24.126,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "PE"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82042,
+    "fields": {
+        "date": "2020-08-30T17:09:03.659Z",
+        "time_window": 30,
+        "diff": -70.679,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "PA"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82041,
+    "fields": {
+        "date": "2020-08-30T17:09:03.659Z",
+        "time_window": 30,
+        "diff": -22.43,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "OM"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82040,
+    "fields": {
+        "date": "2020-08-30T17:09:03.658Z",
+        "time_window": 30,
+        "diff": -12.221,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "NZ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82039,
+    "fields": {
+        "date": "2020-08-30T17:09:03.657Z",
+        "time_window": 30,
+        "diff": -10.745,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "NP"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82038,
+    "fields": {
+        "date": "2020-08-30T17:09:03.656Z",
+        "time_window": 30,
+        "diff": -6.899,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "NO"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82037,
+    "fields": {
+        "date": "2020-08-30T17:09:03.655Z",
+        "time_window": 30,
+        "diff": -8.762,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "NL"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82036,
+    "fields": {
+        "date": "2020-08-30T17:09:03.655Z",
+        "time_window": 30,
+        "diff": -7.56,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "NI"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82035,
+    "fields": {
+        "date": "2020-08-30T17:09:03.654Z",
+        "time_window": 30,
+        "diff": 8.432,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "NG"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82034,
+    "fields": {
+        "date": "2020-08-30T17:09:03.653Z",
+        "time_window": 30,
+        "diff": -1.258,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "NC"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82033,
+    "fields": {
+        "date": "2020-08-30T17:09:03.652Z",
+        "time_window": 30,
+        "diff": -83.037,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MZ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82032,
+    "fields": {
+        "date": "2020-08-30T17:09:03.651Z",
+        "time_window": 30,
+        "diff": 16.667,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MY"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82031,
+    "fields": {
+        "date": "2020-08-30T17:09:03.650Z",
+        "time_window": 30,
+        "diff": -108.574,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MX"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82030,
+    "fields": {
+        "date": "2020-08-30T17:09:03.650Z",
+        "time_window": 30,
+        "diff": 3.099,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MV"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82029,
+    "fields": {
+        "date": "2020-08-30T17:09:03.649Z",
+        "time_window": 30,
+        "diff": -18.919,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MU"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82028,
+    "fields": {
+        "date": "2020-08-30T17:09:03.648Z",
+        "time_window": 30,
+        "diff": -12.585,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MT"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82027,
+    "fields": {
+        "date": "2020-08-30T17:09:03.647Z",
+        "time_window": 30,
+        "diff": -87.655,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MR"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82026,
+    "fields": {
+        "date": "2020-08-30T17:09:03.647Z",
+        "time_window": 30,
+        "diff": -12.082,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MQ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82025,
+    "fields": {
+        "date": "2020-08-30T17:09:03.646Z",
+        "time_window": 30,
+        "diff": -6.172,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MO"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82024,
+    "fields": {
+        "date": "2020-08-30T17:09:03.645Z",
+        "time_window": 30,
+        "diff": 13.636,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MN"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82023,
+    "fields": {
+        "date": "2020-08-30T17:09:03.644Z",
+        "time_window": 30,
+        "diff": 8.361,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MM"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82022,
+    "fields": {
+        "date": "2020-08-30T17:09:03.644Z",
+        "time_window": 30,
+        "diff": -113.66,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "ML"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82021,
+    "fields": {
+        "date": "2020-08-30T17:09:03.643Z",
+        "time_window": 30,
+        "diff": -19.102,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MK"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82020,
+    "fields": {
+        "date": "2020-08-30T17:09:03.642Z",
+        "time_window": 30,
+        "diff": -193.04,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MG"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82019,
+    "fields": {
+        "date": "2020-08-30T17:09:03.641Z",
+        "time_window": 30,
+        "diff": -7.671,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MF"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82018,
+    "fields": {
+        "date": "2020-08-30T17:09:03.640Z",
+        "time_window": 30,
+        "diff": -3.428,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "ME"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82017,
+    "fields": {
+        "date": "2020-08-30T17:09:03.640Z",
+        "time_window": 30,
+        "diff": -0.898,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MD"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82016,
+    "fields": {
+        "date": "2020-08-30T17:09:03.639Z",
+        "time_window": 30,
+        "diff": -5.888,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MC"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82015,
+    "fields": {
+        "date": "2020-08-30T17:09:03.638Z",
+        "time_window": 30,
+        "diff": -22.033,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MA"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82014,
+    "fields": {
+        "date": "2020-08-30T17:09:03.638Z",
+        "time_window": 30,
+        "diff": 75.18,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "LY"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82013,
+    "fields": {
+        "date": "2020-08-30T17:09:03.637Z",
+        "time_window": 30,
+        "diff": -7.685,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "LV"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82012,
+    "fields": {
+        "date": "2020-08-30T17:09:03.636Z",
+        "time_window": 30,
+        "diff": -0.854,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "LU"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82011,
+    "fields": {
+        "date": "2020-08-30T17:09:03.635Z",
+        "time_window": 30,
+        "diff": 48.382,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "LT"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82010,
+    "fields": {
+        "date": "2020-08-30T17:09:03.634Z",
+        "time_window": 30,
+        "diff": 79.889,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "LR"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82009,
+    "fields": {
+        "date": "2020-08-30T17:09:03.634Z",
+        "time_window": 30,
+        "diff": -17.857,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "LK"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82008,
+    "fields": {
+        "date": "2020-08-30T17:09:03.633Z",
+        "time_window": 30,
+        "diff": -1.274,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "LI"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82007,
+    "fields": {
+        "date": "2020-08-30T17:09:03.617Z",
+        "time_window": 30,
+        "diff": -50.885,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "LC"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82006,
+    "fields": {
+        "date": "2020-08-30T17:09:03.616Z",
+        "time_window": 30,
+        "diff": -1.588,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "LB"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82005,
+    "fields": {
+        "date": "2020-08-30T17:09:03.616Z",
+        "time_window": 30,
+        "diff": 21.927,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "LA"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82004,
+    "fields": {
+        "date": "2020-08-30T17:09:03.615Z",
+        "time_window": 30,
+        "diff": -37.113,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "KZ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82003,
+    "fields": {
+        "date": "2020-08-30T17:09:03.614Z",
+        "time_window": 30,
+        "diff": 15.382,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "KW"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82002,
+    "fields": {
+        "date": "2020-08-30T17:09:03.613Z",
+        "time_window": 30,
+        "diff": 36.998,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "KR"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82001,
+    "fields": {
+        "date": "2020-08-30T17:09:03.613Z",
+        "time_window": 30,
+        "diff": 39.65,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "KN"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 82000,
+    "fields": {
+        "date": "2020-08-30T17:09:03.612Z",
+        "time_window": 30,
+        "diff": 40.93,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "KH"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81999,
+    "fields": {
+        "date": "2020-08-30T17:09:03.611Z",
+        "time_window": 30,
+        "diff": -22.226,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "KG"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81998,
+    "fields": {
+        "date": "2020-08-30T17:09:03.610Z",
+        "time_window": 30,
+        "diff": -1.919,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "KE"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81997,
+    "fields": {
+        "date": "2020-08-30T17:09:03.609Z",
+        "time_window": 30,
+        "diff": -5.596,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "JP"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81996,
+    "fields": {
+        "date": "2020-08-30T17:09:03.609Z",
+        "time_window": 30,
+        "diff": -2.967,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "JO"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81995,
+    "fields": {
+        "date": "2020-08-30T17:09:03.608Z",
+        "time_window": 30,
+        "diff": -23.126,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "JM"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81994,
+    "fields": {
+        "date": "2020-08-30T17:09:03.607Z",
+        "time_window": 30,
+        "diff": 6.221,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "JE"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81993,
+    "fields": {
+        "date": "2020-08-30T17:09:03.607Z",
+        "time_window": 30,
+        "diff": -8.995,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "IT"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81992,
+    "fields": {
+        "date": "2020-08-30T17:09:03.606Z",
+        "time_window": 30,
+        "diff": -9.688,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "IS"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81991,
+    "fields": {
+        "date": "2020-08-30T17:09:03.605Z",
+        "time_window": 30,
+        "diff": 57.604,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "IR"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81990,
+    "fields": {
+        "date": "2020-08-30T17:09:03.605Z",
+        "time_window": 30,
+        "diff": 7.629,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "IQ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81989,
+    "fields": {
+        "date": "2020-08-30T17:09:03.604Z",
+        "time_window": 30,
+        "diff": -19.33,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "IN"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81988,
+    "fields": {
+        "date": "2020-08-30T17:09:03.603Z",
+        "time_window": 30,
+        "diff": 34.66,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "IM"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81987,
+    "fields": {
+        "date": "2020-08-30T17:09:03.602Z",
+        "time_window": 30,
+        "diff": -12.736,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "IL"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81986,
+    "fields": {
+        "date": "2020-08-30T17:09:03.602Z",
+        "time_window": 30,
+        "diff": -7.363,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "IE"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81985,
+    "fields": {
+        "date": "2020-08-30T17:09:03.601Z",
+        "time_window": 30,
+        "diff": 8.385,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "ID"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81984,
+    "fields": {
+        "date": "2020-08-30T17:09:03.600Z",
+        "time_window": 30,
+        "diff": -12.094,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "HU"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81983,
+    "fields": {
+        "date": "2020-08-30T17:09:03.599Z",
+        "time_window": 30,
+        "diff": 45.483,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "HT"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81982,
+    "fields": {
+        "date": "2020-08-30T17:09:03.599Z",
+        "time_window": 30,
+        "diff": 14.175,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "HR"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81981,
+    "fields": {
+        "date": "2020-08-30T17:09:03.598Z",
+        "time_window": 30,
+        "diff": -3.016,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "HN"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81980,
+    "fields": {
+        "date": "2020-08-30T17:09:03.597Z",
+        "time_window": 30,
+        "diff": 68.956,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "HK"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81979,
+    "fields": {
+        "date": "2020-08-30T17:09:03.596Z",
+        "time_window": 30,
+        "diff": 120.71,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "GY"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81978,
+    "fields": {
+        "date": "2020-08-30T17:09:03.596Z",
+        "time_window": 30,
+        "diff": -111.137,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "GU"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81977,
+    "fields": {
+        "date": "2020-08-30T17:09:03.595Z",
+        "time_window": 30,
+        "diff": -35.31,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "GT"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81976,
+    "fields": {
+        "date": "2020-08-30T17:09:03.594Z",
+        "time_window": 30,
+        "diff": -6.924,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "GR"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81975,
+    "fields": {
+        "date": "2020-08-30T17:09:03.593Z",
+        "time_window": 30,
+        "diff": -20.66,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "GQ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81974,
+    "fields": {
+        "date": "2020-08-30T17:09:03.592Z",
+        "time_window": 30,
+        "diff": -15.864,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "GP"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81973,
+    "fields": {
+        "date": "2020-08-30T17:09:03.592Z",
+        "time_window": 30,
+        "diff": -178.19,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "GN"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81972,
+    "fields": {
+        "date": "2020-08-30T17:09:03.591Z",
+        "time_window": 30,
+        "diff": -1.598,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "GI"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81971,
+    "fields": {
+        "date": "2020-08-30T17:09:03.590Z",
+        "time_window": 30,
+        "diff": 0.575,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "GH"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81970,
+    "fields": {
+        "date": "2020-08-30T17:09:03.590Z",
+        "time_window": 30,
+        "diff": -15.735,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "GF"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81969,
+    "fields": {
+        "date": "2020-08-30T17:09:03.589Z",
+        "time_window": 30,
+        "diff": 7.528,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "GE"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81968,
+    "fields": {
+        "date": "2020-08-30T17:09:03.588Z",
+        "time_window": 30,
+        "diff": -10.665,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "GB"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81967,
+    "fields": {
+        "date": "2020-08-30T17:09:03.587Z",
+        "time_window": 30,
+        "diff": -14.721,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "GA"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81966,
+    "fields": {
+        "date": "2020-08-30T17:09:03.587Z",
+        "time_window": 30,
+        "diff": -7.158,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "FR"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81965,
+    "fields": {
+        "date": "2020-08-30T17:09:03.586Z",
+        "time_window": 30,
+        "diff": -6.665,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "FO"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81964,
+    "fields": {
+        "date": "2020-08-30T17:09:03.585Z",
+        "time_window": 30,
+        "diff": -12.265,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "FM"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81963,
+    "fields": {
+        "date": "2020-08-30T17:09:03.584Z",
+        "time_window": 30,
+        "diff": 95.802,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "FJ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81962,
+    "fields": {
+        "date": "2020-08-30T17:09:03.584Z",
+        "time_window": 30,
+        "diff": -8.477,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "FI"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81961,
+    "fields": {
+        "date": "2020-08-30T17:09:03.583Z",
+        "time_window": 30,
+        "diff": 20.984,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "EU"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81960,
+    "fields": {
+        "date": "2020-08-30T17:09:03.582Z",
+        "time_window": 30,
+        "diff": -55.595,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "ET"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81959,
+    "fields": {
+        "date": "2020-08-30T17:09:03.582Z",
+        "time_window": 30,
+        "diff": -5.25,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "ES"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81958,
+    "fields": {
+        "date": "2020-08-30T17:09:03.581Z",
+        "time_window": 30,
+        "diff": -18.386,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "EG"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81957,
+    "fields": {
+        "date": "2020-08-30T17:09:03.580Z",
+        "time_window": 30,
+        "diff": -8.604,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "EE"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81956,
+    "fields": {
+        "date": "2020-08-30T17:09:03.579Z",
+        "time_window": 30,
+        "diff": -59.752,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "EC"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81955,
+    "fields": {
+        "date": "2020-08-30T17:09:03.579Z",
+        "time_window": 30,
+        "diff": 2.169,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "DZ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81954,
+    "fields": {
+        "date": "2020-08-30T17:09:03.578Z",
+        "time_window": 30,
+        "diff": -57.712,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "DO"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81953,
+    "fields": {
+        "date": "2020-08-30T17:09:03.577Z",
+        "time_window": 30,
+        "diff": -14.129,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "DK"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81952,
+    "fields": {
+        "date": "2020-08-30T17:09:03.576Z",
+        "time_window": 30,
+        "diff": -9.028,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "DE"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81951,
+    "fields": {
+        "date": "2020-08-30T17:09:03.576Z",
+        "time_window": 30,
+        "diff": -7.386,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "CZ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81950,
+    "fields": {
+        "date": "2020-08-30T17:09:03.575Z",
+        "time_window": 30,
+        "diff": 0.179,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "CY"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81949,
+    "fields": {
+        "date": "2020-08-30T17:09:03.574Z",
+        "time_window": 30,
+        "diff": -81.405,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "CW"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81948,
+    "fields": {
+        "date": "2020-08-30T17:09:03.573Z",
+        "time_window": 30,
+        "diff": -231.54,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "CU"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81947,
+    "fields": {
+        "date": "2020-08-30T17:09:03.572Z",
+        "time_window": 30,
+        "diff": -28.783,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "CR"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81946,
+    "fields": {
+        "date": "2020-08-30T17:09:03.572Z",
+        "time_window": 30,
+        "diff": -40.433,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "CO"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81945,
+    "fields": {
+        "date": "2020-08-30T17:09:03.571Z",
+        "time_window": 30,
+        "diff": 156.796,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "CN"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81944,
+    "fields": {
+        "date": "2020-08-30T17:09:03.570Z",
+        "time_window": 30,
+        "diff": -132.95,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "CM"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81943,
+    "fields": {
+        "date": "2020-08-30T17:09:03.570Z",
+        "time_window": 30,
+        "diff": -0.305,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "CL"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81942,
+    "fields": {
+        "date": "2020-08-30T17:09:03.569Z",
+        "time_window": 30,
+        "diff": -7.256,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "CI"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81941,
+    "fields": {
+        "date": "2020-08-30T17:09:03.568Z",
+        "time_window": 30,
+        "diff": -5.721,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "CH"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81940,
+    "fields": {
+        "date": "2020-08-30T17:09:03.567Z",
+        "time_window": 30,
+        "diff": -17.671,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "CG"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81939,
+    "fields": {
+        "date": "2020-08-30T17:09:03.566Z",
+        "time_window": 30,
+        "diff": -2.66,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "CD"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81938,
+    "fields": {
+        "date": "2020-08-30T17:09:03.551Z",
+        "time_window": 30,
+        "diff": -9.827,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "CA"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81937,
+    "fields": {
+        "date": "2020-08-30T17:09:03.551Z",
+        "time_window": 30,
+        "diff": -2.364,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BZ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81936,
+    "fields": {
+        "date": "2020-08-30T17:09:03.550Z",
+        "time_window": 30,
+        "diff": 17.289,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BY"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81935,
+    "fields": {
+        "date": "2020-08-30T17:09:03.549Z",
+        "time_window": 30,
+        "diff": 35.182,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BT"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81934,
+    "fields": {
+        "date": "2020-08-30T17:09:03.548Z",
+        "time_window": 30,
+        "diff": -2.69,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BS"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81933,
+    "fields": {
+        "date": "2020-08-30T17:09:03.547Z",
+        "time_window": 30,
+        "diff": 17.051,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BR"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81932,
+    "fields": {
+        "date": "2020-08-30T17:09:03.546Z",
+        "time_window": 30,
+        "diff": 8.867,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BO"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81931,
+    "fields": {
+        "date": "2020-08-30T17:09:03.545Z",
+        "time_window": 30,
+        "diff": 50.01,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BN"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81930,
+    "fields": {
+        "date": "2020-08-30T17:09:03.544Z",
+        "time_window": 30,
+        "diff": -68.28,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BM"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81929,
+    "fields": {
+        "date": "2020-08-30T17:09:03.543Z",
+        "time_window": 30,
+        "diff": -10.336,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BL"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81928,
+    "fields": {
+        "date": "2020-08-30T17:09:03.543Z",
+        "time_window": 30,
+        "diff": -45.037,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BJ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81927,
+    "fields": {
+        "date": "2020-08-30T17:09:03.542Z",
+        "time_window": 30,
+        "diff": -139.72,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BI"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81926,
+    "fields": {
+        "date": "2020-08-30T17:09:03.541Z",
+        "time_window": 30,
+        "diff": -42.343,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BH"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81925,
+    "fields": {
+        "date": "2020-08-30T17:09:03.540Z",
+        "time_window": 30,
+        "diff": -2.434,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BG"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81924,
+    "fields": {
+        "date": "2020-08-30T17:09:03.540Z",
+        "time_window": 30,
+        "diff": -91.485,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BF"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81923,
+    "fields": {
+        "date": "2020-08-30T17:09:03.539Z",
+        "time_window": 30,
+        "diff": -6.432,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BE"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81922,
+    "fields": {
+        "date": "2020-08-30T17:09:03.538Z",
+        "time_window": 30,
+        "diff": 20.691,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BD"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81921,
+    "fields": {
+        "date": "2020-08-30T17:09:03.538Z",
+        "time_window": 30,
+        "diff": -29.29,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BB"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81920,
+    "fields": {
+        "date": "2020-08-30T17:09:03.537Z",
+        "time_window": 30,
+        "diff": -9.383,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BA"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81919,
+    "fields": {
+        "date": "2020-08-30T17:09:03.536Z",
+        "time_window": 30,
+        "diff": -40.782,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "AZ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81918,
+    "fields": {
+        "date": "2020-08-30T17:09:03.535Z",
+        "time_window": 30,
+        "diff": -7.547,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "AX"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81917,
+    "fields": {
+        "date": "2020-08-30T17:09:03.534Z",
+        "time_window": 30,
+        "diff": -0.364,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "AU"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81916,
+    "fields": {
+        "date": "2020-08-30T17:09:03.534Z",
+        "time_window": 30,
+        "diff": -8.49,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "AT"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81915,
+    "fields": {
+        "date": "2020-08-30T17:09:03.533Z",
+        "time_window": 30,
+        "diff": -0.781,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "AR"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81914,
+    "fields": {
+        "date": "2020-08-30T17:09:03.532Z",
+        "time_window": 30,
+        "diff": -7.899,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "AM"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81913,
+    "fields": {
+        "date": "2020-08-30T17:09:03.531Z",
+        "time_window": 30,
+        "diff": 14.475,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "AL"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81912,
+    "fields": {
+        "date": "2020-08-30T17:09:03.530Z",
+        "time_window": 30,
+        "diff": -45.5,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "AG"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81911,
+    "fields": {
+        "date": "2020-08-30T17:09:03.529Z",
+        "time_window": 30,
+        "diff": 82.546,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "AF"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81910,
+    "fields": {
+        "date": "2020-08-30T17:09:03.528Z",
+        "time_window": 30,
+        "diff": -17.245,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "AE"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81909,
+    "fields": {
+        "date": "2020-08-30T17:09:03.527Z",
+        "time_window": 30,
+        "diff": 56.78,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "AD"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81908,
+    "fields": {
+        "date": "2020-08-30T17:09:01.714Z",
+        "time_window": 7,
+        "diff": -11.37,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "ZW"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81907,
+    "fields": {
+        "date": "2020-08-30T17:09:01.714Z",
+        "time_window": 7,
+        "diff": -30.774,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "ZM"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81906,
+    "fields": {
+        "date": "2020-08-30T17:09:01.713Z",
+        "time_window": 7,
+        "diff": -15.603,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "ZA"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81905,
+    "fields": {
+        "date": "2020-08-30T17:09:01.713Z",
+        "time_window": 7,
+        "diff": -9.557,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "YT"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81904,
+    "fields": {
+        "date": "2020-08-30T17:09:01.712Z",
+        "time_window": 7,
+        "diff": -139.16,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "YE"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81903,
+    "fields": {
+        "date": "2020-08-30T17:09:01.711Z",
+        "time_window": 7,
+        "diff": -12.5,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "VN"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81902,
+    "fields": {
+        "date": "2020-08-30T17:09:01.710Z",
+        "time_window": 7,
+        "diff": 37.393,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "VI"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81901,
+    "fields": {
+        "date": "2020-08-30T17:09:01.710Z",
+        "time_window": 7,
+        "diff": -13.346,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "VE"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81900,
+    "fields": {
+        "date": "2020-08-30T17:09:01.709Z",
+        "time_window": 7,
+        "diff": -27.807,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "UZ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81899,
+    "fields": {
+        "date": "2020-08-30T17:09:01.708Z",
+        "time_window": 7,
+        "diff": -1.702,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "UY"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81898,
+    "fields": {
+        "date": "2020-08-30T17:09:01.707Z",
+        "time_window": 7,
+        "diff": -7.765,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "US"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81897,
+    "fields": {
+        "date": "2020-08-30T17:09:01.706Z",
+        "time_window": 7,
+        "diff": 3.538,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "UG"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81896,
+    "fields": {
+        "date": "2020-08-30T17:09:01.706Z",
+        "time_window": 7,
+        "diff": -2.083,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "UA"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81895,
+    "fields": {
+        "date": "2020-08-30T17:09:01.705Z",
+        "time_window": 7,
+        "diff": -30.042,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "TZ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81894,
+    "fields": {
+        "date": "2020-08-30T17:09:01.704Z",
+        "time_window": 7,
+        "diff": -2.18,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "TW"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81893,
+    "fields": {
+        "date": "2020-08-30T17:09:01.703Z",
+        "time_window": 7,
+        "diff": -55.281,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "TT"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81892,
+    "fields": {
+        "date": "2020-08-30T17:09:01.702Z",
+        "time_window": 7,
+        "diff": 17.831,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "TR"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81891,
+    "fields": {
+        "date": "2020-08-30T17:09:01.702Z",
+        "time_window": 7,
+        "diff": 22.516,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "TN"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81890,
+    "fields": {
+        "date": "2020-08-30T17:09:01.701Z",
+        "time_window": 7,
+        "diff": -87.75,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "TJ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81889,
+    "fields": {
+        "date": "2020-08-30T17:09:01.700Z",
+        "time_window": 7,
+        "diff": 30.716,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "TH"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81888,
+    "fields": {
+        "date": "2020-08-30T17:09:01.685Z",
+        "time_window": 7,
+        "diff": -13.586,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "TG"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81887,
+    "fields": {
+        "date": "2020-08-30T17:09:01.685Z",
+        "time_window": 7,
+        "diff": -75.628,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "SY"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81886,
+    "fields": {
+        "date": "2020-08-30T17:09:01.684Z",
+        "time_window": 7,
+        "diff": -48.132,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "SX"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81885,
+    "fields": {
+        "date": "2020-08-30T17:09:01.683Z",
+        "time_window": 7,
+        "diff": 3.789,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "SV"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81884,
+    "fields": {
+        "date": "2020-08-30T17:09:01.682Z",
+        "time_window": 7,
+        "diff": -56.815,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "SR"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81883,
+    "fields": {
+        "date": "2020-08-30T17:09:01.682Z",
+        "time_window": 7,
+        "diff": -64.28,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "SO"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81882,
+    "fields": {
+        "date": "2020-08-30T17:09:01.681Z",
+        "time_window": 7,
+        "diff": -22.784,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "SN"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81881,
+    "fields": {
+        "date": "2020-08-30T17:09:01.680Z",
+        "time_window": 7,
+        "diff": -9.553,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "SK"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81880,
+    "fields": {
+        "date": "2020-08-30T17:09:01.679Z",
+        "time_window": 7,
+        "diff": 1.165,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "SI"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81879,
+    "fields": {
+        "date": "2020-08-30T17:09:01.679Z",
+        "time_window": 7,
+        "diff": 17.902,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "SG"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81878,
+    "fields": {
+        "date": "2020-08-30T17:09:01.678Z",
+        "time_window": 7,
+        "diff": -9.706,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "SE"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81877,
+    "fields": {
+        "date": "2020-08-30T17:09:01.677Z",
+        "time_window": 7,
+        "diff": -26.433,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "SD"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81876,
+    "fields": {
+        "date": "2020-08-30T17:09:01.677Z",
+        "time_window": 7,
+        "diff": -21.56,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "SC"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81875,
+    "fields": {
+        "date": "2020-08-30T17:09:01.676Z",
+        "time_window": 7,
+        "diff": -11.17,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "SA"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81874,
+    "fields": {
+        "date": "2020-08-30T17:09:01.675Z",
+        "time_window": 7,
+        "diff": 0.438,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "RW"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81873,
+    "fields": {
+        "date": "2020-08-30T17:09:01.674Z",
+        "time_window": 7,
+        "diff": 0.702,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "RU"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81872,
+    "fields": {
+        "date": "2020-08-30T17:09:01.674Z",
+        "time_window": 7,
+        "diff": 14.322,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "RS"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81871,
+    "fields": {
+        "date": "2020-08-30T17:09:01.673Z",
+        "time_window": 7,
+        "diff": -5.155,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "RO"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81870,
+    "fields": {
+        "date": "2020-08-30T17:09:01.672Z",
+        "time_window": 7,
+        "diff": -5.545,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "RE"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81869,
+    "fields": {
+        "date": "2020-08-30T17:09:01.672Z",
+        "time_window": 7,
+        "diff": 66.497,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "QA"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81868,
+    "fields": {
+        "date": "2020-08-30T17:09:01.671Z",
+        "time_window": 7,
+        "diff": -3.078,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "PY"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81867,
+    "fields": {
+        "date": "2020-08-30T17:09:01.670Z",
+        "time_window": 7,
+        "diff": -5.473,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "PT"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81866,
+    "fields": {
+        "date": "2020-08-30T17:09:01.669Z",
+        "time_window": 7,
+        "diff": -53.79,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "PS"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81865,
+    "fields": {
+        "date": "2020-08-30T17:09:01.669Z",
+        "time_window": 7,
+        "diff": -18.232,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "PR"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81864,
+    "fields": {
+        "date": "2020-08-30T17:09:01.668Z",
+        "time_window": 7,
+        "diff": -12.715,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "PL"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81863,
+    "fields": {
+        "date": "2020-08-30T17:09:01.667Z",
+        "time_window": 7,
+        "diff": 46.502,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "PK"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81862,
+    "fields": {
+        "date": "2020-08-30T17:09:01.667Z",
+        "time_window": 7,
+        "diff": -2.968,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "PH"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81861,
+    "fields": {
+        "date": "2020-08-30T17:09:01.666Z",
+        "time_window": 7,
+        "diff": 2.764,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "PE"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81860,
+    "fields": {
+        "date": "2020-08-30T17:09:01.665Z",
+        "time_window": 7,
+        "diff": -64.078,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "PA"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81859,
+    "fields": {
+        "date": "2020-08-30T17:09:01.665Z",
+        "time_window": 7,
+        "diff": -18.381,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "OM"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81858,
+    "fields": {
+        "date": "2020-08-30T17:09:01.664Z",
+        "time_window": 7,
+        "diff": -10.948,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "NZ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81857,
+    "fields": {
+        "date": "2020-08-30T17:09:01.663Z",
+        "time_window": 7,
+        "diff": -2.738,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "NP"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81856,
+    "fields": {
+        "date": "2020-08-30T17:09:01.662Z",
+        "time_window": 7,
+        "diff": -5.323,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "NO"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81855,
+    "fields": {
+        "date": "2020-08-30T17:09:01.662Z",
+        "time_window": 7,
+        "diff": -6.432,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "NL"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81854,
+    "fields": {
+        "date": "2020-08-30T17:09:01.661Z",
+        "time_window": 7,
+        "diff": 0.371,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "NI"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81853,
+    "fields": {
+        "date": "2020-08-30T17:09:01.660Z",
+        "time_window": 7,
+        "diff": 7.697,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "NG"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81852,
+    "fields": {
+        "date": "2020-08-30T17:09:01.659Z",
+        "time_window": 7,
+        "diff": -1.978,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "NC"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81851,
+    "fields": {
+        "date": "2020-08-30T17:09:01.659Z",
+        "time_window": 7,
+        "diff": 18.475,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MY"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81850,
+    "fields": {
+        "date": "2020-08-30T17:09:01.658Z",
+        "time_window": 7,
+        "diff": -92.973,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MX"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81849,
+    "fields": {
+        "date": "2020-08-30T17:09:01.657Z",
+        "time_window": 7,
+        "diff": 8.721,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MV"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81848,
+    "fields": {
+        "date": "2020-08-30T17:09:01.657Z",
+        "time_window": 7,
+        "diff": -18.479,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MU"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81847,
+    "fields": {
+        "date": "2020-08-30T17:09:01.656Z",
+        "time_window": 7,
+        "diff": -71.96,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MR"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81846,
+    "fields": {
+        "date": "2020-08-30T17:09:01.655Z",
+        "time_window": 7,
+        "diff": -9.522,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MQ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81845,
+    "fields": {
+        "date": "2020-08-30T17:09:01.654Z",
+        "time_window": 7,
+        "diff": -3.793,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MO"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81844,
+    "fields": {
+        "date": "2020-08-30T17:09:01.653Z",
+        "time_window": 7,
+        "diff": 17.477,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MN"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81843,
+    "fields": {
+        "date": "2020-08-30T17:09:01.653Z",
+        "time_window": 7,
+        "diff": 9.177,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MM"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81842,
+    "fields": {
+        "date": "2020-08-30T17:09:01.652Z",
+        "time_window": 7,
+        "diff": -113.66,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "ML"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81841,
+    "fields": {
+        "date": "2020-08-30T17:09:01.651Z",
+        "time_window": 7,
+        "diff": -12.4,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MK"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81840,
+    "fields": {
+        "date": "2020-08-30T17:09:01.650Z",
+        "time_window": 7,
+        "diff": -12.762,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MF"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81839,
+    "fields": {
+        "date": "2020-08-30T17:09:01.650Z",
+        "time_window": 7,
+        "diff": -2.577,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MD"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81838,
+    "fields": {
+        "date": "2020-08-30T17:09:01.649Z",
+        "time_window": 7,
+        "diff": -20.977,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MA"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81837,
+    "fields": {
+        "date": "2020-08-30T17:09:01.648Z",
+        "time_window": 7,
+        "diff": -69.835,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "LY"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81836,
+    "fields": {
+        "date": "2020-08-30T17:09:01.647Z",
+        "time_window": 7,
+        "diff": -5.576,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "LV"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81835,
+    "fields": {
+        "date": "2020-08-30T17:09:01.646Z",
+        "time_window": 7,
+        "diff": 0.276,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "LU"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81834,
+    "fields": {
+        "date": "2020-08-30T17:09:01.646Z",
+        "time_window": 7,
+        "diff": 51.389,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "LT"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81833,
+    "fields": {
+        "date": "2020-08-30T17:09:01.645Z",
+        "time_window": 7,
+        "diff": 156.92,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "LR"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81832,
+    "fields": {
+        "date": "2020-08-30T17:09:01.644Z",
+        "time_window": 7,
+        "diff": -17.301,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "LK"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81831,
+    "fields": {
+        "date": "2020-08-30T17:09:01.643Z",
+        "time_window": 7,
+        "diff": -2.992,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "LI"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81830,
+    "fields": {
+        "date": "2020-08-30T17:09:01.642Z",
+        "time_window": 7,
+        "diff": -1.163,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "LB"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81829,
+    "fields": {
+        "date": "2020-08-30T17:09:01.642Z",
+        "time_window": 7,
+        "diff": 13.177,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "LA"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81828,
+    "fields": {
+        "date": "2020-08-30T17:09:01.641Z",
+        "time_window": 7,
+        "diff": -25.801,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "KZ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81827,
+    "fields": {
+        "date": "2020-08-30T17:09:01.640Z",
+        "time_window": 7,
+        "diff": 19.526,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "KW"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81826,
+    "fields": {
+        "date": "2020-08-30T17:09:01.639Z",
+        "time_window": 7,
+        "diff": 37.798,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "KR"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81825,
+    "fields": {
+        "date": "2020-08-30T17:09:01.638Z",
+        "time_window": 7,
+        "diff": 24.73,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "KH"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81824,
+    "fields": {
+        "date": "2020-08-30T17:09:01.638Z",
+        "time_window": 7,
+        "diff": -54.43,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "KG"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81823,
+    "fields": {
+        "date": "2020-08-30T17:09:01.637Z",
+        "time_window": 7,
+        "diff": -2.743,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "KE"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81822,
+    "fields": {
+        "date": "2020-08-30T17:09:01.636Z",
+        "time_window": 7,
+        "diff": -4.451,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "JP"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81821,
+    "fields": {
+        "date": "2020-08-30T17:09:01.635Z",
+        "time_window": 7,
+        "diff": -0.629,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "JO"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81820,
+    "fields": {
+        "date": "2020-08-30T17:09:01.634Z",
+        "time_window": 7,
+        "diff": 60.69,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "JM"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81819,
+    "fields": {
+        "date": "2020-08-30T17:09:01.634Z",
+        "time_window": 7,
+        "diff": 2.885,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "JE"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81818,
+    "fields": {
+        "date": "2020-08-30T17:09:01.633Z",
+        "time_window": 7,
+        "diff": -8.349,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "IT"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81817,
+    "fields": {
+        "date": "2020-08-30T17:09:01.620Z",
+        "time_window": 7,
+        "diff": -6.977,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "IS"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81816,
+    "fields": {
+        "date": "2020-08-30T17:09:01.619Z",
+        "time_window": 7,
+        "diff": 60.895,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "IR"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81815,
+    "fields": {
+        "date": "2020-08-30T17:09:01.618Z",
+        "time_window": 7,
+        "diff": 9.11,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "IQ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81814,
+    "fields": {
+        "date": "2020-08-30T17:09:01.617Z",
+        "time_window": 7,
+        "diff": -12.895,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "IN"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81813,
+    "fields": {
+        "date": "2020-08-30T17:09:01.616Z",
+        "time_window": 7,
+        "diff": 34.66,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "IM"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81812,
+    "fields": {
+        "date": "2020-08-30T17:09:01.615Z",
+        "time_window": 7,
+        "diff": -11.729,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "IL"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81811,
+    "fields": {
+        "date": "2020-08-30T17:09:01.615Z",
+        "time_window": 7,
+        "diff": -6.314,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "IE"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81810,
+    "fields": {
+        "date": "2020-08-30T17:09:01.614Z",
+        "time_window": 7,
+        "diff": 4.871,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "ID"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81809,
+    "fields": {
+        "date": "2020-08-30T17:09:01.613Z",
+        "time_window": 7,
+        "diff": -11.361,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "HU"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81808,
+    "fields": {
+        "date": "2020-08-30T17:09:01.612Z",
+        "time_window": 7,
+        "diff": -2.226,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "HR"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81807,
+    "fields": {
+        "date": "2020-08-30T17:09:01.611Z",
+        "time_window": 7,
+        "diff": -9.486,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "HN"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81806,
+    "fields": {
+        "date": "2020-08-30T17:09:01.611Z",
+        "time_window": 7,
+        "diff": 73.817,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "HK"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81805,
+    "fields": {
+        "date": "2020-08-30T17:09:01.610Z",
+        "time_window": 7,
+        "diff": -24.504,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "GT"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81804,
+    "fields": {
+        "date": "2020-08-30T17:09:01.610Z",
+        "time_window": 7,
+        "diff": -6.671,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "GR"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81803,
+    "fields": {
+        "date": "2020-08-30T17:09:01.609Z",
+        "time_window": 7,
+        "diff": -14.717,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "GP"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81802,
+    "fields": {
+        "date": "2020-08-30T17:09:01.608Z",
+        "time_window": 7,
+        "diff": -0.085,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "GI"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81801,
+    "fields": {
+        "date": "2020-08-30T17:09:01.608Z",
+        "time_window": 7,
+        "diff": -14.26,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "GH"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81800,
+    "fields": {
+        "date": "2020-08-30T17:09:01.607Z",
+        "time_window": 7,
+        "diff": -15.38,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "GF"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81799,
+    "fields": {
+        "date": "2020-08-30T17:09:01.606Z",
+        "time_window": 7,
+        "diff": -31.21,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "GE"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81798,
+    "fields": {
+        "date": "2020-08-30T17:09:01.606Z",
+        "time_window": 7,
+        "diff": -9.679,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "GB"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81797,
+    "fields": {
+        "date": "2020-08-30T17:09:01.605Z",
+        "time_window": 7,
+        "diff": -13.29,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "GA"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81796,
+    "fields": {
+        "date": "2020-08-30T17:09:01.604Z",
+        "time_window": 7,
+        "diff": -6.546,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "FR"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81795,
+    "fields": {
+        "date": "2020-08-30T17:09:01.603Z",
+        "time_window": 7,
+        "diff": -7.256,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "FO"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81794,
+    "fields": {
+        "date": "2020-08-30T17:09:01.603Z",
+        "time_window": 7,
+        "diff": 91.93,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "FJ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81793,
+    "fields": {
+        "date": "2020-08-30T17:09:01.602Z",
+        "time_window": 7,
+        "diff": -7.305,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "FI"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81792,
+    "fields": {
+        "date": "2020-08-30T17:09:01.601Z",
+        "time_window": 7,
+        "diff": 51.863,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "EU"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81791,
+    "fields": {
+        "date": "2020-08-30T17:09:01.601Z",
+        "time_window": 7,
+        "diff": -5.151,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "ES"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81790,
+    "fields": {
+        "date": "2020-08-30T17:09:01.600Z",
+        "time_window": 7,
+        "diff": -19.653,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "EG"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81789,
+    "fields": {
+        "date": "2020-08-30T17:09:01.599Z",
+        "time_window": 7,
+        "diff": -8.351,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "EE"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81788,
+    "fields": {
+        "date": "2020-08-30T17:09:01.597Z",
+        "time_window": 7,
+        "diff": -45.148,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "EC"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81787,
+    "fields": {
+        "date": "2020-08-30T17:09:01.596Z",
+        "time_window": 7,
+        "diff": 1.846,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "DZ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81786,
+    "fields": {
+        "date": "2020-08-30T17:09:01.595Z",
+        "time_window": 7,
+        "diff": -51.899,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "DO"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81785,
+    "fields": {
+        "date": "2020-08-30T17:09:01.594Z",
+        "time_window": 7,
+        "diff": -14.095,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "DK"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81784,
+    "fields": {
+        "date": "2020-08-30T17:09:01.593Z",
+        "time_window": 7,
+        "diff": -7.368,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "DE"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81783,
+    "fields": {
+        "date": "2020-08-30T17:09:01.593Z",
+        "time_window": 7,
+        "diff": -7.261,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "CZ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81782,
+    "fields": {
+        "date": "2020-08-30T17:09:01.592Z",
+        "time_window": 7,
+        "diff": -3.129,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "CY"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81781,
+    "fields": {
+        "date": "2020-08-30T17:09:01.591Z",
+        "time_window": 7,
+        "diff": -81.58,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "CW"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81780,
+    "fields": {
+        "date": "2020-08-30T17:09:01.590Z",
+        "time_window": 7,
+        "diff": -26.546,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "CR"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81779,
+    "fields": {
+        "date": "2020-08-30T17:09:01.590Z",
+        "time_window": 7,
+        "diff": -28.853,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "CO"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81778,
+    "fields": {
+        "date": "2020-08-30T17:09:01.589Z",
+        "time_window": 7,
+        "diff": 152.873,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "CN"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81777,
+    "fields": {
+        "date": "2020-08-30T17:09:01.588Z",
+        "time_window": 7,
+        "diff": -106.61,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "CM"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81776,
+    "fields": {
+        "date": "2020-08-30T17:09:01.588Z",
+        "time_window": 7,
+        "diff": -0.574,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "CL"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81775,
+    "fields": {
+        "date": "2020-08-30T17:09:01.587Z",
+        "time_window": 7,
+        "diff": -4.35,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "CI"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81774,
+    "fields": {
+        "date": "2020-08-30T17:09:01.586Z",
+        "time_window": 7,
+        "diff": -5.684,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "CH"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81773,
+    "fields": {
+        "date": "2020-08-30T17:09:01.585Z",
+        "time_window": 7,
+        "diff": -24.951,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "CG"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81772,
+    "fields": {
+        "date": "2020-08-30T17:09:01.585Z",
+        "time_window": 7,
+        "diff": 14.18,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "CD"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81771,
+    "fields": {
+        "date": "2020-08-30T17:09:01.584Z",
+        "time_window": 7,
+        "diff": -9.709,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "CA"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81770,
+    "fields": {
+        "date": "2020-08-30T17:09:01.583Z",
+        "time_window": 7,
+        "diff": 1.769,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BZ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81769,
+    "fields": {
+        "date": "2020-08-30T17:09:01.582Z",
+        "time_window": 7,
+        "diff": 16.089,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BY"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81768,
+    "fields": {
+        "date": "2020-08-30T17:09:01.582Z",
+        "time_window": 7,
+        "diff": 42.537,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BT"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81767,
+    "fields": {
+        "date": "2020-08-30T17:09:01.581Z",
+        "time_window": 7,
+        "diff": 17.447,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BR"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81766,
+    "fields": {
+        "date": "2020-08-30T17:09:01.580Z",
+        "time_window": 7,
+        "diff": 10.494,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BO"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81765,
+    "fields": {
+        "date": "2020-08-30T17:09:01.579Z",
+        "time_window": 7,
+        "diff": -5.626,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BL"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81764,
+    "fields": {
+        "date": "2020-08-30T17:09:01.579Z",
+        "time_window": 7,
+        "diff": -152.47,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BJ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81763,
+    "fields": {
+        "date": "2020-08-30T17:09:01.578Z",
+        "time_window": 7,
+        "diff": -32.325,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BH"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81762,
+    "fields": {
+        "date": "2020-08-30T17:09:01.577Z",
+        "time_window": 7,
+        "diff": -1.54,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BG"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81761,
+    "fields": {
+        "date": "2020-08-30T17:09:01.576Z",
+        "time_window": 7,
+        "diff": -139.42,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BF"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81760,
+    "fields": {
+        "date": "2020-08-30T17:09:01.576Z",
+        "time_window": 7,
+        "diff": -6.074,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BE"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81759,
+    "fields": {
+        "date": "2020-08-30T17:09:01.575Z",
+        "time_window": 7,
+        "diff": 24.367,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BD"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81758,
+    "fields": {
+        "date": "2020-08-30T17:09:01.574Z",
+        "time_window": 7,
+        "diff": -9.419,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BA"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81757,
+    "fields": {
+        "date": "2020-08-30T17:09:01.573Z",
+        "time_window": 7,
+        "diff": -41.989,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "AZ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81756,
+    "fields": {
+        "date": "2020-08-30T17:09:01.573Z",
+        "time_window": 7,
+        "diff": -7.625,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "AX"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81755,
+    "fields": {
+        "date": "2020-08-30T17:09:01.572Z",
+        "time_window": 7,
+        "diff": 1.036,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "AU"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81754,
+    "fields": {
+        "date": "2020-08-30T17:09:01.571Z",
+        "time_window": 7,
+        "diff": -7.397,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "AT"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81753,
+    "fields": {
+        "date": "2020-08-30T17:09:01.570Z",
+        "time_window": 7,
+        "diff": -0.21,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "AR"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81752,
+    "fields": {
+        "date": "2020-08-30T17:09:01.569Z",
+        "time_window": 7,
+        "diff": -6.538,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "AM"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81751,
+    "fields": {
+        "date": "2020-08-30T17:09:01.568Z",
+        "time_window": 7,
+        "diff": 95.403,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "AL"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81750,
+    "fields": {
+        "date": "2020-08-30T17:09:01.567Z",
+        "time_window": 7,
+        "diff": 109.957,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "AF"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81749,
+    "fields": {
+        "date": "2020-08-30T17:09:01.566Z",
+        "time_window": 7,
+        "diff": -15.885,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "AE"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81748,
+    "fields": {
+        "date": "2020-08-30T17:08:59.725Z",
+        "time_window": 2,
+        "diff": -12.296,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "ZW"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81747,
+    "fields": {
+        "date": "2020-08-30T17:08:59.724Z",
+        "time_window": 2,
+        "diff": -74.085,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "ZM"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81746,
+    "fields": {
+        "date": "2020-08-30T17:08:59.723Z",
+        "time_window": 2,
+        "diff": -14.215,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "ZA"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81745,
+    "fields": {
+        "date": "2020-08-30T17:08:59.722Z",
+        "time_window": 2,
+        "diff": -14.424,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "YT"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81744,
+    "fields": {
+        "date": "2020-08-30T17:08:59.721Z",
+        "time_window": 2,
+        "diff": -13.022,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "VN"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81743,
+    "fields": {
+        "date": "2020-08-30T17:08:59.721Z",
+        "time_window": 2,
+        "diff": -15.013,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "VE"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81742,
+    "fields": {
+        "date": "2020-08-30T17:08:59.720Z",
+        "time_window": 2,
+        "diff": -1.481,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "UY"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81741,
+    "fields": {
+        "date": "2020-08-30T17:08:59.719Z",
+        "time_window": 2,
+        "diff": -7.837,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "US"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81740,
+    "fields": {
+        "date": "2020-08-30T17:08:59.719Z",
+        "time_window": 2,
+        "diff": -12.73,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "UG"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81739,
+    "fields": {
+        "date": "2020-08-30T17:08:59.718Z",
+        "time_window": 2,
+        "diff": -9.428,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "UA"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81738,
+    "fields": {
+        "date": "2020-08-30T17:08:59.717Z",
+        "time_window": 2,
+        "diff": -3.2,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "TW"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81737,
+    "fields": {
+        "date": "2020-08-30T17:08:59.716Z",
+        "time_window": 2,
+        "diff": -69.087,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "TT"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81736,
+    "fields": {
+        "date": "2020-08-30T17:08:59.716Z",
+        "time_window": 2,
+        "diff": 18.676,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "TR"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81735,
+    "fields": {
+        "date": "2020-08-30T17:08:59.715Z",
+        "time_window": 2,
+        "diff": 62.993,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "TN"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81734,
+    "fields": {
+        "date": "2020-08-30T17:08:59.714Z",
+        "time_window": 2,
+        "diff": -87.75,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "TJ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81733,
+    "fields": {
+        "date": "2020-08-30T17:08:59.713Z",
+        "time_window": 2,
+        "diff": 32.831,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "TH"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81732,
+    "fields": {
+        "date": "2020-08-30T17:08:59.713Z",
+        "time_window": 2,
+        "diff": -7.956,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "TG"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81731,
+    "fields": {
+        "date": "2020-08-30T17:08:59.712Z",
+        "time_window": 2,
+        "diff": -187.093,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "SY"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81730,
+    "fields": {
+        "date": "2020-08-30T17:08:59.711Z",
+        "time_window": 2,
+        "diff": -61.782,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "SX"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81729,
+    "fields": {
+        "date": "2020-08-30T17:08:59.710Z",
+        "time_window": 2,
+        "diff": -76.725,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "SR"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81728,
+    "fields": {
+        "date": "2020-08-30T17:08:59.710Z",
+        "time_window": 2,
+        "diff": -23.88,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "SN"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81727,
+    "fields": {
+        "date": "2020-08-30T17:08:59.709Z",
+        "time_window": 2,
+        "diff": -7.795,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "SK"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81726,
+    "fields": {
+        "date": "2020-08-30T17:08:59.708Z",
+        "time_window": 2,
+        "diff": 0.004,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "SI"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81725,
+    "fields": {
+        "date": "2020-08-30T17:08:59.707Z",
+        "time_window": 2,
+        "diff": 17.836,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "SG"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81724,
+    "fields": {
+        "date": "2020-08-30T17:08:59.706Z",
+        "time_window": 2,
+        "diff": -10.204,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "SE"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81723,
+    "fields": {
+        "date": "2020-08-30T17:08:59.706Z",
+        "time_window": 2,
+        "diff": -40.167,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "SD"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81722,
+    "fields": {
+        "date": "2020-08-30T17:08:59.705Z",
+        "time_window": 2,
+        "diff": -11.628,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "SA"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81721,
+    "fields": {
+        "date": "2020-08-30T17:08:59.704Z",
+        "time_window": 2,
+        "diff": 8.785,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "RW"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81720,
+    "fields": {
+        "date": "2020-08-30T17:08:59.703Z",
+        "time_window": 2,
+        "diff": 0.253,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "RU"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81719,
+    "fields": {
+        "date": "2020-08-30T17:08:59.702Z",
+        "time_window": 2,
+        "diff": 58.495,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "RS"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81718,
+    "fields": {
+        "date": "2020-08-30T17:08:59.701Z",
+        "time_window": 2,
+        "diff": -5.882,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "RO"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81717,
+    "fields": {
+        "date": "2020-08-30T17:08:59.700Z",
+        "time_window": 2,
+        "diff": -7.202,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "RE"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81716,
+    "fields": {
+        "date": "2020-08-30T17:08:59.699Z",
+        "time_window": 2,
+        "diff": 89.227,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "QA"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81715,
+    "fields": {
+        "date": "2020-08-30T17:08:59.685Z",
+        "time_window": 2,
+        "diff": -3.083,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "PY"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81714,
+    "fields": {
+        "date": "2020-08-30T17:08:59.684Z",
+        "time_window": 2,
+        "diff": -5.414,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "PT"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81713,
+    "fields": {
+        "date": "2020-08-30T17:08:59.683Z",
+        "time_window": 2,
+        "diff": -53.79,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "PS"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81712,
+    "fields": {
+        "date": "2020-08-30T17:08:59.683Z",
+        "time_window": 2,
+        "diff": -22.975,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "PR"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81711,
+    "fields": {
+        "date": "2020-08-30T17:08:59.682Z",
+        "time_window": 2,
+        "diff": -12.557,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "PL"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81710,
+    "fields": {
+        "date": "2020-08-30T17:08:59.681Z",
+        "time_window": 2,
+        "diff": 0.177,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "PK"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81709,
+    "fields": {
+        "date": "2020-08-30T17:08:59.681Z",
+        "time_window": 2,
+        "diff": -7.198,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "PH"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81708,
+    "fields": {
+        "date": "2020-08-30T17:08:59.680Z",
+        "time_window": 2,
+        "diff": -0.986,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "PE"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81707,
+    "fields": {
+        "date": "2020-08-30T17:08:59.679Z",
+        "time_window": 2,
+        "diff": -63.265,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "PA"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81706,
+    "fields": {
+        "date": "2020-08-30T17:08:59.679Z",
+        "time_window": 2,
+        "diff": -17.666,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "OM"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81705,
+    "fields": {
+        "date": "2020-08-30T17:08:59.678Z",
+        "time_window": 2,
+        "diff": -10.5,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "NZ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81704,
+    "fields": {
+        "date": "2020-08-30T17:08:59.677Z",
+        "time_window": 2,
+        "diff": -3.973,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "NP"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81703,
+    "fields": {
+        "date": "2020-08-30T17:08:59.677Z",
+        "time_window": 2,
+        "diff": -5.458,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "NO"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81702,
+    "fields": {
+        "date": "2020-08-30T17:08:59.676Z",
+        "time_window": 2,
+        "diff": -6.159,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "NL"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81701,
+    "fields": {
+        "date": "2020-08-30T17:08:59.675Z",
+        "time_window": 2,
+        "diff": 15.504,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "NI"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81700,
+    "fields": {
+        "date": "2020-08-30T17:08:59.675Z",
+        "time_window": 2,
+        "diff": 12.082,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "NG"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81699,
+    "fields": {
+        "date": "2020-08-30T17:08:59.674Z",
+        "time_window": 2,
+        "diff": -7.23,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "NC"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81698,
+    "fields": {
+        "date": "2020-08-30T17:08:59.673Z",
+        "time_window": 2,
+        "diff": 19.518,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MY"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81697,
+    "fields": {
+        "date": "2020-08-30T17:08:59.672Z",
+        "time_window": 2,
+        "diff": -126.938,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MX"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81696,
+    "fields": {
+        "date": "2020-08-30T17:08:59.672Z",
+        "time_window": 2,
+        "diff": -14.687,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MV"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81695,
+    "fields": {
+        "date": "2020-08-30T17:08:59.671Z",
+        "time_window": 2,
+        "diff": -2.853,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MU"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81694,
+    "fields": {
+        "date": "2020-08-30T17:08:59.670Z",
+        "time_window": 2,
+        "diff": -5.544,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MQ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81693,
+    "fields": {
+        "date": "2020-08-30T17:08:59.670Z",
+        "time_window": 2,
+        "diff": -7.736,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MO"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81692,
+    "fields": {
+        "date": "2020-08-30T17:08:59.669Z",
+        "time_window": 2,
+        "diff": 3.894,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MM"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81691,
+    "fields": {
+        "date": "2020-08-30T17:08:59.668Z",
+        "time_window": 2,
+        "diff": -12.4,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MK"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81690,
+    "fields": {
+        "date": "2020-08-30T17:08:59.668Z",
+        "time_window": 2,
+        "diff": -28.02,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MF"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81689,
+    "fields": {
+        "date": "2020-08-30T17:08:59.667Z",
+        "time_window": 2,
+        "diff": -5.151,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MD"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81688,
+    "fields": {
+        "date": "2020-08-30T17:08:59.666Z",
+        "time_window": 2,
+        "diff": -48.195,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "MA"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81687,
+    "fields": {
+        "date": "2020-08-30T17:08:59.665Z",
+        "time_window": 2,
+        "diff": -5.526,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "LV"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81686,
+    "fields": {
+        "date": "2020-08-30T17:08:59.664Z",
+        "time_window": 2,
+        "diff": -2.801,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "LU"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81685,
+    "fields": {
+        "date": "2020-08-30T17:08:59.664Z",
+        "time_window": 2,
+        "diff": -3.48,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "LT"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81684,
+    "fields": {
+        "date": "2020-08-30T17:08:59.663Z",
+        "time_window": 2,
+        "diff": -19.795,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "LK"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81683,
+    "fields": {
+        "date": "2020-08-30T17:08:59.662Z",
+        "time_window": 2,
+        "diff": -5.15,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "LI"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81682,
+    "fields": {
+        "date": "2020-08-30T17:08:59.661Z",
+        "time_window": 2,
+        "diff": -1.476,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "LB"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81681,
+    "fields": {
+        "date": "2020-08-30T17:08:59.661Z",
+        "time_window": 2,
+        "diff": -9.98,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "LA"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81680,
+    "fields": {
+        "date": "2020-08-30T17:08:59.660Z",
+        "time_window": 2,
+        "diff": -33.31,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "KZ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81679,
+    "fields": {
+        "date": "2020-08-30T17:08:59.659Z",
+        "time_window": 2,
+        "diff": 19.124,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "KW"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81678,
+    "fields": {
+        "date": "2020-08-30T17:08:59.659Z",
+        "time_window": 2,
+        "diff": 38.403,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "KR"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81677,
+    "fields": {
+        "date": "2020-08-30T17:08:59.658Z",
+        "time_window": 2,
+        "diff": -12.535,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "KH"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81676,
+    "fields": {
+        "date": "2020-08-30T17:08:59.657Z",
+        "time_window": 2,
+        "diff": -54.43,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "KG"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81675,
+    "fields": {
+        "date": "2020-08-30T17:08:59.656Z",
+        "time_window": 2,
+        "diff": 0.457,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "KE"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81674,
+    "fields": {
+        "date": "2020-08-30T17:08:59.656Z",
+        "time_window": 2,
+        "diff": -5.37,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "JP"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81673,
+    "fields": {
+        "date": "2020-08-30T17:08:59.655Z",
+        "time_window": 2,
+        "diff": -0.789,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "JO"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81672,
+    "fields": {
+        "date": "2020-08-30T17:08:59.654Z",
+        "time_window": 2,
+        "diff": -7.93,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "IT"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81671,
+    "fields": {
+        "date": "2020-08-30T17:08:59.653Z",
+        "time_window": 2,
+        "diff": -6.453,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "IS"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81670,
+    "fields": {
+        "date": "2020-08-30T17:08:59.653Z",
+        "time_window": 2,
+        "diff": 66.471,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "IR"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81669,
+    "fields": {
+        "date": "2020-08-30T17:08:59.652Z",
+        "time_window": 2,
+        "diff": -0.387,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "IQ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81668,
+    "fields": {
+        "date": "2020-08-30T17:08:59.651Z",
+        "time_window": 2,
+        "diff": -14.2,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "IN"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81667,
+    "fields": {
+        "date": "2020-08-30T17:08:59.650Z",
+        "time_window": 2,
+        "diff": -8.986,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "IL"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81666,
+    "fields": {
+        "date": "2020-08-30T17:08:59.649Z",
+        "time_window": 2,
+        "diff": -6.329,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "IE"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81665,
+    "fields": {
+        "date": "2020-08-30T17:08:59.649Z",
+        "time_window": 2,
+        "diff": 3.919,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "ID"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81664,
+    "fields": {
+        "date": "2020-08-30T17:08:59.648Z",
+        "time_window": 2,
+        "diff": -11.339,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "HU"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81663,
+    "fields": {
+        "date": "2020-08-30T17:08:59.647Z",
+        "time_window": 2,
+        "diff": 77.418,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "HR"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81662,
+    "fields": {
+        "date": "2020-08-30T17:08:59.646Z",
+        "time_window": 2,
+        "diff": 91.391,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "HK"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81661,
+    "fields": {
+        "date": "2020-08-30T17:08:59.646Z",
+        "time_window": 2,
+        "diff": -44.97,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "GT"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81660,
+    "fields": {
+        "date": "2020-08-30T17:08:59.645Z",
+        "time_window": 2,
+        "diff": -8.057,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "GR"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81659,
+    "fields": {
+        "date": "2020-08-30T17:08:59.644Z",
+        "time_window": 2,
+        "diff": -9.727,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "GP"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81658,
+    "fields": {
+        "date": "2020-08-30T17:08:59.643Z",
+        "time_window": 2,
+        "diff": -52.88,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "GH"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81657,
+    "fields": {
+        "date": "2020-08-30T17:08:59.642Z",
+        "time_window": 2,
+        "diff": -14.64,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "GF"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81656,
+    "fields": {
+        "date": "2020-08-30T17:08:59.641Z",
+        "time_window": 2,
+        "diff": -9.356,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "GB"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81655,
+    "fields": {
+        "date": "2020-08-30T17:08:59.640Z",
+        "time_window": 2,
+        "diff": -14.439,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "GA"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81654,
+    "fields": {
+        "date": "2020-08-30T17:08:59.640Z",
+        "time_window": 2,
+        "diff": -6.423,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "FR"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81653,
+    "fields": {
+        "date": "2020-08-30T17:08:59.639Z",
+        "time_window": 2,
+        "diff": -35.275,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "FO"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81652,
+    "fields": {
+        "date": "2020-08-30T17:08:59.638Z",
+        "time_window": 2,
+        "diff": 102.3,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "FJ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81651,
+    "fields": {
+        "date": "2020-08-30T17:08:59.637Z",
+        "time_window": 2,
+        "diff": -7.781,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "FI"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81650,
+    "fields": {
+        "date": "2020-08-30T17:08:59.636Z",
+        "time_window": 2,
+        "diff": -5.909,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "ES"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81649,
+    "fields": {
+        "date": "2020-08-30T17:08:59.635Z",
+        "time_window": 2,
+        "diff": -22.221,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "EG"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81648,
+    "fields": {
+        "date": "2020-08-30T17:08:59.634Z",
+        "time_window": 2,
+        "diff": -9.248,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "EE"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81647,
+    "fields": {
+        "date": "2020-08-30T17:08:59.620Z",
+        "time_window": 2,
+        "diff": -63.929,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "EC"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81646,
+    "fields": {
+        "date": "2020-08-30T17:08:59.619Z",
+        "time_window": 2,
+        "diff": 12.927,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "DZ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81645,
+    "fields": {
+        "date": "2020-08-30T17:08:59.618Z",
+        "time_window": 2,
+        "diff": -68.415,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "DO"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81644,
+    "fields": {
+        "date": "2020-08-30T17:08:59.617Z",
+        "time_window": 2,
+        "diff": -11.625,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "DK"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81643,
+    "fields": {
+        "date": "2020-08-30T17:08:59.617Z",
+        "time_window": 2,
+        "diff": -6.884,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "DE"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81642,
+    "fields": {
+        "date": "2020-08-30T17:08:59.616Z",
+        "time_window": 2,
+        "diff": -7.001,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "CZ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81641,
+    "fields": {
+        "date": "2020-08-30T17:08:59.614Z",
+        "time_window": 2,
+        "diff": 1.594,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "CY"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81640,
+    "fields": {
+        "date": "2020-08-30T17:08:59.614Z",
+        "time_window": 2,
+        "diff": -15.215,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "CR"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81639,
+    "fields": {
+        "date": "2020-08-30T17:08:59.613Z",
+        "time_window": 2,
+        "diff": -45.459,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "CO"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81638,
+    "fields": {
+        "date": "2020-08-30T17:08:59.612Z",
+        "time_window": 2,
+        "diff": 149.591,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "CN"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81637,
+    "fields": {
+        "date": "2020-08-30T17:08:59.611Z",
+        "time_window": 2,
+        "diff": -3.332,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "CL"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81636,
+    "fields": {
+        "date": "2020-08-30T17:08:59.611Z",
+        "time_window": 2,
+        "diff": -0.066,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "CI"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81635,
+    "fields": {
+        "date": "2020-08-30T17:08:59.610Z",
+        "time_window": 2,
+        "diff": -6.945,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "CH"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81634,
+    "fields": {
+        "date": "2020-08-30T17:08:59.609Z",
+        "time_window": 2,
+        "diff": -61.786,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "CG"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81633,
+    "fields": {
+        "date": "2020-08-30T17:08:59.609Z",
+        "time_window": 2,
+        "diff": -9.53,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "CA"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81632,
+    "fields": {
+        "date": "2020-08-30T17:08:59.608Z",
+        "time_window": 2,
+        "diff": -8.663,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BZ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81631,
+    "fields": {
+        "date": "2020-08-30T17:08:59.607Z",
+        "time_window": 2,
+        "diff": 13.34,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BY"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81630,
+    "fields": {
+        "date": "2020-08-30T17:08:59.606Z",
+        "time_window": 2,
+        "diff": 37.573,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BT"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81629,
+    "fields": {
+        "date": "2020-08-30T17:08:59.606Z",
+        "time_window": 2,
+        "diff": 16.525,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BR"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81628,
+    "fields": {
+        "date": "2020-08-30T17:08:59.605Z",
+        "time_window": 2,
+        "diff": 11.716,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BO"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81627,
+    "fields": {
+        "date": "2020-08-30T17:08:59.604Z",
+        "time_window": 2,
+        "diff": -10.17,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BL"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81626,
+    "fields": {
+        "date": "2020-08-30T17:08:59.604Z",
+        "time_window": 2,
+        "diff": -53.49,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BH"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81625,
+    "fields": {
+        "date": "2020-08-30T17:08:59.603Z",
+        "time_window": 2,
+        "diff": -1.834,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BG"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81624,
+    "fields": {
+        "date": "2020-08-30T17:08:59.602Z",
+        "time_window": 2,
+        "diff": -5.513,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BE"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81623,
+    "fields": {
+        "date": "2020-08-30T17:08:59.601Z",
+        "time_window": 2,
+        "diff": 15.073,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BD"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81622,
+    "fields": {
+        "date": "2020-08-30T17:08:59.601Z",
+        "time_window": 2,
+        "diff": -6.572,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "BA"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81621,
+    "fields": {
+        "date": "2020-08-30T17:08:59.600Z",
+        "time_window": 2,
+        "diff": -66.817,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "AZ"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81620,
+    "fields": {
+        "date": "2020-08-30T17:08:59.599Z",
+        "time_window": 2,
+        "diff": -10.557,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "AX"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81619,
+    "fields": {
+        "date": "2020-08-30T17:08:59.599Z",
+        "time_window": 2,
+        "diff": -2.355,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "AU"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81618,
+    "fields": {
+        "date": "2020-08-30T17:08:59.598Z",
+        "time_window": 2,
+        "diff": -9.218,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "AT"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81617,
+    "fields": {
+        "date": "2020-08-30T17:08:59.597Z",
+        "time_window": 2,
+        "diff": -1.896,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "AR"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81616,
+    "fields": {
+        "date": "2020-08-30T17:08:59.596Z",
+        "time_window": 2,
+        "diff": -4.319,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "AM"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81615,
+    "fields": {
+        "date": "2020-08-30T17:08:59.595Z",
+        "time_window": 2,
+        "diff": 57.82,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "AF"
+    }
+},
+{
+    "model": "simon_app.v6perf",
+    "pk": 81614,
+    "fields": {
+        "date": "2020-08-30T17:08:58.824Z",
+        "time_window": 2,
+        "diff": -14.161,
+        "dualstack": 0.0,
+        "v6_rate": 0.0,
+        "country": "AE"
+    }
+}
+]
