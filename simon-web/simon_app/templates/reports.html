@@ -171,20 +171,20 @@
                     </p>
                 {% endif %}
 
-                {% if ripe_atlas|length != 0 %}
-                    <h4 class="page-header">Medidor: Ripe Atlas Ping (<code>icmp</code>)</h4>
-
-                    <p>Esta gráfica esta basada en {{ ripe_atlas | length | unit_shortener }} muestras recolectadas
-                        desde {{ date_from }}</p>
-
-                    <div id="latency_histogram_ripe_atlas" style="height: 20em;"></div>
-
-                    <p class="pull-right" style="font-size: 0.9em;">
-                        <code>ICMP</code> RIPE Atlas Ping results are performed using the <a href="http:/atlas.ripe.net"
-                                                                                             target="_blank">RIPE Atlas
-                        <span class="glyphicon glyphicon-new-window"></span></a> measurement platform.
-                    </p>
-                {% endif %}
+{#                {% if ripe_atlas|length != 0 %}#}
+{#                    <h4 class="page-header">Medidor: Ripe Atlas Ping (<code>icmp</code>)</h4>#}
+{##}
+{#                    <p>Esta gráfica esta basada en {{ ripe_atlas | length | unit_shortener }} muestras recolectadas#}
+{#                        desde {{ date_from }}</p>#}
+{##}
+{#                    <div id="latency_histogram_ripe_atlas" style="height: 20em;"></div>#}
+{##}
+{#                    <p class="pull-right" style="font-size: 0.9em;">#}
+{#                        <code>ICMP</code> RIPE Atlas Ping results are performed using the <a href="http:/atlas.ripe.net"#}
+{#                                                                                             target="_blank">RIPE Atlas#}
+{#                        <span class="glyphicon glyphicon-new-window"></span></a> measurement platform.#}
+{#                    </p>#}
+{#                {% endif %}#}
             </div>
 
             <div class="col-lg-4">
@@ -313,13 +313,13 @@
             colors: ['6F8AB7']
         });
 
-        {{ latency_histogram_ripe_atlas.x }}.length > 0 && CHARTS.draw({
-            x: {{ latency_histogram_ripe_atlas.x | safe }},
-            kind: 'Histogram',
-            labels: ['ICMP ping'],
-            divId: 'latency_histogram_ripe_atlas',
-            colors: ['6F8AB7']
-        });
+{#        {{ latency_histogram_ripe_atlas.x }}.length > 0 && CHARTS.draw({#}
+{#            x: {{ latency_histogram_ripe_atlas.x | safe }},#}
+{#            kind: 'Histogram',#}
+{#            labels: ['ICMP ping'],#}
+{#            divId: 'latency_histogram_ripe_atlas',#}
+{#            colors: ['6F8AB7']#}
+{#        });#}
 
         CHARTS.draw({
             x: {{ pie_chart.value | safe }},
