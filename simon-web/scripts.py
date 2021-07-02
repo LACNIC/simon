@@ -1,8 +1,10 @@
 #!/usr/bin/python
 
+from __future__ import print_function
+from __future__ import absolute_import
 import os
-from simon_app.functions import whoIs
-from simon_app.models import TestPoint, Results, Country
+from .simon_app.functions import whoIs
+from .simon_app.models import TestPoint, Results, Country
 from geopy import geocoders
 from __future__ import division #float division
 import math
@@ -12,7 +14,7 @@ from time import gmtime, strftime
 from urlparse import urlparse
 from netaddr import IPAddress, IPNetwork, AddrFormatError
 import socket
-import simon_project.settings as settings
+from . import simon_project.settings as settings
 from urllib2 import urlopen
 from lxml import etree
 
@@ -77,7 +79,7 @@ def db_cleaning():
 				result.delete()
 				deleted_registers += 1
 	
-	print str(deleted_registers)+' registers deleted'
+	print(str(deleted_registers)+' registers deleted')
 
 def write_web_testpoints():
 	"""
@@ -140,23 +142,23 @@ def write_web_testpoints():
 								ok = True
 					if ok is True:
 						tp = TestPoint(description=description, testtype=testtype, ip_address=str(ip_address), country=country, enabled=enabled, date_created=date_created, url=long_url, city=city, latitude=latitude, longitude=longitude)
-						print OKGREEN + str(ip_address) + ENDC
+						print(OKGREEN + str(ip_address) + ENDC)
 						tp.save()
 						nuevos.append(tp)
 					else:
-						print "%s" % str(ip_address)
+						print("%s" % str(ip_address))
 			if len(nuevos) > 0:
-				print "The following Test Points have been added:"
+				print("The following Test Points have been added:")
 			for tp in nuevos:
-				print OKGREEN + str(tp.ip_address) + ENDC
+				print(OKGREEN + str(tp.ip_address) + ENDC)
 		
 		#DNS and IP format exceptions
 		except NXDOMAIN:
-			print 'The query name does not exist. URL: ' + url
+			print('The query name does not exist. URL: ' + url)
 		except AddrFormatError:
-			print 'Address Format Error'
+			print('Address Format Error')
 		except socket.gaierror:
-			print "No address associated with hostname"
+			print("No address associated with hostname")
 
 
 
@@ -168,24 +170,24 @@ def city_to_testpoint():
 		Done to avoid delays when loading charts 
 	"""
 	for ip_address in TestPoint.objects.all().values_list('ip_address', flat=True):
-		print ' Processing %s' % ip_address
+		print(' Processing %s' % ip_address)
 		try:
 			city = whoIs(ip_address)['entities'][0]['vcardArray'][1][2][3][3]
 			testpoint = TestPoint.objects.get(ip_address=ip_address)
 			testpoint.city = city
 			testpoint.save()
 		except TypeError:
-			print 'Error when getting %s city.' % ip_address
+			print('Error when getting %s city.' % ip_address)
 
 def city_to_testpoint2():
 	for t in TestPoint.objects.all():
-		print ' Processing ' 
+		print(' Processing ') 
 		try:
 			city = whoIs(t.ip_address)['entities'][0]['vcardArray'][1][2][3][3]
 			t.city = city
 			t.save()
 		except TypeError:
-			print 'Error when getting %s city.' % t.ip_address
+			print('Error when getting %s city.' % t.ip_address)
 
 def city2latLong():
 	"""
@@ -200,9 +202,9 @@ def city2latLong():
 				tp.longitude = lng
 				tp.save()
 			except UnicodeEncodeError:
-				print 'Error unicode'
+				print('Error unicode')
 			except TypeError:
-				print 'Type error'
+				print('Type error')
 
 def rtts():
 	from datetime import datetime
@@ -214,7 +216,7 @@ def rtts():
 	for line in lines:
 		time = datetime.strptime(line.split(' ')[0], "%H:%M:%S.%f")
 		delta = time - anterior
-		print delta.microseconds / 1000
+		print(delta.microseconds / 1000)
 		anterior = time
 
 def clean():
@@ -224,7 +226,7 @@ def clean():
 	for line in lines:
 		rtt = float(line)
 		if rtt < 500 and rtt > 100:
-			print rtt
+			print(rtt)
 
 # rtts()
 clean()

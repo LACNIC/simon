@@ -5,12 +5,14 @@ Created on 12/11/2012
 '''
 # -*- encoding: utf-8 -*-
 from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 from datadog import statsd
 from django.http import HttpResponse
 from simon_app.functions import bps2KMG, whoIs
 from simon_app.models import *
 import datetime
-import gviz_api
+from . import gviz_api
 import json
 import math
 import psycopg2
@@ -53,7 +55,7 @@ def web_points(request):
         countrycode = str(request.GET.get('countrycode', "XX"))
         protocol = str(request.GET.get('protocol', "http"))
     except Exception as e:
-        print e
+        print(e)
         logging.error("Error while parsing request %s" % request.GET)
 
     points = SpeedtestTestPoint.objects.filter(enabled=True)
@@ -95,7 +97,7 @@ def web_points(request):
     if protocol == "https":
         for p in points:
             support = p.has_https_support()
-            if support: print support
+            if support: print(support)
         points = [p for p in points if p.has_https_support()]
         same_user_country = [p for p in same_user_country if p.has_https_support()]
         same_user_region = [p for p in same_user_region if p.has_https_support()]
@@ -125,10 +127,10 @@ def web_points(request):
             point_dict['city'] = point.city
         except TypeError:
             # IP is probably a local address
-            print 'Error retrieving test point city'
+            print('Error retrieving test point city')
         except Region.DoesNotExist:
             # Extreme cases (Antarctica?)
-            print 'Error retrieving test point region'
+            print('Error retrieving test point region')
 
         point_dict['images'] = []
         json_points.append(point_dict)
@@ -170,7 +172,7 @@ def web_configs(request):
     #######
 
 
-def latency(request, country='all', ip_version='all', year=2009, month=01):
+def latency(request, country='all', ip_version='all', year=2009, month=0o1):
     """
     API View in charge of returning Latency queries
 
@@ -247,7 +249,7 @@ def ases(request, asn_origin, asn_destination):
     return HttpResponse(json_response, content_type="application/json")
 
 
-def throughput(request, country='all', ip_version='all', year=2009, month=01):
+def throughput(request, country='all', ip_version='all', year=2009, month=0o1):
     # Returns JSON with latency
 
     date_from = datetime.date(int(year), int(month), 1)
@@ -301,7 +303,7 @@ def servers_locations_maps(request):
                 new_row['num_points'] = 1
                 table.append(new_row)
         except TypeError:
-            print 'Error when getting city.'
+            print('Error when getting city.')
 
     description = {
         "city": ("string", "City"),
@@ -331,7 +333,7 @@ def servers_locations_maps2(request):
             row.append(1)
             table.append(dict(zip(keys, row)))
         except TypeError:
-            print 'Error when getting %s city.' % ip_address
+            print('Error when getting %s city.' % ip_address)
 
     description = {
         "city": ("string", "City"),
@@ -452,8 +454,8 @@ def country_latency_chart(request, country):
         row = []
         row.append((category_min + category_max) / 2.0)
         for history_year in history_years:
-            date_from = datetime.date(history_year, 01, 01)
-            date_to = datetime.date(history_year + 1, 01, 01)
+            date_from = datetime.date(history_year, 0o1, 0o1)
+            date_to = datetime.date(history_year + 1, 0o1, 0o1)
             n = results_rtt.filter(Q(date_test__gte=date_from) & Q(date_test__lt=date_to)).count()
             m = results_rtt.filter(
                 Q(ave_rtt__gte=category_min) & Q(ave_rtt__lt=category_max) & Q(date_test__gte=date_from) & Q(
@@ -461,14 +463,14 @@ def country_latency_chart(request, country):
             try:
                 row.append(float("%0.2f" % (100 * (m / float(n)))))
             except ZeroDivisionError:
-                print 'Division by zero at tables view'
+                print('Division by zero at tables view')
                 row.append(0)
         table_history.append(dict(zip(keys_history, row)))
 
     description = {"category": ("number", "Latencia")}
     for year in history_years:
-        date_from = datetime.date(year, 01, 01)
-        date_to = datetime.date(year + 1, 01, 01)
+        date_from = datetime.date(year, 0o1, 0o1)
+        date_to = datetime.date(year + 1, 0o1, 0o1)
         probes = "%s muestras" % (
             str(len(results_country.filter(Q(date_test__gt=date_from) & Q(date_test__lt=date_to)))))
         description['latency_%s' % (year)] = ("number", '%s (%s)' % (year, probes))
@@ -628,7 +630,7 @@ def tables(request, country_iso, ip_version, year, month, tester, tester_version
     year = int(year)
     month = int(month)
     # Selection is only by YY-mm
-    day = 01
+    day = 0o1
 
     target_countries = Results.objects.all().values_list('country_destination', flat='True').distinct().order_by()
     tests_list = []
@@ -712,7 +714,7 @@ def tables(request, country_iso, ip_version, year, month, tester, tester_version
 
 
 def latency_box_chart(request, country_iso, ip_version, year, month, tester, tester_version):
-    print ''
+    print('')
 
 
 def throughput_json(request, country_iso, ip_version, year, month, tester, tester_version):  # , test_type):
@@ -720,7 +722,7 @@ def throughput_json(request, country_iso, ip_version, year, month, tester, teste
     year = int(year)
     month = int(month)
     # Selection is only by YY-mm
-    day = 01
+    day = 0o1
 
     target_countries = ThroughputResults.objects.all().values_list('country_destination',
                                                                    flat='True').distinct().order_by()
@@ -832,7 +834,7 @@ def throughput_tables(request, country_iso, ip_version, year, month, tester, tes
     year = int(year)
     month = int(month)
     # Selection is only by YY-mm
-    day = 01
+    day = 0o1
 
     target_countries = ThroughputResults.objects.all().values_list('country_destination',
                                                                    flat='True').distinct().order_by()

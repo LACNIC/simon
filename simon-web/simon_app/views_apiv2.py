@@ -5,12 +5,13 @@ Created on 12/11/2012
 '''
 # -*- encoding: utf-8 -*-
 from __future__ import division
+from __future__ import absolute_import
 from django.db.models import Q
 from django.http import HttpResponse
 from simon_app.functions import bps2KMG, whoIs
 from simon_app.models import *
 import datetime
-import gviz_api
+from . import gviz_api
 import json
 import math
 import psycopg2
@@ -54,7 +55,7 @@ def latency(request):
     if year_from == None:
         year_from = 2009
     if month_from == None:
-        month_from = 01
+        month_from = 0o1
     if day_from == None:
         day_from = 1
     if year_to == None:

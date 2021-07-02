@@ -1,10 +1,11 @@
+from __future__ import absolute_import
 # Django settings for simon_project project.
 import os
 import socket
-import passwords
+from . import passwords
 from datadog import initialize
 from datetime import datetime
-import passwords
+from . import passwords
 from subprocess import check_output
 
 PROJECT_ROOT = os.path.abspath(os.path.pardir)

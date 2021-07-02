@@ -1,6 +1,8 @@
 # -*- encoding: utf-8 -*-
 
 from __future__ import division
+from __future__ import print_function
+from __future__ import absolute_import
 from datadog import statsd
 from django.contrib.gis.geoip import GeoIP
 from django.http import HttpResponse
@@ -9,8 +11,8 @@ from django.shortcuts import redirect, render, render_to_response
 from django.views.decorators.csrf import csrf_exempt
 from lxml import etree
 
-from lib.helpers import *
-from api_views import \
+from .lib.helpers import *
+from .api_views import \
     country_latency_chart as  country_latency_chart_api, \
     region_latency_chart as region_latency_chart_api, tables as tables_api, \
     throughput_json as throughput_json_api, \
@@ -21,10 +23,10 @@ from api_views import \
     ntp_points as ntp_points_api, throughput_tables as throughput_tables_api, \
     latency as latency_api, throughput as throughput_api, \
     throughput_by_country_chart as throughput_by_country_chart_api, getCountry
-from functions import *
-from mailing import send_mail_point_offline
-from models import *
-from functions import GMTUY
+from .functions import *
+from .mailing import send_mail_point_offline
+from .models import *
+from .functions import GMTUY
 import simon_project.settings as settings
 from _socket import timeout
 from django.views.decorators.cache import cache_page
@@ -130,12 +132,12 @@ def saveTracerouteResults(request, fileName):
     f.close()
 
     ip_origin = request.META['REMOTE_ADDR']
-    print "origen : %s" % ip_origin
+    print("origen : %s" % ip_origin)
     for line in lines:
         fields = line.split()
         try:
             ip_destination = fields[1]
-            print "destino : %s" % ip_destination
+            print("destino : %s" % ip_destination)
 
             rtts = []
             for field in fields[2:]:
@@ -192,10 +194,10 @@ def saveTracerouteResults(request, fileName):
 
                 r.save()
 
-                print r
+                print(r)
 
         except ValueError as ve:
-            print ve
+            print(ve)
             pass
 
 
@@ -260,12 +262,12 @@ def inner_latency_chart(request):
 
 
 #  @timed_command
-def latency(request, country='all', ip_version=4, year=2009, month=01):
+def latency(request, country='all', ip_version=4, year=2009, month=0o1):
     return latency_api(request, country, ip_version, year, month)
 
 
 #  @timed_command
-def throughput(request, country='all', ip_version=4, year=2009, month=01):
+def throughput(request, country='all', ip_version=4, year=2009, month=0o1):
     return throughput_api(request, country, ip_version, year, month)
 
 
@@ -421,9 +423,9 @@ def post_xml_throughput_result(request):
                 result.save()
         except etree.XMLSyntaxError as e:
             # this exception is thrown on schema validation error
-            print e
+            print(e)
         except Exception as e:
-            print e
+            print(e)
 
     return HttpResponse("END")
 
@@ -524,8 +526,8 @@ def participate(request):
 #  @timed_command
 @csrf_exempt
 def reports(request):
-    from reportes import ReportForm
-    from api_views import get_cc_from_ip_address
+    from .reportes import ReportForm
+    from .api_views import get_cc_from_ip_address
     from datetime import timedelta
 
     latency_histogram_applet = latency_histogram_js = latency_histogram_probeapi = latency_histogram_ripe_atlas = cc1 = ""
@@ -677,7 +679,7 @@ def reports(request):
 
 #  @timed_command
 def reports_as(request):
-    from reportes import ASForm
+    from .reportes import ASForm
 
     context = getContext(request)
     form = ASForm()
@@ -689,8 +691,8 @@ def reports_as(request):
     id = request.POST['as_dropdown']
     as_ = AS.objects.get(id=id)
 
-    print as_.asn
-    print Results.objects.filter(as_origin=as_.asn)
+    print(as_.asn)
+    print(Results.objects.filter(as_origin=as_.asn))
 
     context['collapse'] = "in"
     context['as'] = as_
@@ -890,7 +892,7 @@ def charts(request):
     ############
 
     from django.template import RequestContext
-    from lib.helpers import simon_processor
+    from .lib.helpers import simon_processor
 
     ctx = {
         'countries': countries,

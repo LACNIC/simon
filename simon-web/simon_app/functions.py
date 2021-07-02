@@ -3,6 +3,7 @@ Created on 12/11/2012
 
 @author: agustinf
 '''
+from __future__ import print_function
 import math
 import simon_project.settings as settings
 from netaddr import IPAddress, IPNetwork, AddrFormatError
@@ -39,7 +40,7 @@ def whoIs(address):
         json_data = json.loads(data)
         return json_data
     except URLError:
-        print 'Error while getting whois information for %s' % address
+        print('Error while getting whois information for %s' % address)
 
 
 def bps2KMG(bps):
@@ -77,7 +78,7 @@ def KMG2bps(KMG):
     elif KMG.find('Kbps') != -1:
         return number * K
     else:
-        print 'Failed to convert %s to bps' % KMG
+        print('Failed to convert %s to bps' % KMG)
 
     return KMG  # failed
 
@@ -93,7 +94,7 @@ def networkInLACNICResources(network):
                 return True
 
     except AddrFormatError:
-        print 'Error en el formato de la direccion'
+        print('Error en el formato de la direccion')
 
     return False
 
@@ -109,7 +110,7 @@ def inLACNICResources(ip_address):
                 return True
 
     except AddrFormatError:
-        print 'Error en el formato de la direccion'
+        print('Error en el formato de la direccion')
 
     return False
 
@@ -125,7 +126,7 @@ def partOfLACNICResources(network):
                 return True
 
     except AddrFormatError:
-        print 'Error en el formato de la direccion'
+        print('Error en el formato de la direccion')
 
     return False
 
@@ -141,7 +142,7 @@ def LACNICResourcesIsPartOf(bigger_network):
                 return True
 
     except AddrFormatError:
-        print 'Error en el formato de la direccion'
+        print('Error en el formato de la direccion')
 
     return False
 
