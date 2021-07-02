@@ -4,7 +4,7 @@ from django.db import models
 from django.db import connection
 from django.db.models import Q
 from django.db.models.fields import CharField, IntegerField
-from ipaddr import IPv6Address, IPv4Address
+from ipaddress import IPv6Address, IPv4Address
 import json
 import logging
 import requests
