@@ -1,9 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
 from django.core.management.base import BaseCommand
 from simon_app.decorators import probeapi
 from simon_app.models import Country
-from probeapi_traceroute import ProbeApiTraceroute
+from .probeapi_traceroute import ProbeApiTraceroute
 from simon_app.decorators import timed_command, mem_comsumption
 
 

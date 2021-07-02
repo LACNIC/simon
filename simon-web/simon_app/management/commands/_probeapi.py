@@ -1,11 +1,13 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+from __future__ import absolute_import
 from datadog import statsd
 from django.template import Template, Context
 
 from simon_app.models import *
 from simon_app.functions import GMTUY
-from probeapi_libs import get_countries, get_probeapi_response
+from .probeapi_libs import get_countries, get_probeapi_response
 
 from multiprocessing.dummy import Pool as ThreadPool
 from threading import Lock
@@ -50,7 +52,7 @@ class ProbeApiMeasurement():
                 return self.process_response(response, requested_url=url)
 
             except Exception as e:
-                print e, e.message
+                print(e, e.message)
                 return []
 
         # end of do_work
@@ -93,7 +95,7 @@ class ProbeApiMeasurement():
                 # sanity check before building URLs
                 online = tp.check_point(timeout=10, save=False, protocol="icmp")
                 if not online:
-                    print "Skipping %s" % (tp)
+                    print("Skipping %s" % (tp))
                     continue
 
                 destination_ip = tp.ip_address
@@ -105,7 +107,7 @@ class ProbeApiMeasurement():
         self.logger.info("TPs %s x CCs %s" % (len(tps), len(ccs)))
         self.logger.info("Launching %.0f worker threads on a %.0f jobs queue" % (self.threads, len(urls)))
         for u in urls:
-            print u
+            print(u)
 
         self.results = thread_pool.map(do_work, urls)
 
@@ -171,7 +173,7 @@ class ProbeApiMeasurement():
                         as_origin = empty_ass[0]
 
                 except Exception as e:
-                    print e, e.message
+                    print(e, e.message)
                     as_origin = AS(asn=asn)  # create the empty-network AS
                     as_origin.save()
 

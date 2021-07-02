@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 from django.core.management.base import BaseCommand
 
 
@@ -24,7 +25,7 @@ class Command(BaseCommand):
 
         url = "https://probeapifree.p.mashape.com/Probes.svc/GetCountries"
 
-        print url
+        print(url)
 
         response = opener.open(url).read()
         py_object = json.loads(response, parse_int=int)
@@ -34,8 +35,8 @@ class Command(BaseCommand):
             code_ = object["CountryCode"]
             if code_ in ccs:
                 count = object["ProbesCount"]
-                print code_, count
+                print(code_, count)
                 region_count += count
 
-        print "Regional count %s" % (region_count)
-        print "Query took %s" % (datetime.datetime.now(GMTUY()) - now)
+        print("Regional count %s" % (region_count))
+        print("Query took %s" % (datetime.datetime.now(GMTUY()) - now))

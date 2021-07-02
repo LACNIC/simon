@@ -3,6 +3,7 @@ from __future__ import division
 """
     Script than saves the Heatmap data into static/data/heatmap
 """
+from __future__ import print_function
 from django.core.management.base import BaseCommand
 from simon_app.models import Country, Params
 from django.db.models import Q
@@ -12,7 +13,7 @@ from simon_app.decorators import chatty_command
 
 
 def heatmap(start, end):
-    print "Generating heatmap for %s - %s" % (start.year, end.year)
+    print("Generating heatmap for %s - %s" % (start.year, end.year))
 
     countries_iso = list(
         Country.objects.filter(Q(region_id=1) | Q(region_id=2) | Q(region_id=3)).order_by('printable_name').values_list(
@@ -62,7 +63,7 @@ def heatmap(start, end):
             j = j + 1
         i = i + 1
         j = 0
-    print "Region mean: %s" % (str(sum(latencies) * 1.0 / len(latencies)))
+    print("Region mean: %s" % (str(sum(latencies) * 1.0 / len(latencies))))
     try:
         param = Params.objects.get(config_name='heatmap_values')
         param.config_value = json.dumps(values)
@@ -163,7 +164,7 @@ def build_heatmap(dictionary, filename, plot_text=True, figsize=(10, 10)):
         n += 1
         sys.stdout.write("\r Preparing Data (1/3) %.1f%%" % (100 * float(n / len(dictionary))))
         sys.stdout.flush()
-    print ""
+    print("")
 
     # def cluster_sort(key):
     #     d = {'DO': 0, 'GT': 1, 'CO': 0, 'VE': 1, 'CL': 2, 'BO': 2, 'EC': 0, 'AR': 3, 'HN': 0, 'BR': 3, 'CR': 0, 'CU': 0,
@@ -186,8 +187,8 @@ def build_heatmap(dictionary, filename, plot_text=True, figsize=(10, 10)):
                 n += 1
                 sys.stdout.write("\r Preparing Data (2/3) %.1f%%" % (100 * float(n / N)))
                 sys.stdout.flush()
-    print ""
-    print "Painting matrix (3/3)"
+    print("")
+    print("Painting matrix (3/3)")
 
     data = np.reshape(res, (len(origins), len(destinations)))
     fig, ax = plt.subplots(figsize=figsize)

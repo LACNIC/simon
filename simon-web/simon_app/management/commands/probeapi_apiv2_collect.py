@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 from datetime import datetime, timedelta
 from django.core.management.base import BaseCommand
 from simon_app.models import ProbeApiRequest
@@ -27,8 +28,8 @@ class Command(BaseCommand):
             date_1__gte=then
         )
 
-        print "Requests to collect: ", pars.count()
+        print("Requests to collect: ", pars.count())
 
         for par in pars:
             j = par.get()
-            print par, j
+            print(par, j)

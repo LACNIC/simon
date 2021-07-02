@@ -1,5 +1,6 @@
+from __future__ import absolute_import
 import pytz
-from _export_results import export
+from ._export_results import export
 from datetime import datetime
 from django.core.management.base import BaseCommand
 from django.db.models import Q
@@ -20,7 +21,7 @@ class Command(BaseCommand):
         comments = []
 
         ccs = Country.objects.get_lacnic_countrycodes()
-        start = datetime(year=2016, month=01, day=01)
+        start = datetime(year=2016, month=0o1, day=0o1)
 
         sms = ProbeApiPingResult.objects.filter(
             Q(country_destination__in=ccs) & Q(country_origin__in=ccs)
@@ -37,7 +38,7 @@ class Command(BaseCommand):
         export(js, 'results-lac-connectivity-js')  # .json
 
         # Results for 2015
-        start = datetime(year=2015, month=01, day=01)
+        start = datetime(year=2015, month=0o1, day=0o1)
         end = datetime(year=2016, month=12, day=31)
 
         sms = ProbeApiPingResult.objects.filter(

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 from django.core.management.base import BaseCommand
 
 from simon_app.models import *
@@ -23,7 +24,7 @@ class Command(BaseCommand):
                 current_check = tp.check_point(timeout=10, save=False, protocol="https")
                 latest_https_check = tp.get_latest_https_check()
                 if latest_https_check is None or latest_https_check.status != current_check:
-                    print latest_https_check
+                    print(latest_https_check)
                     # persist on change
                     check = HttpsCheck(test_point=tp, status=current_check)
                     tp.httpscheck_set.add(check)

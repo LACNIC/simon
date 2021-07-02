@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 import json
 from django.core.management.base import BaseCommand
 from simon_app.models import ProbeApiRequest
@@ -27,5 +28,5 @@ class Command(BaseCommand):
 
         j = par.get()
 
-        print json.loads(j)
+        print(json.loads(j))
         return j

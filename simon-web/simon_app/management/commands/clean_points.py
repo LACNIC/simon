@@ -1,3 +1,4 @@
+from __future__ import print_function
 from collections import defaultdict
 from django.db import DatabaseError, transaction
 from django.core.management.base import BaseCommand
@@ -18,6 +19,6 @@ class Command(BaseCommand):
         tps.filter(ip_address__in=responses.keys()).update(enabled=True)
         tps.exclude(ip_address__in=responses.keys()).update(enabled=False)
 
-        print "Test points statuses (ICMP):"
-        print "UP {up}".format(up=len(responses)), tps.filter(ip_address__in=responses.keys())
-        print "DOWN {down}".format(down=len(no_responses)), tps.exclude(ip_address__in=responses.keys())
+        print("Test points statuses (ICMP):")
+        print("UP {up}".format(up=len(responses)), tps.filter(ip_address__in=responses.keys()))
+        print("DOWN {down}".format(down=len(no_responses)), tps.exclude(ip_address__in=responses.keys()))

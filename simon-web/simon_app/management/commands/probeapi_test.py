@@ -1,9 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from __future__ import absolute_import
 from django.core.management.base import BaseCommand
 from simon_app.models import SpeedtestTestPoint, Country
 from simon_app.decorators import probeapi
-from _probeapi import ProbeApiMeasurement
+from ._probeapi import ProbeApiMeasurement
 from simon_app.decorators import timed_command, mem_comsumption
 
 

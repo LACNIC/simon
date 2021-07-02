@@ -1,3 +1,4 @@
+from __future__ import print_function
 
 from simon_app.models import *
 from django.core.management.base import BaseCommand
@@ -24,4 +25,4 @@ class Command(BaseCommand):
         tps = SpeedtestTestPoint.objects.filter(country=cc.upper(), ip_address__contains=version, enabled=True)
 
         for tp in tps:
-            print tp.ip_address
+            print(tp.ip_address)

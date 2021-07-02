@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 from django.core import serializers
 from django.core.management.base import BaseCommand
 from simon_app.models import ProbeApiRequest
@@ -25,4 +26,4 @@ class Command(BaseCommand):
             probeapi_id=id
         )
 
-        print serializers.serialize('json', par)
+        print(serializers.serialize('json', par))

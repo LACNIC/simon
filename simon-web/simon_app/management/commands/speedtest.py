@@ -1,3 +1,4 @@
+from __future__ import print_function
 from cookielib import CookieJar
 
 from django.core.management.base import BaseCommand
@@ -140,7 +141,7 @@ def a(server):
     if server is None:
         return None
 
-    print '.',
+    print('.', end=' ')
 
     # Get the IP address
     long_url = server.get('url')

@@ -1,11 +1,13 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+from __future__ import absolute_import
 from django.template import Template, Context
 from django.db import transaction
 from simon_app.models import *
 from simon_app.functions import GMTUY
 from simon_app.api_views import get_cc_from_ip_address
-from probeapi_libs import get_countries, get_probeapi_response
+from .probeapi_libs import get_countries, get_probeapi_response
 
 from multiprocessing.dummy import Pool as ThreadPool
 from threading import Lock
@@ -46,7 +48,7 @@ class ProbeApiTraceroute():
                     self.process_response(response, requested_url=url)
 
             except Exception as e:
-                print e
+                print(e)
                 pass
 
             finally:
@@ -80,7 +82,7 @@ class ProbeApiTraceroute():
                 # sanity check before building URLs
                 online = tp.check_point(timeout=10, save=False, protocol="icmp")
                 if not online:
-                    print "Skipping %s" % (tp)
+                    print("Skipping %s" % (tp))
                     continue
 
                 destination_ip = tp.ip_address
@@ -92,7 +94,7 @@ class ProbeApiTraceroute():
         self.logger.info("TPs %s x CCs %s" % (len(tps), len(ccs)))
         self.logger.info("Launching %.0f worker threads on a %.0f jobs queue" % (self.threads, len(urls)))
         for u in urls:
-            print u
+            print(u)
 
         thread_pool.map(do_work, urls)
 

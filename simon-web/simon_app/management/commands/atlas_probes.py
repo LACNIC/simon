@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 from django.core.management.base import BaseCommand
 from simon_app.models import *
 import json
@@ -79,8 +80,8 @@ class Command(BaseCommand):
             counter = Counter(statuses)
             for c in counter:
                 amount = counter[c]
-                print c, amount, "(%.0f%%)" % (100.0 * amount / len(statuses))
-            print "Anchor count for LAC region: %.0f" % (anchor_count)
+                print(c, amount, "(%.0f%%)" % (100.0 * amount / len(statuses)))
+            print("Anchor count for LAC region: %.0f" % (anchor_count))
 
             countries_counter = Counter([p['cc'] for p in new_probes])
 
@@ -110,7 +111,7 @@ class Command(BaseCommand):
                     countries_text,
                     connected
                 )
-                print text
+                print(text)
                 # tweet(text)
 
                 new_anchors = [p for p in new_probes if p['is_anchor']]

@@ -1,3 +1,4 @@
+from __future__ import print_function
 from django.core.management.base import BaseCommand
 import matplotlib.pyplot as pyplot
 from numpy import math
@@ -10,7 +11,7 @@ from simon_app.models import Results, Country
 class Command(BaseCommand):
     
     def use(self):
-        print "Use: histogram <year>|historical country|region [<CC>] [<CC>] | all"
+        print("Use: histogram <year>|historical country|region [<CC>] [<CC>] | all")
         
 #     def add_arguments(self, parser):
 #         parser.add_argument('-H', '--historical')
@@ -55,7 +56,7 @@ class Command(BaseCommand):
                     for destination in destinations:
                         title = "Latency histogram between %s and %s, %s-%s" % (origin.iso, destination.iso, start.year, end.year)
                         filename = "countries/%s-%s %s-%s" % (origin.iso, destination.iso, start.year, end.year)
-                        print "%s : %s" % (title, filename)
+                        print("%s : %s" % (title, filename))
                         self.histogram_countries(origin.iso, destination.iso, DESDE, HASTA, start, end, title, filename)
                 return
             

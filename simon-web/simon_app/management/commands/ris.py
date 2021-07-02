@@ -1,3 +1,4 @@
+from __future__ import print_function
 from django.core.management.base import BaseCommand
 from simon_app.models import AS
 from simon_app.functions import networkInLACNICResources
@@ -23,11 +24,11 @@ class Command(BaseCommand):
         # print
         # exit(1)
 
-        print "Downloading RIS..."
+        print("Downloading RIS...")
         file_v4 = urllib2.urlopen('http://www.ris.ripe.net/dumps/riswhoisdump.IPv4.gz').read()
         file_v6 = urllib2.urlopen('http://www.ris.ripe.net/dumps/riswhoisdump.IPv6.gz').read()
 
-        print "Parsing RIS..."
+        print("Parsing RIS...")
         ris_v4 = zlib.decompress(file_v4, 16 + zlib.MAX_WBITS)
         ris_v6 = zlib.decompress(file_v6, 16 + zlib.MAX_WBITS)
         asn_list = [asn.split('\t') for asn in ris_v4.split('\n')] + [asn.split('\t') for asn in ris_v6.split('\n')]
@@ -42,7 +43,7 @@ class Command(BaseCommand):
         )
         internet.save()
 
-        print "Inserting new records (%s)" % (now)
+        print("Inserting new records (%s)" % (now))
         new = []
         N = len(asn_list)
         for i, line in enumerate(asn_list):
@@ -85,6 +86,6 @@ class Command(BaseCommand):
                 # print n.asn, n.network, n.pfx_length
                 n.save()
 
-        print "Deleting old records..."
+        print("Deleting old records...")
         for o in old:
             o.delete()

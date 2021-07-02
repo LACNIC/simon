@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 import json
 import requests
 from simon_project.settings import KONG_API_KEY, PROBEAPI_ENDPOINT
@@ -9,7 +10,7 @@ def get_countries(ccs=[]):
     url = PROBEAPI_ENDPOINT + "/GetCountries"
 
     try:
-        print "Getting countries..."
+        print("Getting countries...")
         response = get_probeapi_response(url)
         py_object = json.loads(response)
         res = {}
@@ -19,8 +20,8 @@ def get_countries(ccs=[]):
                 res[cc] = p["ProbesCount"]
         return res
     except Exception as e:
-        print e
-        print response
+        print(e)
+        print(response)
         return None
 
 
