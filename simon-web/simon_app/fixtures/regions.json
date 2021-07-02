@@ -1,0 +1,194 @@
+[
+{
+    "model": "simon_app.region",
+    "pk": 24,
+    "fields": {
+        "name": "Northern America",
+        "numcode": 21
+    }
+},
+{
+    "model": "simon_app.region",
+    "pk": 23,
+    "fields": {
+        "name": "Polynesia",
+        "numcode": 61
+    }
+},
+{
+    "model": "simon_app.region",
+    "pk": 22,
+    "fields": {
+        "name": "Micronesia",
+        "numcode": 57
+    }
+},
+{
+    "model": "simon_app.region",
+    "pk": 21,
+    "fields": {
+        "name": "Melanesia",
+        "numcode": 54
+    }
+},
+{
+    "model": "simon_app.region",
+    "pk": 20,
+    "fields": {
+        "name": "Australia and New Zealand",
+        "numcode": 53
+    }
+},
+{
+    "model": "simon_app.region",
+    "pk": 19,
+    "fields": {
+        "name": "Western Asia",
+        "numcode": 145
+    }
+},
+{
+    "model": "simon_app.region",
+    "pk": 18,
+    "fields": {
+        "name": "South-Eastern Asia",
+        "numcode": 35
+    }
+},
+{
+    "model": "simon_app.region",
+    "pk": 17,
+    "fields": {
+        "name": "Southern Asia",
+        "numcode": 34
+    }
+},
+{
+    "model": "simon_app.region",
+    "pk": 16,
+    "fields": {
+        "name": "Eastern Asia",
+        "numcode": 30
+    }
+},
+{
+    "model": "simon_app.region",
+    "pk": 15,
+    "fields": {
+        "name": "Central Asia",
+        "numcode": 143
+    }
+},
+{
+    "model": "simon_app.region",
+    "pk": 14,
+    "fields": {
+        "name": "Southern Europe",
+        "numcode": 39
+    }
+},
+{
+    "model": "simon_app.region",
+    "pk": 13,
+    "fields": {
+        "name": "Eastern Europe",
+        "numcode": 151
+    }
+},
+{
+    "model": "simon_app.region",
+    "pk": 12,
+    "fields": {
+        "name": "Western Europe",
+        "numcode": 155
+    }
+},
+{
+    "model": "simon_app.region",
+    "pk": 11,
+    "fields": {
+        "name": "Northern Europe",
+        "numcode": 154
+    }
+},
+{
+    "model": "simon_app.region",
+    "pk": 10,
+    "fields": {
+        "name": "Southern Africa",
+        "numcode": 18
+    }
+},
+{
+    "model": "simon_app.region",
+    "pk": 9,
+    "fields": {
+        "name": "Eastern Africa",
+        "numcode": 14
+    }
+},
+{
+    "model": "simon_app.region",
+    "pk": 8,
+    "fields": {
+        "name": "Middle Africa",
+        "numcode": 17
+    }
+},
+{
+    "model": "simon_app.region",
+    "pk": 7,
+    "fields": {
+        "name": "Western Africa",
+        "numcode": 11
+    }
+},
+{
+    "model": "simon_app.region",
+    "pk": 6,
+    "fields": {
+        "name": "Northern Africa",
+        "numcode": 15
+    }
+},
+{
+    "model": "simon_app.region",
+    "pk": 5,
+    "fields": {
+        "name": "Africa",
+        "numcode": 2
+    }
+},
+{
+    "model": "simon_app.region",
+    "pk": 4,
+    "fields": {
+        "name": "Otras",
+        "numcode": 0
+    }
+},
+{
+    "model": "simon_app.region",
+    "pk": 3,
+    "fields": {
+        "name": "South America",
+        "numcode": 5
+    }
+},
+{
+    "model": "simon_app.region",
+    "pk": 2,
+    "fields": {
+        "name": "Central America",
+        "numcode": 13
+    }
+},
+{
+    "model": "simon_app.region",
+    "pk": 1,
+    "fields": {
+        "name": "Caribbean",
+        "numcode": 29
+    }
+}
+]
