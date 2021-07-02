@@ -1,4 +1,8 @@
 from __future__ import print_function
+from __future__ import division
+from builtins import str
+from past.utils import old_div
+from builtins import object
 import json
 import numpy
 from datadog import statsd
@@ -235,7 +239,7 @@ class ProbeApiRequest(models.Model):
                     number_probes=len(rtts),
                     min_rtt=min(rtts),
                     max_rtt=max(rtts),
-                    ave_rtt=int(sum(rtts) / len(rtts)),
+                    ave_rtt=int(old_div(sum(rtts), len(rtts))),
                     dev_rtt=numpy.std(rtts),
                     median_rtt=numpy.median(rtts),
                     packet_loss=0,  # TODO
@@ -307,7 +311,7 @@ class ProbeApiRequest(models.Model):
                         number_probes=len(rtts),
                         min_rtt=min(rtts),
                         max_rtt=max(rtts),
-                        ave_rtt=int(sum(rtts) / len(rtts)),
+                        ave_rtt=int(old_div(sum(rtts), len(rtts))),
                         dev_rtt=numpy.std(rtts),
                         median_rtt=numpy.median(rtts),
                         packet_loss=0,  # TODO

@@ -1,4 +1,8 @@
 from __future__ import print_function
+from __future__ import division
+from builtins import str
+from past.utils import old_div
+from builtins import object
 from datetime import datetime, timedelta
 from django.db import models
 from django.db import connection
@@ -162,7 +166,7 @@ class Country(models.Model):
     def __unicode__(self):
         return self.printable_name
 
-    class Meta:
+    class Meta(object):
         verbose_name = 'Pais'
         verbose_name_plural = 'Paises'
 
@@ -242,7 +246,7 @@ class AS(models.Model):
     def __unicode__(self):
         return "ASN %s" % (self.asn)
 
-    class Meta:
+    class Meta(object):
         verbose_name = 'Sistema Autonomo'
         verbose_name_plural = 'Sistemas Autonomos'
 
@@ -467,7 +471,7 @@ class Results(models.Model):
     def date_short(self):
         return self.date_test.strftime("%x")
 
-    class Meta:
+    class Meta(object):
         verbose_name = 'Resultado'
         verbose_name_plural = 'Resultados'
 
@@ -516,7 +520,7 @@ class ProbeApiPingResult(Results):
 
         super(ProbeApiPingResult, self).save(*args, **kwargs)  # Call the "real" save() method.
 
-    class Meta:
+    class Meta(object):
         verbose_name = 'Resultado ProbeAPI'
         verbose_name_plural = 'Resultados ProbeAPI'
 
@@ -616,7 +620,7 @@ class TracerouteResult(models.Model):
             [rtts.append(p.rtt) for p in h.probes if p.rtt is not None]
             m = len(rtts)
             if m > 0:
-                hops.append("%.2f" % (sum(rtts) / m))
+                hops.append("%.2f" % (old_div(sum(rtts), m)))
             else:
                 hops.append("%.2f" % (0.0))
         return self.output  # "%s --> %s (%s %s hops) %s" % (self.ip_origin, tr.dest_ip, hops, n, self.date_test.strftime("%d/%m/%Y"))
@@ -711,15 +715,15 @@ class RipeAtlasProbe(models.Model):
         """
         td = self.time_since_last_check
         if td.seconds > 3600:
-            mins = "%.0f minutos" % ((td.seconds % 3600) / 60)
-            horas = "%.0f %s" % (td.seconds / 3600, "horas" if td.seconds / 3600 > 1 else "hora")
+            mins = "%.0f minutos" % (old_div((td.seconds % 3600), 60))
+            horas = "%.0f %s" % (old_div(td.seconds, 3600), "horas" if old_div(td.seconds, 3600) > 1 else "hora")
             return "%s %s" % (horas, mins)
         elif td.seconds > 60:
-            return "%.0f minutos" % (td.seconds / 60)
+            return "%.0f minutos" % (old_div(td.seconds, 60))
         else:
             return "%.0f segundos" % td.seconds
 
-    class Meta:
+    class Meta(object):
         verbose_name = 'RIPE Atlas Probe'
         verbose_name_plural = 'RIPE Atlas Probes'
 
@@ -852,7 +856,7 @@ class TestPoint(models.Model):
                 self.save()
         return self.enabled
 
-    class Meta:
+    class Meta(object):
         verbose_name = 'Punto de prueba'
         verbose_name_plural = 'Puntos de prueba'
 
@@ -890,7 +894,7 @@ class SpeedtestTestPoint(TestPoint):
         else:
             return None
 
-    class Meta:
+    class Meta(object):
         verbose_name = 'Punto de prueba de Speedtest.com'
         verbose_name_plural = 'Puntos de prueba de Speedtest.com'
 
@@ -904,7 +908,7 @@ class HttpsCheck(models.Model):
     status = models.NullBooleanField(default=False)
     test_point = models.ForeignKey(SpeedtestTestPoint)
 
-    class Meta:
+    class Meta(object):
         verbose_name = 'Chequeo HTTPS'
         verbose_name_plural = 'Chequeos HTTPS'
 
@@ -948,7 +952,7 @@ class Configs(models.Model):
     def __unicode__(self):
         return self.config_value
 
-    class Meta:
+    class Meta(object):
         verbose_name = 'Configuracion'
         verbose_name_plural = 'Configuraciones'
 
@@ -960,7 +964,7 @@ class Params(models.Model):
     def __unicode__(self):
         return self.config_value
 
-    class Meta:
+    class Meta(object):
         verbose_name = 'Parametro'
         verbose_name_plural = 'Parametros'
 
