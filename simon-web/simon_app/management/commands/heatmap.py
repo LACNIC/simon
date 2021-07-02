@@ -1,5 +1,7 @@
 from __future__ import division
 
+from builtins import str
+from builtins import range
 """
     Script than saves the Heatmap data into static/data/heatmap
 """

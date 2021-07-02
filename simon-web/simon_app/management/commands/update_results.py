@@ -1,10 +1,12 @@
+from future import standard_library
+standard_library.install_aliases()
 from django.core.management.base import BaseCommand
 from simon_app.models import *
 from django.db.models import Q
 from sys import stdout
 from simon_app.functions import networkInLACNICResources
 from simon_project import settings
-import zlib, urllib2
+import zlib, urllib.request, urllib.error, urllib.parse
 import datetime
 
 class Command(BaseCommand):

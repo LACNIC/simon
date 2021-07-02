@@ -2,6 +2,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 from __future__ import absolute_import
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
 from django.template import Template, Context
 from django.db import transaction
 from simon_app.models import *
@@ -16,10 +19,10 @@ import json
 import datetime
 import numpy
 import logging
-import urlparse
+import urllib.parse
 
 
-class ProbeApiTraceroute():
+class ProbeApiTraceroute(object):
     """
         Class that holds the logic to perform a ProbeAPI measurement
     """
@@ -59,7 +62,7 @@ class ProbeApiTraceroute():
         if ccs is None:
             return EMPTY_RESULTS
 
-        ccs = ccs.keys()  # get countries with running probes...
+        ccs = list(ccs.keys())  # get countries with running probes...
 
         urls = []
         thread_pool = ThreadPool(self.threads)

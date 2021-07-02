@@ -1,16 +1,19 @@
 from __future__ import print_function
-from cookielib import CookieJar
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from http.cookiejar import CookieJar
 
 from django.core.management.base import BaseCommand
 
 from simon_app.mailing import send_mail_new_points_found
 from simon_app.models import *
 from time import gmtime, strftime
-from urlparse import urlparse
+from urllib.parse import urlparse
 from netaddr import IPAddress, IPNetwork, AddrFormatError
 import socket
 import simon_project.settings as settings
-from urllib2 import urlopen, build_opener, HTTPCookieProcessor
+from urllib.request import urlopen, build_opener, HTTPCookieProcessor
 from lxml import etree
 import logging
 from simon_app.functions import GMTUY
@@ -81,16 +84,16 @@ class Command(BaseCommand):
             tps_to_check.append(b(tp))
 
         tps_checked = []
-        for tp in tqdm(filter(None, tps_to_check), desc="Checking for new points"):
+        for tp in tqdm([_f for _f in tps_to_check if _f], desc="Checking for new points"):
             for _tp in a(tp):
                 tps_checked.append(_tp)
         # tps_to_check = [a(tp) for tp in tps_to_check if tp is not None]  # now they're TPs
 
         tps_checked_2 = []
-        for tp in tqdm(filter(None, tps_checked)):
+        for tp in tqdm([_f for _f in tps_checked if _f]):
             tps_checked_2.append(perform_https_check(tp))
         # res = [perform_https_check(tp) for tp in tps_to_check if tp is not None]
-        nuevos = filter(None, tps_checked_2)
+        nuevos = [_f for _f in tps_checked_2 if _f]
 
         if nuevos:
             logging.info("The following Test Points have been added (%.0f):" % (len(nuevos)))
@@ -104,7 +107,7 @@ def xml_to_dict(server):
     res = {}
     for attr in ['url', 'cc', 'name', 'lat', 'lon', 'sponsor']:
 
-        if attr not in server.keys():
+        if attr not in list(server.keys()):
             continue
 
         res.update({

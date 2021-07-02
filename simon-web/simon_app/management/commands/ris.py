@@ -1,9 +1,11 @@
 from __future__ import print_function
+from future import standard_library
+standard_library.install_aliases()
 from django.core.management.base import BaseCommand
 from simon_app.models import AS
 from simon_app.functions import networkInLACNICResources
 from simon_app import caching
-import zlib, urllib2
+import zlib, urllib.request, urllib.error, urllib.parse
 import datetime
 from sys import stdout
 from simon_app.decorators import timed_command, mem_comsumption
@@ -25,8 +27,8 @@ class Command(BaseCommand):
         # exit(1)
 
         print("Downloading RIS...")
-        file_v4 = urllib2.urlopen('http://www.ris.ripe.net/dumps/riswhoisdump.IPv4.gz').read()
-        file_v6 = urllib2.urlopen('http://www.ris.ripe.net/dumps/riswhoisdump.IPv6.gz').read()
+        file_v4 = urllib.request.urlopen('http://www.ris.ripe.net/dumps/riswhoisdump.IPv4.gz').read()
+        file_v6 = urllib.request.urlopen('http://www.ris.ripe.net/dumps/riswhoisdump.IPv6.gz').read()
 
         print("Parsing RIS...")
         ris_v4 = zlib.decompress(file_v4, 16 + zlib.MAX_WBITS)

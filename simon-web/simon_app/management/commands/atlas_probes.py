@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
 from django.core.management.base import BaseCommand
 from simon_app.models import *
 import json
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 from simon_app.functions import GMTUY
 from simon_app.mailing import *
 from simon_app.decorators import timed_command
@@ -41,7 +44,7 @@ class Command(BaseCommand):
             while next is not None:
 
                 # url = "%s%s" % (base_url, next)
-                page_content = json.loads(urllib2.urlopen(next).read())
+                page_content = json.loads(urllib.request.urlopen(next).read())
                 next = page_content['next']
 
                 for probe in page_content['results']:
@@ -104,7 +107,7 @@ class Command(BaseCommand):
                     countries_text += c + " "
                 countries_text = countries_text[:-1]
 
-                connected = unicode(counter["Connected"])
+                connected = str(counter["Connected"])
                 text = u"%.0f %s en la región (%s)! Eso hace un total de %s RIPE Atlas probes conectadas!" % (
                     n,
                     "nuevas RIPE Atlas probes" if n > 1 else "nueva RIPE Atlas probe",

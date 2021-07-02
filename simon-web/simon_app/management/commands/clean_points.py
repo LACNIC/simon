@@ -16,9 +16,9 @@ class Command(BaseCommand):
         tps = SpeedtestTestPoint.objects.all()
 
         responses, no_responses = multi_ping([tp.ip_address for tp in tps], timeout=10, retry=9)
-        tps.filter(ip_address__in=responses.keys()).update(enabled=True)
-        tps.exclude(ip_address__in=responses.keys()).update(enabled=False)
+        tps.filter(ip_address__in=list(responses.keys())).update(enabled=True)
+        tps.exclude(ip_address__in=list(responses.keys())).update(enabled=False)
 
         print("Test points statuses (ICMP):")
-        print("UP {up}".format(up=len(responses)), tps.filter(ip_address__in=responses.keys()))
-        print("DOWN {down}".format(down=len(no_responses)), tps.exclude(ip_address__in=responses.keys()))
+        print("UP {up}".format(up=len(responses)), tps.filter(ip_address__in=list(responses.keys())))
+        print("DOWN {down}".format(down=len(no_responses)), tps.exclude(ip_address__in=list(responses.keys())))

@@ -1,4 +1,5 @@
 from __future__ import print_function
+from builtins import range
 from django.core.management.base import BaseCommand
 import matplotlib.pyplot as pyplot
 from numpy import math
@@ -99,7 +100,7 @@ class Command(BaseCommand):
     
     def histogram_region(self, DESDE, HASTA, start, end, title):
         
-        years = range(int(start.year), int(end.year) + 1)
+        years = list(range(int(start.year), int(end.year) + 1))
         data_years = []
         legends = []
         for year in years:

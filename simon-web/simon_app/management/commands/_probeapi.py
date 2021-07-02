@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 from __future__ import absolute_import
+from builtins import object
 from datadog import statsd
 from django.template import Template, Context
 
@@ -19,7 +20,7 @@ import logging
 from simon_project.settings import DEBUG
 
 
-class ProbeApiMeasurement():
+class ProbeApiMeasurement(object):
     """
         Class that holds the logic to perform a ProbeAPI measurement
     """
@@ -71,7 +72,7 @@ class ProbeApiMeasurement():
 
         # get countries with running probes...
         if DEBUG:
-            most_probes = sorted(ccs.items(), key=lambda i: i[1], reverse=True)[0]
+            most_probes = sorted(list(ccs.items()), key=lambda i: i[1], reverse=True)[0]
             ccs = [most_probes[0]]  # less ccs to iterate through when developing
 
         urls = []
@@ -131,7 +132,7 @@ class ProbeApiMeasurement():
         py_object = json.loads(response, parse_int=int)
 
         key = 'StartPingTestByCountryResult'
-        if key not in py_object.keys():
+        if key not in list(py_object.keys()):
             return
         if len(py_object[key]) <= 0:
             return

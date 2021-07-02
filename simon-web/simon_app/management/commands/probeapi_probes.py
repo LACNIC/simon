@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 from __future__ import print_function
+from future import standard_library
+standard_library.install_aliases()
 from django.core.management.base import BaseCommand
 
 
@@ -9,7 +11,7 @@ class Command(BaseCommand):
         from simon_app.models import Country
         from simon_app.functions import GMTUY
         from simon_project import passwords
-        import urllib2
+        import urllib.request, urllib.error, urllib.parse
         import json
         import datetime
 
@@ -17,7 +19,7 @@ class Command(BaseCommand):
 
         ccs = Country.objects.get_lacnic_countries().values_list('iso', flat=True)
 
-        opener = urllib2.build_opener()
+        opener = urllib.request.build_opener()
         opener.addheaders = [
             ("X-Mashape-Key", passwords.PROBEAPI),
             ("Accept", "application/json")

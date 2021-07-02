@@ -29,10 +29,7 @@ class Command(BaseCommand):
 
         # accept ip addr, hostnmae, or plain txt as dst
         # plain txt will be formatted to hostname %s.exp.dev.lacnic.net
-        dst = map(
-            lambda d: "%s.exp.dev.lacnic.net" % d if '.' not in d and ':' not in d else d,
-            dst
-        )
+        dst = ["%s.exp.dev.lacnic.net" % d if '.' not in d and ':' not in d else d for d in dst]
 
         msm = ProbeApiMeasurement(
             max_job_queue_size=10,
