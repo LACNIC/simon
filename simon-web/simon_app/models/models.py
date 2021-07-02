@@ -1,3 +1,4 @@
+from __future__ import print_function
 from datetime import datetime, timedelta
 from django.db import models
 from django.db import connection
@@ -633,7 +634,7 @@ class TracerouteHop(Results):
     traceroute_result = models.ForeignKey(TracerouteResult)
 
     def __str__(self):
-        print "AS%s (%s) --> AS%s (%s)" % (self.as_origin, self.ip_origin, self.as_destination, self.ip_destination)
+        print("AS%s (%s) --> AS%s (%s)" % (self.as_origin, self.ip_origin, self.as_destination, self.ip_destination))
 
 
 class ProbeapiTracerouteResult(TracerouteResult):
@@ -649,7 +650,7 @@ class ProbeapiTracerouteHop(ProbeApiPingResult):
     traceroute_result = models.ForeignKey(ProbeapiTracerouteResult)
 
     def __str__(self):
-        print "AS%s (%s) --> AS%s (%s)" % (self.as_origin, self.ip_origin, self.as_destination, self.ip_destination)
+        print("AS%s (%s) --> AS%s (%s)" % (self.as_origin, self.ip_origin, self.as_destination, self.ip_destination))
 
 class RipeAtlasProbeManager(models.Manager):
     def connected_now(self):

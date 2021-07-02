@@ -1,6 +1,7 @@
+from __future__ import absolute_import
 from django.db import models
 from datetime import datetime
-from models import Country
+from .models import Country
 
 
 class V6PerfManager(models.Manager):

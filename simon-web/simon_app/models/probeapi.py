@@ -1,3 +1,4 @@
+from __future__ import print_function
 import json
 import numpy
 from datadog import statsd
@@ -187,7 +188,7 @@ class ProbeApiRequest(models.Model):
 
         self.save()
 
-        print j
+        print(j)
         return j
 
     def parse_response(self, j):
@@ -375,7 +376,7 @@ class ProbeApiRequest(models.Model):
                 # first time it's being fetched
                 self.parse_response(j)
         except Exception as e:
-            print e
+            print(e)
             pass
 
         s = json.dumps(j)
@@ -385,5 +386,5 @@ class ProbeApiRequest(models.Model):
         if persist:
             self.save()
 
-        print s
+        print(s)
         return j
