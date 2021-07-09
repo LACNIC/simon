@@ -112,7 +112,7 @@ def chatty_command(command=""):
             try:
                 function(*args, **kw)
             except Exception as e:
-                logging.error("Command: %s \n Exception thrown: %s \n Exception message: %s" % (command, e, e.message))
+                logging.error("Command: %s \n Exception thrown: %s" % (command, e))
 
         return wrapper
 
