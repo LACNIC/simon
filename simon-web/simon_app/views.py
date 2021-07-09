@@ -890,6 +890,7 @@ def atlas(request):
         if country_object:
             counter[cc]['country_name'] = country_object.printable_name
 
+    del counter[None]
     counter = OrderedDict(sorted(counter.items(), key=lambda t: t[0]))
 
     # paginator = Paginator(probes_all, 15)
