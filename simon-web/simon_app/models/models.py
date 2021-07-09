@@ -12,7 +12,6 @@ from ipaddress import IPv6Address, IPv4Address
 import json
 import logging
 import requests
-import trparse
 import datetime
 import pytz
 
@@ -593,45 +592,6 @@ class TracerouteResult(models.Model):
         all = self.hop_set.all()
         return "%s (AS%s) --> %s (AS%s) (%.0f hops)" % (
             self.country_origin, self.as_origin, self.country_destination, self.as_destination, len(all))
-
-    def pretty_print(self):
-        from geoip2.errors import AddressNotFoundError
-        import geoip2.database
-
-        reader = geoip2.database.Reader(settings.GEOIP_DATABASE)
-
-        tr = self.parse()
-        if tr is None:
-            return ""
-
-        try:
-            destination = str(reader.city(tr.dest_ip).country.iso_code)
-        except AddressNotFoundError as e:
-            destination = '?'
-        try:
-            origin = str(reader.city(self.ip_origin).country.iso_code)
-        except AddressNotFoundError as e:
-            origin = '?'
-
-        hops = []
-        n = len(tr.hops)
-        for h in tr.hops:
-            rtts = []
-            [rtts.append(p.rtt) for p in h.probes if p.rtt is not None]
-            m = len(rtts)
-            if m > 0:
-                hops.append("%.2f" % (old_div(sum(rtts), m)))
-            else:
-                hops.append("%.2f" % (0.0))
-        return self.output  # "%s --> %s (%s %s hops) %s" % (self.ip_origin, tr.dest_ip, hops, n, self.date_test.strftime("%d/%m/%Y"))
-
-    def parse(self):
-        try:
-            if self.output is not "":
-                return trparse.loads(self.output)
-            return None
-        except Exception:
-            return None
 
 
 class TracerouteHop(Results):
