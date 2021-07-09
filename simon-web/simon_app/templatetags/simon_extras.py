@@ -1,3 +1,4 @@
+from __future__ import print_function
 from django import template
 from datetime import datetime
 from simon_app.functions import GMTUY
@@ -70,7 +71,7 @@ def time_since(value):
     """
     td = datetime.now(GMTUY()) - value
 
-    print td
+    print(td)
 
     if td.days > 1:
         return "mas de un dia"
@@ -99,11 +100,11 @@ def max_(value, arg):
 @register.filter(name="get_by_attribute")
 def get_by_attribute(objects, raw_args):
 
-    print raw_args
+    print(raw_args)
 
     key, value = raw_args.split(' ')
 
-    print key, value
+    print(key, value)
 
     func = operator.attrgetter(key)
 
