@@ -42,5 +42,7 @@ django-contrib-comments~=1.5
 tqdm~=4.39.0
 # multiping~=1.1.2
 
+gviz-api~=1.9
+
 django-fixture-magic~=0.1
 future~=0.18.2

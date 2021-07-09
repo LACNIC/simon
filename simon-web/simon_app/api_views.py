@@ -12,7 +12,9 @@ from django.http import HttpResponse
 from simon_app.functions import bps2KMG, whoIs
 from simon_app.models import *
 import datetime
-from . import gviz_api
+# from . import gviz_api
+
+import gviz_api
 import json
 import math
 import psycopg2
