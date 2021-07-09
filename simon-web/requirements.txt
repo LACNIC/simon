@@ -10,7 +10,7 @@ idna<2.8,>=2.5
 pip~=20.0.2
 wheel~=0.34.2
 cryptography~=2.9.2
-lxml~=3.3.5
+lxml
 ipaddress~=1.0.23
 pycparser~=2.20
 html5lib~=1.0.1
@@ -44,3 +44,4 @@ tqdm~=4.39.0
 # multiping~=1.1.2
 
 django-fixture-magic~=0.1
+future~=0.18.2
