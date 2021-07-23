@@ -159,7 +159,7 @@ class Country(models.Model):
     printable_name = models.CharField(max_length=80)
     iso3 = models.CharField(max_length=3, null=True, blank=True)
     numcode = models.IntegerField(null=True)
-    region = models.ForeignKey(Region)
+    region = models.ForeignKey(Region,  on_delete=models.CASCADE)
     objects = CountryManager()
 
     def __unicode__(self):
@@ -595,7 +595,7 @@ class TracerouteResult(models.Model):
 
 
 class TracerouteHop(Results):
-    traceroute_result = models.ForeignKey(TracerouteResult)
+    traceroute_result = models.ForeignKey(TracerouteResult, on_delete=models.CASCADE)
 
     def __str__(self):
         print("AS%s (%s) --> AS%s (%s)" % (self.as_origin, self.ip_origin, self.as_destination, self.ip_destination))
@@ -611,7 +611,7 @@ class ProbeapiTracerouteResult(TracerouteResult):
 
 class ProbeapiTracerouteHop(ProbeApiPingResult):
     hop_number = models.IntegerField(default=0, help_text='0 means something went wrong')
-    traceroute_result = models.ForeignKey(ProbeapiTracerouteResult)
+    traceroute_result = models.ForeignKey(ProbeapiTracerouteResult, on_delete=models.CASCADE)
 
     def __str__(self):
         print("AS%s (%s) --> AS%s (%s)" % (self.as_origin, self.ip_origin, self.as_destination, self.ip_destination))
@@ -641,19 +641,25 @@ class RipeAtlasProbe(models.Model):
 
     @property
     def latest_status(self):
-        reverse_ = RipeAtlasProbeStatus.objects.filter(probe=self).order_by('date').reverse()[0]
+        reverse_ = RipeAtlasProbeStatus.objects.filter(probe=self).order_by('date').reverse().first()
         return reverse_
 
     @property
     def last_check(self):
-        return self.latest_status.date
+        if self.latest_status is None:
+            return None
+        else:
+            return self.latest_status.date
 
     def last_check_timedelta(self, t1):
         """
         :param now:
         :return: Time diff between latest check and t1
         """
-        return t1 - self.last_check
+        if self.last_check is None:
+            return None
+        else:
+            return t1 - self.last_check
 
     @property
     def time_since_last_check(self):
@@ -674,6 +680,9 @@ class RipeAtlasProbe(models.Model):
         :return:
         """
         td = self.time_since_last_check
+        if td is None:
+            return "N/A"
+
         if td.seconds > 3600:
             mins = "%.0f minutos" % (old_div((td.seconds % 3600), 60))
             horas = "%.0f %s" % (old_div(td.seconds, 3600), "horas" if old_div(td.seconds, 3600) > 1 else "hora")
@@ -721,7 +730,7 @@ class RipeAtlasProbeStatusManager(models.Manager):
 
 
 class RipeAtlasProbeStatus(models.Model):
-    probe = models.ForeignKey(RipeAtlasProbe)
+    probe = models.ForeignKey(RipeAtlasProbe, on_delete=models.CASCADE)
     date = models.DateTimeField()
     status = models.CharField(max_length=20, null=True)
     objects = RipeAtlasProbeStatusManager()
@@ -866,7 +875,7 @@ class HttpsCheck(models.Model):
 
     date = models.DateTimeField(default=datetime.now)
     status = models.NullBooleanField(default=False)
-    test_point = models.ForeignKey(SpeedtestTestPoint)
+    test_point = models.ForeignKey(SpeedtestTestPoint, on_delete=models.CASCADE)
 
     class Meta(object):
         verbose_name = 'Chequeo HTTPS'
@@ -887,8 +896,8 @@ class Images(models.Model):
 
 
 class Images_in_TestPoints(models.Model):
-    testPoint = models.ForeignKey(TestPoint)
-    image = models.ForeignKey(Images)
+    testPoint = models.ForeignKey(TestPoint, on_delete=models.CASCADE)
+    image = models.ForeignKey(Images, on_delete=models.CASCADE)
     local_path = models.TextField()
 
     def __unicode__(self):

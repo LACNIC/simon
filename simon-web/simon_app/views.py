@@ -4,7 +4,7 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import absolute_import
 from datadog import statsd
-from django.contrib.gis.geoip import GeoIP
+from django.contrib.gis.geoip2 import GeoIP2 as GeoIP
 from django.http import HttpResponse
 # from django.template.loader import render_to_string as render_to_response
 from django.shortcuts import redirect, render, render_to_response
