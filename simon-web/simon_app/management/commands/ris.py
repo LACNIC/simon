@@ -33,7 +33,7 @@ class Command(BaseCommand):
         print("Parsing RIS...")
         ris_v4 = zlib.decompress(file_v4, 16 + zlib.MAX_WBITS)
         ris_v6 = zlib.decompress(file_v6, 16 + zlib.MAX_WBITS)
-        asn_list = [asn.split('\t') for asn in ris_v4.split('\n')] + [asn.split('\t') for asn in ris_v6.split('\n')]
+        asn_list = [asn.split(b'\t') for asn in ris_v4.split(b'\n')] + [asn.split(b'\t') for asn in ris_v6.split(b'\n')]
 
         old = [a for a in AS.objects.filter(pfx_length__gt=0, network__isnull=False)]  # Delete ALL AS-related info and make place for new information
         internet = AS(
