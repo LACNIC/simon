@@ -69,6 +69,4 @@ def export(sms, filename, pks=[]):
         del sm
 
     with open(STATIC_ROOT + "/%s.json" % filename, 'wb') as jsonfile:
-        encoder = json.JSONEncoder()
-        for chunk in encoder.iterencode(res):
-            jsonfile.write(chunk)
+        jsonfile.write(json.dumps(res).encode())
