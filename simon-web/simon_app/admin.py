@@ -191,10 +191,13 @@ class CountryAdmin(SimonReadOnlyAdmin):
 
 
 class RegionAdmin(SimonAdmin):
-    list_display = ['name', 'numcode']
+    list_display = ['name', 'numcode', 'count']
     inlines = [
         CountryInline,
     ]
+
+    def count(self, region):
+        return ','.join(list(Country.objects.filter(region=region).values_list('iso', flat=True)))
 
 class V6PerfAdmin(SimonReadOnlyAdmin):
     list_display = ['country', 'diff', 'dualstack', 'v6_rate', 'date', 'time_window']
