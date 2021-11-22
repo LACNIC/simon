@@ -392,3 +392,24 @@ class ProbeApiRequest(models.Model):
 
         print(s)
         return j
+
+class ProbeApiFetchFromFTP(models.Model):
+
+    server_time = models.DateTimeField()
+    ip = models.GenericIPAddressField()
+    charging = models.IntegerField()
+    lat = models.FloatField()
+    lon = models.FloatField()
+    acc = models.IntegerField()
+    network_operator = models.CharField(max_length=64)
+    sim_operator = models.CharField(max_length=64)
+    cellular_type = models.CharField(max_length=64)
+    timestamp = models.BigIntegerField()
+    active_connection = models.CharField(max_length=64)
+    device_info = models.CharField(max_length=128)
+    package_name = models.CharField(max_length=128)
+    command_result = models.TextField()
+    command_name = models.TextField()
+    unique_id = models.CharField(max_length=64)
+    version = models.CharField(max_length=64)
+    os_version = models.CharField(max_length=64)
