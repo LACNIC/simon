@@ -8,8 +8,8 @@ import math
 import simon_project.settings as settings
 from netaddr import IPAddress, IPNetwork, AddrFormatError
 import json as json
-import urllib.request
-import urllib.error
+import urllib2
+from urllib2 import URLError
 from django.db.models import Q
 from simon_app.models.models import Results
 from datetime import tzinfo, timedelta
@@ -34,12 +34,12 @@ def whoIs(address):
         "Accept": "application/json"
     }
     try:
-        req = urllib.request.Request(('http://%s%s' % (host, target)), None, headers)
-        response = urllib.request.urlopen(req, timeout=10)
+        req = urllib2.Request(('http://%s%s' % (host, target)), None, headers)
+        response = urllib2.urlopen(req, timeout=10)
         data = response.read()
         json_data = json.loads(data)
         return json_data
-    except urllib.error.URLError:
+    except URLError:
         print('Error while getting whois information for %s' % address)
 
 
