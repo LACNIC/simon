@@ -12,6 +12,10 @@ from netaddr import IPAddress
 from requests import get, post
 from simon_app.models import AS, ProbeApiPingResult, SpeedtestTestPoint, ProbeapiTracerouteResult, ProbeapiTracerouteHop
 from simon_project.settings import PROBEAPI_ENDPOINT_V2, KONG_API_KEY, DATADOG_DEFAULT_TAGS
+from simon_project.passwords import FTPUSER, FTPPASSWORD
+import zlib
+import simplejson
+
 
 
 class ProbeApiTestSettings(object):
@@ -393,18 +397,77 @@ class ProbeApiRequest(models.Model):
         print(s)
         return j
 
+class HourlyBatch(models.Model):
+    probeapi_batch = models.CharField(max_length=10)
+    fecha_de_ejecucion = models.DateTimeField(default=datetime.now)
+    probeapi_batch_fecha = models.DateTimeField(default=datetime.now)
+    status = models.CharField(max_length=2,choices=[("IP", 'In progress'),("ER", 'Error'),("FI", 'Finished'),], default="IP")
+
+    def get(self):
+        self.fecha_de_ejecucion = datetime.now()
+        self.probeapi_batch_fecha = datetime.strptime(self.probeapi_batch, '%Y%m%d%H')
+        self.status = "IP"
+
+        path = "https://portal.speedchecker.com/export/lacnic/"
+        file = "Lacnic-"+self.probeapi_batch+".ndjson.gz"
+
+        try:
+            r = get(path+file,auth=(FTPUSER, FTPPASSWORD))
+        except:
+            "No data found for that batch"
+
+        if r:
+            data = zlib.decompress(r.content, zlib.MAX_WBITS | 16)
+            data = data.split("\r\n")
+
+            self.probeapifetchfromftp_set.all().delete()
+            for d in data:
+                if len(d) >0:
+                    jd = simplejson.loads(d)
+                    x = ProbeApiFetchFromFTP()
+                    x.batch = self
+                    x.server_time = jd.get("ServerTime")
+                    x.ip = jd.get("IP")
+                    x.acc = jd.get("Acc")
+                    x.sim_operator = jd.get("SimOperator")
+                    x.active_connection = jd.get("ActiveConnection")
+                    x.command_name = jd.get("CommandName")
+                    x.network_operator = jd.get("NetworkOperator")
+                    x.package_name = jd.get("PackageName")
+                    x.cellular_type = jd.get("CellularType")
+                    x.version = jd.get("Version")
+                    x.unique_id = jd.get("UniqueID")
+                    x.lon = jd.get("Lon")
+                    x.timestamp = jd.get("Timestamp")
+                    x.lat = jd.get("Lat")
+                    x.device_info = jd.get("DeviceInfo")
+                    x.os_version = jd.get("OSVersion")
+                    x.charging = jd.get("Charging")
+                    x.command_result = str(jd.get("CommandResult"))
+                    x.save()
+
+            self.status = "FI"
+        else:
+            data = []
+            self.status = "ER"
+
+        return "Se cargaron %s " % str(len(data) - 1)
+
+
+
 class ProbeApiFetchFromFTP(models.Model):
 
+    batch = models.ForeignKey(HourlyBatch, on_delete=models.CASCADE)
     server_time = models.DateTimeField()
     ip = models.GenericIPAddressField()
     charging = models.IntegerField()
     lat = models.FloatField()
     lon = models.FloatField()
     acc = models.IntegerField()
-    network_operator = models.CharField(max_length=64)
-    sim_operator = models.CharField(max_length=64)
-    cellular_type = models.CharField(max_length=64)
-    timestamp = models.BigIntegerField()
+    network_operator = models.CharField(max_length=64, null=True)
+    sim_operator = models.CharField(max_length=64, null=True)
+    cellular_type = models.CharField(max_length=64, null=True)
+    timestamp = models.BigIntegerField(null=True)
     active_connection = models.CharField(max_length=64)
     device_info = models.CharField(max_length=128)
     package_name = models.CharField(max_length=128)
