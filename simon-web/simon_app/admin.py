@@ -216,6 +216,15 @@ class ProbeApiRequestAdmin(SimonAdmin):
         else:
             return 0
 
+class ProbeApiFTPResults(SimonReadOnlyAdmin):
+    # def get_readonly_fields(self, request, obj=None):
+    #     return [f.name for f in self.model._meta.fields]
+
+    list_display = ['batch', 'ip', 'command_name']
+    # search_fields = ['country_origin', 'country_destination', 'as_origin', 'as_destination', 'ip_origin', 'ip_destination']
+
+admin.site.register(ProbeApiFetchFromFTP, ProbeApiFTPResults)
+
 admin.site.register(Results, ResultsAdmin)
 
 admin.site.register(TestPoint, TestPointAdmin)
