@@ -15,6 +15,7 @@ import requests
 import datetime
 import pytz
 
+
 import simon_project.settings as settings
 # from reportes import GMTUY
 
@@ -425,11 +426,11 @@ class Results(models.Model):
     ip_destination = models.GenericIPAddressField(null=True)
     testype = models.CharField(max_length=20, default='N/A')
     number_probes = models.IntegerField(null=True)
-    min_rtt = models.IntegerField(null=True)
-    max_rtt = models.IntegerField(null=True)
-    ave_rtt = models.IntegerField(null=True)
-    dev_rtt = models.IntegerField(null=True)
-    median_rtt = models.IntegerField(null=True)
+    min_rtt = models.FloatField(null=True)
+    max_rtt = models.FloatField(null=True)
+    ave_rtt = models.FloatField(null=True)
+    dev_rtt = models.FloatField(null=True)
+    median_rtt = models.FloatField(null=True)
     packet_loss = models.IntegerField(null=True)
     country_origin = models.CharField(max_length=2)
     country_destination = models.CharField(max_length=2)

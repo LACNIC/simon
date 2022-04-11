@@ -10,11 +10,13 @@ from django.db import models
 from datetime import datetime
 from netaddr import IPAddress
 from requests import get, post
-from simon_app.models import AS, ProbeApiPingResult, SpeedtestTestPoint, ProbeapiTracerouteResult, ProbeapiTracerouteHop
+from .models import AS, ProbeApiPingResult, SpeedtestTestPoint, ProbeapiTracerouteResult, ProbeapiTracerouteHop, Results
 from simon_project.settings import PROBEAPI_ENDPOINT_V2, KONG_API_KEY, DATADOG_DEFAULT_TAGS
 from simon_project.passwords import FTPUSER, FTPPASSWORD
 import zlib
 import simplejson
+from simon_app.api_views import get_cc_from_ip_address
+import pytz
 
 
 
@@ -454,7 +456,6 @@ class HourlyBatch(models.Model):
         return "Se cargaron %s " % str(len(data) - 1)
 
 
-
 class ProbeApiFetchFromFTP(models.Model):
 
     batch = models.ForeignKey(HourlyBatch, on_delete=models.CASCADE)
@@ -476,3 +477,76 @@ class ProbeApiFetchFromFTP(models.Model):
     unique_id = models.CharField(max_length=64)
     version = models.CharField(max_length=64, null=True)
     os_version = models.CharField(max_length=64, null=True)
+
+
+class ProbeApiV3ResultMetaData(models.Model):
+
+    probeapi_probe_id = models.CharField(default='', max_length=128)
+    hostname = models.CharField(null=True, max_length=128, default='')
+    ipv4only = models.BooleanField(default=False)
+    ipv6only = models.BooleanField(default=False)
+    error_msg = models.CharField(default='', null=True, max_length=128)
+    server_time = models.DateTimeField(default=datetime.now)
+    time_diff = models.FloatField(null=True)
+
+class ProbeApiV3DataResult(Results):
+
+    @classmethod
+    def create(cls, title):
+        data_result = cls(tester='probeapiv3', number_probes=3)
+        return data_result
+
+    def save(self, version=3, *args, **kwargs):
+        super(ProbeApiV3DataResult, self).save(*args, **kwargs)
+
+class ProbeApiV3PingResultMetaData(ProbeApiV3ResultMetaData):
+    probeapifetchfromftp = models.ForeignKey(ProbeApiFetchFromFTP, on_delete=models.CASCADE, null=True,related_name="pingmetadata", default=None)
+
+
+class ProbeApiV3PingResult(models.Model):
+
+    data = models.ForeignKey(ProbeApiV3DataResult, on_delete=models.CASCADE, null=True, default=None)
+    metadata = models.ForeignKey(ProbeApiV3PingResultMetaData, on_delete=models.CASCADE, related_name='metadata_obj', null=True, default=None)
+    packet_loss_percentage = models.FloatField(null=True)
+
+    class Meta(object):
+        verbose_name = 'Resultado ProbeAPI v3'
+        verbose_name_plural = 'Resultados ProbeAPI v3'
+
+    def get_results(self):
+        try:
+            return u'%s' % self.metadata.probeapifetchfromftp.command_result.split("<CMD>")[0]
+        except ProbeApiV3PingResultMetaData.DoesNotExist:
+            return u'No metadata'
+
+class ProbeApiV3TracerouteResultMetaData(ProbeApiV3ResultMetaData):
+    probeapifetchfromftp = models.ForeignKey(ProbeApiFetchFromFTP, on_delete=models.CASCADE, null=True,related_name="traceroutemetadata", default=None)
+
+    def get_results(self):
+        try:
+            return u'%s' % self.probeapifetchfromftp.command_result.replace("<CMD>","\n\n").replace("|","\n")
+        except ProbeApiV3TracerouteResultMetaData.DoesNotExist:
+            return u'No metadata'
+
+    def get_command_name(self):
+        try:
+            return u'%s' % self.probeapifetchfromftp.command_name.replace("<CMD>","\n\n").replace("|","\n")
+        except ProbeApiV3TracerouteResultMetaData.DoesNotExist:
+            return u'No metadata'
+
+class ProbeApiV3TracerouteHop(models.Model):
+
+    traceroute = models.ForeignKey(ProbeApiV3TracerouteResultMetaData, on_delete=models.CASCADE, default=None)
+    data = models.ForeignKey(ProbeApiV3DataResult, on_delete=models.CASCADE, null=True, default=None)
+    hop_number = models.IntegerField(null=True, default=0)
+    error_msg = models.CharField(default='', null=True, max_length=128)
+
+    def get_results(self):
+        try:
+            return u'%s' % self.traceroute.probeapifetchfromftp.command_result.replace("<CMD>","\n\n").replace("|","\n")
+        except ProbeApiV3TracerouteResultMetaData.DoesNotExist:
+            return u'No metadata'
+
+
+
+

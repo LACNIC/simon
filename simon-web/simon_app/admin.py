@@ -216,6 +216,109 @@ class ProbeApiRequestAdmin(SimonAdmin):
         else:
             return 0
 
+class ProbeApiFTPResults(SimonReadOnlyAdmin):
+    # def get_readonly_fields(self, request, obj=None):
+    #     return [f.name for f in self.model._meta.fields]
+
+    list_display = ['batch', 'ip', 'command_name']
+    # search_fields = ['country_origin', 'country_destination', 'as_origin', 'as_destination', 'ip_origin', 'ip_destination']
+
+# class MetaDataInLine(admin.TabularInline):
+#     model = ProbeApiV3PingResultMetaData
+
+class ProbeApiV3PingResultAdmin(SimonAdmin):
+    list_display = ['cc_origin', 'cc_destination', 'as_origin', 'as_destination', 'ip_origin', 'ip_destination', 'ave_rtt', 'dev_rtt', 'packet_loss_percentage','hostname', 'ipv4_only', 'ipv6_only', 'error_msg','server_time']
+
+    search_fields =['data__country_origin', 'data__country_destination']
+
+    readonly_fields = ['get_results']
+    fieldsets = [
+        ('Ping info', {'fields': ['data', 'packet_loss_percentage']}),
+        ('Metadata', {'fields': ['metadata', 'get_results']}),
+    ]
+
+    def cc_origin(self, obj):
+        return obj.data.country_origin
+    def cc_destination(self, obj):
+        return obj.data.country_destination
+    def as_origin(self, obj):
+        return obj.data.as_origin
+    def as_destination(self, obj):
+        return obj.data.as_destination
+    def ip_origin(self, obj):
+        return obj.data.ip_origin
+    def ip_destination(self, obj):
+        return obj.data.ip_destination
+    def ave_rtt(self, obj):
+        return obj.data.ave_rtt
+    def dev_rtt(self, obj):
+        return obj.data.dev_rtt
+    def hostname(self, obj):
+        return obj.metadata.hostname
+    def ipv4_only(self, obj):
+        return obj.metadata.ipv4only
+    def ipv6_only(self, obj):
+        return obj.metadata.ipv6only
+    def error_msg(self, obj):
+        return obj.metadata.error_msg
+    def server_time(self, obj):
+        return obj.metadata.server_time
+
+
+class ProbeApiV3TracerouteHopAdmin(SimonAdmin):
+    list_display = ['cc_origin', 'cc_destination', 'as_origin', 'as_destination', 'ip_origin', 'ip_destination', 'ave_rtt', 'dev_rtt', 'error_msg', 'hop_number','hostname', 'ipv4_only', 'ipv6_only','server_time']
+
+    readonly_fields = ['get_results']
+    fieldsets = [
+        ('Traceroute info', {'fields': ['data', 'hop_number', 'error_msg']}),
+        ('Metadata', {'fields': ['traceroute', 'get_results']}),
+    ]
+
+    def cc_origin(self, obj):
+        return obj.data.country_origin
+    def cc_destination(self,obj):
+        return obj.data.country_destination
+    def as_origin(self,obj):
+        return obj.data.as_origin
+    def as_destination(self,obj):
+        return obj.data.as_destination
+    def ip_origin(self,obj):
+        return obj.data.ip_origin
+    def ip_destination(self,obj):
+        return obj.data.ip_destination
+    def ave_rtt(self,obj):
+        return obj.data.ave_rtt
+    def dev_rtt(self,obj):
+        return obj.data.dev_rtt
+    def hostname(self,obj):
+        return obj.traceroute.hostname
+    def ipv4_only(self,obj):
+        return obj.traceroute.ipv4only
+    def ipv6_only(self,obj):
+        return obj.traceroute.ipv6only
+    def server_time(self,obj):
+        return obj.traceroute.server_time
+
+class ProbeApiV3MetaDataAdmin(SimonAdmin):
+    list_display = ['probeapi_probe_id', 'hostname', 'ipv4only', 'ipv6only', 'error_msg', 'server_time', 'time_diff']
+
+class ProbeApiV3TracerouteAdmin(SimonAdmin):
+    list_display = ['probeapi_probe_id', 'hostname', 'ipv4only', 'ipv6only', 'error_msg', 'server_time', 'time_diff']
+    readonly_fields = ['get_results','get_command_name']
+    fieldsets = [
+        ('Traceroute info', {'fields': ['probeapi_probe_id', 'hostname', 'ipv4only', 'ipv6only', 'error_msg', 'server_time', 'time_diff']}),
+        ('Command Result', {'fields': ['get_results']}),
+        ('command Name', {'fields': ['get_command_name']})
+    ]
+
+admin.site.register(ProbeApiFetchFromFTP, ProbeApiFTPResults)
+
+admin.site.register(ProbeApiV3PingResult, ProbeApiV3PingResultAdmin)
+admin.site.register(ProbeApiV3TracerouteHop, ProbeApiV3TracerouteHopAdmin)
+admin.site.register(ProbeApiV3DataResult, ResultsAdmin)
+admin.site.register(ProbeApiV3ResultMetaData, ProbeApiV3MetaDataAdmin)
+admin.site.register(ProbeApiV3TracerouteResultMetaData, ProbeApiV3TracerouteAdmin)
+
 admin.site.register(Results, ResultsAdmin)
 
 admin.site.register(TestPoint, TestPointAdmin)
