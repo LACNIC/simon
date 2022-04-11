@@ -223,12 +223,7 @@ class ProbeApiFTPResults(SimonReadOnlyAdmin):
     list_display = ['batch', 'ip', 'command_name']
     # search_fields = ['country_origin', 'country_destination', 'as_origin', 'as_destination', 'ip_origin', 'ip_destination']
 
-<<<<<<< HEAD
 admin.site.register(ProbeApiFetchFromFTP, ProbeApiFTPResults)
-
-=======
-# class MetaDataInLine(admin.TabularInline):
-#     model = ProbeApiV3PingResultMetaData
 
 class ProbeApiV3PingResultAdmin(SimonAdmin):
     list_display = ['cc_origin', 'cc_destination', 'as_origin', 'as_destination', 'ip_origin', 'ip_destination', 'ave_rtt', 'dev_rtt', 'packet_loss_percentage','hostname', 'ipv4_only', 'ipv6_only', 'error_msg','server_time']
@@ -315,7 +310,6 @@ class ProbeApiV3TracerouteAdmin(SimonAdmin):
         ('command Name', {'fields': ['get_command_name']})
     ]
 
-admin.site.register(ProbeApiFetchFromFTP, ProbeApiFTPResults)
 
 admin.site.register(ProbeApiV3PingResult, ProbeApiV3PingResultAdmin)
 admin.site.register(ProbeApiV3TracerouteHop, ProbeApiV3TracerouteHopAdmin)
@@ -323,7 +317,6 @@ admin.site.register(ProbeApiV3DataResult, ResultsAdmin)
 admin.site.register(ProbeApiV3ResultMetaData, ProbeApiV3MetaDataAdmin)
 admin.site.register(ProbeApiV3TracerouteResultMetaData, ProbeApiV3TracerouteAdmin)
 
->>>>>>> speechecker_ftp
 admin.site.register(Results, ResultsAdmin)
 
 admin.site.register(TestPoint, TestPointAdmin)
