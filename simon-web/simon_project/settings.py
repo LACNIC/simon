@@ -324,7 +324,7 @@ SECRET_KEY = '4dpg)uw43y9qt!0d28adewe%zfkc))k)e35=4rirn*+xe##z9z'
 #     "simon_app.lib.helpers.simon_processor"
 # )
 
-MIDDLEWARE = [
+MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
