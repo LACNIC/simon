@@ -16,6 +16,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
 
         objetos = ProbeApiFetchFromFTP.objects.all()
+
         cant_pings_guardados = 0
         cant_tr_guardados = 0
 
