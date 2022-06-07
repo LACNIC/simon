@@ -13,10 +13,16 @@ import pytz
 
 class Command(BaseCommand):
 
+    def add_arguments(self, parser):
+        parser.add_argument('--cant_objetos', type=int)
+
     def handle(self, *args, **options):
 
         objetos = ProbeApiFetchFromFTP.objects.all()
 
+        cant_objetos = options['cant_objetos']
+
+        objetos = ProbeApiFetchFromFTP.objects.all()[:cant_objetos]
         cant_pings_guardados = 0
         cant_tr_guardados = 0
 
@@ -27,7 +33,7 @@ class Command(BaseCommand):
             probe_id = name_result[0].split("|")[1].split("=")[1]
             country_origin = get_cc_from_ip_address(o.ip)
             as_origin = AS.objects.get_as_by_ip(o.ip).asn
-            print(o.server_time, o.timestamp)
+            #print(o.server_time, o.timestamp)
             try:
                 dt_timestamp = datetime.fromtimestamp(o.timestamp / 1000, pytz.utc)
                 time_diff = (o.server_time - dt_timestamp).total_seconds()
@@ -53,7 +59,7 @@ class Command(BaseCommand):
                     if i.startswith("ipv6only="):
                         ipv6only = i.split("=")[1]
 
-                print(probe_id, hostname, ipv4only, ipv6only, o.server_time)
+                #print(probe_id, hostname, ipv4only, ipv6only, o.server_time)
                 traceroute_result = ProbeApiV3TracerouteResultMetaData.objects.create(
                     probeapi_probe_id = probe_id,
                     hostname = hostname,
