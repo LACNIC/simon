@@ -14,7 +14,8 @@ import pytz
 class Command(BaseCommand):
 
     def add_arguments(self, parser):
-        parser.add_argument('--cant_objetos', type=int)
+        parser.add_argument('--inicio', type=int)
+        parser.add_argument('--fin', type=int)
 
     def handle(self, *args, **options):
 
@@ -22,7 +23,10 @@ class Command(BaseCommand):
 
         cant_objetos = options['cant_objetos']
 
-        objetos = ProbeApiFetchFromFTP.objects.all()[:cant_objetos]
+        cant_objetos = options['inicio', 'fin']
+
+
+        objetos = ProbeApiFetchFromFTP.objects.all()[cant_objetos[0]:cant_objetos[1]]
         cant_pings_guardados = 0
         cant_tr_guardados = 0
 
