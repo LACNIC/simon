@@ -19,10 +19,11 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        cant_objetos = options['inicio', 'fin']
+        inicio = options['inicio']
+        fin = options['fin']
 
 
-        objetos = ProbeApiFetchFromFTP.objects.all()[cant_objetos[0]:cant_objetos[1]]
+        objetos = ProbeApiFetchFromFTP.objects.all()[inicio:fin]
         cant_pings_guardados = 0
         cant_tr_guardados = 0
 
