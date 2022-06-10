@@ -19,10 +19,6 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
 
-        objetos = ProbeApiFetchFromFTP.objects.all()
-
-        cant_objetos = options['cant_objetos']
-
         cant_objetos = options['inicio', 'fin']
 
 
