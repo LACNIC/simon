@@ -485,7 +485,7 @@ class ProbeApiV3ResultMetaData(models.Model):
     hostname = models.CharField(null=True, max_length=128, default='')
     ipv4only = models.BooleanField(default=False)
     ipv6only = models.BooleanField(default=False)
-    error_msg = models.CharField(default='', null=True, max_length=128)
+    error_msg = models.CharField(default='', null=True, max_length=512)
     server_time = models.DateTimeField(default=datetime.now)
     time_diff = models.FloatField(null=True, max_length=255)
 
