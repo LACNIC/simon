@@ -206,6 +206,8 @@ class Command(BaseCommand):
                         ipv6only = i.split("=")[1]
 
                 country_destination = get_cc_from_ip_address(ip_dest)
+                if not country_destination:
+                    country_destination = 'XX'
                 as_destination = AS.objects.get_as_by_ip(ip_dest).asn
 
                 metadata = ProbeApiV3PingResultMetaData.objects.create(
