@@ -102,6 +102,8 @@ class Command(BaseCommand):
                             if j.split("=")[0] == "ip":
                                 ip_dest = j.split("=")[1]
                                 country_destination = get_cc_from_ip_address(ip_dest)
+                                if not country_destination:
+                                    country_destination = 'XX'
                                 as_destination = AS.objects.get_as_by_ip(ip_dest).asn
                             if j.split("=")[0] == "hostname":
                                 host = j.split("=")[1]
